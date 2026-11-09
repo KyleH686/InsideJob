@@ -1,5 +1,5 @@
-ROOMS=['office','store room','gallery','lobby','vault','corridor','loading dock','deposit room','banking hall','atm lobby','strongroom','security room','cash room']
-ENT={'main':'the front doors','back':'the back door','dock':'the loading dock','sky':'the skylight','drain':'the storm drain','side':'the staff door','atm':'the A.T.M. wall','roof':'the roof hatch','sewer':'the sewer tunnel'}
+ROOMS=['office','store room','gallery','lobby','vault','corridor','loading dock','deposit room','banking hall','atm lobby','strongroom','security room','cash room','kitchen','conservatory','library','great hall','study','long gallery','drawing room']
+ENT={'main':'the front doors','back':'the back door','dock':'the loading dock','sky':'the skylight','drain':'the storm drain','side':'the staff door','atm':'the A.T.M. wall','roof':'the roof hatch','sewer':'the sewer tunnel','cons':'the conservatory doors','kitchen':'the kitchen door','chimney':'the chimney','cellar':'the coal chute'}
 L={}  # key -> (voice,text)
 def c(k,t):L[k]=('ctl',t)
 def g(k,t):L[k]=('grd',t)

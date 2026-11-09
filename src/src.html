@@ -441,6 +441,32 @@ const SITES={
    'From tonight the crew cuts the power once, briefly. Someone will drop through the roof hatch into the deposit room. The scout radios your plates, the lensman walks through one laser, and an Impostor in a guard uniform walks straight past cameras.',
    'Last night. Six of them, a sewer tunnel up into the cash room, and at 01:26 the Fox: a professional who goes straight for the Pell Sapphire.'],
   roomOf(x,y){if(x<25){if(y<12)return x<12?'office':'deposit room';return x<8&&y>17?'atm lobby':'banking hall'}if(y<8)return 'strongroom';if(y<16)return 'security room';return 'cash room'}},
+ manor:{name:'Ashcombe House',caption:'ASHCOMBE HOUSE · COUNTRY HOUSE SECURITY SURVEY · DRG 03/C',note1:'Ashcombe - too many ways in!',n1x:13,note2:['glasshouse = weak spot?',2.6,24.9],
+  blurb:'Spread thin. A rambling country house with two ways in from night one, then a kitchen door, a chimney and a coal chute. The Ashcombe Tiara sits in the study.',
+  walls(hl,vl){vl(10,2,23);hl(2,10,13);hl(10,27,10);vl(27,2,23);hl(27,37,9);hl(27,37,16);for(const [x,y] of [[14,16],[23,16],[14,20],[23,20]])hl(x,x,y);hl(17,20,13)},
+  doors:[{x:10,y:5},{x:6,y:13},{x:10,y:18},{x:18,y:10},{x:27,y:12},{x:27,y:20},{x:33,y:16},{x:32,y:9,vault:true}],
+  entries:[{id:'main',name:'Front door',tiles:[[18,23],[19,23]],spawn:[18,24],night:1},
+   {id:'cons',name:'Conservatory doors',tiles:[[2,19]],spawn:[1,19],night:1,lab:[4,-1.5]},
+   {id:'kitchen',name:'Kitchen door',tiles:[[5,2]],spawn:[5,1],night:2,lab:[2.6,.2]},
+   {id:'chimney',name:'Chimney',tiles:[],spawn:[22,4],night:3,roof:true},
+   {id:'cellar',name:'Coal chute',tiles:[],spawn:[4,9],night:5,roof:true}],
+  rooms:[{n:'KITCHEN',x:6,y:7.6},{n:'CONSERVATORY',x:6,y:16.2},{n:'LIBRARY',x:18.5,y:6.8},{n:'GREAT HALL',x:18.5,y:18.2},{n:'STUDY',x:32,y:6.2},{n:'LONG GALLERY',x:32,y:13.4},{n:'DRAWING ROOM',x:32,y:19.6}],
+  loot:[{id:'wine',name:'Vintage claret',x:3,y:3,v:3500,crack:2,kind:'crate'},
+   {id:'orchid',name:'Ghost orchids',x:3,y:22,v:2500,crack:1.5,kind:'statue'},
+   {id:'folio',name:'First folio',x:12,y:3,v:5000,crack:2.5,kind:'cash'},
+   {id:'p1',name:'"Lady Ashcombe"',x:30,y:10,v:7000,crack:3,kind:'painting'},
+   {id:'p2',name:'"Hounds at Dawn"',x:35,y:10,v:6000,crack:3,kind:'painting'},
+   {id:'safe',name:'Study safe',x:29,y:3,v:6000,crack:6,kind:'safe'},
+   {id:'gem',name:'The Ashcombe Tiara',x:32,y:3,v:15000,crack:7,kind:'gem'},
+   {id:'deeds',name:'Estate bonds',x:35,y:3,v:4000,crack:2,kind:'cash'},
+   {id:'silver',name:'Family silver',x:35,y:22,v:4000,crack:2,kind:'gold'},
+   {id:'clock',name:'Carriage clock',x:29,y:22,v:3000,crack:1.5,kind:'statue'}],
+  hints:['Two ways in from the very first night: the front door, and the glass conservatory doors on the west side. Cover both.',
+   'The kitchen door at the back opens tonight, and the kitchen leads straight into the library. Three ways in now.',
+   'Someone will come down the library chimney tonight. Hackers loop cameras on their route, and the Magpie throws noise-makers to drag guards away. Back cameras up with plates.',
+   'From tonight the crew cuts the power once, briefly. The scout radios your plates, the lensman walks through one laser, and an Impostor in a guard uniform walks straight past cameras.',
+   'Last night. Six of them, a coal chute up into the kitchen, and at 01:26 the Fox: a professional who goes straight for the Ashcombe Tiara.'],
+  roomOf(x,y){if(x<10)return y<13?'kitchen':'conservatory';if(x<27)return y<10?'library':'great hall';if(y<9)return 'study';if(y<16)return 'long gallery';return 'drawing room'}},
 };
 let SITE='gallery';try{const v=localStorage.getItem('ij-site');if(v&&SITES[v])SITE=v}catch(e){}
 function useSite(id){if(!SITES[id])id='gallery';SITE=id;const S_=SITES[id];
@@ -768,7 +794,7 @@ const AU={on:true,ctx:null,buf:{},vo:{},master:null,sfxBus:null,voBus:null,musBu
  fake(x){this.play('fake',{vol:.7,x})||SYN.deny()},
  step(x,vol=.25){this.play('step',{vol,x})},
  stepAt(o,vol=.25){const i=idx(Math.max(0,Math.min(W-1,Math.floor(o.x))),Math.max(0,Math.min(H-1,Math.floor(o.y))));const r=G[i]===OUT?'street':roomOf(i);
-  const k=r==='street'?'stepGrass':/office|security|manager/.test(r)?'stepCarpet':/gallery|deposit|lobby|banking/.test(r)?'stepWood':'stepHard';
+  const k=r==='street'?'stepGrass':/office|security|manager|study|drawing/.test(r)?'stepCarpet':/gallery|deposit|lobby|banking|library/.test(r)?'stepWood':'stepHard';
   if(!this.play(k,{vol:vol*1.5,x:o.x,rate:.9+Math.random()*.2}))this.play('step',{vol,x:o.x})},
  siren(){this.play('alarm3',{vol:.8});this.play('alarm3',{vol:.7,delay:1.1});SYN.trip()},
  start(){this.play('confirm',{vol:.6})||SYN.start()},
@@ -1473,7 +1499,7 @@ function staticSketch(c){
   txt(c,e.name.toLowerCase()+(e.roof?'!':' ?'),...(e.roof?[sx+.5,sy+1.35]:entLab(e,e.id==='back'?-.2:1.8,e.id==='back'?-1.1:.6)),.62,'#c8382b',{font:'Caveat',weight:'700',rot:-.06})});
  roomLabels(c,'#2f2c27',.72,'Caveat',{weight:'700',rot:-.03});
  c.strokeStyle='rgba(150,100,50,.18)';c.lineWidth=.18;c.beginPath();c.arc(36.3,24.6,1.1,.3,5.9);c.stroke();c.lineWidth=.05;c.beginPath();c.arc(36.25,24.65,.9,0,6.28);c.stroke();
- txt(c,SITES[SITE].note1,3,.9,.75,'#2c5aa0',{font:'Caveat',weight:'700',align:'left',rot:-.015});
+ txt(c,SITES[SITE].note1,SITES[SITE].n1x||3,.9,.75,'#2c5aa0',{font:'Caveat',weight:'700',align:'left',rot:-.015});
  txt(c,SITES[SITE].note2[0],SITES[SITE].note2[1],SITES[SITE].note2[2],.6,'#2c5aa0',{font:'Caveat',rot:.02,align:'left'});
 }
 function staticBoard(c){
