@@ -49,7 +49,7 @@ for k,fs in G.items():
         o=f'enc/{k}_{n}.mp3'
         subprocess.run(['ffmpeg','-y','-loglevel','error','-i',f,'-t','2.5','-ac','1','-ar','24000','-b:a','40k',o],check=True)
         out[k].append(base64.b64encode(open(o,'rb').read()).decode())
-for n,f in [('musHeist','dl/mus_heist.ogg')]:
+for n,f in [('musHeist','dl/mus_heist.ogg'),('musPlan','dl/mus_plan.ogg')]:
     o=f'enc/{n}.mp3';subprocess.run(['ffmpeg','-y','-loglevel','error','-i',f,'-ac','1','-ar','32000','-b:a','56k',o],check=True);out[n]=[base64.b64encode(open(o,'rb').read()).decode()]
 vo={}
 for f in sorted(glob.glob('vo/*.mp3')):
