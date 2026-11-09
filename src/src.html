@@ -280,6 +280,8 @@ body[data-theme=riso] #hint{background:#fff;color:#1d3f8f;border:2px solid #1d3f
 
 #mtabs{display:none}
 #loupe{position:fixed;width:150px;height:150px;border-radius:50%;border:3px solid var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.45);pointer-events:none;display:none;z-index:60;background:var(--bg)}
+html{touch-action:manipulation;overscroll-behavior:none;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 input,textarea{-webkit-user-select:auto;user-select:auto}
 button{touch-action:manipulation}
@@ -2026,6 +2028,19 @@ addEventListener('resize',resize);resize();$('fsBtn').onclick=()=>{AU.init();tog
 if(document.fonts)document.fonts.ready.then(()=>redrawStatic());
 titleScreen();refreshUI();
 requestAnimationFrame(frame);
+
+// lockdown: no pinch/double-tap zoom, no page scroll except inside panels that actually scroll
+(function(){
+ const pv=e=>e.preventDefault();
+ ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,pv,{passive:false}));
+ document.addEventListener('dblclick',e=>{if(!e.target.closest('input,textarea'))e.preventDefault()},{passive:false});
+ const scroller=el=>{for(;el&&el!==document.body;el=el.parentElement){const cs=getComputedStyle(el),o=cs.overflowY;if((o==='auto'||o==='scroll')&&el.scrollHeight>el.clientHeight+1)return el}return null};
+ let lastEnd=0,lastEl=null;
+ document.addEventListener('touchmove',e=>{if(e.touches.length>1||(typeof e.scale==='number'&&e.scale!==1)){e.preventDefault();return}if(!scroller(e.target))e.preventDefault()},{passive:false});
+ document.addEventListener('touchend',e=>{const now=e.timeStamp,t=e.target;if(t.closest&&t.closest('input,textarea,select')){lastEnd=0;return}
+  if(now-lastEnd<350&&e.changedTouches.length===1&&!(t.closest&&t.closest('#cv'))){e.preventDefault();const b=t.closest&&t.closest('button,a,label,[onclick]');if(b)b.click()}
+  lastEnd=now;lastEl=t},{passive:false});
+})();
 </script>
 </body>
 </html>
