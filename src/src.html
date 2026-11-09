@@ -342,14 +342,75 @@ button{touch-action:manipulation}
  #hint{top:auto!important;bottom:6px!important;opacity:.95}
  #toasts{top:auto!important;bottom:8px!important}
 }
+/* ===== home / title page ===== */
+#home{position:fixed;inset:0;z-index:45;display:none;overflow:hidden;background:radial-gradient(120% 90% at 50% 30%,#14467f 0%,#0b2a4f 55%,#061a33 100%);color:#e8f3ff}
+body.home #home{display:block}
+body[data-theme=sketch] #home{background:#efe6cf;color:#2f2c27}
+#homeCv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#home .hwrap{position:relative;height:100%;display:grid;grid-template-rows:auto minmax(110px,1fr) auto auto;justify-items:center;padding:max(18px,env(safe-area-inset-top)) 18px max(12px,env(safe-area-inset-bottom));box-sizing:border-box;max-width:560px;margin:0 auto;grid-template-columns:minmax(0,1fr);width:100%}
+#home .hlogo{text-align:center;margin-top:3vh;position:relative;width:100%;margin-bottom:14px}
+#home .hkick{font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.32em;text-transform:uppercase;opacity:.8}
+body[data-theme=sketch] #home .hkick{font-family:'Patrick Hand',cursive;letter-spacing:.18em;font-size:14px}
+#home h1{margin:.12em 0 .1em;font-family:'Lilita One','Architects Daughter',cursive;font-weight:normal;font-size:clamp(58px,17vw,104px);line-height:.86;letter-spacing:.04em;color:#e8f3ff;text-shadow:0 2px 0 #7fe3ff,0 6px 0 #0a3a6e,0 10px 24px rgba(0,0,0,.55);animation:hIn .8s cubic-bezier(.2,1.5,.4,1) both}
+body[data-theme=sketch] #home h1{font-family:'Caveat',cursive;font-weight:700;color:#2f2c27;text-shadow:3px 3px 0 #f4c95d;letter-spacing:.02em;line-height:.8}
+#home h1 .o{display:inline-block;position:relative;color:transparent}
+#home h1 .o::after{content:'';position:absolute;left:12%;right:12%;top:22%;bottom:16%;border-radius:50%;border:.11em solid #e8f3ff;box-shadow:0 0 0 .04em #7fe3ff,inset 0 0 .25em rgba(127,227,255,.6);background:radial-gradient(circle at 50% 50%,#ff6b78 0 18%,#2a0d14 20% 34%,transparent 36%)}
+body[data-theme=sketch] #home h1 .o::after{border-color:#2f2c27;box-shadow:2px 2px 0 #f4c95d;background:radial-gradient(circle at 50% 50%,#c8382b 0 18%,#2f2c27 20% 34%,transparent 36%)}
+@keyframes hIn{from{transform:scale(1.6) rotate(-4deg);opacity:0}}
+#home .htape{position:relative;width:calc(100% + 80px);left:-40px;transform:rotate(-3deg);margin-top:6px;background:repeating-linear-gradient(-45deg,#ffd36b 0 18px,#1b1b1b 18px 36px);padding:5px 0;box-shadow:0 6px 16px rgba(0,0,0,.4);overflow:hidden}
+#home .htrack{display:flex;width:max-content;animation:tape 22s linear infinite}
+#home .htrack span{background:#ffd36b;color:#1b1b1b;font-family:'Share Tech Mono',monospace;font-weight:bold;font-size:13px;letter-spacing:.2em;padding:3px 0;white-space:nowrap}
+@keyframes tape{to{transform:translateX(-50%)}}
+#hScene{width:100%;min-height:110px}
+#home .hmenu{display:flex;flex-direction:column;gap:9px;width:min(100%,380px)}
+#home .hmenu button{font-family:'Architects Daughter',cursive;font-size:18px;padding:11px 14px;border:1.5px solid rgba(232,243,255,.55);background:rgba(6,26,51,.55);color:#e8f3ff;letter-spacing:.04em;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);transition:transform .12s}
+#home .hmenu button:active{transform:scale(.97)}
+#home .hmenu button.pri{font-family:'Lilita One',cursive;font-size:24px;letter-spacing:.08em;padding:13px;background:#e8f3ff;color:#0c2f57;border-color:#e8f3ff;box-shadow:0 0 0 3px rgba(127,227,255,.35),0 8px 22px rgba(0,0,0,.4);animation:pulse 2.4s ease-in-out infinite}
+#home .hmenu button small{display:block;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.06em;opacity:.75;margin-top:2px}
+@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(127,227,255,.12),0 8px 22px rgba(0,0,0,.4)}}
+#home .hrow{display:flex;gap:9px}#home .hrow button{flex:1;font-size:15px;padding:9px 6px}
+body[data-theme=sketch] #home .hmenu button{font-family:'Caveat',cursive;font-size:23px;background:#fbf6e8;color:#2f2c27;border:2px solid #2f2c27;border-radius:4px 8px 5px 9px/9px 4px 8px 5px;box-shadow:2px 3px 0 rgba(0,0,0,.18)}
+body[data-theme=sketch] #home .hmenu button.pri{background:#2c5aa0;color:#fbf6e8;font-family:'Caveat',cursive;font-weight:700;font-size:30px;box-shadow:3px 4px 0 #2f2c27;animation:none}
+body[data-theme=sketch] #home .hmenu button small{font-family:'Patrick Hand',cursive;font-size:13px}
+body[data-theme=sketch] #home .hrow button{font-size:19px}
+#home .hfoot{font-size:10px;opacity:.5;margin-top:10px;font-family:'Share Tech Mono',monospace;text-align:center}
+@media (max-height:560px) and (min-aspect-ratio:5/4){
+ #home .hwrap{max-width:none;grid-template-columns:minmax(0,1fr) minmax(260px,340px);grid-template-rows:auto 1fr auto;column-gap:22px;align-items:center;padding:max(10px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) 8px max(18px,env(safe-area-inset-left))}
+ #home .hlogo{grid-column:1;grid-row:1;margin-top:0}#hScene{grid-column:1;grid-row:2;min-height:80px;align-self:stretch}
+ #home .hmenu{grid-column:2;grid-row:1/3;gap:7px}#home .hmenu button{padding:8px 10px;font-size:16px}#home .hmenu button.pri{font-size:21px;padding:10px}
+ #home h1{font-size:clamp(44px,10vw,72px)}#home .hfoot{grid-column:1/3;margin-top:4px}
+}
+/* how to play */
+.htp{text-align:center}.htp .ill{height:120px;display:flex;align-items:center;justify-content:center;gap:16px;margin:4px 0 6px}
+.htp .ill svg{width:54px;height:54px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.htp .ill canvas{width:260px;height:120px;max-width:100%}
+.htp p{min-height:66px}
+.dots{display:flex;gap:7px;justify-content:center;margin:8px 0}.dots i{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.3}.dots i.on{opacity:1}
+.htpNav{display:flex;gap:8px}.htpNav button{flex:1}
+/* coach marks */
+#coach{position:fixed;z-index:44;max-width:min(330px,calc(100vw - 20px));background:#e8f3ff;color:#0c2f57;padding:12px 14px 10px;font-size:14px;line-height:1.4;box-shadow:0 10px 30px rgba(0,0,0,.45);display:none;border-radius:3px;animation:pop .3s cubic-bezier(.2,1.4,.4,1)}
+#coach.show{display:block}
+#coach b.step{display:block;font-size:10px;letter-spacing:.2em;opacity:.6;margin-bottom:3px}
+#coach .cbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+#coach .cbtns button{border:1px solid #0c2f57;background:transparent;color:#0c2f57;font-size:12px;padding:4px 10px}
+#coach .cbtns button.n{background:#0c2f57;color:#e8f3ff}
+#coach::after{content:'';position:absolute;width:14px;height:14px;background:inherit;transform:rotate(45deg);left:var(--ax,50%);margin-left:-7px}
+#coach.up::after{bottom:-6px}#coach.down::after{top:-6px}#coach.none::after{display:none}
+body[data-theme=sketch] #coach{background:#fff8d6;color:#2f2c27;border:2px solid #2f2c27;font-family:'Patrick Hand',cursive;font-size:16px}
+.tutHi{position:relative;z-index:43;outline:3px solid #ffd36b!important;outline-offset:2px;animation:tutP 1.1s ease-in-out infinite}
+@keyframes tutP{50%{outline-color:rgba(255,211,107,.25)}}
+#coachDot{position:fixed;z-index:43;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:3px solid #ffd36b;pointer-events:none;display:none;animation:cdot 1.2s ease-out infinite}
+@keyframes cdot{from{transform:scale(.5);opacity:1}to{transform:scale(1.6);opacity:0}}
+#homeBtn{border:1px solid color-mix(in srgb,var(--line) 50%,transparent);background:transparent;padding:4px 9px;font-size:13px}
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ THREE BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ THREE BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v9 · sound by Kenney (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
   <div id="styles"></div>
-  <button id="fsBtn" title="Full screen (F)">⛶</button><button id="mute" title="Sound (M)">♪ on</button>
+  <button id="homeBtn" title="Menu (Esc)">☰</button><button id="fsBtn" title="Full screen (F)">⛶</button><button id="mute" title="Sound (M)">♪ on</button>
  </header>
  <main>
   <div id="toasts"></div><canvas id="loupe" width="300" height="300"></canvas><div id="stage"><canvas id="cv"></canvas><div id="hint"></div><div id="abil"></div><div id="replayBar"><span id="rpLbl">REPLAY</span><div class="bar"><i id="rpBar"></i></div><button class="small" data-r="2">2×</button><button class="small on" data-r="4">4×</button><button class="small" data-r="8">8×</button><button class="small" id="rpSkip">Skip ▸▸</button></div><div id="overlay"><div id="sheet"></div></div></div>
@@ -1172,7 +1233,7 @@ function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SIT
 function nextNight(){setMTab('build');hideSheet();ST.night++;for(const l of ST.loot)if(l.dropped){l.i=l.home;l.dropped=false}if(ST.endless){resetLoot();ST.stolen=0;ST.limit=OT_CAP;ST.intel.plates.clear();otMod()}buildMap(ST.night);ST.phase='plan';ST.thieves=[];ST.guards=[];ST.smokes=[];ST.vaultOpen=false;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false}
  devicesChanged();redrawStatic();refreshUI();hint(nightDef(ST.night).hint,9);logLine(dayName(ST.night)+': new intel on tonight\'s crew.');saveGame()}
-function newGame(){useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
+function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
 
 // ================================================================ ABILITIES
 function useSiren(){if(ST.phase!=='heist'||ST.abil.siren<=0)return;ST.abil.siren--;AU.siren();AU.say('siren',{cd:0,pri:3});FX.flash=.7;FX.flashCol=S.danger;FX.shake=.4;ST.alarmT=6;logLine('<b style="color:var(--danger)">PANIC SIREN</b> sounded.');
@@ -1917,8 +1978,9 @@ function drawLoupe(){if(!touchP||performance.now()-touchP.t0<130)return;const r=
  const L=150;let lx=touchP.x-L/2,ly=touchP.y-L-46;if(ly<6)ly=touchP.y+46;lx=Math.max(6,Math.min(innerWidth-L-6,lx));loupe.style.left=lx+'px';loupe.style.top=ly+'px';loupe.style.display='block'}
 function finishRoute(){const g=ST.routeFor;ST.routeFor=null;devicesChanged();hint(g.route.length?'Patrol set: '+g.route.length+' points.':'Sentry set: this guard stands and scans.',3);refreshUI()}
 addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;AU.init();const k=e.key.toLowerCase();
+ if(homeOn()){if(k==='escape'&&HOME.from==='game')homeAct('resume');return}
  const tk=Object.keys(DEV).find(t=>DEV[t].key===k);if(tk&&ST.phase==='plan'){selectTool(tk);return}
- if(k==='escape'){if(ST.routeFor)finishRoute();ST.tool=null;ST.sel=null;refreshUI()}
+ if(k==='escape'){if(!ST.routeFor&&!ST.tool&&!ST.sel&&!$('overlay').classList.contains('show')){HOME.from='game';showHome();return}if(ST.routeFor)finishRoute();ST.tool=null;ST.sel=null;refreshUI()}
  if(k==='enter'&&ST.routeFor)finishRoute();
  if(k===' '){e.preventDefault();if(ST.phase==='plan')startNight();else if(ST.phase==='heist')setSpeed(ST.speed?0:1)}
  if(ST.phase==='heist'&&k==='q'){ST.abTool=ST.abTool==='slam'?null:'slam';renderAbil()}
@@ -2011,23 +2073,6 @@ function openLooks(){if($('looksDone'))return;looksPrev=$('overlay').classList.c
  showSheet(`<h2>Choose an art style</h2><p style="margin:0;opacity:.8">Every style is drawn in code and plays the same. Switch any time, even mid-heist (T cycles).</p>${galleryHTML()}<button class="cta" id="looksDone">Done</button>`);wireGallery();
  $('looksDone').onclick=()=>{if(looksPrev){showSheet(looksPrev);if(looksPrev.includes('class="gal"'))wireGallery()}else hideSheet()};
  if(ST.phase==='heist')setSpeed(0)}
-function titleScreen(){
- showSheet(`<h1>INSIDE JOB</h1><p style="opacity:.8;margin-top:0">A heist game from the other side.</p>
- <p>You're the security consultant for <span id="siteNm">${SITES[SITE].name}</span>. For five nights, crews will try to rob it. You can't stop them coming in. You can only decide what they have to walk past.</p>
- <ul><li><b>Thieves route around what they can see.</b> Every camera you fit bends their path. The dotted lines show where each one plans to go.</li>
- <li>Being watched fills a thief's suspicion bar. Full means caught.</li>
- <li>They have to get back out carrying the loot. It's only lost if it leaves the building.</li>
- <li>Pressure plates are the one thing they can't see.</li></ul>
- <ul><li>Your tools: slam doors (Q), a panic siren (W), a speaker you click to bluff a guard's voice, decoy loot, upgrades, and a perk between nights.</li><li>The crews learn. Escapees warn the next crew, scouts radio your plates, and a caught thief rattles the rest. Press I to see what each one is thinking.</li></ul>
- <p style="margin-bottom:4px">Building:</p><div class="pick" id="sitePick">${Object.entries(SITES).map(([k,d])=>`<button data-s="${k}" class="${k===SITE?'on':''}">${d.name}</button>`).join('')}</div><p id="siteDesc" style="margin:0 0 6px;font-size:12px;opacity:.75">${SITES[SITE].blurb}</p>
- <p style="margin-bottom:4px">Difficulty:</p><div class="pick" id="diffPick">${Object.entries(DIFF).map(([k,d])=>`<button data-d="${k}" class="${k===ST.diff?'on':''}" title="${d.desc}">${d.name}</button>`).join('')}</div><p id="diffDesc" style="margin:0;font-size:12px;opacity:.75">${DIFF[ST.diff].desc}</p>${(()=>{let b=0;try{b=+localStorage.getItem('ij-best')||0}catch(e){}return b?`<p style="margin:6px 0 0;font-size:12px">Best overtime run: <b>${b}</b> extra night${b===1?'':'s'}.</p>`:`<p style="margin:6px 0 0;font-size:12px;opacity:.75">Finish Friday to unlock endless overtime nights.</p>`})()}
- ${(()=>{const di=dailyInfo(),b=dailyBest();return `<button class="cta" style="opacity:.9;margin-top:8px;font-size:16px;padding:8px" onclick="AU.init();startDaily()">Daily job: ${di.mod.name} ▸${b?' (best '+money(b.stolen)+')':''}</button>`})()}
- <p style="margin:8px 0 0;font-size:12px"><a href="#" onclick="showAchs();return false" style="color:inherit">★ Achievements: ${ACHS.size}/${ACH.length}</a></p>
- <p style="margin-bottom:4px">Pick an art style (switch any time with T):</p>${galleryHTML()}
- ${(()=>{const sv=readSave();return sv?`<button class="cta" onclick="AU.init();loadGame()">Continue: ${dayName(sv.night)} night · ${DIFF[sv.diff]?.name||''} ▸</button><button class="cta" style="opacity:.8;margin-top:8px;font-size:16px;padding:8px" onclick="AU.init();clearSave();newGame()">Start a new contract</button>`:`<button class="cta" onclick="AU.init();newGame()">Take the contract ▸</button>`})()}`);wireGallery();
- document.querySelectorAll('#sitePick button').forEach(b=>b.onclick=()=>{SITE=b.dataset.s;try{localStorage.setItem('ij-site',SITE)}catch(e){}document.querySelectorAll('#sitePick button').forEach(o=>o.classList.toggle('on',o===b));$('siteDesc').textContent=SITES[SITE].blurb;$('siteNm').textContent=SITES[SITE].name;useSite(SITE);ST.night=1;buildMap(1);resetLoot();devicesChanged();redrawStatic();AU.init();AU.click()});
- document.querySelectorAll('#diffPick button').forEach(b=>b.onclick=()=>{ST.diff=b.dataset.d;try{localStorage.setItem('ij-diff',ST.diff)}catch(e){}document.querySelectorAll('#diffPick button').forEach(o=>o.classList.toggle('on',o===b));$('diffDesc').textContent=DIFF[ST.diff].desc;AU.init();AU.click()});
-}
 
 // ================================================================ LOOP
 let last=performance.now();
@@ -2041,7 +2086,7 @@ function frame(now){
   crewTick-=dt;if(crewTick<=0){crewTick=.4;renderCrew();$('sClock').textContent=fmtClock();if(ST.sel)refreshSelOnly()}}
  else if(ST.phase==='replay'){updateReplay(dt)}
  else if(ST.phase==='plan'){ST.t+=dt;for(const d of ST.devices)if(d.type==='camera')d.cur=aimDrag&&aimDrag.dev===d?d.ang:camAngle(d,ST.t)}
- render(dt);drawLoupe();
+ if(homeOn())drawHome();else render(dt);drawLoupe();syncTheme(dt);if((tutTick._n=(tutTick._n||0)+1)%6===0)tutTick();
  requestAnimationFrame(frame);
 }
 function refreshSelOnly(){}
@@ -2052,6 +2097,160 @@ try{const t=localStorage.getItem('ij-theme');if(t&&STYLES[t])theme=t;const d=loc
 setTheme(theme);document.querySelectorAll('#mtabs button').forEach(b=>b.onclick=()=>{setMTab(b.dataset.t);AU.click&&AU.click()});
 addEventListener('resize',resize);resize();$('fsBtn').onclick=()=>{AU.init();toggleFS()};if(navigator.standalone||matchMedia('(display-mode: fullscreen),(display-mode: standalone)').matches)$('fsBtn').hidden=true;
 if(document.fonts)document.fonts.ready.then(()=>redrawStatic());
+// ================================================================ HOME / TITLE PAGE
+const HOME={from:null,t0:performance.now()};
+function homeOn(){return document.body.classList.contains('home')}
+function showHome(){if(ST.phase==='heist'&&ST.speed>0){HOME.speed=ST.speed;setSpeed(0)}hideSheet();coachHide();
+ const inGame=HOME.from==='game';const sv=readSave();const di=dailyInfo(),db=dailyBest();
+ let main='';
+ if(inGame)main=`<button class="pri" data-h="resume">Resume<small>${ST.daily?'Daily job':dayName(ST.night)+' night'} · ${SITES[SITE].name}</small></button><button data-h="new">New contract</button>`;
+ else if(sv)main=`<button class="pri" data-h="cont">Continue<small>${dayName(sv.night)} night · ${(SITES[sv.site]||SITES.gallery).name} · ${DIFF[sv.diff]?.name||''}</small></button><button data-h="new">New contract</button>`;
+ else main=`<button class="pri" data-h="new">Play</button>`;
+ $('hMenu').innerHTML=main+`<button data-h="daily">Daily job<small>${di.mod.name}${db?' · best '+money(db.stolen):''}</small></button>
+ <button data-h="htp">How to play</button>
+ <div class="hrow"><button data-h="ach">★ ${ACHS.size}/${ACH.length}</button><button data-h="look">${STYLES[theme].name}</button><button data-h="snd">${AU.on?'♪ On':'♪ Off'}</button></div>`;
+ document.querySelectorAll('#hMenu button').forEach(b=>b.onclick=()=>{AU.init();AU.click&&AU.click();homeAct(b.dataset.h)});
+ document.body.classList.add('home');resizeHome()}
+function hideHome(){document.body.classList.remove('home')}
+function homeAct(h){
+ if(h==='resume'){hideHome();HOME.from=null;if(ST.phase==='heist'&&HOME.speed){setSpeed(HOME.speed);HOME.speed=0}return}
+ if(h==='cont'){hideHome();HOME.from=null;loadGame();return}
+ if(h==='new'){hideHome();setupSheet();return}
+ if(h==='daily'){hideHome();HOME.from=null;startDaily();return}
+ if(h==='htp'){hideHome();howToPlay(0);return}
+ if(h==='ach'){hideHome();showSheet(`<h2>Achievements · ${ACHS.size}/${ACH.length}</h2>${achHTML()}<button class="cta" id="achBack">Back</button>`);$('achBack').onclick=()=>{AU.click();showHome()};return}
+ if(h==='look'){setTheme(theme==='blueprint'?'sketch':'blueprint');showHome();return}
+ if(h==='snd'){toggleMute();showHome();return}}
+function titleScreen(){HOME.from=null;showHome()}
+const hcv=document.createElement('canvas');hcv.id='homeCv';
+function resizeHome(){const r=$('home').getBoundingClientRect(),dpr=Math.min(2,devicePixelRatio||1);hcv.width=Math.round(r.width*dpr);hcv.height=Math.round(r.height*dpr);hcv._dpr=dpr}
+function drawHome(){const c=hcv.getContext('2d'),dpr=hcv._dpr||1,Wp=hcv.width/dpr,Hp=hcv.height/dpr;if(!Wp)return;
+ const SK=theme==='sketch';const now=(performance.now()-HOME.t0)/1000;
+ c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,Wp,Hp);
+ // background grid
+ c.strokeStyle=SK?'rgba(80,110,160,.18)':'rgba(127,227,255,.07)';c.lineWidth=1;const g=24,off=(now*6)%g;c.beginPath();for(let x=-g+off;x<Wp;x+=g){c.moveTo(x,0);c.lineTo(x,Hp)}for(let y=-g+off*.5;y<Hp;y+=g){c.moveTo(0,y);c.lineTo(Wp,y)}c.stroke();
+ if(!SK){c.strokeStyle='rgba(127,227,255,.14)';c.beginPath();for(let x=-g*5+off;x<Wp;x+=g*5){c.moveTo(x,0);c.lineTo(x,Hp)}c.stroke()}
+ // scene band
+ const sc=$('hScene').getBoundingClientRect(),hr=$('home').getBoundingClientRect();const R={x:sc.left-hr.left,y:sc.top-hr.top,w:sc.width,h:sc.height};
+ if(R.h<40)return;const full=R.w>Wp*.8,s=Math.min(R.h/2.6,64),Wt=Math.max(6,(full?Wp:R.w)/s);const ox=full?0:R.x,oy=R.y+R.h/2-s*.4;if(!full){c.save();c.beginPath();c.rect(R.x,R.y-4,R.w,R.h+8);c.clip()}
+ const T=(now%15),ink=SK?'#2f2c27':'#e8f3ff';
+ c.save();c.translate(ox,oy);c.scale(s,s);
+ // corridor: back wall + floor
+ c.fillStyle=SK?'rgba(255,250,235,.7)':'rgba(10,40,80,.6)';c.fillRect(-1,-1.2,Wt+2,2.4);
+ c.fillStyle=SK?'#d8cfb8':'#2a5f9a';c.fillRect(-1,-1.5,Wt+2,.4);c.fillStyle=SK?'#2f2c27':'#9fd3ff';c.fillRect(-1,-1.12,Wt+2,.05);
+ c.fillStyle=SK?'#d8cfb8':'#1d4f88';c.fillRect(-1,1.15,Wt+2,.3);c.fillStyle=SK?'#2f2c27':'#7fb7ee';c.fillRect(-1,1.15,Wt+2,.04);
+ // plinth + gem
+ const gx=Wt*.55,gy=-.55,taken=T>6&&T<13.5;
+ c.fillStyle=SK?'#fbf6e8':'#173f6e';c.strokeStyle=ink;c.lineWidth=.04;c.fillRect(gx-.32,gy-.1,.64,.42);c.strokeRect(gx-.32,gy-.1,.64,.42);
+ if(!taken){const gl=c.createRadialGradient(gx,gy-.2,0,gx,gy-.2,1.2);gl.addColorStop(0,SK?'rgba(44,90,160,.35)':'rgba(160,120,255,.55)');gl.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=gl;c.fillRect(gx-1.2,gy-1.4,2.4,2.4);
+  c.fillStyle=SK?'#2c5aa0':'#c7a6ff';c.beginPath();c.moveTo(gx,gy-.45+Math.sin(now*2)*.03);c.lineTo(gx+.17,gy-.25);c.lineTo(gx,gy-.05);c.lineTo(gx-.17,gy-.25);c.closePath();c.fill();c.stroke()}
+ // camera
+ const cx=Wt*.3,cy=-1.2,ca=Math.PI/2+Math.sin(now*.9)*.75;
+ const cg=c.createRadialGradient(cx,cy,0,cx,cy,3);cg.addColorStop(0,SK?'rgba(200,56,43,.22)':'rgba(127,227,255,.35)');cg.addColorStop(1,'rgba(127,227,255,0)');
+ c.fillStyle=cg;c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,3,ca-.42,ca+.42);c.closePath();c.fill();
+ c.save();c.translate(cx,cy);c.rotate(ca);c.fillStyle=SK?'#fbf6e8':'#cfe9ff';c.strokeStyle=SK?'#2f2c27':'#061a33';c.lineWidth=.04;c.fillRect(-.05,-.13,.36,.26);c.strokeRect(-.05,-.13,.36,.26);c.restore();
+ c.fillStyle=(now%1<.5)?'#ff6b78':'#5a1520';c.beginPath();c.arc(cx,cy,.05,0,7);c.fill();
+ // actors
+ const keep=ST.t;ST.t=now;
+ let tx_,tface=0,tmove=1,tloot=false,tcr=true,tilt=0,gxp=null,gface=Math.PI,gmove=1,bub=null,gbub=null;
+ if(T<4.5){tx_=-1+(gx-.7+1)*(T/4.5)}else if(T<6){tx_=gx-.7;tmove=0;bub=T>4.8?'…':null}else if(T<9.7){const k=(T-6)/3.7;tx_=gx-.7-(gx-.7-Wt*.2)*k;tface=Math.PI;tloot=true;tcr=false;gxp=Wt+1-(Wt+1-(Wt*.2+.5))*Math.min(1,(T-6.3)/3.4);if(T<7)gbub='!'}
+ else{tx_=Wt*.2;tface=Math.PI;tmove=0;tloot=true;tilt=1.25;gxp=Wt*.2+.55;gmove=0;bub=null}
+ const inCam=(()=>{const a=Math.atan2(.2-cy,tx_-cx),d=Math.hypot(tx_-cx,.2-cy);let da=Math.abs(((a-ca+Math.PI*3)%(Math.PI*2))-Math.PI);return d<3&&da<.42})();
+ if(inCam&&T<6)bub='?';
+ const fade=T>13.5?Math.max(0,1-(T-13.5)/1):1;c.globalAlpha=fade;
+ c.save();c.translate(tx_,.2);figure(c,{kind:'thief',col:SK?'#c8382b':'#ffd36b',body:SK?'#5b5850':'#1c2230',head:SK?'#3c3a35':'#151a24',skin:'#e9c4a0',moving:tmove,face:tface,id:1,crouch:tcr&&T<6,tilt,loot:tloot});c.restore();
+ if(gxp!==null){// torch
+  if(gmove){const tg=c.createRadialGradient(gxp,.1,0,gxp,.1,2.4);tg.addColorStop(0,'rgba(255,230,150,.35)');tg.addColorStop(1,'rgba(255,230,150,0)');c.fillStyle=tg;c.beginPath();c.moveTo(gxp,.1);c.arc(gxp,.1,2.4,Math.PI-.35,Math.PI+.35);c.closePath();c.fill()}
+  c.save();c.translate(gxp,.25);figure(c,{kind:'guard',col:SK?'#2c5aa0':'#7fe3ff',body:SK?'#3f6db5':'#24467e',head:SK?'#f3e3c8':'#f0c9a0',skin:'#f0c9a0',legs:SK?'#2f2c27':'#101c33',moving:gmove,face:gface,id:3});c.restore()}
+ const bubble=(x,y,t,col)=>{c.fillStyle=SK?'#fbf6e8':'#e8f3ff';c.strokeStyle=SK?'#2f2c27':'#061a33';c.lineWidth=.04;c.beginPath();c.arc(x,y,.22,0,7);c.fill();c.stroke();txt(c,t,x,y+.01,.3,col,{font:'Nunito',weight:'800'})};
+ if(bub)bubble(tx_+.15,-.75,bub,bub==='?'?'#e8742a':'#0c2f57');if(gbub&&gxp!==null)bubble(gxp,-.75,gbub,'#c8382b');
+ if(T>=9.7&&T<13.5){const k=Math.min(1,(T-9.7)/.25);c.save();c.translate(Wt*.2+.3,-.2);c.rotate(-.12);c.scale(2.2-1.2*k,2.2-1.2*k);c.globalAlpha=fade*Math.min(1,k*1.5)*.9;c.strokeStyle=SK?'#c8382b':'#ff6b78';c.lineWidth=.07;c.strokeRect(-1.05,-.32,2.1,.64);txt(c,'CAUGHT',0,.02,.42,SK?'#c8382b':'#ff6b78',{font:SK?'Caveat':'Share Tech Mono',weight:'700'});c.restore()}
+ c.globalAlpha=1;ST.t=keep;c.restore();if(!full)c.restore();
+ // home music + a footstep or two
+ if(!HOME.lastStep||now-HOME.lastStep>.45){HOME.lastStep=now}
+}
+// ================================================================ SETUP (new contract)
+function setupSheet(){HOME.from=null;showSheet(`<h2>New contract</h2>
+ <p style="margin:0 0 4px">Building:</p><div class="pick" id="sitePick">${Object.entries(SITES).map(([k,d])=>`<button data-s="${k}" class="${k===SITE?'on':''}">${d.name}</button>`).join('')}</div><p id="siteDesc" style="margin:0 0 6px;font-size:12px;opacity:.75">${SITES[SITE].blurb}</p>
+ <p style="margin-bottom:4px">Difficulty:</p><div class="pick" id="diffPick">${Object.entries(DIFF).map(([k,d])=>`<button data-d="${k}" class="${k===ST.diff?'on':''}">${d.name}</button>`).join('')}</div><p id="diffDesc" style="margin:0;font-size:12px;opacity:.75">${DIFF[ST.diff].desc}</p>
+ ${(()=>{let b=0;try{b=+localStorage.getItem('ij-best')||0}catch(e){}return b?`<p style="margin:6px 0 0;font-size:12px">Best overtime run: <b>${b}</b> extra night${b===1?'':'s'}.</p>`:`<p style="margin:6px 0 0;font-size:12px;opacity:.75">Finish Friday to unlock endless overtime nights.</p>`})()}
+ <div class="pick" id="tutPick" style="margin-top:12px"><button data-t="1" class="${tutWanted()?'on':''}">Tutorial on the first night</button><button data-t="0" class="${tutWanted()?'':'on'}">No tutorial</button></div>
+ ${readSave()?'<p style="margin:4px 0 0;font-size:12px;opacity:.75">This replaces your saved contract.</p>':''}
+ <button class="cta" id="takeBtn">Take the contract ▸</button><button class="cta" id="setBack" style="opacity:.8;margin-top:8px;font-size:16px;padding:8px">Back</button>`);
+ document.querySelectorAll('#sitePick button').forEach(b=>b.onclick=()=>{SITE=b.dataset.s;try{localStorage.setItem('ij-site',SITE)}catch(e){}document.querySelectorAll('#sitePick button').forEach(o=>o.classList.toggle('on',o===b));$('siteDesc').textContent=SITES[SITE].blurb;useSite(SITE);ST.night=1;buildMap(1);resetLoot();devicesChanged();redrawStatic();AU.init();AU.click()});
+ document.querySelectorAll('#diffPick button').forEach(b=>b.onclick=()=>{ST.diff=b.dataset.d;try{localStorage.setItem('ij-diff',ST.diff)}catch(e){}document.querySelectorAll('#diffPick button').forEach(o=>o.classList.toggle('on',o===b));$('diffDesc').textContent=DIFF[ST.diff].desc;AU.init();AU.click()});
+ let tutOn=tutWanted();document.querySelectorAll('#tutPick button').forEach(b=>b.onclick=()=>{tutOn=b.dataset.t==='1';document.querySelectorAll('#tutPick button').forEach(o=>o.classList.toggle('on',o===b));AU.click()});
+ $('takeBtn').onclick=()=>{AU.init();clearSave();newGame();if(tutOn)tutStart()};$('setBack').onclick=()=>{AU.click();showHome()}}
+// ================================================================ HOW TO PLAY
+const HTP=[
+ ['You\'re the security','Crews will rob this building for five nights. You can\'t keep them out. You only decide what they have to walk past.','ill-plan'],
+ ['They walk around what they see','Every camera, laser and floodlight bends a thief\'s route. The dotted lines show where each one plans to go.',['camera','laser','light']],
+ ['Watched means caught','Being seen fills a thief\'s suspicion bar. Full means arrested. Guards chase and tackle anyone they spot.',['guard','camera']],
+ ['The trap they can\'t see','Pressure plates are invisible to thieves, so put them right on a dotted route. Decoy loot wastes their time.',['plate','decoy']],
+ ['Play the night','Slam a door shut (Q), fire the panic siren (W), or tap a speaker to fake a guard\'s voice. Each has limited uses.',['steel','speaker']],
+ ['They learn','Escapees warn the next crew, scouts radio your plates, and on Friday the Fox comes for the biggest prize. Loot only counts once it leaves the building.','ill-fox'],
+];
+function htpIll(k){if(Array.isArray(k))return k.map(t=>ICON[t]||'').join('');return `<canvas id="htpCv" width="520" height="240" data-k="${k}"></canvas>`}
+function howToPlay(n){n=Math.max(0,Math.min(HTP.length-1,n));const [h,p,ill]=HTP[n];const last=n===HTP.length-1;
+ showSheet(`<div class="htp"><h2>${h}</h2><div class="ill">${htpIll(ill)}</div><p>${p}</p><div class="dots">${HTP.map((_,k)=>`<i class="${k===n?'on':''}"></i>`).join('')}</div>
+ <div class="htpNav"><button class="cta" id="htpPrev" style="opacity:.8;font-size:16px">${n?'◂ Back':'Menu'}</button><button class="cta" id="htpNext" style="font-size:16px">${last?'Play the tutorial ▸':'Next ▸'}</button></div>
+ ${last?'':'<p style="margin:6px 0 0;font-size:12px;opacity:.7;min-height:0">Swipe or use the arrows.</p>'}</div>`);
+ $('htpPrev').onclick=()=>{AU.click();n?howToPlay(n-1):showHome()};
+ $('htpNext').onclick=()=>{AU.click();if(last){clearSave();SITE='gallery';try{localStorage.setItem('ij-site',SITE)}catch(e){}newGame();tutStart()}else howToPlay(n+1)};
+ const sh=$('sheet');let sx=null;sh.onpointerdown=e=>{sx=e.clientX};sh.onpointerup=e=>{if(sx===null)return;const d=e.clientX-sx;sx=null;if(Math.abs(d)>50){AU.click();if(d<0&&!last)howToPlay(n+1);else if(d>0&&n)howToPlay(n-1)}};
+ const cvh=$('htpCv');if(cvh)htpAnim(cvh)}
+function htpAnim(cvh){const c=cvh.getContext('2d');const k=cvh.dataset.k;const t0=performance.now();const SK=theme==='sketch';
+ const step=()=>{if(!document.body.contains(cvh))return;const t=(performance.now()-t0)/1000;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,520,240);c.setTransform(40,0,0,40,0,0);const keep=ST.t;ST.t=t;const ink=SK?'#2f2c27':'#e8f3ff';
+  c.strokeStyle=ink;c.lineWidth=.06;c.strokeRect(.3,.3,12.4,5.4);c.beginPath();c.moveTo(6.5,.3);c.lineTo(6.5,2.2);c.moveTo(6.5,3.6);c.lineTo(6.5,5.7);c.stroke();
+  if(k==='ill-plan'){// dotted route bending round a camera cone
+   const ca=Math.PI*.5+Math.sin(t)*.5;c.fillStyle=SK?'rgba(200,56,43,.15)':'rgba(127,227,255,.22)';c.beginPath();c.moveTo(9,.4);c.arc(9,.4,3.2,ca-.45,ca+.45);c.closePath();c.fill();
+   c.setLineDash([.12,.16]);c.strokeStyle=SK?'#c8382b':'#ffd36b';c.beginPath();c.moveTo(.6,4.6);c.lineTo(5.6,4.6);c.quadraticCurveTo(6.5,5.2,7.4,5.1);c.lineTo(11.6,5);c.lineTo(11.6,1.4);c.stroke();c.setLineDash([]);
+   const u=(t*.25)%1;const px=u<.55?.6+u/.55*7:7.6+(u-.55)/.45*4,py=u<.55?4.6:5.05;c.save();c.translate(px,py-.2);c.scale(.9,.9);figure(c,{kind:'thief',col:SK?'#c8382b':'#ffd36b',body:SK?'#5b5850':'#1c2230',head:SK?'#3c3a35':'#151a24',skin:'#e9c4a0',moving:1,face:0,id:2,crouch:true});c.restore();
+   c.fillStyle=SK?'#2c5aa0':'#c7a6ff';c.beginPath();c.moveTo(11.6,.9);c.lineTo(11.85,1.2);c.lineTo(11.6,1.5);c.lineTo(11.35,1.2);c.fill()}
+  else{// the Fox heads for the prize
+   const u=(t*.18)%1;const px=.8+u*10.4;c.fillStyle=SK?'#2c5aa0':'#c7a6ff';c.beginPath();c.moveTo(11.6,2.4);c.lineTo(11.9,2.8);c.lineTo(11.6,3.2);c.lineTo(11.3,2.8);c.fill();
+   c.save();c.translate(px,3.1);figure(c,{kind:'thief',col:'#e8742a',body:SK?'#5b5850':'#1c2230',head:SK?'#3c3a35':'#151a24',skin:'#e9c4a0',moving:1,face:0,id:4,boss:true});c.restore();
+   txt(c,'THE FOX',px,1.6,.4,'#e8742a',{font:SK?'Caveat':'Share Tech Mono',weight:'700'})}
+  ST.t=keep;requestAnimationFrame(step)};step()}
+// ================================================================ INTERACTIVE TUTORIAL
+function tutWanted(){try{return !localStorage.getItem('ij-tut')}catch(e){return true}}
+const TUT={on:false,i:0,shownAt:0};
+const TUTS=[
+ {t:()=>'Welcome to the night shift. Tonight\'s crew comes in through the flashing entry and heads for the loot. The dotted lines show where each one plans to go.',next:true,pt:()=>{const e=ENTRIES.find(e=>e.night<=ST.night);return e?[e.spawn[0]+.5,e.spawn[1]+.5]:null}},
+ {t:()=>'Pick the Camera.',el:'.tool[data-t=camera]',done:()=>ST.tool==='camera'||ST.devices.some(d=>d.type==='camera'),pre:()=>setMTab('build')},
+ {t:()=>TOUCH?'Hold your finger on the map to zoom in, then let go to place the camera where it can see a dotted route.':'Click the map to place the camera where it can see a dotted route. Drag while you place it to aim it.',done:()=>ST.devices.some(d=>d.type==='camera')},
+ {t:()=>'See the routes bend? Thieves walk around anything they can see. Pressure plates are the one thing they can\'t. Pick a plate.',el:'.tool[data-t=plate]',done:()=>ST.tool==='plate'||ST.devices.some(d=>d.type==='plate'),pre:()=>{if(ST.sel){ST.sel=null;refreshUI()}setMTab('build')}},
+ {t:()=>'Put the plate right on a dotted route. Anyone who steps on it brings the guards.',done:()=>ST.devices.some(d=>d.type==='plate')},
+ {t:()=>'Nice. Spend the rest of your budget however you like, then start the night.',el:'#go',done:()=>ST.phase==='heist',pre:()=>{if(ST.sel){ST.sel=null;refreshUI()}setMTab('build')}},
+ {t:()=>'Being watched fills a thief\'s suspicion bar. Full means caught. If one gets close to the loot, '+(TOUCH?'tap Slam to shut a door in their face or Siren to scatter them.':'press Q to slam a door or W for the siren.'),el:'#abil',next:true,auto:14},
+ {t:()=>'That\'s the job. Each night brings a new crew, new ways in and new tricks. Good luck.',next:true,auto:8,last:true},
+];
+function tutStart(){TUT.on=true;TUT.i=0;TUT.shownAt=performance.now();HOME.from=null;tutShow()}
+function tutEnd(){TUT.on=false;try{localStorage.setItem('ij-tut','1')}catch(e){}coachHide()}
+function coachHide(){const c=$('coach');if(c)c.classList.remove('show');document.querySelectorAll('.tutHi').forEach(e=>e.classList.remove('tutHi'));const d=$('coachDot');if(d)d.style.display='none'}
+function tutShow(){const st=TUTS[TUT.i];if(!st){tutEnd();return}if(st.pre)st.pre();TUT.shownAt=performance.now();const c=$('coach');
+ c.innerHTML=`<b class="step">TUTORIAL ${TUT.i+1}/${TUTS.length}</b>${st.t()}<div class="cbtns"><button id="cSkip">${st.last?'Close':'Skip tutorial'}</button>${st.next&&!st.last?'<button class="n" id="cNext">Got it</button>':''}</div>`;
+ c.classList.add('show');$('cSkip').onclick=()=>{AU.click();tutEnd()};if($('cNext'))$('cNext').onclick=()=>{AU.click();tutAdvance()};$('hint').classList.remove('show');tutPlace()}
+function tutAdvance(){TUT.i++;document.querySelectorAll('.tutHi').forEach(e=>e.classList.remove('tutHi'));if(TUT.i>=TUTS.length)tutEnd();else{AU.play&&AU.play('confirm');tutShow()}}
+function tutPlace(){const st=TUTS[TUT.i],c=$('coach'),dot=$('coachDot');if(!st||!c)return;const vw=innerWidth,vh=innerHeight;const cw=c.offsetWidth,ch=c.offsetHeight;
+ document.querySelectorAll('.tutHi').forEach(e=>{if(!st.el||!e.matches(st.el))e.classList.remove('tutHi')});
+ let el=st.el?[...document.querySelectorAll(st.el)].find(e=>e.offsetParent):null;let ax=null,top,left,dir='none';
+ if(el){el.classList.add('tutHi');const r=el.getBoundingClientRect();ax=r.left+r.width/2;if(r.top-ch-14>8){top=r.top-ch-14;dir='up'}else{top=Math.min(vh-ch-8,r.bottom+14);dir='down'}left=ax-cw/2}
+ else{const r=$('stage').getBoundingClientRect(),mob=matchMedia('(max-width:900px),(max-height:560px)').matches&&!matchMedia('(min-aspect-ratio:5/4)').matches;if(mob){left=r.left+r.width/2-cw/2;top=Math.min(vh-ch-8,r.bottom+8)}else{left=r.left+10;top=Math.max(8,r.top+10)}}
+ left=Math.max(8,Math.min(vw-cw-8,left));c.style.left=left+'px';c.style.top=top+'px';c.classList.remove('up','down','none');c.classList.add(dir);if(ax!==null)c.style.setProperty('--ax',(ax-left)+'px');
+ const p=st.pt&&st.pt();if(p&&dot){const r=cv.getBoundingClientRect();dot.style.display='block';dot.style.left=(r.left+p[0]/W*r.width)+'px';dot.style.top=(r.top+p[1]/H*r.height)+'px'}else if(dot)dot.style.display='none'}
+function tutTick(){if(!TUT.on)return;if(homeOn()||$('overlay').classList.contains('show')){coachHide();return}const st=TUTS[TUT.i];if(!$('coach').classList.contains('show'))tutShow();
+ if(st.done&&st.done()){tutAdvance();return}if(st.auto&&performance.now()-TUT.shownAt>st.auto*1000&&!st.done){tutAdvance();return}tutPlace()}
+// ================================================================ THEME MUSIC
+AU.themeOn=function(){this.wantTheme=true;if(!this.ctx||this.th||!this.has('musPlan'))return;const c=this.ctx;const g=c.createGain();g.gain.value=0;g.connect(this.master);const src=c.createBufferSource();src.buffer=this.buf.musPlan.find(Boolean);src.loop=true;src.connect(g);src.start();this.th={src,g};this.themeLevel()};
+AU.themeLevel=function(){if(!this.th)return;const c=this.ctx,g=this.th.g;const v=MIX.mus*(homeOn()?1.25:.75);g.gain.cancelScheduledValues(c.currentTime);g.gain.setValueAtTime(g.gain.value,c.currentTime);g.gain.linearRampToValueAtTime(v,c.currentTime+1.2)};
+AU.themeOff=function(){this.wantTheme=false;if(!this.th)return;const c=this.ctx,{src,g}=this.th;g.gain.cancelScheduledValues(c.currentTime);g.gain.setValueAtTime(g.gain.value,c.currentTime);g.gain.linearRampToValueAtTime(0,c.currentTime+1);setTimeout(()=>{try{src.stop()}catch(e){}},1200);this.th=null};
+let themeTick=0,themeWasHome=null;
+function syncTheme(dt){themeTick-=dt;if(themeTick>0)return;themeTick=.3;if(!AU.ctx)return;const want=homeOn()||ST.phase==='plan'||ST.phase==='report';
+ if(want&&!AU.th)AU.themeOn();else if(!want&&AU.th)AU.themeOff();const h=homeOn();if(AU.th&&h!==themeWasHome)AU.themeLevel();themeWasHome=h}
+document.addEventListener('pointerdown',()=>{if(!AU.ctx)AU.init()},{capture:true});
+
+$('home').prepend(hcv);addEventListener('resize',()=>{if(homeOn())resizeHome()});$('homeBtn').onclick=()=>{AU.init();AU.click();HOME.from='game';showHome()};
 titleScreen();refreshUI();
 requestAnimationFrame(frame);
 
