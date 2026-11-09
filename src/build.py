@@ -1,6 +1,7 @@
 import json,sys,os
 sys.path.insert(0,'../snd');from lines import L
 s=open('src.html').read()
+s=s.replace('/*__THREE__*/',open('three.min.js').read())
 sfx=open('../snd/sfx.json').read();vo=open('../snd/vo.json').read()
 s=s.replace('/*__SFX__*/{}',sfx).replace('/*__VO__*/{}',vo).replace('/*__VOTXT__*/{}',json.dumps({k:[v,t] for k,(v,t) in L.items()}))
 open('inside-job.html','w').write(s)
