@@ -879,7 +879,14 @@ const AU={on:true,ctx:null,buf:{},vo:{},master:null,sfxBus:null,voBus:null,musBu
  loop(x){this.play('glitch',{vol:.7,x})||SYN.loop()},
  slam(x){if(this.play('slam',{vol:.9,x}))this.play('slamHit',{vol:.6,delay:.05,x});else SYN.breach()},
  stun(x){this.play('stun',{vol:.6,x})},
- bark(x){for(const dl of [0,.22]){SYN.tone(420,.11,{type:'sawtooth',vol:.16,slide:-.45,delay:dl});SYN.noise(.1,{vol:.28,f:900,q:1.2,delay:dl});SYN.tone(150,.12,{type:'square',vol:.1,slide:-.3,delay:dl})}},
+ // small night sounds so a quiet building never feels dead: an owl, a creak, a far-off car, the hall clock
+ life(dt){if(!this.ctx||!this.on)return;this.lifeT=(this.lifeT??6)-dt;if(this.lifeT>0)return;this.lifeT=7+Math.random()*11;if(ST.alarmT>0)return;const k=Math.floor(Math.random()*4);
+  if(k===0){for(const [dl,f] of [[0,392],[.42,330],[.62,330]])SYN.tone(f,.3,{type:'sine',vol:.035,slide:.92,delay:dl,attack:.06})}
+  else if(k===1){SYN.noise(.35,{vol:.05,f:220,q:6,slide:.6});SYN.noise(.2,{vol:.04,f:320,q:8,delay:.3,slide:.7})}
+  else if(k===2){SYN.noise(2.4,{vol:.035,f:160,q:.6,type:'lowpass',slide:.5})}
+  else{for(let n=0;n<4;n++)SYN.tone(n%2?1500:1900,.03,{type:'triangle',vol:.02,delay:n*.5})}},
+ bell(n){for(let k=0;k<n;k++)for(const [m,v] of [[1,.07],[2.01,.035],[2.76,.025],[5.4,.012]])SYN.tone(196*m,2.2,{type:'sine',vol:v,delay:.3+k*1.25,attack:.004})},
+ bark(x){for(const dl of [0,.22]){SYN.tone(420,.11,{type:'sawtooth',vol:.16,slide:.55,delay:dl});SYN.noise(.1,{vol:.28,f:900,q:1.2,delay:dl});SYN.tone(150,.12,{type:'square',vol:.1,slide:.7,delay:dl})}},
  fake(x){this.play('fake',{vol:.7,x})||SYN.deny()},
  step(x,vol=.25){this.play('step',{vol,x})},
  stepAt(o,vol=.25){const i=idx(Math.max(0,Math.min(W-1,Math.floor(o.x))),Math.max(0,Math.min(H-1,Math.floor(o.y))));const r=G[i]===OUT?'street':roomOf(i);
@@ -925,7 +932,7 @@ function startNight(){setMTab('crew');$('hint').classList.remove('show');hintTim
  for(const g of ST.guards){const k=g.loopPath.indexOf(g.i);g.lp=Math.max(0,k)}
  ST.t=0;ST.clock=0;ST.phase='heist';ST.tool=null;ST.sel=null;ST.routeFor=null;ST.report=[];ST.endT=0;
  ST.nightStats={arrests:0,scared:0,stolen:0,saved:0,items:[]};
- AU.start();AU.droneOn();AU.vq=[];AU.vLast={};logLine('Night '+ST.night+' begins. All systems armed.');setTimeout(()=>AU.say('night_start',{cd:0}),300);
+ AU.start();AU.bell(2);AU.droneOn();AU.vq=[];AU.vLast={};logLine('Night '+ST.night+' begins. All systems armed.');setTimeout(()=>AU.say('night_start',{cd:0}),300);
  refreshUI();
 }
 function crewName(k){return NAMES[(ST.night*3+k*5)%NAMES.length]}
@@ -1178,7 +1185,7 @@ function powerTick(dt){const pc=ST.pc;if(!pc||pc.done)return;pc.t+=dt;
 function stepSim(dt){
  powerTick(dt);
  for(const d of ST.devices)if(d.type==='speaker'&&d.cd>0)d.cd-=dt;
- dogTick(dt);
+ dogTick(dt);AU.life(dt);
  ST.t+=dt;ST.clock+=dt*.5;
  for(const d of ST.devices){if(d.type==='camera'){if(d.lockT>0&&d.lock&&['in','out','flee'].includes(d.lock.state)){d.lockT-=dt;const ta=Math.atan2(d.lock.y-d.y-.5,d.lock.x-d.x-.5);d.trk=(d.trk??d.cur)+angDiff(ta,d.trk??d.cur)*Math.min(1,dt*7);d.cur=d.trk}else{d.trk=null;d.lock=null;d.cur=camAngle(d,ST.t)}d.seeing=false;if(d.looped>0){d.looped-=dt;if(d.looped<=0){d.looped=0;rebuildWatch();for(const th of ST.thieves)th.needReplan=true}}}if(d.armed>0)d.armed-=dt;if(d.hit>0)d.hit-=dt*1.5}
  for(const s of ST.smokes){s.t-=dt;s.r=Math.min(s.R,s.r+dt*4);if(s.t<1)s.r=Math.max(0,s.R*s.t)}
