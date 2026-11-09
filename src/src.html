@@ -651,7 +651,7 @@ const $=id=>document.getElementById(id);
 
 // ================================================================ STATE
 const DIFF={easy:{name:'Easy',cash:1000,limit:40000,detect:1.3,smart:.5,tackle:.9,react:.8,desc:'More money, a higher theft limit, and thieves are slower to react.'},normal:{name:'Normal',cash:800,limit:25000,detect:1,smart:1,tackle:.75,react:1,desc:'The intended challenge.'},hard:{name:'Hard',cash:650,limit:18000,detect:.85,smart:1.4,tackle:.66,react:1.15,desc:'Tighter budget and limit. Thieves hide sooner and learn faster.'}};
-const ST={diff:'normal',limit:30000,intel:{plates:new Set(),cams:new Set(),lasers:new Set()},danger:null,mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],abil:{slam:0,siren:0},abTool:null,slams:[],rec:[],recEv:[],stars:[],night:1,cash:800,stolen:0,arrests:0,phase:'plan',devices:[],loot:[],thieves:[],guards:[],smokes:[],t:0,clock:0,speed:1,routes:true,heat:false,thoughts:true,tool:null,sel:null,routeFor:null,report:[],nightStats:null,nameSeed:0,devId:1,done:false};
+const ST={diff:'normal',limit:30000,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},danger:null,mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],abil:{slam:0,siren:0},abTool:null,slams:[],rec:[],recEv:[],stars:[],night:1,cash:800,stolen:0,arrests:0,phase:'plan',devices:[],loot:[],thieves:[],guards:[],smokes:[],t:0,clock:0,speed:1,routes:true,heat:false,thoughts:true,tool:null,sel:null,routeFor:null,report:[],nightStats:null,nameSeed:0,devId:1,done:false};
 function resetLoot(){ST.loot=LOOT_DEF.map(l=>({...l,i:idx(l.x,l.y),stolen:false,carrier:null}))}
 function syncDecoys(){if(ST.phase==='heist')return;ST.loot=ST.loot.filter(l=>!l.fake);for(const d of ST.devices)if(d.type==='decoy')ST.loot.push({id:'decoy'+d.id,name:'Decoy jewels',x:d.x,y:d.y,i:d.i,v:6500,crack:2.5,kind:'gem',fake:true,dev:d,stolen:false,carrier:null,spent:false})}
 const camRange=d=>CAM.range+(d.lv>=1?2:0)+ST.mods.camRange;
@@ -715,6 +715,7 @@ function rebuildWatch(){
   if(d.type==='camera'&&!(d.looped>0)&&!ST.dark&&d.cov){const f=ST.intel&&ST.intel.cams.has(d.i)?1.6:1;for(let i=0;i<W*H;i++)watch[i]+=d.cov[i]*16*f}
   if(d.type==='laser'&&!d.broken&&d.beam)for(const i of d.beam)laserMap[i]=d.id;
   if(d.type==='plate')plateMap[d.i]=d.id;
+  if(d.type==='dog'&&ST.intel&&ST.intel.dogs&&ST.intel.dogs.has(d.i)){const R=(d.lv?4.5:3)+1;for(let y=Math.floor(d.y-R);y<=d.y+R;y++)for(let x=Math.floor(d.x-R);x<=d.x+R;x++){if(!inb(x,y))continue;const dd=Math.hypot(x-d.x,y-d.y);if(dd<R)watch[idx(x,y)]+=(R-dd)*3}}
  }
  for(let i=0;i<W*H;i++)watch[i]+=lit[i]*2.5+patrolMap[i]*10;
  costCache={};
@@ -988,7 +989,7 @@ function addDanger(x,y,r,v){if(!ST.danger)return;const cx=Math.floor(x),cy=Math.
 function dogTick(dt){for(const d of ST.devices){if(d.type!=='dog')continue;if(d.cd>0)d.cd-=dt;if(d.bark>0)d.bark-=dt;if(d.cd>0)continue;const R=d.lv?4.5:3;let near=null,nd=1e9;
   for(const th of ST.thieves){if(!['in','out','flee'].includes(th.state)||th.x==null)continue;const dd=Math.hypot(th.x-d.x-.5,th.y-d.y-.5);if(dd<R&&dd<nd){nd=dd;near=th}}
   if(!near)continue;d.cd=d.lv?6:10;d.bark=1.6;d.face=Math.atan2(near.y-d.y-.5,near.x-d.x-.5);AU.bark(d.x);floatText(d.x+.5,d.y-.3,'WOOF!',S.accent);FX.rings.push({x:d.x+.5,y:d.y+.5,r:R,t:0});
-  addSus(near,22,'dog');if(near.state!=='caught'){near.hurry=Math.max(near.hurry||0,4);near.needReplan=true}addDanger(d.x+.5,d.y+.5,3,16);noise(d.x+.5,d.y+.5,11);logLine('The dog barks at '+near.name+' in the '+roomOf(d.i)+'.');ST.barks=(ST.barks||0)+1}}
+  addSus(near,22,'dog');learn(near,'dog',d);if(near.state!=='caught'){near.hurry=Math.max(near.hurry||0,4);near.needReplan=true}addDanger(d.x+.5,d.y+.5,3,16);noise(d.x+.5,d.y+.5,11);logLine('The dog barks at '+near.name+' in the '+roomOf(d.i)+'.');ST.barks=(ST.barks||0)+1}}
 function learn(th,kind,d){(th.learned=th.learned||[]).push({kind,id:d.id,i:d.i})}
 function learnCam(th){for(const d of ST.devices)if(d.type==='camera'&&d.seeing)(th.learned=th.learned||[]).push({kind:'cam',id:d.id,i:d.i})}
 function coverTile(e){if(e.roof)return spawnI(e);const [x,y]=e.tiles[0];const c=[[0,-1],[1,0],[-1,0],[0,1]].map(([dx,dy])=>idx(x+dx,y+dy)).find(i=>G[i]===FLOOR);return c??idx(x,y)}
@@ -1184,8 +1185,8 @@ function recordFrame(){ST.rec.push({t:ST.t,th:ST.thieves.map(t=>[t.x,t.y,t.sus,t
 function stars(ns){const n=ST.thieves.filter(t=>t.state!=='gone').length;return [ns.stolen===0,ns.arrests>=Math.ceil(n/2),ns.arrests===n&&n>0]}
 function endNight(){
  if(ST.phase!=='heist')return;ST.phase='report';if(ST.dark){ST.dark=false;computeLit();rebuildWatch()}AU.droneOff();
- const told=[];for(const t of ST.thieves)if((t.state==='escaped')&&t.learned)for(const L of t.learned){if(L.kind==='plate'&&!ST.intel.plates.has(L.i)){ST.intel.plates.add(L.i);told.push('the pressure plate in the '+roomOf(L.i))}if(L.kind==='cam'&&!ST.intel.cams.has(L.i)){ST.intel.cams.add(L.i);told.push('camera C'+(ST.devices.find(d=>d.id===L.id)||{}).n+' in the '+roomOf(L.i))}}
- ST.nightStats.told=told;
+ const told=[];for(const t of ST.thieves)if((t.state==='escaped')&&t.learned)for(const L of t.learned){if(L.kind==='plate'&&!ST.intel.plates.has(L.i)){ST.intel.plates.add(L.i);told.push('the pressure plate in the '+roomOf(L.i))}if(L.kind==='cam'&&!ST.intel.cams.has(L.i)){ST.intel.cams.add(L.i);told.push('camera C'+(ST.devices.find(d=>d.id===L.id)||{}).n+' in the '+roomOf(L.i))}if(L.kind==='dog'){ST.intel.dogs=ST.intel.dogs||new Set();if(!ST.intel.dogs.has(L.i)){ST.intel.dogs.add(L.i);told.push('the guard dog in the '+roomOf(L.i))}}}
+ {const cnt={};for(const t of told)cnt[t]=(cnt[t]||0)+1;ST.nightStats.told=Object.entries(cnt).map(([t,n])=>n>1?t.replace(/^the (.*?) in the/,(m,w)=>'the '+n+' '+w+'s in the'):t)}
  {const ws=ST.devices.filter(d=>d.work>5).sort((a,b)=>b.work-a.work);const tot=ws.reduce((a,d)=>a+d.work,0);if(ws.length){const d=ws[0];ST.nightStats.mvp=`${DEV[d.type].name}${d.n?' C'+d.n:''} in the ${roomOf(d.i)}`+(ws.length>1?` (${Math.round(d.work/tot*100)}% of the suspicion)`:'');}}
  const ns=ST.nightStats;const income=350+(ns.stolen===0?200:0);ST.cash+=income;ns.income=income;
  const fired=ST.stolen>ST.limit;const last=ST.night>=5&&!ST.endless;if(ST.endless&&!fired){try{const b=+localStorage.getItem('ij-best')||0;if(ST.night-5>b)localStorage.setItem('ij-best',ST.night-5)}catch(e){}}
@@ -1240,13 +1241,13 @@ function setMTab(t){document.body.dataset.mtab=t;document.querySelectorAll('#mta
 const SAVE_KEY='ij-save';
 function saveGame(){if(ST.daily)return;if(ST.done){clearSave();return}try{const keep=['type','i','x','y','ang','sweep','phase','orient','route','cur','n','lv','paid'];
  localStorage.setItem(SAVE_KEY,JSON.stringify({v:1,t:Date.now(),site:SITE,diff:ST.diff,night:ST.night,cash:ST.cash,stolen:ST.stolen,limit:ST.limit,arrests:ST.arrests,endless:ST.endless,otSeed:ST.otSeed||0,otMod:ST.otMod?ST.otMod.id:null,otSnap:ST.otSnap,perks:ST.perks,mods:ST.mods,stars:ST.stars,
-  intel:{plates:[...ST.intel.plates],cams:[...ST.intel.cams],lasers:[...ST.intel.lasers]},stolenIds:ST.loot.filter(l=>l.stolen&&!l.fake).map(l=>l.id),costs:Object.fromEntries(Object.entries(DEV).map(([k,d])=>[k,d.cost])),
+  intel:{plates:[...ST.intel.plates],cams:[...ST.intel.cams],lasers:[...ST.intel.lasers],dogs:[...(ST.intel.dogs||[])]},stolenIds:ST.loot.filter(l=>l.stolen&&!l.fake).map(l=>l.id),costs:Object.fromEntries(Object.entries(DEV).map(([k,d])=>[k,d.cost])),
   devices:ST.devices.map(d=>Object.fromEntries(keep.filter(k=>k in d).map(k=>[k,d[k]]))),camN}))}catch(e){}}
 function clearSave(){try{localStorage.removeItem(SAVE_KEY)}catch(e){}}
 function readSave(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');return s&&s.v===1?s:null}catch(e){return null}}
 function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SITE=SITES[s.site]?s.site:'gallery';newGame();
  Object.assign(ST,{night:s.night,cash:s.cash,stolen:s.stolen,limit:s.limit,arrests:s.arrests,endless:s.endless,otSeed:s.otSeed,otMod:DAILY_MODS.find(m=>m.id===s.otMod)||null,otSnap:s.otSnap||null,perks:s.perks,mods:s.mods,stars:s.stars||[],
-  intel:{plates:new Set(s.intel.plates),cams:new Set(s.intel.cams),lasers:new Set(s.intel.lasers)}});
+  intel:{plates:new Set(s.intel.plates),cams:new Set(s.intel.cams),lasers:new Set(s.intel.lasers),dogs:new Set(s.intel.dogs||[])}});
  for(const k in s.costs)if(DEV[k])DEV[k].cost=s.costs[k];
  for(const l of ST.loot)l.stolen=s.stolenIds.includes(l.id);
  buildMap(ST.night);ST.devices=s.devices.map(d=>({...d,id:ST.devId++,route:d.route||[]}));camN=s.camN||ST.devices.length+1;
@@ -1254,7 +1255,7 @@ function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SIT
 function nextNight(){setMTab('build');hideSheet();ST.night++;for(const l of ST.loot)if(l.dropped){l.i=l.home;l.dropped=false}if(ST.endless){resetLoot();ST.stolen=0;ST.limit=OT_CAP;ST.intel.plates.clear();otMod()}buildMap(ST.night);ST.phase='plan';ST.thieves=[];ST.guards=[];ST.smokes=[];ST.vaultOpen=false;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false}
  devicesChanged();redrawStatic();refreshUI();hint(nightDef(ST.night).hint,9);logLine(dayName(ST.night)+': new intel on tonight\'s crew.');saveGame()}
-function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
+function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
 
 // ================================================================ ABILITIES
 function useSiren(){if(ST.phase!=='heist'||ST.abil.siren<=0)return;ST.abil.siren--;AU.siren();AU.say('siren',{cd:0,pri:3});FX.flash=.7;FX.flashCol=S.danger;FX.shake=.4;ST.alarmT=6;logLine('<b style="color:var(--danger)">PANIC SIREN</b> sounded.');
@@ -1741,14 +1742,30 @@ function drawDevices(c){for(const d of ST.devices){
  if(sel){c.save();c.strokeStyle=S.accent;c.lineWidth=.05;c.setLineDash([.12,.08]);c.lineDashOffset=-ST.t;c.beginPath();c.arc(x,y,.62,0,7);c.stroke();c.restore()}
 }}
 function drawDog(c,x,y,d){
- c.save();const col=theme==='board'?'#2b1d14':S.devCol,fill=theme==='board'?'#e9c89a':S.devFill;const up=d.bark>0;c.lineWidth=.05;c.strokeStyle=col;
- c.fillStyle=fill;c.beginPath();c.ellipse(x,y+.06,.36,.27,0,0,7);c.fill();c.stroke();// basket
- c.translate(x,y);if(up){c.rotate((d.face||0));c.translate(Math.sin(ST.t*30)*.02,0)}
- c.fillStyle=col;c.beginPath();c.ellipse(0,.03,up?.2:.22,up?.13:.15,0,0,7);c.fill();c.beginPath();c.arc(up?.2:.14,up?0:-.06,.1,0,7);c.fill();
- c.beginPath();c.arc(up?.16:.1,up?-.1:-.15,.045,0,7);c.arc(up?.16:.2,up?.1:-.13,.045,0,7);c.fill();
+ c.save();const col=theme==='board'?'#2b1d14':S.devCol,fill=theme==='board'?'#c9b8f0':S.devFill;const up=d.bark>0;const fur=theme==='sketch'?'#b8763a':'#d39a5c',furD=theme==='sketch'?'#6e4220':'#7a4a22';c.lineWidth=.045;c.strokeStyle=col;
+ // basket: woven rim and a cushion
+ c.fillStyle=fill;rr(c,x-.4,y-.32,.8,.64,.26);c.fill();c.stroke();c.fillStyle=theme==='sketch'?'#e8d6b8':'rgba(255,255,255,.12)';rr(c,x-.3,y-.22,.6,.44,.18);c.fill();
+ c.save();c.globalAlpha=.5;c.setLineDash([.06,.06]);rr(c,x-.35,y-.27,.7,.54,.22);c.stroke();c.restore();
+ c.translate(x,y);
+ if(up){// awake: standing, facing the noise, head bobbing with each bark
+  c.rotate(d.face||0);const b=Math.abs(Math.sin(ST.t*18))*.04;c.fillStyle=fur;c.strokeStyle=furD;c.lineWidth=.035;
+  c.beginPath();c.ellipse(-.04,0,.24,.13,0,0,7);c.fill();c.stroke();// body
+  c.beginPath();c.moveTo(-.26,0);c.quadraticCurveTo(-.4,-.12+Math.sin(ST.t*25)*.08,-.36,-.2);c.lineWidth=.05;c.stroke();// wagging tail
+  c.lineWidth=.035;c.beginPath();c.arc(.22+b,0,.12,0,7);c.fill();c.stroke();// head
+  c.fillStyle=furD;c.beginPath();c.ellipse(.17+b,-.11,.07,.04,-.5,0,7);c.ellipse(.17+b,.11,.07,.04,.5,0,7);c.fill();// ears
+  c.fillStyle='#1a1410';c.beginPath();c.arc(.34+b,0,.035,0,7);c.fill();// nose
+ }else{// asleep: curled in a ring, nose tucked under the tail, breathing
+  const br=1+Math.sin((ST.t||performance.now()/1000)*2.2)*.03;c.scale(br,br);c.fillStyle=fur;c.strokeStyle=furD;c.lineWidth=.035;
+  c.beginPath();c.arc(0,.02,.19,0,7);c.fill();c.stroke();// curled body
+  c.beginPath();c.arc(.1,-.06,.1,0,7);c.fill();c.stroke();// head resting on the body
+  c.fillStyle=furD;c.beginPath();c.ellipse(.03,-.11,.06,.035,.8,0,7);c.fill();c.beginPath();c.ellipse(.17,-.13,.06,.035,-.4,0,7);c.fill();// ears
+  c.strokeStyle=furD;c.lineWidth=.05;c.beginPath();c.arc(0,.02,.15,1.2,2.9);c.stroke();// tail wrapped round
+  c.fillStyle='#1a1410';c.beginPath();c.arc(.18,-.01,.025,0,7);c.fill();
+ }
  c.restore();
- if(ST.phase==='heist'&&!up&&!(d.cd>0)){const k=(ST.t*.5)%1;txt(c,'z',x+.25+k*.15,y-.3-k*.3,.2+k*.08,col,{font:S.font,alpha:1-k})}
- if(d.lv&&ST.phase==='plan')txt(c,'★',x+.38,y-.4,.22,S.accent,{font:'Nunito',weight:'800'});}
+ if(ST.phase==='heist'&&!up&&!(d.cd>0)){const k=(ST.t*.5)%1;txt(c,'z',x+.28+k*.15,y-.32-k*.3,.2+k*.08,col,{font:S.font,alpha:1-k})}
+ if(d.lv&&ST.phase==='plan')txt(c,'★',x+.38,y-.4,.22,S.accent,{font:'Nunito',weight:'800'});
+ if(ST.phase==='plan'&&ST.intel.dogs&&ST.intel.dogs.has(d.i))txt(c,'KNOWN',x+.5,y-.2,.2,S.danger,{font:S.mono,weight:'700'});}
 function drawSpeaker(c,x,y,d){
  c.save();const col=theme==='board'?'#2b1d14':S.devCol,fill=theme==='board'?'#c9b8f0':S.devFill;
  if(S.glow){c.shadowColor=col;c.shadowBlur=6*DPR}c.fillStyle=fill;c.strokeStyle=col;c.lineWidth=.05;rr(c,x-.24,y-.24,.48,.48,.1);c.fill();c.stroke();c.shadowBlur=0;
