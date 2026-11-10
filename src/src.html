@@ -74,6 +74,10 @@ main{flex:1;display:flex;min-height:0}
 @keyframes stamp{from{transform:rotate(-12deg) scale(2.4);opacity:0}}
 #sheet .cta{margin-top:16px;width:100%;padding:12px;font-family:var(--fh);font-size:20px;background:var(--btn);color:var(--btnink);border:0}
 #sheet .pick{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+#sheet .works{display:flex;flex-direction:column;gap:6px}
+#sheet .wk{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;border:1px solid currentColor;padding:6px 8px}
+#sheet .wk .ic{font-size:20px;text-align:center}#sheet .wk small{display:block;font-size:11px;opacity:.75}#sheet .wk.done{opacity:.55}
+#sheet .wk button[disabled]{opacity:.4}
 #sheet .mugs{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px}
 #sheet .mug{border:1px solid currentColor;padding:6px;display:flex;flex-direction:column;gap:1px;font-size:13px;position:relative}
 #sheet .mug i{font-size:10px;opacity:.7}#sheet .mug small{font-size:10px;opacity:.75}#sheet .mug.unk{opacity:.4;border-style:dashed}
@@ -439,7 +443,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
     <div class="stat"><div class="k">Arrests</div><div class="v" id="sArrests">0</div></div>
     <div class="stat meter"><div class="k">Stolen so far <span id="sStolen" style="float:right">£0 / £25,000</span></div><div class="bar"><i id="sStolenBar"></i></div></div>
    </div><div id="perkList"></div></section>
-   <section class="card" id="buildCard" data-mt="build"><h3>Install <small id="phaseTag">planning</small></h3><div id="tools"></div><div id="toolHelp"></div><button id="routeDone" hidden>Done: set patrol</button>
+   <section class="card" id="buildCard" data-mt="build"><h3>Install <small id="phaseTag">planning</small></h3><div id="tools"></div><div id="toolHelp"></div><button id="routeDone" hidden>Done: set patrol</button><button id="worksBtn" class="small" style="margin-top:8px;width:100%">🧱 Building works</button>
     <div id="selBox" hidden><div id="selName" style="margin-top:8px"></div><div id="selBtns"></div></div>
    </section>
    <section class="card" data-mt="crew"><h3>Tonight's crew <small>intel</small></h3><div id="crew"></div></section>
@@ -641,7 +645,7 @@ function buildMap(night){
  hl(2,37,2);hl(2,37,23);vl(2,2,23);vl(37,2,23);
  SITES[SITE].walls(hl,vl);
  for(const d of DOORS)G[idx(d.x,d.y)]=DOOR;
- for(const e of ENTRIES)if(e.night<=night)for(const [x,y] of e.tiles)G[idx(x,y)]=ENTRY;
+ for(const e of ENTRIES)if(e.night<=night&&!(ST.works&&ST.works.sealed.includes(e.id)))for(const [x,y] of e.tiles)G[idx(x,y)]=ENTRY;
 }
 const passable=i=>G[i]!==WALL;
 
@@ -748,7 +752,7 @@ const DIFF={easy:{name:'Easy',cash:1000,limit:40000,detect:1.3,smart:.5,tackle:.
 const ST={diff:'normal',limit:30000,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},danger:null,mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],abil:{slam:0,siren:0},abTool:null,slams:[],rec:[],recEv:[],stars:[],night:1,cash:800,stolen:0,arrests:0,phase:'plan',devices:[],loot:[],thieves:[],guards:[],smokes:[],t:0,clock:0,speed:1,routes:true,heat:false,thoughts:true,tool:null,sel:null,routeFor:null,report:[],nightStats:null,nameSeed:0,devId:1,done:false};
 function resetLoot(){ST.loot=LOOT_DEF.map(l=>({...l,i:idx(l.x,l.y),stolen:false,carrier:null}))}
 function syncDecoys(){if(ST.phase==='heist')return;ST.loot=ST.loot.filter(l=>!l.fake);for(const d of ST.devices)if(d.type==='decoy')ST.loot.push({id:'decoy'+d.id,name:'Decoy jewels',x:d.x,y:d.y,i:d.i,v:6500,crack:2.5,kind:'gem',fake:true,dev:d,stolen:false,carrier:null,spent:false})}
-const camRange=d=>CAM.range+(d.lv>=1?2:0)+ST.mods.camRange;
+const camRange=d=>CAM.range+(d.lv>=1?2:0)+ST.mods.camRange+(ST.works&&ST.works.cctv?1:0);
 const isSlam=i=>ST.slams.some(s=>s.i===i);
 
 // ================================================================ VISION
@@ -771,7 +775,7 @@ function inCone(ox,oy,ang,fov,range,px,py){
 function camAngle(c,t){return c.ang+(c.sweep?CAM.amp*Math.sin(t*Math.PI*2/CAM.period+c.phase):0)}
 function lockAt(i){
  const d=ST.devices.find(d=>d.type==='steel'&&d.i===i&&!d.forced);if(d)return d.lv?8:4;
- if(i===VAULT_I&&!ST.vaultOpen)return 5;return 0;
+ if(i===VAULT_I&&!ST.vaultOpen)return ST.works&&ST.works.vault?8:5;return 0;
 }
 let VAULT_I=idx(31,11);
 function computeLit(){
@@ -855,7 +859,7 @@ function laserBeam(x,y,o){
 function autoOrient(x,y){const h=laserBeam(x,y,'h').length,v=laserBeam(x,y,'v').length;return h<=v?'h':'v'}
 
 // ================================================================ ENTRIES / PLANNER
-const activeEntries=()=>ENTRIES.filter(e=>e.night<=ST.night);
+const activeEntries=()=>ENTRIES.filter(e=>e.night<=ST.night&&!(ST.works&&ST.works.sealed.includes(e.id)));
 const spawnI=e=>idx(e.spawn[0],e.spawn[1]);
 function scoutOnRadio(){return ST.thieves.find(o=>o.counter==='scout'&&['in','out'].includes(o.state))}
 function knowledge(th){return {mirror:th.counter==='mirror'&&th.charges>0,scout:th.counter==='scout'||!!th.T.knowsPlates||!!scoutOnRadio(),crack:th.crack,disguise:!!th.T.disguise&&!th.loot,bold:th.counter==='lure'&&th.charges>0||th.oppT>0&&ST.guards.some(g=>g.state==='chase'&&g.target!==th)}}
@@ -1012,6 +1016,21 @@ function startNight(){setMTab('crew');$('hint').classList.remove('show');hintTim
  AU.start();AU.bell(2);AU.droneOn();AU.vq=[];AU.vLast={};logLine('Night '+ST.night+' begins. All systems armed.');setTimeout(()=>AU.say('night_start',{cd:0}),300);
  refreshUI();
 }
+// ---------- building works: permanent changes to the building, bought between nights
+const WORKS_COST={door:320,roof:260,vault:240,cctv:380};
+function worksSheet(){const W_=ST.works;const open=ENTRIES.filter(e=>!W_.sealed.includes(e.id));const nowOpen=open.filter(e=>e.night<=ST.night);
+ let h=`<h2>Building works</h2><p style="margin:0 0 8px;font-size:13px;opacity:.8">Permanent changes for the rest of this contract. Budget: <b>${money(ST.cash)}</b>.</p><div class="works">`;
+ const row=(ic,name,desc,cost,act,dis,done)=>h+=`<div class="wk${done?' done':''}"><span class="ic">${ic}</span><div><b>${name}</b><small>${desc}</small></div>${done?'<span class="tag">DONE</span>':`<button class="small" data-w="${act}" ${dis||ST.cash<cost?'disabled':''}>${money(cost)}</button>`}</div>`;
+ for(const e of ENTRIES){if(e.id==='main')continue;const sealedE=W_.sealed.includes(e.id);const last=!sealedE&&e.night<=ST.night&&nowOpen.length<=1;
+  row(e.roof?'⛔':'🧱',(e.roof?'Seal the ':'Brick up the ')+e.name.toLowerCase(),(e.night>ST.night?`Opens on ${dayName(e.night)}. `:'Open now. ')+(e.roof?'Nobody comes in this way again.':'Turned into solid wall.')+(last?' (Can\'t close the only way in.)':''),e.roof?WORKS_COST.roof:WORKS_COST.door,'seal:'+e.id,last,sealedE)}
+ row('🔩','Reinforce the vault door','Takes thieves 8 s to crack instead of 5.',WORKS_COST.vault,'vault',false,W_.vault);
+ row('📡','Upgrade the CCTV wiring','Every camera sees 1 tile further.',WORKS_COST.cctv,'cctv',false,W_.cctv);
+ showSheet(h+`</div><button class="cta" id="wkBack">Done</button>`);
+ document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const a=b.dataset.w;let cost=0;
+  if(a.startsWith('seal:')){const e=ENTRIES.find(x=>x.id===a.slice(5));cost=e.roof?WORKS_COST.roof:WORKS_COST.door;if(ST.cash<cost)return AU.deny();W_.sealed.push(e.id);logLine((e.roof?'Sealed the ':'Bricked up the ')+e.name.toLowerCase()+'.')}
+  else{cost=WORKS_COST[a];if(ST.cash<cost)return AU.deny();W_[a]=true}
+  ST.cash-=cost;AU.upgrade();buildMap(ST.night);rebuildWatch();devicesChanged();redrawStatic();if(R3.on){R3.wkey=null;r3Walls()}saveGame();worksSheet()});
+ $('wkBack').onclick=()=>{AU.click();hideSheet();refreshUI()}}
 // ---------- rival crews: three named gangs take turns; anyone who escapes comes back later, harder to spot
 const GANGS={
  lantern:{name:'The Lantern Club',card:'🏮',leader:'Vesper',members:['Vesper','Wren','Moth','Lark','Sable'],motto:'Old-school burglars who work by lamplight.',calling:'A paper lantern left burning on the floor.'},
@@ -1358,13 +1377,13 @@ function setMTab(t){document.body.dataset.mtab=t;document.querySelectorAll('#mta
 const SAVE_KEY='ij-save';
 function saveGame(){if(ST.daily)return;if(ST.done){clearSave();return}try{const keep=['type','i','x','y','ang','sweep','phase','orient','route','cur','n','lv','paid'];
  localStorage.setItem(SAVE_KEY,JSON.stringify({v:1,t:Date.now(),site:SITE,diff:ST.diff,night:ST.night,cash:ST.cash,stolen:ST.stolen,limit:ST.limit,arrests:ST.arrests,endless:ST.endless,otSeed:ST.otSeed||0,otMod:ST.otMod?ST.otMod.id:null,otSnap:ST.otSnap,perks:ST.perks,mods:ST.mods,stars:ST.stars,
-  intel:{plates:[...ST.intel.plates],cams:[...ST.intel.cams],lasers:[...ST.intel.lasers],dogs:[...(ST.intel.dogs||[])]},back:ST.back||[],jailed:ST.jailed||[],busted:ST.busted||[],stolenIds:ST.loot.filter(l=>l.stolen&&!l.fake).map(l=>l.id),costs:Object.fromEntries(Object.entries(DEV).map(([k,d])=>[k,d.cost])),
+  intel:{plates:[...ST.intel.plates],cams:[...ST.intel.cams],lasers:[...ST.intel.lasers],dogs:[...(ST.intel.dogs||[])]},back:ST.back||[],jailed:ST.jailed||[],busted:ST.busted||[],works:ST.works,stolenIds:ST.loot.filter(l=>l.stolen&&!l.fake).map(l=>l.id),costs:Object.fromEntries(Object.entries(DEV).map(([k,d])=>[k,d.cost])),
   devices:ST.devices.map(d=>Object.fromEntries(keep.filter(k=>k in d).map(k=>[k,d[k]]))),camN}))}catch(e){}}
 function clearSave(){try{localStorage.removeItem(SAVE_KEY)}catch(e){}}
 function readSave(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');return s&&s.v===1?s:null}catch(e){return null}}
 function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SITE=SITES[s.site]?s.site:'gallery';newGame();
  Object.assign(ST,{night:s.night,cash:s.cash,stolen:s.stolen,limit:s.limit,arrests:s.arrests,endless:s.endless,otSeed:s.otSeed,otMod:DAILY_MODS.find(m=>m.id===s.otMod)||null,otSnap:s.otSnap||null,perks:s.perks,mods:s.mods,stars:s.stars||[],
-  intel:{plates:new Set(s.intel.plates),cams:new Set(s.intel.cams),lasers:new Set(s.intel.lasers),dogs:new Set(s.intel.dogs||[])},back:s.back||[],jailed:s.jailed||[],busted:s.busted||[]});
+  intel:{plates:new Set(s.intel.plates),cams:new Set(s.intel.cams),lasers:new Set(s.intel.lasers),dogs:new Set(s.intel.dogs||[])},back:s.back||[],jailed:s.jailed||[],busted:s.busted||[],works:s.works||{sealed:[],vault:false,cctv:false}});
  for(const k in s.costs)if(DEV[k])DEV[k].cost=s.costs[k];
  for(const l of ST.loot)l.stolen=s.stolenIds.includes(l.id);
  buildMap(ST.night);ST.devices=s.devices.map(d=>({...d,id:ST.devId++,route:d.route||[]}));camN=s.camN||ST.devices.length+1;
@@ -1372,7 +1391,7 @@ function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SIT
 function nextNight(){setMTab('build');hideSheet();ST.night++;for(const l of ST.loot)if(l.dropped){l.i=l.home;l.dropped=false}if(ST.endless){resetLoot();ST.stolen=0;ST.limit=OT_CAP;ST.intel.plates.clear();otMod()}buildMap(ST.night);ST.phase='plan';ST.thieves=[];ST.guards=[];ST.smokes=[];ST.vaultOpen=false;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false}
  devicesChanged();redrawStatic();refreshUI();hint(nightDef(ST.night).hint,9);logLine(dayName(ST.night)+': new intel on tonight\'s crew.');saveGame()}
-function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],back:[],jailed:[],busted:[],slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});ST.cash+=SITES[SITE].bonus||0;resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
+function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],back:[],jailed:[],busted:[],works:{sealed:[],vault:false,cctv:false},slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});ST.cash+=SITES[SITE].bonus||0;resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
 
 // ================================================================ ABILITIES
 function useSiren(){if(ST.phase!=='heist'||ST.abil.siren<=0)return;ST.abil.siren--;AU.siren();AU.say('siren',{cd:0,pri:3});FX.flash=.7;FX.flashCol=S.danger;FX.shake=.4;ST.alarmT=6;logLine('<b style="color:var(--danger)">PANIC SIREN</b> sounded.');
@@ -1663,7 +1682,7 @@ function staticRiso(c){
 }
 function floorTiles(c,col,alt){for(let i=0;i<W*H;i++){if(G[i]===OUT||G[i]===WALL)continue;c.fillStyle=alt&&((tx(i)+ty(i))&1)?alt:col;c.fillRect(tx(i),ty(i),1.01,1.01)}}
 function roomLabels(c,col,size,font,opts={}){for(const r of ROOMS)txt(c,r.n,r.x,r.y,size,col,{font,...opts})}
-function entryMarks(c,col,draw){for(const e of ENTRIES){if(e.night>ST.night)continue;draw(e)}}
+function entryMarks(c,col,draw){for(const e of ENTRIES){if(e.night>ST.night||(ST.works&&ST.works.sealed.includes(e.id)))continue;draw(e)}}
 function staticBlueprint(c){
  c.fillStyle='#0f3a6b';c.fillRect(0,0,W,H);floorTiles(c,'#124577');
  c.lineWidth=.02;for(let x=0;x<=W;x+=.5){c.strokeStyle=x%5===0?'rgba(190,225,255,.22)':x%1===0?'rgba(190,225,255,.11)':'rgba(190,225,255,.05)';c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke()}
@@ -2173,9 +2192,9 @@ function setSpeed(s){ST.speed=s;document.querySelectorAll('#speedRow button').fo
 const SHORT={plate:'Plate',light:'Light',steel:'Door',floodlight:'Light',speaker:'Speaker',dog:'Dog',camera:'Camera',laser:'Laser',guard:'Guard',decoy:'Decoy'};
 function buildToolUI(){$('tools').innerHTML=Object.entries(DEV).map(([k,d])=>`<button class="tool" data-t="${k}">${ICON[k]}<span><span class="nm">${d.name}</span><span class="sn">${SHORT[k]||d.name}</span><span class="c">${money(d.cost)}</span></span><kbd>${d.key}</kbd></button>`).join('');
  document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{AU.init();selectTool(b.dataset.t)});
- $('routeDone').onclick=()=>{if(ST.routeFor)finishRoute()};$('styles').innerHTML='<button id="lookBtn"></button>';$('lookBtn').onclick=()=>{AU.init();AU.click();setTheme(nextLook())};
+ $('routeDone').onclick=()=>{if(ST.routeFor)finishRoute()};$('worksBtn').onclick=()=>{AU.init();AU.click();worksSheet()};$('styles').innerHTML='<button id="lookBtn"></button>';$('lookBtn').onclick=()=>{AU.init();AU.click();setTheme(nextLook())};
 }
-function refreshUI(){
+function refreshUI(){if($('worksBtn'))$('worksBtn').hidden=ST.phase!=='plan'||!!ST.daily;
  $('sNight').textContent=ST.night+' / 5';$('sNight').title=DIFF[ST.diff].name;$('sCash').textContent=money(ST.cash);$('sArrests').textContent=ST.arrests;
  $('sStolen').textContent=money(ST.stolen)+' / '+money(ST.limit);$('sStolenBar').style.width=Math.min(100,ST.stolen/ST.limit*100)+'%';
  document.querySelectorAll('.tool').forEach(b=>{const t=b.dataset.t;b.classList.toggle('on',ST.tool===t);b.disabled=ST.phase!=='plan'||ST.cash<DEV[t].cost});
@@ -2320,7 +2339,7 @@ function r3Walls(){if(!R3.ready)return;const key=SITE+'|'+G.join('');if(R3.wkey=
  for(let i=0;i<W*H;i++)if(G[i]===WALL&&!cov[i])rects.push([tx(i),ty(i),1,1]);
  for(const [x,y,w,h,v] of rects){const g=r3Block(x+.04,y+.04,w-.08,h-.08,WH+(v?.004:0),.22,.07);const m=new THREE.Mesh(g,[R3.mats.cap,R3.mats.wall]);m.castShadow=true;m.receiveShadow=true;R3.world.add(m)}
  // doors
- for(const e of ENTRIES){if(e.roof||!e.tiles.length)continue;const [ex,ey]=e.tiles[0];const sp=r3Sprite('#3dff8a',1.6,.55);sp.position.set(ex+.5,1.15,ey+.5);R3.world.add(sp);const sign=new THREE.Mesh(new THREE.BoxGeometry(.36,.14,.04),new THREE.MeshBasicMaterial({color:'#3dff8a'}));sign.position.set(ex+.5,1.12,ey+.5);R3.world.add(sign)}
+ for(const e of ENTRIES){if(e.roof||!e.tiles.length||e.night>ST.night||(ST.works&&ST.works.sealed.includes(e.id)))continue;const [ex,ey]=e.tiles[0];const sp=r3Sprite('#3dff8a',1.6,.55);sp.position.set(ex+.5,1.15,ey+.5);R3.world.add(sp);const sign=new THREE.Mesh(new THREE.BoxGeometry(.36,.14,.04),new THREE.MeshBasicMaterial({color:'#3dff8a'}));sign.position.set(ex+.5,1.12,ey+.5);R3.world.add(sign)}
  R3.doors=[];for(const d of doorTiles()){const grp=new THREE.Group();const piv=new THREE.Group();grp.add(piv);
   if(d.vault){const vd=new THREE.Mesh(new THREE.CylinderGeometry(.46,.46,.16,32),R3.mats.steel);vd.rotation.x=Math.PI/2;if(d.vert)vd.rotation.z=Math.PI/2;vd.position.y=.5;vd.castShadow=true;piv.add(vd);const hub=new THREE.Mesh(new THREE.TorusGeometry(.2,.035,8,24),R3.mats.brass);hub.position.y=.5;hub.rotation.copy(vd.rotation);hub.rotation.x+=Math.PI/2;piv.add(hub);grp.position.set(d.x+.5,0,d.y+.5)}
   else{const L=.9;const p=new THREE.Mesh(r3PanelGeo(),R3.mats.door);p.castShadow=true;piv.add(p);const kn=new THREE.Mesh(new THREE.SphereGeometry(.04,10,8),R3.mats.brass);kn.position.set(L*.82,.45,.06);piv.add(kn);
