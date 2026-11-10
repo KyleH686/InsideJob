@@ -1,11 +1,11 @@
-ROOMS=['office','store room','gallery','lobby','vault','corridor','loading dock','deposit room','banking hall','atm lobby','strongroom','security room','cash room','kitchen','conservatory','library','great hall','study','long gallery','drawing room']
-ENT={'main':'the front doors','back':'the back door','dock':'the loading dock','sky':'the skylight','drain':'the storm drain','side':'the staff door','atm':'the A.T.M. wall','roof':'the roof hatch','sewer':'the sewer tunnel','cons':'the conservatory doors','kitchen':'the kitchen door','chimney':'the chimney','cellar':'the coal chute'}
+ROOMS=['office','store room','gallery','lobby','vault','corridor','loading dock','deposit room','banking hall','atm lobby','strongroom','security room','cash room','kitchen','conservatory','library','great hall','study','long gallery','drawing room','egyptian room','grand hall','gem room','armoury','archive','showroom','cutting room','workshop','staff room','vip lounge','cashier cage','count room','gaming floor','bar']
+ENT={'main':'the front doors','back':'the back door','dock':'the loading dock','sky':'the skylight','drain':'the storm drain','side':'the staff door','atm':'the A.T.M. wall','roof':'the roof hatch','sewer':'the sewer tunnel','cons':'the conservatory doors','kitchen':'the kitchen door','chimney':'the chimney','cellar':'the coal chute','bay':'the loading bay','win':'a ground floor window','fire':'the fire exit','vent':'the roof vent','tunnel':'the service tunnel'}
 L={}  # key -> (voice,text)
 def c(k,t):L[k]=('ctl',t)
 def g(k,t):L[k]=('grd',t)
 for k,e in ENT.items(): c('ent_'+k,f'Control. Movement at {e}.')
 for r in ROOMS:
-    rk=r.replace(' ','_');r=r.replace('atm','A.T.M.')
+    rk=r.replace(' ','_');r=r.replace('atm','A.T.M.').replace('vip','V.I.P.')
     c('cam_'+rk,f'Camera has someone in the {r}.')
     c('laser_'+rk,f'Laser tripped. {r.capitalize()}.')
     c('plate_'+rk,f'Pressure plate in the {r}.')
@@ -30,3 +30,8 @@ g('g_thatway_0','They went that way!');g('g_thatway_1','Heading your way, cut th
 g('g_cutoff','They\'ll go for the exit. I\'ll get there first.')
 c('fox_in','Control. Heads up, all units. That\'s the Fox. Professional. Do not let him reach the vault.')
 c('fox_caught','We got the Fox! Outstanding work.')
+
+c('ev_storm','Control. Storm overhead. Watch for lightning.');c('ev_cleaners','Cleaners are working late. The lights stay on for now.');c('ev_police','Police patrol is in the area. Call them when you need them.')
+c('ev_fog','Fog is rolling in. Camera range is down tonight.');c('ev_football','The match is on in the guard room. Do not expect much from them early on.')
+c('leader_caught_0','That is their leader in cuffs. Bounty confirmed.');c('leader_caught_1','We have the gang leader. Good work.')
+c('police_call','Police are on their way to the door.');c('autolock','Alarm lock engaged. Every door is sealed.')
