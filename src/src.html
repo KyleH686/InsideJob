@@ -780,6 +780,7 @@ function lockAt(i){
 let VAULT_I=idx(31,11);
 function computeLit(){
  lit=new Float32Array(W*H);strobe=new Uint8Array(W*H);
+ if(ST.ev==='cleaners'&&ST.phase==='heist'&&!ST.litOff)for(let i=0;i<W*H;i++)if(G[i]===FLOOR||G[i]===DOOR)lit[i]=.5;
  for(const d of ST.devices)if(d.type==='light'&&!ST.dark){const ox=d.x+.5,oy=d.y+.5;
   for(let y=Math.max(0,d.y-4);y<=Math.min(H-1,d.y+4);y++)for(let x=Math.max(0,d.x-4);x<=Math.min(W-1,d.x+4);x++){const i=idx(x,y);if(!passable(i))continue;const dd=Math.hypot(x+.5-ox,y+.5-oy);if(dd<=3.3&&los(ox,oy,x+.5,y+.5)){lit[i]=Math.max(lit[i],1-dd/4);if(d.lv)strobe[i]=1}}}
 }
@@ -1011,11 +1012,30 @@ function startNight(){setMTab('crew');$('hint').classList.remove('show');hintTim
   ST.thieves.push({id:k,type,T,name:cm.name,gang:cm.gang,back:!!cm.back,susMul:cm.back?.85:1,col:S.crew[k%5],spawnT:t,state:'wait',x:0,y:0,tile:-1,path:[],sus:0,maxSus:T.maxSus||100,speed:T.speed*(ST.mods.tspeed||1),crack:T.crack||1,counter:T.counter,charges:T.charges||0,unseen:9,hurry:0,trail:[],face:0,loot:null,target:null,exit:null,waitT:0,crackT:0,breachT:0,seenBy:null,reported:false,outcome:null,beepT:0,smokeArmed:true,dist:0,climbT:0,plan:plans[k]})});
  ST.guards=ST.devices.filter(d=>d.type==='guard').map(d=>({dev:d,x:d.x+.5,y:d.y+.5,i:d.i,face:-Math.PI/2,loopPath:guardLoop(d),lp:0,state:'patrol',path:[],look:0,target:null,lastSeen:null,lostT:0,pause:0,stepT:0}));
  for(const g of ST.guards){const k=g.loopPath.indexOf(g.i);g.lp=Math.max(0,k)}
+ ST.ev=nightEvent();ST.lt=4;ST.litOff=false;ST.police=null;ST.abil.police=ST.ev==='police'?1:0;
  ST.t=0;ST.clock=0;ST.phase='heist';ST.tool=null;ST.sel=null;ST.routeFor=null;ST.report=[];ST.endT=0;
  ST.nightStats={arrests:0,scared:0,stolen:0,saved:0,items:[]};
+ if(ST.ev){computeLit();rebuildWatch();setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2+1.2,EVENTS[ST.ev].name.toUpperCase(),S.danger)},1700);logLine(EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name+'.')}
  AU.start();AU.bell(2);AU.droneOn();AU.vq=[];AU.vLast={};logLine('Night '+ST.night+' begins. All systems armed.');setTimeout(()=>AU.say('night_start',{cd:0}),300);
  refreshUI();
 }
+// ---------- night events: some nights bring weather, late staff or a police patrol
+const EVENTS={
+ storm:{ic:'⛈',name:'Thunderstorm',desc:'Lightning lights up the whole building every few seconds, and anyone inside gains suspicion. Thunder drowns out noise, so guards hear less.'},
+ cleaners:{ic:'🧹',name:'Cleaners working late',desc:'The lights stay on for the first 30 seconds. Every room counts as lit, so cameras fill suspicion faster and the crew hangs back.'},
+ police:{ic:'🚓',name:'Police patrol nearby',desc:'You can call the police once tonight (E). A car arrives 6 s later and waits 15 s at the busiest exit, arresting anyone who leaves through it.'}};
+function nightEvent(n){n=n||ST.night;if(ST.daily||n<2||(n>4&&!ST.endless))return null;const r=mulberry((ST.evSeed||1)*31+n*977)();if(r<.25)return null;const k=Object.keys(EVENTS);return k[Math.floor((r-.25)/.75*k.length)%k.length]}
+function eventTick(dt){const ev=ST.ev;if(!ev)return;
+ if(ev==='storm'){ST.lt=(ST.lt??4)-dt;if(ST.lt<=0){ST.lt=6+Math.random()*6;FX.flash=.45;FX.flashCol='#e8f4ff';R3.bolt=.5;SYN.noise(2.6,{vol:.32,f:140,q:.5,type:'lowpass',delay:.5+Math.random()*.6,slide:.4});SYN.noise(.25,{vol:.18,f:2400,q:.4,type:'highpass'});
+   let hit=0;for(const th of ST.thieves)if(['in','out','flee'].includes(th.state)&&th.x!=null&&!th.hiding){addSus(th,9,'lightning');hit++}if(hit)logLine('Lightning lights up the building.')}}
+ if(ev==='cleaners'&&!ST.litOff&&ST.t>=30){ST.litOff=true;computeLit();rebuildWatch();for(const th of ST.thieves)th.needReplan=true;logLine('The cleaners go home and the lights go off.');AU.play('click',{vol:.5})}
+ const P=ST.police;if(P&&P.on){P.t-=dt;if(!P.e&&P.t<=0){const busy=ST.thieves.filter(t=>['in','out','flee'].includes(t.state)&&t.x!=null);const tgt=busy.find(t=>t.loot)||busy[0];const ents=activeEntries().filter(e=>!e.roof);const pick=(tgt&&tgt.exit&&!tgt.exit.roof?tgt.exit:null)||ents.sort((a,b)=>tgt?Math.hypot(a.spawn[0]-tgt.x,a.spawn[1]-tgt.y)-Math.hypot(b.spawn[0]-tgt.x,b.spawn[1]-tgt.y):0)[0];
+   if(pick){P.e=pick;P.t=15;stamp(pick.spawn[0]+.5,pick.spawn[1]-.5,'POLICE',S.accent);logLine('A police car pulls up at the '+pick.name.toLowerCase()+'.');ST.recEv.push({t:ST.t,x:pick.spawn[0]+.5,y:pick.spawn[1],k:'alarm',s:'Police at the '+pick.name.toLowerCase()});AU.play('alarm3',{vol:.35});for(const th of ST.thieves)th.needReplan=true}else P.on=false}
+  else if(P.e){const sp=P.e.spawn;for(const th of ST.thieves)if(['out','flee'].includes(th.state)&&Math.hypot(th.x-sp[0]-.5,th.y-sp[1]-.5)<3.5)catchThief(th,'police');if(P.t<=0){P.on=false;logLine('The police car drives off.')}}}}
+function callPolice(){if(ST.phase!=='heist'||!ST.abil.police)return;ST.abil.police--;ST.police={on:true,t:6,e:null};AU.play('confirm',{vol:.5});hint('Police are on their way: 6 seconds.',3);logLine('You call the police.');renderAbil()}
+function drawPolice(c){const P=ST.police;if(!P||!P.on||!P.e)return;const [x,y]=P.e.spawn;const bl=Math.sin(ST.t*12)>0;c.save();c.translate(x+.5,y+.5);c.fillStyle='#e8eef8';c.strokeStyle='#123';c.lineWidth=.05;rr(c,-.9,-.42,1.8,.84,.18);c.fill();c.stroke();c.fillStyle='#1b3a8a';c.fillRect(-.9,-.08,1.8,.16);
+ c.fillStyle=bl?'#3d7bff':'#ff3b4a';c.beginPath();c.arc(-.18,0,.12,0,7);c.fill();c.fillStyle=bl?'#ff3b4a':'#3d7bff';c.beginPath();c.arc(.18,0,.12,0,7);c.fill();
+ c.globalAlpha=.25;c.fillStyle=bl?'#3d7bff':'#ff3b4a';c.beginPath();c.arc(0,0,3.5,0,7);c.fill();c.restore()}
 // ---------- building works: permanent changes to the building, bought between nights
 const WORKS_COST={door:320,roof:260,vault:240,cctv:380};
 function worksSheet(){const W_=ST.works;const open=ENTRIES.filter(e=>!W_.sealed.includes(e.id));const nowOpen=open.filter(e=>e.night<=ST.night);
@@ -1108,7 +1128,7 @@ function alarm(x,y,msg,kind){
  for(const {g} of free){g.state='investigate';g.lastSeen=[x,y];g.path=guardPath(g,idx(Math.floor(x),Math.floor(y)));g.look=0}
  for(const th of ST.thieves)if(th.state==='in'||th.state==='out')th.hurry=Math.max(th.hurry,3);
 }
-function noise(x,y,r,fromCatch){
+function noise(x,y,r,fromCatch){if(ST.ev==='storm')r*=.6;
  FX.rings.push({x,y,r,t:0});const src=idx(Math.floor(x),Math.floor(y));if(!passable(src))return;const res=dijkstra(src,flatCost());
  let told=false;
  for(const g of ST.guards){if(g.state==='chase'||g.state==='cover')continue;const gi=idx(Math.floor(g.x),Math.floor(g.y));if(res.d[gi]>r*1.25)continue;
@@ -1135,7 +1155,7 @@ function searchPoints(p){if(!p)return [];const x0=Math.floor(p[0]),y0=Math.floor
 function guardPath(g,dst){const cur=idx(Math.floor(g.x),Math.floor(g.y));const p=pathTo(dijkstra(cur,flatCost(),dst),dst);return p?p.slice(1):[]}
 function catchThief(th,by){
  if(th.state==='caught'||th.state==='escaped')return;
- const srcName={camera:'on camera',guard:'tackled by a guard',laser:'after tripping a laser',plate:'after stepping on a pressure plate'}[by]||'on camera';
+ const srcName={police:'by the police at the door',lightning:'in a lightning flash',dog:'after the dog barked',camera:'on camera',guard:'tackled by a guard',laser:'after tripping a laser',plate:'after stepping on a pressure plate'}[by]||'on camera';
  th.outcome='caught '+srcName+(th.loot?' holding '+th.loot.name:'');th.state='caught';th.caughtT=0;th.caughtBy=by;AU.play('cuffs',{vol:.55,x:th.x,delay:.45});
  ach('first');if(th.loot)ach('bag');if(th.T.boss){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900);ST.cash+=500;floatText(th.x,th.y-1.6,'THE FOX! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.type==='magpie'&&th.charges<2)ach('magpie');
  if(th.loot){const l=th.loot;l.carrier=null;th.loot=null;if(G[th.tile]===FLOOR||G[th.tile]===DOOR){l.home=l.home??l.i;l.i=th.tile;l.dropped=true;setTimeout(()=>floatText(tx(l.i)+.5,ty(l.i)-.2,'DROPPED',S.accent),400);logLine(th.name+' drops '+l.name+'. It is lying in the '+roomOf(l.i)+'.')}}
@@ -1299,7 +1319,7 @@ function powerTick(dt){const pc=ST.pc;if(!pc||pc.done)return;pc.t+=dt;
 function stepSim(dt){
  powerTick(dt);
  for(const d of ST.devices)if(d.type==='speaker'&&d.cd>0)d.cd-=dt;
- dogTick(dt);AU.life(dt);
+ dogTick(dt);eventTick(dt);AU.life(dt);
  ST.t+=dt;ST.clock+=dt*.5;
  for(const d of ST.devices){if(d.type==='camera'){if(d.lockT>0&&d.lock&&['in','out','flee'].includes(d.lock.state)){d.lockT-=dt;const ta=Math.atan2(d.lock.y-d.y-.5,d.lock.x-d.x-.5);d.trk=(d.trk??d.cur)+angDiff(ta,d.trk??d.cur)*Math.min(1,dt*7);d.cur=d.trk}else{d.trk=null;d.lock=null;d.cur=camAngle(d,ST.t)}d.seeing=false;if(d.looped>0){d.looped-=dt;if(d.looped<=0){d.looped=0;rebuildWatch();for(const th of ST.thieves)th.needReplan=true}}}if(d.armed>0)d.armed-=dt;if(d.hit>0)d.hit-=dt*1.5}
  for(const s of ST.smokes){s.t-=dt;s.r=Math.min(s.R,s.r+dt*4);if(s.t<1)s.r=Math.max(0,s.R*s.t)}
@@ -1377,13 +1397,13 @@ function setMTab(t){document.body.dataset.mtab=t;document.querySelectorAll('#mta
 const SAVE_KEY='ij-save';
 function saveGame(){if(ST.daily)return;if(ST.done){clearSave();return}try{const keep=['type','i','x','y','ang','sweep','phase','orient','route','cur','n','lv','paid'];
  localStorage.setItem(SAVE_KEY,JSON.stringify({v:1,t:Date.now(),site:SITE,diff:ST.diff,night:ST.night,cash:ST.cash,stolen:ST.stolen,limit:ST.limit,arrests:ST.arrests,endless:ST.endless,otSeed:ST.otSeed||0,otMod:ST.otMod?ST.otMod.id:null,otSnap:ST.otSnap,perks:ST.perks,mods:ST.mods,stars:ST.stars,
-  intel:{plates:[...ST.intel.plates],cams:[...ST.intel.cams],lasers:[...ST.intel.lasers],dogs:[...(ST.intel.dogs||[])]},back:ST.back||[],jailed:ST.jailed||[],busted:ST.busted||[],works:ST.works,stolenIds:ST.loot.filter(l=>l.stolen&&!l.fake).map(l=>l.id),costs:Object.fromEntries(Object.entries(DEV).map(([k,d])=>[k,d.cost])),
+  intel:{plates:[...ST.intel.plates],cams:[...ST.intel.cams],lasers:[...ST.intel.lasers],dogs:[...(ST.intel.dogs||[])]},back:ST.back||[],jailed:ST.jailed||[],busted:ST.busted||[],works:ST.works,evSeed:ST.evSeed,stolenIds:ST.loot.filter(l=>l.stolen&&!l.fake).map(l=>l.id),costs:Object.fromEntries(Object.entries(DEV).map(([k,d])=>[k,d.cost])),
   devices:ST.devices.map(d=>Object.fromEntries(keep.filter(k=>k in d).map(k=>[k,d[k]]))),camN}))}catch(e){}}
 function clearSave(){try{localStorage.removeItem(SAVE_KEY)}catch(e){}}
 function readSave(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');return s&&s.v===1?s:null}catch(e){return null}}
 function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SITE=SITES[s.site]?s.site:'gallery';newGame();
  Object.assign(ST,{night:s.night,cash:s.cash,stolen:s.stolen,limit:s.limit,arrests:s.arrests,endless:s.endless,otSeed:s.otSeed,otMod:DAILY_MODS.find(m=>m.id===s.otMod)||null,otSnap:s.otSnap||null,perks:s.perks,mods:s.mods,stars:s.stars||[],
-  intel:{plates:new Set(s.intel.plates),cams:new Set(s.intel.cams),lasers:new Set(s.intel.lasers),dogs:new Set(s.intel.dogs||[])},back:s.back||[],jailed:s.jailed||[],busted:s.busted||[],works:s.works||{sealed:[],vault:false,cctv:false}});
+  intel:{plates:new Set(s.intel.plates),cams:new Set(s.intel.cams),lasers:new Set(s.intel.lasers),dogs:new Set(s.intel.dogs||[])},back:s.back||[],jailed:s.jailed||[],busted:s.busted||[],works:s.works||{sealed:[],vault:false,cctv:false},evSeed:s.evSeed||7});
  for(const k in s.costs)if(DEV[k])DEV[k].cost=s.costs[k];
  for(const l of ST.loot)l.stolen=s.stolenIds.includes(l.id);
  buildMap(ST.night);ST.devices=s.devices.map(d=>({...d,id:ST.devId++,route:d.route||[]}));camN=s.camN||ST.devices.length+1;
@@ -1391,7 +1411,7 @@ function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SIT
 function nextNight(){setMTab('build');hideSheet();ST.night++;for(const l of ST.loot)if(l.dropped){l.i=l.home;l.dropped=false}if(ST.endless){resetLoot();ST.stolen=0;ST.limit=OT_CAP;ST.intel.plates.clear();otMod()}buildMap(ST.night);ST.phase='plan';ST.thieves=[];ST.guards=[];ST.smokes=[];ST.vaultOpen=false;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false}
  devicesChanged();redrawStatic();refreshUI();hint(nightDef(ST.night).hint,9);logLine(dayName(ST.night)+': new intel on tonight\'s crew.');saveGame()}
-function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],back:[],jailed:[],busted:[],works:{sealed:[],vault:false,cctv:false},slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});ST.cash+=SITES[SITE].bonus||0;resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
+function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],back:[],jailed:[],busted:[],works:{sealed:[],vault:false,cctv:false},evSeed:1+Math.floor(Math.random()*1e6),slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});ST.cash+=SITES[SITE].bonus||0;resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
 
 // ================================================================ ABILITIES
 function useSiren(){if(ST.phase!=='heist'||ST.abil.siren<=0)return;ST.abil.siren--;AU.siren();AU.say('siren',{cd:0,pri:3});FX.flash=.7;FX.flashCol=S.danger;FX.shake=.4;ST.alarmT=6;logLine('<b style="color:var(--danger)">PANIC SIREN</b> sounded.');
@@ -1403,9 +1423,9 @@ function trySlam(i){if(ST.abil.slam<=0||G[i]!==DOOR||i===VAULT_I||isSlam(i)){AU.
  if(ST.thieves.some(t=>['in','out','flee'].includes(t.state)&&Math.hypot(t.x-tx(i)-.5,t.y-ty(i)-.5)<.75)){AU.deny();floatText(tx(i)+.5,ty(i),'blocked',S.danger);return false}
  ST.abil.slam--;ST.slams.push({i,t:7});costCache={};for(const th of ST.thieves)th.needReplan=true;AU.slam(tx(i));AU.say('slam',{cd:8});FX.shake=.3;burst(tx(i)+.5,ty(i)+.5,16,S.ink,2.5);logLine('Door slammed shut in the '+roomOf(i)+'.');if(ST.abil.slam<=0)ST.abTool=null;renderAbil();return true}
 function renderAbil(){const a=$('abil');a.classList.toggle('show',ST.phase==='heist');if(ST.phase!=='heist')return;
- a.innerHTML=`<button id="abSlam" class="${ST.abTool==='slam'?'on':''}" ${ST.abil.slam?'':'disabled'}><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6">${ICON.slam.replace(/<\/?svg[^>]*>/g,'')}</svg><span class="ln">Slam a door</span><span class="sh">Slam</span> ×${ST.abil.slam} <kbd>Q</kbd></button><button id="abSiren" ${ST.abil.siren?'':'disabled'}><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6">${ICON.siren.replace(/<\/?svg[^>]*>/g,'')}</svg><span class="ln">Panic siren</span><span class="sh">Siren</span> ×${ST.abil.siren} <kbd>W</kbd></button>`;
+ a.innerHTML=`<button id="abSlam" class="${ST.abTool==='slam'?'on':''}" ${ST.abil.slam?'':'disabled'}><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6">${ICON.slam.replace(/<\/?svg[^>]*>/g,'')}</svg><span class="ln">Slam a door</span><span class="sh">Slam</span> ×${ST.abil.slam} <kbd>Q</kbd></button><button id="abSiren" ${ST.abil.siren?'':'disabled'}><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6">${ICON.siren.replace(/<\/?svg[^>]*>/g,'')}</svg><span class="ln">Panic siren</span><span class="sh">Siren</span> ×${ST.abil.siren} <kbd>W</kbd></button>${ST.ev==='police'?`<button id="abPolice" ${ST.abil.police?'':'disabled'}><span style="font-size:16px">🚓</span><span class="ln">Call the police</span><span class="sh">Police</span> ×${ST.abil.police} <kbd>E</kbd></button>`:''}`;
  $('abSlam').onclick=()=>{ST.abTool=ST.abTool==='slam'?null:'slam';if(ST.abTool)hint('Click a doorway to slam it shut for 7 seconds. Thieves have to find another way.',4);renderAbil()};
- $('abSiren').onclick=useSiren}
+ $('abSiren').onclick=useSiren;if($('abPolice'))$('abPolice').onclick=callPolice}
 // ================================================================ REPLAY
 function startReplay(){if(!ST.rec.length)return;hideSheet();$('hint').classList.remove('show');hintTimer=0;ST.phase='replay';ST.rp={t:0,speed:0,fi:0,ev:0,cap:'',capT:0};ST.recEv.sort((a,b)=>a.t-b.t);document.querySelectorAll('#replayBar [data-r]').forEach(o=>o.classList.toggle('on',o.dataset.r==='0'));document.body.classList.add('rp');for(const th of ST.thieves){th.trail=[];th.caughtT=0;th.crackT=0;th.breachT=0;th.climbT=0;th.waiting=false}
  FX.stamps=[];FX.floats=[];$('replayBar').classList.add('show');renderAbil();refreshUI();AU.droneOn()}
@@ -1775,6 +1795,7 @@ function render(dtReal){
  drawLasers(c);
  drawGuardRoutes(c);
  drawSmokes(c);
+ drawPolice(c);
  drawTrails(c);
  drawWalls3D(c);
  drawDoors3D(c);
@@ -2174,6 +2195,7 @@ addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;AU.init();co
  if(k===' '){e.preventDefault();if(ST.phase==='plan')startNight();else if(ST.phase==='heist')setSpeed(ST.speed?0:1)}
  if(ST.phase==='heist'&&k==='q'){ST.abTool=ST.abTool==='slam'?null:'slam';renderAbil()}
  if(ST.phase==='heist'&&k==='w')useSiren();
+ if(ST.phase==='heist'&&k==='e')callPolice();
  if(k==='u'&&ST.sel&&ST.phase==='plan')upgradeSel();
  if(k==='v'){ST.routes=!ST.routes;refreshUI()}
  if(k==='h'){ST.heat=!ST.heat;refreshUI()}
@@ -2222,6 +2244,7 @@ function renderCrew(){
  const night=nightDef(ST.night);if(!night)return;let html='';
  if(ST.phase==='plan'&&(ST.intel.plates.size||ST.intel.cams.size)){const kp=ST.devices.filter(d=>d.type==='plate'&&ST.intel.plates.has(d.i)).length;html+=`<div class="r" style="margin-bottom:6px"><b style="color:var(--danger)">Word on the street:</b> they know about ${kp} of your plates${ST.intel.cams.size?' and fear '+ST.devices.filter(d=>d.type==='camera'&&ST.intel.cams.has(d.i)).length+' camera'+(ST.intel.cams.size>1?'s':''):''}. Moving a plate makes it secret again.</div>`}
  if(ST.phase==='plan'){const plans=_rc&&_rcKey.startsWith(devVer+'|'+ST.night)?_rc:null;
+  {const ev=nightEvent();if(ev){const E=EVENTS[ev];html+=`<div class="r" style="margin-bottom:6px;padding:6px 8px;border:1px dashed var(--danger)"><span style="font-size:18px">${E.ic}</span> <b style="color:var(--ink)">Tonight's forecast: ${E.name}.</b> ${E.desc}</div>`}}
   {const gk=nightGang();if(gk){const g=GANGS[gk];const nb=(ST.back||[]).filter(b=>b.gang===gk).length;html+=`<div class="r" style="margin-bottom:6px"><span style="font-size:18px">${g.card}</span> <b style="color:var(--ink)">Tonight: ${g.name}.</b> ${g.motto}${nb?` <b style="color:var(--danger)">${nb} of them got away before and ${nb>1?'are':'is'} back, 15% harder to spot.</b>`:''}</div>`}else if(!ST.daily)html+=`<div class="r" style="margin-bottom:6px"><b style="color:var(--ink)">Tonight: everyone.</b> The gangs have joined forces, and the Fox is with them.</div>`}
   night.crew.forEach(([type,t],k)=>{const T=TYPES[type],p=plans&&plans[k];const col=S.crew[k%5];const cm=T.boss?{name:'The Fox'}:crewMember(k);
    html+=`<div class="crew"><div class="dot" style="background:${col}">${k+1}</div><div><b>${cm.name}</b>${cm.back?'<span class="tag" style="color:var(--danger);border-color:var(--danger)">BACK</span>':''}<span class="tag">${T.tag}</span> <span style="font-size:12px;opacity:.7">${T.name}, arrives ${fmtT(t)}</span><div class="r">${T.desc}</div>${p?`<div class="r">Likely: <b style="color:var(--ink)">${p.entry.name}</b> → ${p.loot.name} (${money(p.loot.v)}). In view ~${p.exposure.toFixed(1)}s${p.trips?', '+p.trips+' laser'+(p.trips>1?'s':''):''}.</div>`:''}</div></div>`})}
@@ -2452,6 +2475,7 @@ function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;
  // power cut: the building goes dark, emergency red
  const dark=ST.dark&&ST.phase==='heist',plan=ST.phase==='plan'||ST.phase==='report';R3.hemi.intensity=lerp(R3.hemi.intensity,dark?.12:plan?.95:.34,.08);R3.hemi.color.set(dark?'#a03040':'#5d8fd6');R3.moon.intensity=lerp(R3.moon.intensity,dark?.35:plan?1.6:1.5,.08);
  if(R3.pools)for(const [k,m] of R3.pools.entries()){const tgt=dark?0:plan?.1:.2+.03*Math.sin(R3.t*1.3+k*2.1);m.material.opacity=lerp(m.material.opacity,tgt,.06)}
+ if(R3.bolt>0){R3.bolt-=dt;const b=Math.max(0,R3.bolt/.5);R3.moon.intensity=1.5+b*5;R3.hemi.intensity+=b*.9}
  R3.floorMat.emissiveIntensity=lerp(R3.floorMat.emissiveIntensity,plan?.3:.07,.08);R3.r.toneMappingExposure=lerp(R3.r.toneMappingExposure,plan?1.35:1.2,.08);
  r3Sync(dt);
  const pa=R3.dust.geometry.attributes.position;for(let i=0;i<pa.count;i++){let y=pa.getY(i)+dt*.05*Math.sin(i+R3.t*.3);let x=pa.getX(i)+dt*.04*Math.cos(i*1.7+R3.t*.2);if(y>2.9)y=.2;pa.setXY(i,x,y)}pa.needsUpdate=true;
