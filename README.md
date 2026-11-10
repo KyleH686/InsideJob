@@ -2,7 +2,7 @@
 
 ![Inside Job](banner.png)
 
-A heist game from the other side. You're the security consultant: place cameras, lasers, plates, lights, guards and doors, and watch the crews pathfind around what you can see. Five nights, two buildings (Marchbank Gallery and Pell Street Bank), Blueprint and Sketchbook styles.
+A heist game from the other side. You're the security consultant: place cameras, lasers, plates, lights, guards and doors, and watch the crews pathfind around what you can see. Five nights, six buildings to unlock, Blueprint and Sketchbook styles.
 
 ## Play on a phone, full screen
 

@@ -453,7 +453,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v23 · sound by Kenney (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v24 · sound by Kenney (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -1055,7 +1055,7 @@ function startNight(){setTimeout(()=>{if(ST.ev&&EVENTS[ST.ev])tip('ev-'+ST.ev,EV
  ST.t=0;ST.clock=0;ST.phase='heist';ST.tool=null;ST.sel=null;ST.routeFor=null;ST.report=[];ST.endT=0;
  ST.nightStats={arrests:0,scared:0,stolen:0,saved:0,items:[]};
  if(ST.ev){if(ST.ev==='fog')for(const c of ST.devices)if(c.type==='camera')c.cov=camCoverage(c);computeLit();rebuildWatch();setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2+1.2,EVENTS[ST.ev].name.toUpperCase(),S.danger)},1700);logLine(EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name+'.')}
- AU.start();AU.bell(2);AU.droneOn();AU.vq=[];AU.vLast={};logLine('Night '+ST.night+' begins. All systems armed.');setTimeout(()=>AU.say('night_start',{cd:0}),300);
+ AU.start();AU.bell(2);AU.droneOn();AU.vq=[];AU.vLast={};logLine('Night '+ST.night+' begins. All systems armed.');setTimeout(()=>AU.say('night_start',{cd:0}),300);if(ST.ev)setTimeout(()=>AU.say('ev_'+ST.ev,{cd:0,pri:2}),3200);
  refreshUI();
 }
 // ---------- night events: some nights bring weather, late staff or a police patrol
@@ -1073,7 +1073,7 @@ function eventTick(dt){const ev=ST.ev;if(!ev)return;
  const P=ST.police;if(P&&P.on){P.t-=dt;if(!P.e&&P.t<=0){const busy=ST.thieves.filter(t=>['in','out','flee'].includes(t.state)&&t.x!=null);const tgt=busy.find(t=>t.loot)||busy[0];const ents=activeEntries().filter(e=>!e.roof);const pick=(tgt&&tgt.exit&&!tgt.exit.roof?tgt.exit:null)||ents.sort((a,b)=>tgt?Math.hypot(a.spawn[0]-tgt.x,a.spawn[1]-tgt.y)-Math.hypot(b.spawn[0]-tgt.x,b.spawn[1]-tgt.y):0)[0];
    if(pick){P.e=pick;P.t=15;stamp(pick.spawn[0]+.5,pick.spawn[1]-.5,'POLICE',S.accent);logLine('A police car pulls up at the '+pick.name.toLowerCase()+'.');ST.recEv.push({t:ST.t,x:pick.spawn[0]+.5,y:pick.spawn[1],k:'alarm',s:'Police at the '+pick.name.toLowerCase()});AU.play('alarm3',{vol:.35});for(const th of ST.thieves)th.needReplan=true}else P.on=false}
   else if(P.e){const sp=P.e.spawn;for(const th of ST.thieves)if(['out','flee'].includes(th.state)&&Math.hypot(th.x-sp[0]-.5,th.y-sp[1]-.5)<3.5)catchThief(th,'police');if(P.t<=0){P.on=false;logLine('The police car drives off.')}}}}
-function callPolice(){if(ST.phase!=='heist'||!ST.abil.police)return;ST.abil.police--;ST.police={on:true,t:6,e:null};AU.play('confirm',{vol:.5});hint('Police are on their way: 6 seconds.',3);logLine('You call the police.');renderAbil()}
+function callPolice(){if(ST.phase!=='heist'||!ST.abil.police)return;ST.abil.police--;ST.police={on:true,t:6,e:null};AU.play('confirm',{vol:.5});AU.say('police_call',{cd:0,pri:2});hint('Police are on their way: 6 seconds.',3);logLine('You call the police.');renderAbil()}
 function drawPolice(c){const P=ST.police;if(!P||!P.on||!P.e)return;const [x,y]=P.e.spawn;const bl=Math.sin(ST.t*12)>0;c.save();c.translate(x+.5,y+.5);c.fillStyle='#e8eef8';c.strokeStyle='#123';c.lineWidth=.05;rr(c,-.9,-.42,1.8,.84,.18);c.fill();c.stroke();c.fillStyle='#1b3a8a';c.fillRect(-.9,-.08,1.8,.16);
  c.fillStyle=bl?'#3d7bff':'#ff3b4a';c.beginPath();c.arc(-.18,0,.12,0,7);c.fill();c.fillStyle=bl?'#ff3b4a':'#3d7bff';c.beginPath();c.arc(.18,0,.12,0,7);c.fill();
  c.globalAlpha=.25;c.fillStyle=bl?'#3d7bff':'#ff3b4a';c.beginPath();c.arc(0,0,3.5,0,7);c.fill();c.restore()}
@@ -1164,7 +1164,7 @@ function onEnterTile(th,i){
 function roomOf(i){const x=tx(i),y=ty(i);if(G[i]===OUT)return 'street';return SITES[SITE].roomOf(x,y)}
 function addSus(th,v,src){th.sus+=v*(th.T.sus||1)*(th.susMul||1);th.seenBy=src;th.unseen=0;th.hurry=2.5;if(th.sus>=th.maxSus)catchThief(th,src)}
 function alarm(x,y,msg,kind){hap([30,40,30]);
- logLine('<b style="color:var(--danger)">ALARM</b> '+msg+'.');if(ST.phase==='heist')ST.recEv.push({t:ST.t,x,y,k:'alarm',s:msg});ST.alarmT=8;if(ST.works&&ST.works.autolock){FX.flash=Math.max(FX.flash,.2);AU.play('slam',{vol:.4});for(const th of ST.thieves)th.needReplan=true}const rk=roomOf(idx(Math.floor(x),Math.floor(y))).replace(' ','_');if(kind&&rk!=='street')AU.say(kind+'_'+rk,{cd:4,pri:2});
+ logLine('<b style="color:var(--danger)">ALARM</b> '+msg+'.');if(ST.phase==='heist')ST.recEv.push({t:ST.t,x,y,k:'alarm',s:msg});ST.alarmT=8;if(ST.works&&ST.works.autolock){FX.flash=Math.max(FX.flash,.2);AU.play('slam',{vol:.4});AU.say('autolock',{cd:25});for(const th of ST.thieves)th.needReplan=true}const rk=roomOf(idx(Math.floor(x),Math.floor(y))).replace(' ','_');if(kind&&rk!=='street')AU.say(kind+'_'+rk,{cd:4,pri:2});
  addDanger(x,y,3,14);
  const free=ST.guards.filter(g=>g.state!=='chase').map(g=>({g,d:Math.hypot(g.x-x,g.y-y)})).sort((a,b)=>a.d-b.d).slice(0,2);
  for(const {g} of free){g.state='investigate';g.lastSeen=[x,y];g.path=guardPath(g,idx(Math.floor(x),Math.floor(y)));g.look=0}
@@ -1199,7 +1199,7 @@ function catchThief(th,by){hap(70);
  if(th.state==='caught'||th.state==='escaped')return;
  const srcName={police:'by the police at the door',lightning:'in a lightning flash',dog:'after the dog barked',camera:'on camera',guard:'tackled by a guard',laser:'after tripping a laser',plate:'after stepping on a pressure plate'}[by]||'on camera';
  th.outcome='caught '+srcName+(th.loot?' holding '+th.loot.name:'');th.state='caught';th.caughtT=0;th.caughtBy=by;AU.play('cuffs',{vol:.55,x:th.x,delay:.45});
- ach('first');if(th.loot)ach('bag');if(th.T.boss){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900);ST.cash+=500;floatText(th.x,th.y-1.6,'THE FOX! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.leader){ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
+ ach('first');if(th.loot)ach('bag');if(th.T.boss){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900);ST.cash+=500;floatText(th.x,th.y-1.6,'THE FOX! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.leader){AU.say('leader_caught',{cd:0,pri:3});ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
  if(th.loot){const l=th.loot;l.carrier=null;th.loot=null;if(G[th.tile]===FLOOR||G[th.tile]===DOOR){l.home=l.home??l.i;l.i=th.tile;l.dropped=true;setTimeout(()=>floatText(tx(l.i)+.5,ty(l.i)-.2,'DROPPED',S.accent),400);logLine(th.name+' drops '+l.name+'. It is lying in the '+roomOf(l.i)+'.')}}
  {let n=0;for(const o of ST.thieves){if(o===th||!['in','out','flee'].includes(o.state))continue;n++;o.spooked=1;o.needReplan=true;
    if(o.state==='in'&&!o.crackT&&o.sus>o.maxSus*.3&&Math.random()<.75){o.state='flee';o.needReplan=true;o.hiding=false;floatText(o.x,o.y-.7,'ABORT',S.accent)}else o.hurry=0}
@@ -2375,8 +2375,8 @@ function optionsSheet(){const fromHome=homeOn()||HOME.from!=='game'&&ST.phase===
   document.querySelectorAll('#sheet [data-o]').forEach(b=>b.onclick=()=>{const k=b.dataset.o;OPT[k]=!OPT[k];saveOpt();AU.click();if(k==='hap')hap(30);draw()});
   $('optSnd').onclick=()=>{AU.init();toggleMute();AU.click();draw()};$('optLook').onclick=()=>{AU.click();setTheme(nextLook());draw()};
   $('optTips').onclick=()=>{TIPS.clear();try{localStorage.removeItem('ij-tips')}catch(e){}OPT.tips=true;saveOpt();AU.click();$('optTips').textContent='Tips reset ✓'};
-  $('optTut').onclick=()=>{AU.click();if($('optTut').dataset.ok||!readSave()&&ST.phase!=='plan'&&ST.phase!=='heist'){clearSave();SITE='gallery';try{localStorage.setItem('ij-site',SITE)}catch(e){}hideSheet();newGame();tutStart()}else{$('optTut').dataset.ok=1;$('optTut').textContent='Ends this contract. Tap again'}};
-  $('optWipe').onclick=()=>{if($('optWipe').dataset.ok){try{Object.keys(localStorage).filter(k=>k.startsWith('ij-')).forEach(k=>localStorage.removeItem(k))}catch(e){}location.reload()}else{AU.deny();$('optWipe').dataset.ok=1;$('optWipe').textContent='Tap again to erase everything'}};
+  $('optTut').onclick=()=>{AU.click();if($('optTut').dataset.ok||!readSave()&&HOME.from!=='game'&&fromHome){clearSave();SITE='gallery';try{localStorage.setItem('ij-site',SITE)}catch(e){}hideSheet();newGame();tutStart()}else{$('optTut').dataset.ok=1;$('optTut').textContent='Ends this contract. Tap again'}};
+  $('optWipe').onclick=()=>{if($('optWipe').dataset.ok){try{Object.keys(localStorage).filter(k=>k.startsWith('ij-')).forEach(k=>localStorage.removeItem(k))}catch(e){}$('optWipe').textContent='Erased. Reopen the game.';try{location.reload()}catch(e){}}else{AU.deny();$('optWipe').dataset.ok=1;$('optWipe').textContent='Tap again to erase everything'}};
   $('optBack').onclick=()=>{AU.click();if(fromHome)showHome();else{hideSheet();if(spd)setSpeed(spd)}}};
  draw()}
 function drawGlints(c){if(theme!=='blueprint'&&theme!=='sketch')return;const now=performance.now()/1000;for(const l of ST.loot){if(l.stolen||l.carrier||l.dropped||l.spent)continue;const tt=(now*.55+l.x*.37+l.y*.61)%3.2;if(tt>.55)continue;const k=Math.sin(tt/.55*Math.PI),x=l.x+.72,y=l.y+.22,r=.2*k;c.save();c.globalAlpha=k;c.fillStyle=theme==='sketch'?'#e0a020':'#ffffff';c.beginPath();c.moveTo(x,y-r);c.quadraticCurveTo(x,y,x+r,y);c.quadraticCurveTo(x,y,x,y+r);c.quadraticCurveTo(x,y,x-r,y);c.quadraticCurveTo(x,y,x,y-r);c.fill();c.restore()}}
