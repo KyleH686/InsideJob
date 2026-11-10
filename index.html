@@ -396,6 +396,22 @@ body[data-theme=sketch] #home h1 .o::after{border-color:#2f2c27;box-shadow:2px 2
 #home .htrack{display:flex;width:max-content;animation:tape 22s linear infinite}
 #home .htrack span{background:#ffd36b;color:#1b1b1b;font-family:'Share Tech Mono',monospace;font-weight:bold;font-size:13px;letter-spacing:.2em;padding:3px 0;white-space:nowrap}
 @keyframes tape{to{transform:translateX(-50%)}}
+@keyframes hUp{from{transform:translateY(18px);opacity:0}}
+#home .hmenu>*{animation:hUp .45s cubic-bezier(.2,1.2,.4,1) both}
+#home .hmenu>*:nth-child(2){animation-delay:.06s}#home .hmenu>*:nth-child(3){animation-delay:.12s}#home .hmenu>*:nth-child(4){animation-delay:.18s}#home .hmenu>*:nth-child(5){animation-delay:.24s}#home .hmenu>*:nth-child(6){animation-delay:.3s}
+#home .hmenu button.pri{animation:hUp .45s cubic-bezier(.2,1.2,.4,1) both,pulse 2.4s ease-in-out .5s infinite}
+.rstar{display:inline-block;opacity:.25}.rstar.on{opacity:1;animation:rstar .5s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes rstar{from{transform:scale(2.8) rotate(-40deg);opacity:0}}
+#sCash{display:inline-block;transition:color .5s}#sCash.up{color:var(--good);animation:cbump .35s}#sCash.dn{animation:cbump .3s}
+@keyframes cbump{40%{transform:scale(1.18)}}
+#sStolenBar.hit{animation:sthit .7s}@keyframes sthit{0%{filter:brightness(3)}30%{filter:brightness(1)}55%{filter:brightness(2.2)}}
+.toast.tip{border-style:dashed;max-width:300px}body:not([data-theme=sketch]) .toast{background:var(--bg)}
+.optG{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;align-items:center;font-size:13px;margin:6px 0 10px}.optG input{width:100%}
+.optT{display:flex;width:100%;justify-content:space-between;align-items:center;gap:10px;text-align:left;padding:6px 10px;margin:4px 0;background:none;border:1px solid var(--line,currentColor);color:inherit;font:inherit;font-size:14px;cursor:pointer}
+.optT small{display:block;font-size:11px;opacity:.7;margin-top:1px}.optT i{font-style:normal;font-weight:bold;min-width:74px;text-align:center;padding:3px 8px;border:1px solid currentColor;opacity:.55;white-space:nowrap}.optT.on i{opacity:1;background:var(--btn);color:var(--btnink);border-color:var(--btn)}
+.optR{display:flex;gap:8px;margin-top:8px}.optR button{flex:1;padding:8px;background:none;border:1px solid currentColor;color:inherit;font:inherit;font-size:13px;cursor:pointer;opacity:.85}.optR button.danger{color:var(--danger)}
+@media (prefers-reduced-motion:reduce){#home .hmenu>*,.rstar.on{animation:none}}
+
 #hScene{width:100%;min-height:110px}
 #home .hmenu{display:flex;flex-direction:column;gap:9px;width:min(100%,380px)}
 #home .hmenu button{font-family:'Architects Daughter',cursive;font-size:18px;padding:11px 14px;border:1.5px solid rgba(232,243,255,.55);background:rgba(6,26,51,.55);color:#e8f3ff;letter-spacing:.04em;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);transition:transform .12s}
@@ -442,7 +458,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v21 · sound by Kenney (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v22 · sound by Kenney (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -472,7 +488,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
     <div class="row"><button class="small on" id="tRoutes">Routes (V)</button><button class="small" id="tHeat">Watch heat (H)</button><button class="small on" id="tThink">Thoughts (I)</button><button class="small" id="tKeys">Keys (?)</button></div>
    </section>
    <section class="card" data-mt="radio"><h3>Radio</h3><div id="log"></div></section>
-   <section class="card" data-mt="more"><h3>Sound <small>saved on this device</small></h3><div id="mixer" style="display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font-size:12px;align-items:center"><label for="mxSfx">Effects</label><input type="range" id="mxSfx" min="0" max="1.5" step=".05" value=".9"><label for="mxVo">Radio voices</label><input type="range" id="mxVo" min="0" max="1.5" step=".05" value="1.1"><label for="mxMus">Music</label><input type="range" id="mxMus" min="0" max="1" step=".05" value=".32"></div></section>
+   <section class="card" data-mt="more"><h3>Sound <small>saved on this device</small></h3><div id="mixer" style="display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font-size:12px;align-items:center"><label for="mxSfx">Effects</label><input type="range" id="mxSfx" min="0" max="1.5" step=".05" value=".9"><label for="mxVo">Radio voices</label><input type="range" id="mxVo" min="0" max="1.5" step=".05" value="1.1"><label for="mxMus">Music</label><input type="range" id="mxMus" min="0" max="1" step=".05" value=".32"></div><button class="cta" style="font-size:14px;padding:6px;margin-top:8px" onclick="AU.click();optionsSheet()">⚙ All options</button></section>
   </aside>
  </main>
 </div>
@@ -1036,7 +1052,7 @@ $('hint').addEventListener('pointerdown',()=>{hintTimer=0;$('hint').classList.re
 function hint(s,dur=7){const h=$('hint');if(TOUCH)s=s.replace(/ \(or press \d\)/g,'').replace(/drag to aim/g,'hold to zoom in, let go to place').replace(/[Rr]ight-click/g,'tap the guard').replace(/press Enter or /g,'').replace(/\bclick/g,'tap').replace(/\bClick/g,'Tap');h.textContent=s;h.classList.add('show');hintTimer=dur}
 
 // ================================================================ HEIST SIM
-function startNight(){setMTab('crew');$('hint').classList.remove('show');hintTimer=0;setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2-1,(ST.daily?'DAILY JOB':dayName(ST.night).toUpperCase()+' NIGHT'),S.accent)},150);ST.dark=false;for(const d of ST.devices)d.work=0;ST.pc=(ST.night>=4||ST.endless||ST.daily)?{at:28+Math.random()*28,dur:ST.perks.includes('gen')?3:8,t:0,on:false,done:false}:null;if(ST.phase==='plan')saveGame();
+function startNight(){setTimeout(()=>{if(ST.ev&&EVENTS[ST.ev])tip('ev-'+ST.ev,EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name,EVENTS[ST.ev].desc)},1500);setMTab('crew');$('hint').classList.remove('show');hintTimer=0;setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2-1,(ST.daily?'DAILY JOB':dayName(ST.night).toUpperCase()+' NIGHT'),S.accent)},150);ST.dark=false;for(const d of ST.devices)d.work=0;ST.pc=(ST.night>=4||ST.endless||ST.daily)?{at:28+Math.random()*28,dur:ST.perks.includes('gen')?3:8,t:0,on:false,done:false}:null;if(ST.phase==='plan')saveGame();
  if(ST.phase!=='plan')return;
  syncDecoys();ST.danger=new Float32Array(W*H);const plans=planNight();ST.thieves=[];ST.smokes=[];ST.slams=[];ST.rec=[];ST.recEv=[];ST.recT=0;ST.vaultOpen=false;ST.alarmT=0;ST.abil={slam:ST.mods.slam,siren:ST.mods.siren};ST.abTool=null;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false;d.armed=0;d.hit=0;d.lock=null;d.lockT=0}
@@ -1159,7 +1175,7 @@ function onEnterTile(th,i){
 }
 function roomOf(i){const x=tx(i),y=ty(i);if(G[i]===OUT)return 'street';return SITES[SITE].roomOf(x,y)}
 function addSus(th,v,src){th.sus+=v*(th.T.sus||1)*(th.susMul||1);th.seenBy=src;th.unseen=0;th.hurry=2.5;if(th.sus>=th.maxSus)catchThief(th,src)}
-function alarm(x,y,msg,kind){
+function alarm(x,y,msg,kind){hap([30,40,30]);
  logLine('<b style="color:var(--danger)">ALARM</b> '+msg+'.');if(ST.phase==='heist')ST.recEv.push({t:ST.t,x,y,k:'alarm',s:msg});ST.alarmT=8;if(ST.works&&ST.works.autolock){FX.flash=Math.max(FX.flash,.2);AU.play('slam',{vol:.4});for(const th of ST.thieves)th.needReplan=true}const rk=roomOf(idx(Math.floor(x),Math.floor(y))).replace(' ','_');if(kind&&rk!=='street')AU.say(kind+'_'+rk,{cd:4,pri:2});
  addDanger(x,y,3,14);
  const free=ST.guards.filter(g=>g.state!=='chase').map(g=>({g,d:Math.hypot(g.x-x,g.y-y)})).sort((a,b)=>a.d-b.d).slice(0,2);
@@ -1191,7 +1207,7 @@ function searchPoints(p){if(!p)return [];const x0=Math.floor(p[0]),y0=Math.floor
   let sc=watchSeconds(i)<.05?2:0;sc+=G[i]===DOOR?1.5:0;sc+=lit[i]>0?-1:0;sc+=Math.random()*1.2;c.push({i,sc})}
  c.sort((a,b)=>b.sc-a.sc);const out=[];for(const k of c){if(out.every(o=>Math.hypot(tx(o)-tx(k.i),ty(o)-ty(k.i))>2.5))out.push(k.i);if(out.length>=2)break}return out}
 function guardPath(g,dst){const cur=idx(Math.floor(g.x),Math.floor(g.y));const p=pathTo(dijkstra(cur,flatCost(),dst),dst);return p?p.slice(1):[]}
-function catchThief(th,by){
+function catchThief(th,by){hap(70);
  if(th.state==='caught'||th.state==='escaped')return;
  const srcName={police:'by the police at the door',lightning:'in a lightning flash',dog:'after the dog barked',camera:'on camera',guard:'tackled by a guard',laser:'after tripping a laser',plate:'after stepping on a pressure plate'}[by]||'on camera';
  th.outcome='caught '+srcName+(th.loot?' holding '+th.loot.name:'');th.state='caught';th.caughtT=0;th.caughtBy=by;AU.play('cuffs',{vol:.55,x:th.x,delay:.45});
@@ -1292,7 +1308,7 @@ function arrive(th){
 function escape(th){
  th.state='escaped';
  if(th.loot){const l=th.loot;l.stolen=true;l.carrier=null;ST.stolen+=l.v;ST.nightStats.stolen+=l.v;ST.nightStats.items.push(l.name);th.outcome='escaped with '+l.name+' ('+money(l.v)+')';
-  floatText(th.x,th.y-.6,'-'+money(l.v),S.danger,true);FX.shake=.3;AU.escaped(th.x);AU.say('escaped',{cd:3,pri:2});ST.recEv.push({t:ST.t,x:th.x,y:th.y,k:'esc',s:'-'+money(l.v)});logLine('<b style="color:var(--danger)">'+th.name+'</b> got away with '+l.name+'.')}
+  floatText(th.x,th.y-.6,'-'+money(l.v),S.danger,true);FX.shake=.3;hap([80,50,80]);AU.escaped(th.x);AU.say('escaped',{cd:3,pri:2});ST.recEv.push({t:ST.t,x:th.x,y:th.y,k:'esc',s:'-'+money(l.v)});logLine('<b style="color:var(--danger)">'+th.name+'</b> got away with '+l.name+'.')}
  else{AU.say('fled_0',{cd:6});th.outcome='fled empty-handed';ST.nightStats.scared++;ST.cash+=60;floatText(th.x,th.y-.6,'scared off +£60',S.good);logLine(th.name+' fled with nothing.')}
  refreshUI();
 }
@@ -1388,7 +1404,7 @@ function endNight(){
  const lines=ST.thieves.map(t=>`<div><span>${t.name}${t.back?' <small style="color:var(--danger)">BACK</small>':''} <small style="opacity:.7">(${t.T.name})</small></span><span style="text-align:right">${t.outcome||'—'}</span></div>`).join('');
  const stampTxt=ns.stolen===0?'SECURE':'BREACHED';const stampCol=ns.stolen===0?'var(--good)':'var(--danger)';
  const st=stars(ns);ST.stars[ST.night-1]=st.filter(Boolean).length;repAdd(ST.stars[ST.night-1]);
- let body=`<div class="stamp" style="color:${stampCol}">${stampTxt}</div><h2>Incident report</h2><div style="font-size:26px;letter-spacing:4px;margin:-2px 0 4px" title="Nothing stolen · Half the crew caught · Whole crew caught">${st.map(b=>`<span style="opacity:${b?1:.25}">★</span>`).join('')}</div><div style="font-size:11px;opacity:.7;margin-bottom:6px">★ nothing stolen · ★ half the crew caught · ★ whole crew caught</div><p style="margin:0 0 10px;opacity:.75">${dayName(ST.night)} night · The Marchbank Gallery</p><div class="lines">${lines}</div>${ns.mvp?`<p style="margin:10px 0 0;font-size:13px"><b>Device of the night:</b> ${ns.mvp}.</p>`:''}${ns.told&&ns.told.length?`<p style="margin:10px 0 0;font-size:13px"><b>Word gets around.</b> The thieves who got away will tell the next crew about ${[...new Set(ns.told)].join(', ')}. Move it or expect them to avoid it.</p>`:''}
+ let body=`<div class="stamp" style="color:${stampCol}">${stampTxt}</div><h2>Incident report</h2><div style="font-size:26px;letter-spacing:4px;margin:-2px 0 4px" title="Nothing stolen · Half the crew caught · Whole crew caught">${st.map((b,k)=>`<span class="rstar${b?' on':''}" style="animation-delay:${.35+k*.3}s">★</span>`).join('')}</div><div style="font-size:11px;opacity:.7;margin-bottom:6px">★ nothing stolen · ★ half the crew caught · ★ whole crew caught</div><p style="margin:0 0 10px;opacity:.75">${dayName(ST.night)} night · The Marchbank Gallery</p><div class="lines">${lines}</div>${ns.mvp?`<p style="margin:10px 0 0;font-size:13px"><b>Device of the night:</b> ${ns.mvp}.</p>`:''}${ns.told&&ns.told.length?`<p style="margin:10px 0 0;font-size:13px"><b>Word gets around.</b> The thieves who got away will tell the next crew about ${[...new Set(ns.told)].join(', ')}. Move it or expect them to avoid it.</p>`:''}
  <div class="lines" style="margin-top:10px"><div><span>Stolen tonight</span><span class="big">${money(ns.stolen)}</span></div><div><span>Arrests (£150 each)</span><span>${ns.arrests}</span></div><div><span>Retainer${ns.stolen===0?' + clean-night bonus':''}</span><span>+${money(income)}</span></div><div><span>${ST.endless?'Nightly cap':'Contract total stolen'}</span><span>${money(ST.stolen)} of ${money(ST.limit)}</span></div></div>`;
  if(ST.daily){const sc=ns.stolen;let b=dailyBest();const isBest=!b||sc<b.stolen||sc===b.stolen&&ns.arrests>b.arrests;if(isBest){b={key:ST.daily.key,stolen:sc,arrests:ns.arrests};try{localStorage.setItem('ij-daily',JSON.stringify(b))}catch(e){}}logDaily(sc,ns.arrests,st.filter(Boolean).length);
   body+=`<h2 style="margin-top:14px">Daily job: ${ST.daily.mod.name}</h2><p>${money(sc)} lost, ${ns.arrests} arrest${ns.arrests===1?'':'s'}. ${isBest?'<b>Your best today.</b>':'Best today: '+money(b.stolen)+', '+b.arrests+' arrests.'} A new job is posted at midnight UTC.</p><button class="cta" onclick="shareDaily()">Share my result</button><p id="shareOk" style="font-size:12px;margin:4px 0 0;min-height:1em"></p><button class="cta" style="opacity:.9;margin-top:6px" onclick="weekSheet()">This week's jobs</button><button class="cta" style="opacity:.85;margin-top:6px" onclick="startDaily()">Try today's job again</button><button class="cta" style="opacity:.85;margin-top:8px" onclick="titleScreen()">Back to the title</button>`;ST.done=true}
@@ -1400,7 +1416,7 @@ function endNight(){
  body+=`<button class="cta" style="opacity:.85;margin-top:8px;font-size:16px;padding:8px" onclick="startReplay()">▶ Watch the replay</button>`;
  if(ST.done)clearSave();
  {const A=[];if(ns.stolen===0)A.push('clean');if(st[2])A.push('sweep');if(ns.stolen===0&&ST.devices.length<=4)A.push('frugal');if(last&&!fired&&!ST.daily){A.push('contract');if(ST.stolen===0)A.push('impenetrable');if(ST.diff==='hard')A.push('hard')}if(ST.endless&&!fired&&ST.night-5>=5)A.push('ot5');A.forEach((a,k)=>setTimeout(()=>ach(a),900+k*700))}
- ST.lastReport=body;showSheet(body);refreshUI();
+ ST.lastReport=body;showSheet(body);refreshUI();st.forEach((b,k)=>b&&setTimeout(()=>{SYN.tone(880*Math.pow(1.26,k),.3,{type:'triangle',vol:.16});SYN.tone(1760*Math.pow(1.26,k),.2,{type:'sine',vol:.06,delay:.03});hap(15)},350+k*300));
 }
 function perkScreen(){
  const pool=PERKS.filter(p=>p.stack||!ST.perks.includes(p.id));const pick=[];const r=mulberry(ST.night*977+ST.arrests*13+ST.stolen);
@@ -1465,7 +1481,7 @@ function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SIT
  for(const l of ST.loot)l.stolen=s.stolenIds.includes(l.id);
  buildMap(ST.night);ST.devices=s.devices.map(d=>({...d,id:ST.devId++,route:d.route||[]}));camN=s.camN||ST.devices.length+1;
  devicesChanged();redrawStatic();refreshUI();hint('Welcome back. '+nightDef(ST.night).hint,9);logLine('Contract resumed: '+dayName(ST.night)+'.')}
-function nextNight(){setMTab('build');hideSheet();ST.night++;for(const l of ST.loot)if(l.dropped){l.i=l.home;l.dropped=false}if(ST.endless){resetLoot();ST.stolen=0;ST.limit=OT_CAP;ST.intel.plates.clear();otMod()}buildMap(ST.night);ST.phase='plan';ST.thieves=[];ST.guards=[];ST.smokes=[];ST.vaultOpen=false;
+function nextNight(){setTimeout(()=>{if(ST.phase!=='plan')return;if(!ST.daily)tip('works','Building works','Open Building works under the tools to brick up an entry, reinforce the vault or wire the doors to the alarm.');const gk=nightGang();if(gk)setTimeout(()=>tip('gang','A gang is in town','The crew panel shows who is coming. Catch their leader for a £200 bounty. Anyone who escapes will be back.'),4000)},1200);setMTab('build');hideSheet();ST.night++;for(const l of ST.loot)if(l.dropped){l.i=l.home;l.dropped=false}if(ST.endless){resetLoot();ST.stolen=0;ST.limit=OT_CAP;ST.intel.plates.clear();otMod()}buildMap(ST.night);ST.phase='plan';ST.thieves=[];ST.guards=[];ST.smokes=[];ST.vaultOpen=false;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false}
  devicesChanged();redrawStatic();refreshUI();hint(nightDef(ST.night).hint,9);logLine(dayName(ST.night)+': new intel on tonight\'s crew.');saveGame()}
 function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],back:[],jailed:[],busted:[],works:{sealed:[],vault:false,cctv:false},evSeed:1+Math.floor(Math.random()*1e6),slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});ST.cash+=SITES[SITE].bonus||0;resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
@@ -1484,7 +1500,7 @@ function renderAbil(){const a=$('abil');a.classList.toggle('show',ST.phase==='he
  $('abSlam').onclick=()=>{ST.abTool=ST.abTool==='slam'?null:'slam';if(ST.abTool)hint('Click a doorway to slam it shut for 7 seconds. Thieves have to find another way.',4);renderAbil()};
  $('abSiren').onclick=useSiren;if($('abPolice'))$('abPolice').onclick=callPolice}
 // ================================================================ REPLAY
-function startReplay(){if(!ST.rec.length)return;hideSheet();$('hint').classList.remove('show');hintTimer=0;ST.phase='replay';ST.rp={t:0,speed:0,fi:0,ev:0,cap:'',capT:0};ST.recEv.sort((a,b)=>a.t-b.t);document.querySelectorAll('#replayBar [data-r]').forEach(o=>o.classList.toggle('on',o.dataset.r==='0'));document.body.classList.add('rp');for(const th of ST.thieves){th.trail=[];th.caughtT=0;th.crackT=0;th.breachT=0;th.climbT=0;th.waiting=false}
+function startReplay(){if(!ST.rec.length)return;setTimeout(()=>tip('replay','Replay','Tap a coloured marker on the timeline to jump straight to that moment.'),800);hideSheet();$('hint').classList.remove('show');hintTimer=0;ST.phase='replay';ST.rp={t:0,speed:0,fi:0,ev:0,cap:'',capT:0};ST.recEv.sort((a,b)=>a.t-b.t);document.querySelectorAll('#replayBar [data-r]').forEach(o=>o.classList.toggle('on',o.dataset.r==='0'));document.body.classList.add('rp');for(const th of ST.thieves){th.trail=[];th.caughtT=0;th.crackT=0;th.breachT=0;th.climbT=0;th.waiting=false}
  FX.stamps=[];FX.floats=[];$('replayBar').classList.add('show');rpMarkers();renderAbil();refreshUI();AU.droneOn()}
 function stopReplay(){ST.phase='report';document.body.classList.remove('rp');$('rpCap').classList.remove('in');$('replayBar').classList.remove('show');AU.droneOff();FX.slow=0;applyFrame(ST.rec[ST.rec.length-1]);showSheet(ST.lastReport);refreshUI()}
 function applyFrame(f){f.th.forEach((a,k)=>{const th=ST.thieves[k];if(!th)return;const moved=Math.hypot(th.x-a[0],th.y-a[1]);[th.x,th.y,th.sus,th.state]=a;th.loot=a[4]?{}:null;th.unseen=a[5]?0:9;th.drop=a[6];th.face=a[7];if(moved>.3&&moved<3&&ST.phase==='replay'){th.trail.push([th.x,th.y]);if(th.trail.length>46)th.trail.shift()}});
@@ -2206,7 +2222,7 @@ function place(type,i,opts={}){
  if(type==='camera'){d.ang=opts.ang??bestAim(d.x,d.y);d.cur=d.ang;d.n=camN++;if(opts.sweep===false)d.sweep=false}
  if(type==='laser')d.orient=opts.orient||autoOrient(d.x,d.y);
  ST.cash-=DEV[type].cost;d.paid=DEV[type].cost;ST.devices.push(d);devicesChanged();AU.place();
- burst(d.x+.5,d.y+.5,10,S.accent,2,.5,.06);
+ burst(d.x+.5,d.y+.5,10,S.accent,2,.5,.06);FX.rings.push({x:d.x+.5,y:d.y+.5,r:1.3,t:0});hap(12);if(type==='guard')tip('pers','Guards have personalities','Select a guard and tap the personality button: a Veteran sees further, a Rookie is cheap, a Dozy one nods off.');
  if(type==='speaker'&&!opts.noRoute)hint('Speaker fitted. During the night, click it to bluff: thieves nearby hide or turn back. Recharges in 12 s.',6);
  if(type==='guard'&&!opts.noRoute){ST.routeFor=d;ST.tool=null;hint(TOUCH?'Tap up to 6 patrol points, then press Done. No points makes a stationary sentry.':'Click up to 6 patrol points for this guard. Click the guard again, press Enter or right-click to finish. No points makes a stationary sentry.',10)}
  ST.sel=d;refreshUI();return d;
@@ -2278,8 +2294,8 @@ function buildToolUI(){$('tools').innerHTML=Object.entries(DEV).map(([k,d])=>`<b
  $('routeDone').onclick=()=>{if(ST.routeFor)finishRoute()};$('worksBtn').onclick=()=>{AU.init();AU.click();worksSheet()};$('styles').innerHTML='<button id="lookBtn"></button>';$('lookBtn').onclick=()=>{AU.init();AU.click();setTheme(nextLook())};
 }
 function refreshUI(){if($('worksBtn'))$('worksBtn').hidden=ST.phase!=='plan'||!!ST.daily;
- $('sNight').textContent=ST.night+' / 5';$('sNight').title=DIFF[ST.diff].name;$('sCash').textContent=money(ST.cash);$('sArrests').textContent=ST.arrests;
- $('sStolen').textContent=money(ST.stolen)+' / '+money(ST.limit);$('sStolenBar').style.width=Math.min(100,ST.stolen/ST.limit*100)+'%';
+ $('sNight').textContent=ST.night+' / 5';$('sNight').title=DIFF[ST.diff].name;if(performance.now()-HUDC.lf>300){HUDC.v=ST.cash;$('sCash').textContent=money(ST.cash)}$('sArrests').textContent=ST.arrests;
+ $('sStolen').textContent=money(ST.stolen)+' / '+money(ST.limit);$('sStolenBar').style.width=Math.min(100,ST.stolen/ST.limit*100)+'%';if(ST.stolen>HUDC.st){const sb=$('sStolenBar');sb.classList.remove('hit');void sb.offsetWidth;sb.classList.add('hit')}HUDC.st=ST.stolen;
  document.querySelectorAll('.tool').forEach(b=>{const t=b.dataset.t;b.classList.toggle('on',ST.tool===t);b.disabled=ST.phase!=='plan'||ST.cash<DEV[t].cost});
  $('toolHelp').textContent=(TOUCH?(x=>x.replace(/Drag when placing to aim it\./,'Hold to zoom in; turn it once placed.').replace(/click/g,'tap').replace(/Click/g,'Tap').replace('Enter or right-click to finish','Tap the guard again to finish')):(x=>x))(ST.routeFor?(TOUCH?'Drawing patrol: tap floor tiles (hold to zoom), then press Done.':'Drawing patrol: click floor tiles. Enter or right-click to finish.')+(TOUCH?'':''):ST.tool?DEV[ST.tool].desc:ST.phase==='plan'?'Pick a device, or click one you placed to adjust it. Thieves can see cameras, lasers, lights and guards, but never plates.':'The crew is inside. Click a device to inspect it.');
  $('phaseTag').textContent=ST.phase==='heist'?'night in progress':ST.phase==='plan'?'planning':'';
@@ -2349,11 +2365,40 @@ function openLooks(){if($('looksDone'))return;looksPrev=$('overlay').classList.c
  if(ST.phase==='heist')setSpeed(0)}
 
 // ================================================================ LOOP
+// ---------- v22: options, haptics, one-time tips
+const OPT={shake:!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches),flash:true,slow:true,hap:true,tips:true};try{Object.assign(OPT,JSON.parse(localStorage.getItem('ij-opt')||'{}'))}catch(e){}
+function saveOpt(){try{localStorage.setItem('ij-opt',JSON.stringify(OPT))}catch(e){}}
+function hap(p){if(OPT.hap&&navigator.vibrate)try{navigator.vibrate(p)}catch(e){}}
+let TIPS=new Set();try{TIPS=new Set(JSON.parse(localStorage.getItem('ij-tips')||'[]'))}catch(e){}
+function tip(id,title,text){try{if(!OPT.tips||TIPS.has(id)||TUT.on)return}catch(e){return}TIPS.add(id);try{localStorage.setItem('ij-tips',JSON.stringify([...TIPS]))}catch(e){}
+ const t=document.createElement('div');t.className='toast tip';t.innerHTML='<b>💡 '+title+'</b>'+text;$('toasts').appendChild(t);while($('toasts').children.length>3)$('toasts').firstChild.remove();requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));
+ SYN.tone(660,.12,{type:'sine',vol:.1});SYN.tone(990,.2,{type:'sine',vol:.09,delay:.1});setTimeout(()=>{t.classList.remove('in');setTimeout(()=>t.remove(),600)},9000)}
+const OPTS=[['shake','Screen shake','On catches and escapes.'],['flash','Screen flashes','Alarms, lightning, power cuts.'],['slow','Slow-motion catches','Zoom and slow down for an arrest.'],['hap','Vibration','Alarms and arrests. Android only.'],['tips','Tips','Hints when something new turns up.']];
+function optionsSheet(){const fromHome=homeOn()||HOME.from!=='game'&&ST.phase==='title';let spd=0;if(ST.phase==='heist'&&ST.speed>0){spd=ST.speed;setSpeed(0)}hideHome();
+ const draw=()=>{const sl=(k,l,max)=>`<label>${l}</label><input type="range" data-mx="${k}" min="0" max="${max}" step=".05" value="${MIX[k]}">`;
+  showSheet(`<h2>Options</h2><div class="optG">${sl('sfx','Effects',1.5)}${sl('vo','Radio voices',1.5)}${sl('mus','Music',1)}</div>
+  <button class="optT ${AU.on?'on':''}" id="optSnd"><span><b>Sound</b><small>Everything on or off.</small></span><i>${AU.on?'On':'Off'}</i></button>
+  <button class="optT on" id="optLook"><span><b>Art style</b><small>Tap to switch the look of the game.</small></span><i>${STYLES[theme].name}</i></button>
+  ${OPTS.map(([k,l,d])=>`<button class="optT ${OPT[k]?'on':''}" data-o="${k}"><span><b>${l}</b><small>${d}</small></span><i>${OPT[k]?'On':'Off'}</i></button>`).join('')}
+  <div class="optR"><button id="optTut">Play the tutorial</button><button id="optTips">Show tips again</button><button id="optWipe" class="danger">Erase progress</button></div>
+  <button class="cta" id="optBack">Back</button>`);
+  document.querySelectorAll('#sheet [data-mx]').forEach(el=>el.oninput=()=>{AU.init();const k=el.dataset.mx;MIX[k]=+el.value;applyMix();const m=$({sfx:'mxSfx',vo:'mxVo',mus:'mxMus'}[k]);if(m)m.value=MIX[k];if(k==='sfx')AU.click()});
+  document.querySelectorAll('#sheet [data-o]').forEach(b=>b.onclick=()=>{const k=b.dataset.o;OPT[k]=!OPT[k];saveOpt();AU.click();if(k==='hap')hap(30);draw()});
+  $('optSnd').onclick=()=>{AU.init();toggleMute();AU.click();draw()};$('optLook').onclick=()=>{AU.click();setTheme(nextLook());draw()};
+  $('optTips').onclick=()=>{TIPS.clear();try{localStorage.removeItem('ij-tips')}catch(e){}OPT.tips=true;saveOpt();AU.click();$('optTips').textContent='Tips reset ✓'};
+  $('optTut').onclick=()=>{AU.click();if($('optTut').dataset.ok||!readSave()&&ST.phase!=='plan'&&ST.phase!=='heist'){clearSave();SITE='gallery';try{localStorage.setItem('ij-site',SITE)}catch(e){}hideSheet();newGame();tutStart()}else{$('optTut').dataset.ok=1;$('optTut').textContent='Ends this contract. Tap again'}};
+  $('optWipe').onclick=()=>{if($('optWipe').dataset.ok){try{Object.keys(localStorage).filter(k=>k.startsWith('ij-')).forEach(k=>localStorage.removeItem(k))}catch(e){}location.reload()}else{AU.deny();$('optWipe').dataset.ok=1;$('optWipe').textContent='Tap again to erase everything'}};
+  $('optBack').onclick=()=>{AU.click();if(fromHome)showHome();else{hideSheet();if(spd)setSpeed(spd)}}};
+ draw()}
+const HUDC={v:null,lf:0,st:0};
+function hudTick(dt){HUDC.lf=performance.now();if(HUDC.v===ST.cash)return;const el=$('sCash');const d=ST.cash-HUDC.v;if(HUDC.v==null||Math.abs(d)<2||Math.abs(d)>6000||homeOn()){HUDC.v=ST.cash}else{if(!HUDC.b){HUDC.b=1;el.classList.remove('up','dn');void el.offsetWidth;el.classList.add(d>0?'up':'dn');if(d>0&&ST.phase==='heist')SYN.tone(1320,.06,{type:'square',vol:.04})}HUDC.v+=Math.sign(d)*Math.max(1,Math.ceil(Math.abs(d)*Math.min(1,dt*9)));if(Math.sign(d)!==Math.sign(ST.cash-HUDC.v))HUDC.v=ST.cash}
+ if(HUDC.v===ST.cash){HUDC.b=0;setTimeout(()=>{if(HUDC.v===ST.cash)el.classList.remove('up','dn')},500)}el.textContent=money(Math.round(HUDC.v))}
 let last=performance.now();
 function frame(now){
  let dt=Math.min(.05,(now-last)/1000);last=now;
+ if(!OPT.slow)FX.slow=0;hudTick(dt);
  if(FX.slow>0){FX.slow-=dt;FX.zoom=lerp(FX.zoom,1.35,Math.min(1,dt*6))}else FX.zoom=lerp(FX.zoom,1,Math.min(1,dt*4));
- if(FX.shake>0)FX.shake-=dt;if(FX.flash>0)FX.flash-=dt;
+ if(FX.shake>0)FX.shake-=dt;if(FX.flash>0)FX.flash-=dt;if(!OPT.shake)FX.shake=0;if(!OPT.flash){FX.flash=0;if(typeof R3!=='undefined')R3.bolt=0}
  if(hintTimer>0){hintTimer-=dt;if(hintTimer<=0)$('hint').classList.remove('show')}
  const simScale=FX.slow>0?.25:1;
  if(ST.phase==='heist'&&ST.speed>0){let rem=dt*ST.speed*simScale;while(rem>0){const h=Math.min(rem,1/60);stepSim(h);rem-=h}
@@ -2562,10 +2607,10 @@ function showHome(){if(ST.phase==='heist'&&ST.speed>0){HOME.speed=ST.speed;setSp
  let main='';
  if(inGame)main=`<button class="pri" data-h="resume">Resume<small>${ST.daily?'Daily job':dayName(ST.night)+' night'} · ${SITES[SITE].name}</small></button><button data-h="new">New contract</button>`;
  else if(sv)main=`<button class="pri" data-h="cont">Continue<small>${dayName(sv.night)} night · ${(SITES[sv.site]||SITES.gallery).name} · ${DIFF[sv.diff]?.name||''}</small></button><button data-h="new">New contract</button>`;
- else main=`<button class="pri" data-h="new">Play</button>`;
+ else main=`<button class="pri" data-h="new">Play<small>Reputation ★ ${repGet()} · ${Object.keys(SITES).filter(siteOpen).length}/${Object.keys(SITES).length} buildings open</small></button>`;
  $('hMenu').innerHTML=main+`<button data-h="daily">Daily job<small>${di.mod.name}${db?' · best '+money(db.stolen):''}</small></button>
  <button data-h="htp">How to play</button><div class="hrow"><button data-h="week">📅 This week</button><button data-h="rogues">🦊 Rogues</button></div>
- <div class="hrow"><button data-h="ach">★ ${ACHS.size}/${ACH.length}</button><button data-h="look">${STYLES[theme].name}</button><button data-h="snd">${AU.on?'♪ On':'♪ Off'}</button></div>`;
+ <div class="hrow"><button data-h="ach">★ ${ACHS.size}/${ACH.length}</button><button data-h="opt">⚙ Options</button></div>`;
  document.querySelectorAll('#hMenu button').forEach(b=>b.onclick=()=>{AU.init();AU.click&&AU.click();homeAct(b.dataset.h)});
  document.body.classList.add('home');resizeHome()}
 function hideHome(){document.body.classList.remove('home')}
@@ -2578,6 +2623,7 @@ function homeAct(h){
  if(h==='rogues'){hideHome();roguesSheet();return}
  if(h==='week'){hideHome();weekSheet();return}
  if(h==='ach'){hideHome();showSheet(`<h2>Achievements · ${ACHS.size}/${ACH.length}</h2>${achHTML()}<button class="cta" id="achBack">Back</button>`);$('achBack').onclick=()=>{AU.click();showHome()};return}
+ if(h==='opt'){optionsSheet();return}
  if(h==='look'){setTheme(nextLook());showHome();return}
  if(h==='snd'){toggleMute();showHome();return}}
 function titleScreen(){HOME.from=null;showHome()}
@@ -2654,8 +2700,12 @@ const HTP=[
  ['The trap they can\'t see','Pressure plates are invisible to thieves, so put them right on a dotted route. Decoy loot wastes their time.',['plate','decoy']],
  ['Play the night','Slam a door shut (Q), fire the panic siren (W), or tap a speaker to fake a guard\'s voice. Each has limited uses.',['steel','speaker']],
  ['They learn','Escapees warn the next crew, scouts radio your plates, and on Friday the Fox comes for the biggest prize. Loot only counts once it leaves the building.','ill-fox'],
+ ['Build a reputation','Every star you earn adds to your reputation. Reputation opens bigger buildings on the city map, and each one pays a bigger budget.',['🏛️','💎','🎰']],
+ ['Know your enemy','Some nights a named gang turns up with its own tricks. Its leader is worth a £200 bounty, and anyone who escapes comes back harder to spot.',['🏮','🪶','🃏']],
+ ['No two nights alike','Storms drown out noise, fog shortens your cameras, and when the football is on the guards barely look up. The crew panel warns you before you build.',['⛈️','🌫️','⚽']],
+ ['Shape the building','Between nights, Building works can brick up an entry, reinforce the vault or lock every door when the alarm goes. Give each guard a personality to suit the post.',['🧱','🔒','🧐']],
 ];
-function htpIll(k){if(Array.isArray(k))return k.map(t=>ICON[t]||'').join('');return `<canvas id="htpCv" width="520" height="240" data-k="${k}"></canvas>`}
+function htpIll(k){if(Array.isArray(k))return k.map(t=>ICON[t]||`<span style="font-size:46px;line-height:1">${t}</span>`).join('');return `<canvas id="htpCv" width="520" height="240" data-k="${k}"></canvas>`}
 function howToPlay(n){n=Math.max(0,Math.min(HTP.length-1,n));const [h,p,ill]=HTP[n];const last=n===HTP.length-1;
  showSheet(`<div class="htp"><h2>${h}</h2><div class="ill">${htpIll(ill)}</div><p>${p}</p><div class="dots">${HTP.map((_,k)=>`<i class="${k===n?'on':''}"></i>`).join('')}</div>
  <div class="htpNav"><button class="cta" id="htpPrev" style="opacity:.8;font-size:16px">${n?'◂ Back':'Menu'}</button><button class="cta" id="htpNext" style="font-size:16px">${last?'Play the tutorial ▸':'Next ▸'}</button></div>
