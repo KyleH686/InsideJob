@@ -74,6 +74,12 @@ main{flex:1;display:flex;min-height:0}
 @keyframes stamp{from{transform:rotate(-12deg) scale(2.4);opacity:0}}
 #sheet .cta{margin-top:16px;width:100%;padding:12px;font-family:var(--fh);font-size:20px;background:var(--btn);color:var(--btnink);border:0}
 #sheet .pick{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+#sitePick .city{width:100%;max-height:40vh;display:block;margin:4px 0 8px;border:1px solid currentColor;background:color-mix(in srgb,currentColor 5%,transparent)}
+.city .st{stroke:currentColor;stroke-width:2.2;opacity:.12}.city .riv{fill:none;stroke:#3d8fd6;stroke-width:4;opacity:.35}
+.city .pin{cursor:pointer}.city .pin .hit{fill:var(--panel);stroke:currentColor;stroke-width:.6;opacity:.9}.city .pin path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round}
+.city .pin text{font-size:4px;fill:currentColor;font-family:var(--mono,monospace)}.city .pin .nm{font-size:3.4px;opacity:.85}
+.city .pin.on .hit{fill:var(--accent);stroke:var(--accent)}.city .pin.on path{stroke:var(--btnink,#000)}.city .pin.lock{opacity:.5}
+.city .pin:not(.lock):hover .hit{stroke-width:1.4}
 #sheet .pick button{border:1px solid currentColor;background:transparent;padding:5px 10px;font-size:13px}
 #sheet .pick button.on{background:var(--btn);color:var(--btnink)}
 #sheet ul{padding-left:18px;font-size:14px;line-height:1.5;margin:6px 0}
@@ -267,6 +273,11 @@ body[data-theme=riso] #hint{background:#fff;color:#1d3f8f;border:2px solid #1d3f
 #abil .sh,#lookBtn .lb2{display:none}
 #replayBar{position:absolute;left:50%;top:14px;transform:translateX(-50%);display:none;gap:10px;align-items:center;z-index:4;padding:6px 12px;background:var(--panel);border:1px solid var(--line);font-size:13px}
 #replayBar.show{display:flex}
+body.rp #stage::before,body.rp #stage::after{content:'';position:absolute;left:0;right:0;height:7%;background:#000;z-index:3;pointer-events:none;animation:lb .5s ease-out}
+body.rp #stage::before{top:0}body.rp #stage::after{bottom:0}@keyframes lb{from{height:0}}
+#rpCap{position:absolute;left:50%;bottom:10%;transform:translate(-50%,8px);z-index:4;padding:6px 14px;background:rgba(0,0,0,.72);color:#fff;font:600 15px/1.3 var(--mono,monospace);letter-spacing:.04em;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;max-width:86%;text-align:center}
+#rpCap.in{opacity:1;transform:translate(-50%,0)}
+body.rp #replayBar{top:9%}
 #replayBar .bar{width:160px}
 #replayBar .bar i{background:var(--accent);transition:none}
 .perks{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0}
@@ -415,7 +426,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
   <button id="homeBtn" title="Menu (Esc)">☰</button><button id="fsBtn" title="Full screen (F)">⛶</button><button id="mute" title="Sound (M)">♪ on</button>
  </header>
  <main>
-  <div id="toasts"></div><canvas id="loupe" width="300" height="300"></canvas><div id="stage"><canvas id="cv"></canvas><div id="hint"></div><div id="abil"></div><div id="replayBar"><span id="rpLbl">REPLAY</span><div class="bar"><i id="rpBar"></i></div><button class="small" data-r="2">2×</button><button class="small on" data-r="4">4×</button><button class="small" data-r="8">8×</button><button class="small" id="rpSkip">Skip ▸▸</button></div><div id="overlay"><div id="sheet"></div></div></div>
+  <div id="toasts"></div><canvas id="loupe" width="300" height="300"></canvas><div id="stage"><canvas id="cv"></canvas><div id="hint"></div><div id="abil"></div><div id="replayBar"><span id="rpLbl">REPLAY</span><div class="bar"><i id="rpBar"></i></div><button class="small on" data-r="0">Auto</button><button class="small" data-r="2">2×</button><button class="small" data-r="4">4×</button><button class="small" data-r="8">8×</button><button class="small" id="rpSkip">Skip ▸▸</button></div><div id="rpCap"></div><div id="overlay"><div id="sheet"></div></div></div>
   <aside id="side">
    <section class="card"><div class="stats">
     <div class="stat"><div class="k">Night</div><div class="v" id="sNight">1 / 5</div></div>
@@ -531,7 +542,86 @@ const SITES={
    'From tonight the crew cuts the power once, briefly. The scout radios your plates, the lensman walks through one laser, and an Impostor in a guard uniform walks straight past cameras.',
    'Last night. Six of them, a coal chute up into the kitchen, and at 01:26 the Fox: a professional who goes straight for the Ashcombe Tiara.'],
   roomOf(x,y){if(x<10)return y<13?'kitchen':'conservatory';if(x<27)return y<10?'library':'great hall';if(y<9)return 'study';if(y<16)return 'long gallery';return 'drawing room'}},
+ museum:{name:'The Harrow Museum',caption:'THE HARROW MUSEUM · NATIONAL COLLECTION · SECURITY DRG 21/D',note1:'Harrow - long hall, long sightlines',n1x:14,note2:['skylight over the hall!',19,24.9],rep:6,bonus:150,city:[54,22],
+  blurb:'Bigger. A grand central hall lined with display cases, two wings, and the Harrow Sapphire behind a vault door. Long sightlines suit cameras, but there is a lot of glass.',
+  walls(hl,vl){vl(13,2,23);vl(26,2,23);hl(2,13,12);hl(26,37,12);for(const [x,y] of [[17,7],[22,7],[17,12],[22,12],[17,17],[22,17]])hl(x,x,y)},
+  doors:[{x:13,y:7},{x:13,y:18},{x:7,y:12},{x:26,y:17},{x:31,y:12},{x:26,y:6,vault:true}],
+  entries:[{id:'main',name:'Front steps',tiles:[[19,23],[20,23]],spawn:[19,24],night:1},
+   {id:'bay',name:'Loading bay',tiles:[[37,19]],spawn:[38,19],night:1,lab:[-5,-1.4]},
+   {id:'win',name:'West window',tiles:[[2,17]],spawn:[1,17],night:2,lab:[2.6,-1.4]},
+   {id:'sky',name:'Hall skylight',tiles:[],spawn:[19,4],night:3,roof:true},
+   {id:'drain',name:'Old drain',tiles:[],spawn:[32,21],night:5,roof:true}],
+  rooms:[{n:'EGYPTIAN ROOM',x:7.5,y:7},{n:'ARMOURY',x:7.5,y:18},{n:'GRAND HALL',x:19.5,y:20.4},{n:'GEM ROOM',x:31.5,y:7},{n:'ARCHIVE',x:31.5,y:18}],
+  loot:[{id:'mask',name:'Gold death mask',x:3,y:3,v:7000,crack:3,kind:'statue'},
+   {id:'scarab',name:'Scarab amulets',x:11,y:3,v:3500,crack:2,kind:'gem'},
+   {id:'sword',name:'Ceremonial sword',x:3,y:22,v:4000,crack:2,kind:'gold'},
+   {id:'helm',name:'Viking helm',x:11,y:22,v:3000,crack:1.5,kind:'statue'},
+   {id:'p1',name:'"The Harrow Hunt"',x:19,y:3,v:6000,crack:3,kind:'painting'},
+   {id:'gem',name:'The Harrow Sapphire',x:31,y:3,v:16000,crack:7,kind:'gem'},
+   {id:'tiara',name:'Duchess tiara',x:35,y:3,v:6000,crack:4,kind:'gem'},
+   {id:'coins',name:'Roman coin hoard',x:28,y:3,v:4500,crack:3,kind:'gold'},
+   {id:'maps',name:'Drake\'s charts',x:35,y:22,v:4000,crack:2,kind:'cash'},
+   {id:'safe',name:'Archive safe',x:28,y:22,v:5000,crack:5,kind:'safe'}],
+  hints:['Two ways in tonight: the front steps, and the loading bay round the side. The Grand Hall is huge, so put cameras where the routes meet.',
+   'A west window opens tonight, straight into the Armoury. The Egyptian Room next to it is full of gold.',
+   'Someone will drop through the hall skylight tonight, right in the middle of everything. Guards in the hall pay off now.',
+   'The crews have heard about your cameras. Mix in plates and a dog where they won\'t expect them.',
+   'Last night. A crew will come up the old drain into the Archive, and the Fox wants the Harrow Sapphire.'],
+  roomOf(x,y){if(x<13)return y<12?'egyptian room':'armoury';if(x<26)return 'grand hall';return y<12?'gem room':'archive'}},
+ jeweller:{name:'Vane & Daughters',caption:'VANE & DAUGHTERS · JEWELLERS SINCE 1888 · SECURITY DRG 04/F',note1:'Vane & Daughters - small but rich',n1x:12,note2:['skylight in the workshop',6,24.9],rep:12,bonus:250,city:[17,68],
+  blurb:'Tight. A small Hatton Garden jeweller packed with stones: the strongroom holds most of the value, and the alley side has three ways in.',
+  walls(hl,vl){vl(20,2,23);hl(2,20,14);hl(20,37,9);hl(20,37,16);vl(11,14,23);for(const [x,y] of [[6,7],[14,7]])hl(x,x+1,y)},
+  doors:[{x:20,y:12},{x:7,y:14},{x:11,y:19},{x:20,y:20},{x:30,y:16},{x:28,y:9,vault:true}],
+  entries:[{id:'main',name:'Shop door',tiles:[[10,2],[11,2]],spawn:[10,1],night:1,lab:[0,-.2]},
+   {id:'back',name:'Alley door',tiles:[[37,20]],spawn:[38,20],night:2,lab:[-5,-1.4]},
+   {id:'win',name:'Side window',tiles:[[2,8]],spawn:[1,8],night:1,lab:[2.6,-1.4]},
+   {id:'sky',name:'Workshop skylight',tiles:[],spawn:[6,19],night:3,roof:true},
+   {id:'drain',name:'Cellar drain',tiles:[],spawn:[25,20],night:5,roof:true}],
+  rooms:[{n:'SHOWROOM',x:11,y:10.6},{n:'WORKSHOP',x:6.5,y:21.4},{n:'OFFICE',x:15.5,y:21.4},{n:'STRONGROOM',x:28.5,y:5.6},{n:'CUTTING ROOM',x:28.5,y:12.6},{n:'STAFF ROOM',x:28.5,y:20}],
+  loot:[{id:'ring',name:'Engagement rings',x:3,y:3,v:3500,crack:2,kind:'gem'},
+   {id:'watch',name:'Gold watches',x:18,y:3,v:4000,crack:2,kind:'gold'},
+   {id:'pearl',name:'Pearl necklace',x:3,y:12,v:3000,crack:1.5,kind:'gem'},
+   {id:'loupe',name:'Loose stones',x:3,y:16,v:4500,crack:3,kind:'gem'},
+   {id:'cash',name:'Petty cash',x:18,y:22,v:2000,crack:1.5,kind:'cash'},
+   {id:'gem',name:'The Vane Pink',x:28,y:3,v:17000,crack:7,kind:'gem'},
+   {id:'safe',name:'Strongroom safe',x:22,y:3,v:7000,crack:6,kind:'safe'},
+   {id:'bars',name:'Gold bars',x:35,y:3,v:6000,crack:4,kind:'gold'},
+   {id:'tray',name:'Diamond tray',x:35,y:11,v:5000,crack:3,kind:'gem'},
+   {id:'brooch',name:'Emerald brooch',x:22,y:11,v:4000,crack:2.5,kind:'gem'}],
+  hints:['Two ways in from night one: the shop door and the side window, both into the showroom. Everything worth having is through the door on the right.',
+   'The alley door at the back opens tonight, and it is only two rooms from the strongroom. Cover the staff room.',
+   'Someone will drop through the workshop skylight tonight, behind your front-of-house cameras.',
+   'The crew will cut the power from tonight. A dog in the cutting room hears them in the dark.',
+   'Last night. A crew will come up the cellar drain into the staff room, and the Fox is after the Vane Pink.'],
+  roomOf(x,y){if(x<20){if(y<14)return 'showroom';return x<11?'workshop':'office'}if(y<9)return 'strongroom';if(y<16)return 'cutting room';return 'staff room'}},
+ casino:{name:'The Golden Ace',caption:'THE GOLDEN ACE CASINO · HOUSE SECURITY · DRG 09/K',note1:'Golden Ace - the count room!',n1x:12,note2:['tables = cover for them',12,24.9],rep:20,bonus:400,city:[76,64],
+  blurb:'The big one. A busy gaming floor full of tables to hide behind, a cashier cage, and a count room stacked with the night\'s takings.',
+  walls(hl,vl){hl(2,24,9);vl(24,2,23);hl(24,37,8);hl(24,37,15);vl(12,2,9);for(const [x,y] of [[6,14],[11,14],[16,14],[6,19],[11,19],[16,19]])hl(x,x+1,y)},
+  doors:[{x:6,y:9},{x:18,y:9},{x:12,y:5},{x:24,y:19},{x:24,y:12},{x:30,y:15},{x:30,y:8,vault:true}],
+  entries:[{id:'main',name:'Main entrance',tiles:[[11,23],[12,23]],spawn:[11,24],night:1},
+   {id:'back',name:'Staff door',tiles:[[37,19]],spawn:[38,19],night:1,lab:[-5,-1.4]},
+   {id:'fire',name:'Fire exit',tiles:[[2,16]],spawn:[1,16],night:3,lab:[2.4,-1.4]},
+   {id:'vent',name:'Roof vent',tiles:[],spawn:[30,11],night:2,roof:true},
+   {id:'tunnel',name:'Service tunnel',tiles:[],spawn:[20,5],night:5,roof:true}],
+  rooms:[{n:'VIP LOUNGE',x:7,y:5.6},{n:'CASHIER CAGE',x:18,y:5.6},{n:'GAMING FLOOR',x:13,y:16.6},{n:'COUNT ROOM',x:30.5,y:4.6},{n:'SECURITY',x:30.5,y:11.6},{n:'BAR',x:30.5,y:19.2}],
+  loot:[{id:'chips',name:'High-roller chips',x:3,y:3,v:5000,crack:2,kind:'cash'},
+   {id:'art',name:'"Lady Luck"',x:10,y:3,v:5000,crack:3,kind:'painting'},
+   {id:'cage',name:'Cage drawer',x:14,y:3,v:4500,crack:2.5,kind:'cash'},
+   {id:'cage2',name:'Cashier safe',x:22,y:3,v:6000,crack:5,kind:'safe'},
+   {id:'take',name:'The night\'s takings',x:30,y:3,v:16000,crack:7,kind:'cash'},
+   {id:'gold',name:'Gold reserve',x:35,y:3,v:7000,crack:4,kind:'gold'},
+   {id:'wheel',name:'Gold roulette wheel',x:3,y:22,v:3000,crack:2,kind:'gold'},
+   {id:'tapes',name:'Security tapes',x:35,y:10,v:2500,crack:1.5,kind:'crate'},
+   {id:'wine',name:'Rare whisky',x:35,y:22,v:3500,crack:1.5,kind:'crate'},
+   {id:'statue',name:'Golden ace statue',x:22,y:22,v:4500,crack:3,kind:'statue'}],
+  hints:['Two ways in on night one: the main entrance onto the gaming floor, and the staff door into the bar. The tables give thieves cover, so cameras high up pay off.',
+   'Someone will drop through the roof vent into the security office tonight, right next to the count room door.',
+   'The fire exit opens tonight on the west side of the floor.',
+   'The crews have studied the floor. Expect them to hide behind tables and wait for camera gaps.',
+   'Last night. A crew will come up the service tunnel into the cashier cage, and the Fox wants the night\'s takings.'],
+  roomOf(x,y){if(x<24){if(y<9)return x<12?'vip lounge':'cashier cage';return 'gaming floor'}if(y<8)return 'count room';if(y<15)return 'security';return 'bar'}},
 };
+SITES.gallery.city=[22,24];SITES.bank.city=[44,54];SITES.manor.city=[82,20];
 let SITE='gallery';try{const v=localStorage.getItem('ij-site');if(v&&SITES[v])SITE=v}catch(e){}
 function useSite(id){if(!SITES[id])id='gallery';SITE=id;const S_=SITES[id];
  DOORS.splice(0,DOORS.length,...S_.doors.map(d=>({...d})));ENTRIES.splice(0,ENTRIES.length,...S_.entries.map(e=>({...e})));
@@ -970,7 +1060,7 @@ function onEnterTile(th,i){
 function roomOf(i){const x=tx(i),y=ty(i);if(G[i]===OUT)return 'street';return SITES[SITE].roomOf(x,y)}
 function addSus(th,v,src){th.sus+=v*(th.T.sus||1);th.seenBy=src;th.unseen=0;th.hurry=2.5;if(th.sus>=th.maxSus)catchThief(th,src)}
 function alarm(x,y,msg,kind){
- logLine('<b style="color:var(--danger)">ALARM</b> '+msg+'.');ST.alarmT=8;const rk=roomOf(idx(Math.floor(x),Math.floor(y))).replace(' ','_');if(kind&&rk!=='street')AU.say(kind+'_'+rk,{cd:4,pri:2});
+ logLine('<b style="color:var(--danger)">ALARM</b> '+msg+'.');if(ST.phase==='heist')ST.recEv.push({t:ST.t,x,y,k:'alarm',s:msg});ST.alarmT=8;const rk=roomOf(idx(Math.floor(x),Math.floor(y))).replace(' ','_');if(kind&&rk!=='street')AU.say(kind+'_'+rk,{cd:4,pri:2});
  addDanger(x,y,3,14);
  const free=ST.guards.filter(g=>g.state!=='chase').map(g=>({g,d:Math.hypot(g.x-x,g.y-y)})).sort((a,b)=>a.d-b.d).slice(0,2);
  for(const {g} of free){g.state='investigate';g.lastSeen=[x,y];g.path=guardPath(g,idx(Math.floor(x),Math.floor(y)));g.look=0}
@@ -989,7 +1079,7 @@ function addDanger(x,y,r,v){if(!ST.danger)return;const cx=Math.floor(x),cy=Math.
 function dogTick(dt){for(const d of ST.devices){if(d.type!=='dog')continue;if(d.cd>0)d.cd-=dt;if(d.bark>0)d.bark-=dt;if(d.cd>0)continue;const R=d.lv?4.5:3;let near=null,nd=1e9;
   for(const th of ST.thieves){if(!['in','out','flee'].includes(th.state)||th.x==null)continue;const dd=Math.hypot(th.x-d.x-.5,th.y-d.y-.5);if(dd<R&&dd<nd){nd=dd;near=th}}
   if(!near)continue;d.cd=d.lv?6:10;d.bark=1.6;d.face=Math.atan2(near.y-d.y-.5,near.x-d.x-.5);AU.bark(d.x);floatText(d.x+.5,d.y-.3,'WOOF!',S.accent);FX.rings.push({x:d.x+.5,y:d.y+.5,r:R,t:0});
-  addSus(near,22,'dog');learn(near,'dog',d);if(near.state!=='caught'){near.hurry=Math.max(near.hurry||0,4);near.needReplan=true}addDanger(d.x+.5,d.y+.5,3,16);noise(d.x+.5,d.y+.5,11);logLine('The dog barks at '+near.name+' in the '+roomOf(d.i)+'.');ST.barks=(ST.barks||0)+1}}
+  addSus(near,22,'dog');ST.recEv.push({t:ST.t,x:near.x,y:near.y,k:'dog',s:'The dog barks at '+near.name});learn(near,'dog',d);if(near.state!=='caught'){near.hurry=Math.max(near.hurry||0,4);near.needReplan=true}addDanger(d.x+.5,d.y+.5,3,16);noise(d.x+.5,d.y+.5,11);logLine('The dog barks at '+near.name+' in the '+roomOf(d.i)+'.');ST.barks=(ST.barks||0)+1}}
 function learn(th,kind,d){(th.learned=th.learned||[]).push({kind,id:d.id,i:d.i})}
 function learnCam(th){for(const d of ST.devices)if(d.type==='camera'&&d.seeing)(th.learned=th.learned||[]).push({kind:'cam',id:d.id,i:d.i})}
 function coverTile(e){if(e.roof)return spawnI(e);const [x,y]=e.tiles[0];const c=[[0,-1],[1,0],[-1,0],[0,1]].map(([dx,dy])=>idx(x+dx,y+dy)).find(i=>G[i]===FLOOR);return c??idx(x,y)}
@@ -1046,7 +1136,7 @@ function updateThief(th,dt){
  if(th.stun>0){th.stun-=dt;return}
  // ---- actions at targets
  if(th.crackT>0){th.crackT-=dt;th.noiseT=(th.noiseT||0)-dt;if(th.noiseT<=0){th.noiseT=.7;AU.crack(th.x);const k=th.target&&th.target.kind;if(k==='safe'||k==='gem'||k==='gold'||k==='crate')noise(th.x,th.y,k==='crate'?3.5:4.5)}if(th.crackT<=0){const l=th.target;if(l&&l.fake&&!l.spent){l.spent=true;ach('decoy');const dv=l.dev;floatText(th.x,th.y-.7,'FAKE!',S.danger,true);burst(th.x,th.y,30,dv.lv?S.danger:S.accent,3);AU.fake(th.x);AU.say('decoy',{cd:8});noise(th.x,th.y,5);logLine(th.name+' opens the decoy. Nothing inside'+(dv.lv?' but dye.':'.'));if(dv.lv)th.dyed=true;th.target=null;th.state='in';th.needReplan=true;addSus(th,dv.lv?40:20,'decoy');return}
-  if(l&&!l.carrier&&!l.stolen&&!l.spent){if(l.dropped)floatText(th.x,th.y-1,'PICKED UP',S.danger);th.loot=l;l.carrier=th;th.state='out';AU.loot(th.x);(FX.pops=FX.pops||[]).push({x:th.x,y:th.y,t:0,icon:LOOT_ICON[l.kind]||'£'});floatText(th.x,th.y-.7,'-'+money(l.v)+'?',S.danger);logLine(th.name+' has '+l.name+'.')}else{th.state='in';th.target=null}th.needReplan=true}return}
+  if(l&&!l.carrier&&!l.stolen&&!l.spent){if(l.dropped)floatText(th.x,th.y-1,'PICKED UP',S.danger);th.loot=l;l.carrier=th;th.state='out';AU.loot(th.x);ST.recEv.push({t:ST.t,x:th.x,y:th.y,k:'grab',s:th.name+' grabs the '+l.name});(FX.pops=FX.pops||[]).push({x:th.x,y:th.y,t:0,icon:LOOT_ICON[l.kind]||'£'});floatText(th.x,th.y-.7,'-'+money(l.v)+'?',S.danger);logLine(th.name+' has '+l.name+'.')}else{th.state='in';th.target=null}th.needReplan=true}return}
  if(th.breachT>0){th.breachT-=dt;th.noiseT=(th.noiseT||0)-dt;if(th.noiseT<=0){th.noiseT=1.1;AU.breach(th.x);noise(th.x,th.y,7)}if(th.breachT<=0){const ni=th.path[0];const sd=ST.devices.find(d=>d.type==='steel'&&d.i===ni);if(sd)sd.forced=true;if(ni===VAULT_I)ST.vaultOpen=true;rebuildWatch();burst(tx(ni)+.5,ty(ni)+.5,16,S.ink,2.5);AU.breach(th.x);logLine(th.name+(ni===VAULT_I?' cracks the vault door.':' forces a steel door.'))}return}
  if(th.climbT>0){th.climbT-=dt;if(th.climbT<=0)escape(th);return}
  // ---- magpie: lure guards off the route
@@ -1193,7 +1283,7 @@ function endNight(){
  AU.end(ns.stolen===0);AU.say('night_end',{cd:0});
  const lines=ST.thieves.map(t=>`<div><span>${t.name} <small style="opacity:.7">(${t.T.name})</small></span><span style="text-align:right">${t.outcome||'—'}</span></div>`).join('');
  const stampTxt=ns.stolen===0?'SECURE':'BREACHED';const stampCol=ns.stolen===0?'var(--good)':'var(--danger)';
- const st=stars(ns);ST.stars[ST.night-1]=st.filter(Boolean).length;
+ const st=stars(ns);ST.stars[ST.night-1]=st.filter(Boolean).length;repAdd(ST.stars[ST.night-1]);
  let body=`<div class="stamp" style="color:${stampCol}">${stampTxt}</div><h2>Incident report</h2><div style="font-size:26px;letter-spacing:4px;margin:-2px 0 4px" title="Nothing stolen · Half the crew caught · Whole crew caught">${st.map(b=>`<span style="opacity:${b?1:.25}">★</span>`).join('')}</div><div style="font-size:11px;opacity:.7;margin-bottom:6px">★ nothing stolen · ★ half the crew caught · ★ whole crew caught</div><p style="margin:0 0 10px;opacity:.75">${dayName(ST.night)} night · The Marchbank Gallery</p><div class="lines">${lines}</div>${ns.mvp?`<p style="margin:10px 0 0;font-size:13px"><b>Device of the night:</b> ${ns.mvp}.</p>`:''}${ns.told&&ns.told.length?`<p style="margin:10px 0 0;font-size:13px"><b>Word gets around.</b> The thieves who got away will tell the next crew about ${[...new Set(ns.told)].join(', ')}. Move it or expect them to avoid it.</p>`:''}
  <div class="lines" style="margin-top:10px"><div><span>Stolen tonight</span><span class="big">${money(ns.stolen)}</span></div><div><span>Arrests (£150 each)</span><span>${ns.arrests}</span></div><div><span>Retainer${ns.stolen===0?' + clean-night bonus':''}</span><span>+${money(income)}</span></div><div><span>${ST.endless?'Nightly cap':'Contract total stolen'}</span><span>${money(ST.stolen)} of ${money(ST.limit)}</span></div></div>`;
  if(ST.daily){const sc=ns.stolen;let b=dailyBest();const isBest=!b||sc<b.stolen||sc===b.stolen&&ns.arrests>b.arrests;if(isBest){b={key:ST.daily.key,stolen:sc,arrests:ns.arrests};try{localStorage.setItem('ij-daily',JSON.stringify(b))}catch(e){}}
@@ -1255,7 +1345,7 @@ function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SIT
 function nextNight(){setMTab('build');hideSheet();ST.night++;for(const l of ST.loot)if(l.dropped){l.i=l.home;l.dropped=false}if(ST.endless){resetLoot();ST.stolen=0;ST.limit=OT_CAP;ST.intel.plates.clear();otMod()}buildMap(ST.night);ST.phase='plan';ST.thieves=[];ST.guards=[];ST.smokes=[];ST.vaultOpen=false;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false}
  devicesChanged();redrawStatic();refreshUI();hint(nightDef(ST.night).hint,9);logLine(dayName(ST.night)+': new intel on tonight\'s crew.');saveGame()}
-function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
+function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});ST.cash+=SITES[SITE].bonus||0;resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
 
 // ================================================================ ABILITIES
 function useSiren(){if(ST.phase!=='heist'||ST.abil.siren<=0)return;ST.abil.siren--;AU.siren();AU.say('siren',{cd:0,pri:3});FX.flash=.7;FX.flashCol=S.danger;FX.shake=.4;ST.alarmT=6;logLine('<b style="color:var(--danger)">PANIC SIREN</b> sounded.');
@@ -1271,18 +1361,22 @@ function renderAbil(){const a=$('abil');a.classList.toggle('show',ST.phase==='he
  $('abSlam').onclick=()=>{ST.abTool=ST.abTool==='slam'?null:'slam';if(ST.abTool)hint('Click a doorway to slam it shut for 7 seconds. Thieves have to find another way.',4);renderAbil()};
  $('abSiren').onclick=useSiren}
 // ================================================================ REPLAY
-function startReplay(){if(!ST.rec.length)return;hideSheet();$('hint').classList.remove('show');hintTimer=0;ST.phase='replay';ST.rp={t:0,speed:4,fi:0,ev:0};for(const th of ST.thieves){th.trail=[];th.caughtT=0;th.crackT=0;th.breachT=0;th.climbT=0;th.waiting=false}
+function startReplay(){if(!ST.rec.length)return;hideSheet();$('hint').classList.remove('show');hintTimer=0;ST.phase='replay';ST.rp={t:0,speed:0,fi:0,ev:0,cap:'',capT:0};ST.recEv.sort((a,b)=>a.t-b.t);document.querySelectorAll('#replayBar [data-r]').forEach(o=>o.classList.toggle('on',o.dataset.r==='0'));document.body.classList.add('rp');for(const th of ST.thieves){th.trail=[];th.caughtT=0;th.crackT=0;th.breachT=0;th.climbT=0;th.waiting=false}
  FX.stamps=[];FX.floats=[];$('replayBar').classList.add('show');renderAbil();refreshUI();AU.droneOn()}
-function stopReplay(){ST.phase='report';$('replayBar').classList.remove('show');AU.droneOff();FX.slow=0;applyFrame(ST.rec[ST.rec.length-1]);showSheet(ST.lastReport);refreshUI()}
+function stopReplay(){ST.phase='report';document.body.classList.remove('rp');$('rpCap').classList.remove('in');$('replayBar').classList.remove('show');AU.droneOff();FX.slow=0;applyFrame(ST.rec[ST.rec.length-1]);showSheet(ST.lastReport);refreshUI()}
 function applyFrame(f){f.th.forEach((a,k)=>{const th=ST.thieves[k];if(!th)return;const moved=Math.hypot(th.x-a[0],th.y-a[1]);[th.x,th.y,th.sus,th.state]=a;th.loot=a[4]?{}:null;th.unseen=a[5]?0:9;th.drop=a[6];th.face=a[7];if(moved>.3&&moved<3&&ST.phase==='replay'){th.trail.push([th.x,th.y]);if(th.trail.length>46)th.trail.shift()}});
  f.g.forEach((a,k)=>{const g=ST.guards[k];if(g)[g.x,g.y,g.face,g.state]=a});
  const cams=ST.devices.filter(d=>d.type==='camera');f.c.forEach((a,k)=>{const d=cams[k];if(d){d.cur=a[0];d.looped=a[1]?1:0;d.seeing=!!a[2]}});
  const lz=ST.devices.filter(d=>d.type==='laser');(f.lz||[]).forEach((b,k)=>{if(lz[k])lz[k].broken=!!b});
  ST.smokes=f.sm;ST.slams=f.sl;ST.t=f.t;ST.clock=f.t*.5}
-function updateReplay(dt){const rp=ST.rp;rp.t+=dt*rp.speed*(FX.slow>0?.25:1);
+// highlights pacing: race through quiet stretches, ease into each big moment
+function rpPace(rp){if(rp.speed)return rp.speed;const nx=ST.recEv.find(e=>e.t>=rp.t-.2);const gap=nx?nx.t-rp.t:99;const tgt=gap<1.6?1.2:gap<4?3:7;rp.cur=lerp(rp.cur||tgt,tgt,.08);return rp.cur}
+function rpFocus(){const rp=ST.rp;if(!rp)return null;const nx=ST.recEv.find(e=>e.t>=rp.t-1.2&&e.t<rp.t+3);if(nx)return [nx.x,nx.y];
+ const act=ST.thieves.filter(t=>['in','out','flee'].includes(t.state)&&t.x!=null);if(!act.length)return null;act.sort((a,b)=>(b.loot?100:0)+b.sus-((a.loot?100:0)+a.sus));return [act[0].x,act[0].y]}
+function updateReplay(dt){const rp=ST.rp;rp.t+=dt*rpPace(rp)*(FX.slow>0?.25:1);if(rp.capT>0){rp.capT-=dt;if(rp.capT<=0)$('rpCap').classList.remove('in')}
  while(rp.fi<ST.rec.length-1&&ST.rec[rp.fi+1].t<=rp.t)rp.fi++;applyFrame(ST.rec[rp.fi]);
  for(const th of ST.thieves)if(th.state==='caught')th.caughtT+=dt*rp.speed;
- while(rp.ev<ST.recEv.length&&ST.recEv[rp.ev].t<=rp.t){const e=ST.recEv[rp.ev++];if(e.k==='catch'){stamp(e.x,e.y,e.s,S.danger);burst(e.x,e.y,40,S.danger,4,1.1,.1);FX.slow=.9;FX.focus=[e.x,e.y];FX.flash=.6;FX.flashCol=S.danger;AU.caught()}else{floatText(e.x,e.y-.6,e.s,S.danger,true);AU.escaped()}}
+ while(rp.ev<ST.recEv.length&&ST.recEv[rp.ev].t<=rp.t){const e=ST.recEv[rp.ev++];if(e.s){$('rpCap').textContent=e.s.replace(/<[^>]+>/g,'');$('rpCap').classList.add('in');rp.capT=2.4}if(e.k==='alarm'||e.k==='dog'){burst(e.x,e.y,16,S.danger,2.5);FX.flash=.3;FX.flashCol=S.danger;continue}if(e.k==='grab'){burst(e.x,e.y,14,S.accent,2.5);AU.loot&&AU.loot(e.x);continue}if(e.k==='catch'){stamp(e.x,e.y,e.s,S.danger);burst(e.x,e.y,40,S.danger,4,1.1,.1);FX.slow=.9;FX.focus=[e.x,e.y];FX.flash=.6;FX.flashCol=S.danger;AU.caught()}else{floatText(e.x,e.y-.6,e.s,S.danger,true);AU.escaped()}}
  $('rpBar').style.width=Math.min(100,rp.t/ST.rec[ST.rec.length-1].t*100)+'%';$('rpLbl').textContent='REPLAY · '+dayName(ST.night).toUpperCase()+' · '+fmtClock();
  if(rp.t>ST.rec[ST.rec.length-1].t+1.5)stopReplay()}
 document.querySelectorAll('#replayBar [data-r]').forEach(b=>b.onclick=()=>{ST.rp.speed=+b.dataset.r;document.querySelectorAll('#replayBar [data-r]').forEach(o=>o.classList.toggle('on',o===b))});
@@ -2304,8 +2398,10 @@ function r3Proj(x,y,z){const v=new THREE.Vector3(x,y,z).project(R3.cam);return [
 function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;
  // camera: framed building, eases toward the action in slow-mo, shakes on impact
  const f=R3.fit,cam=R3.cam;const z=FX.zoom||1;const [fx,fy]=FX.focus||[W/2,H/2];const k=clamp((z-1)/.35,0,1);
- const tx_=lerp(f.tgt.x,fx,k*.8),tz_=lerp(f.tgt.z,fy,k*.8),d=f.d/(1+k*.6);const sh=FX.shake>0?FX.shake*.06:0;
- cam.position.set(tx_+(Math.random()-.5)*sh,Math.sin(f.el)*d+(Math.random()-.5)*sh,tz_+Math.cos(f.el)*d);cam.lookAt(tx_,0,tz_);
+ let tx_=lerp(f.tgt.x,fx,k*.8),tz_=lerp(f.tgt.z,fy,k*.8),d=f.d/(1+k*.6),el=f.el;const sh=FX.shake>0?FX.shake*.06:0;
+ if(ST.phase==='replay'){const p=rpFocus()||[f.tgt.x,f.tgt.z];const C=R3.cine||(R3.cine={x:p[0],z:p[1],d:f.d*.7});const a=Math.min(1,dt*1.6);C.x=lerp(C.x,p[0],a);C.z=lerp(C.z,p[1],a);C.d=lerp(C.d,f.d*(FX.slow>0?.32:.48),Math.min(1,dt*1.2));tx_=C.x;tz_=C.z;d=C.d;el=36*Math.PI/180}else R3.cine=null;
+ const orb=ST.phase==='replay'?Math.sin(R3.t*.15)*.25:0;
+ cam.position.set(tx_+Math.sin(orb)*Math.cos(el)*d+(Math.random()-.5)*sh,Math.sin(el)*d+(Math.random()-.5)*sh,tz_+Math.cos(orb)*Math.cos(el)*d);cam.lookAt(tx_,.4*(ST.phase==='replay'),tz_);
  // power cut: the building goes dark, emergency red
  const dark=ST.dark&&ST.phase==='heist',plan=ST.phase==='plan'||ST.phase==='report';R3.hemi.intensity=lerp(R3.hemi.intensity,dark?.12:plan?.95:.34,.08);R3.hemi.color.set(dark?'#a03040':'#5d8fd6');R3.moon.intensity=lerp(R3.moon.intensity,dark?.35:plan?1.6:1.5,.08);
  if(R3.pools)for(const [k,m] of R3.pools.entries()){const tgt=dark?0:plan?.1:.2+.03*Math.sin(R3.t*1.3+k*2.1);m.material.opacity=lerp(m.material.opacity,tgt,.06)}
@@ -2389,17 +2485,30 @@ function drawHome(){const c=hcv.getContext('2d'),dpr=hcv._dpr||1,Wp=hcv.width/dp
  const f0=clamp((bR.top-hR.top)/Hp,0,1),f1=clamp((bR.bottom-hR.top)/Hp,0,1);g1.addColorStop(0,`rgba(${bg},.8)`);g1.addColorStop(f0,`rgba(${bg},.35)`);g1.addColorStop((f0+f1)/2,`rgba(${bg},.05)`);g1.addColorStop(f1,`rgba(${bg},.35)`);g1.addColorStop(1,`rgba(${bg},.85)`);c.fillStyle=g1;c.fillRect(0,0,Wp,Hp);
 }
 // ================================================================ SETUP (new contract)
-function setupSheet(){HOME.from=null;showSheet(`<h2>New contract</h2>
- <p style="margin:0 0 4px">Building:</p><div class="pick" id="sitePick">${Object.entries(SITES).map(([k,d])=>`<button data-s="${k}" class="${k===SITE?'on':''}">${d.name}</button>`).join('')}</div><p id="siteDesc" style="margin:0 0 6px;font-size:12px;opacity:.75">${SITES[SITE].blurb}</p>
+// ---------- reputation: every star you earn counts toward unlocking bigger contracts
+function repGet(){try{let v=localStorage.getItem('ij-rep');if(v==null){v=Math.min(10,(typeof ACHS!=='undefined'?ACHS.size:0)*2);localStorage.setItem('ij-rep',v)}return +v||0}catch(e){return 0}}
+function repAdd(n){if(!n)return;const before=repGet();const now=before+n;try{localStorage.setItem('ij-rep',now)}catch(e){}
+ for(const [k,d] of Object.entries(SITES))if(d.rep&&before<d.rep&&now>=d.rep)setTimeout(()=>{const t=document.createElement('div');t.className='toast';t.innerHTML='<b>New contract unlocked</b>'+d.name+' is on the city map.';$('toasts').appendChild(t);requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));setTimeout(()=>t.remove(),6000);AU.play&&AU.play('jingGood',{vol:.5})},1800)}
+function siteOpen(k){return repGet()>=(SITES[k].rep||0)}
+function cityMap(){const R=repGet();const B={gallery:'M-7 6V-3L0-8 7-3V6Z',bank:'M-8 6V-2H8V6ZM-9-2 0-8 9-2Z',manor:'M-9 6V-1L-4-6 0-2 4-6 9-1V6Z',museum:'M-9 6V-3H9V6ZM-9-3 0-9 9-3ZM-6-3V6M-2-3V6M2-3V6M6-3V6',jeweller:'M-6 6V-5H6V6ZM-3-2H3',casino:'M-9 6V-4H9V6ZM-4-4V-8H4V-4Z'};
+ let svg=`<svg viewBox="0 0 100 86" class="city" aria-label="City map">`;
+ // streets and the river
+ svg+=`<path d="M0 44 Q30 40 50 46 T100 40" class="riv"/>`;for(const [a,b,c,d] of [[0,14,100,14],[0,76,100,78],[12,0,14,86],[40,0,42,86],[60,0,58,86],[96,0,94,86],[0,38,100,36],[0,56,100,60]])svg+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" class="st"/>`;
+ for(const [k,d] of Object.entries(SITES)){const [x,y]=d.city||[50,50];const open=R>=(d.rep||0);
+  svg+=`<g class="pin${k===SITE?' on':''}${open?'':' lock'}" data-s="${k}" transform="translate(${x} ${y})"><circle r="7.5" class="hit"/><path transform="scale(.62)" d="${B[k]||B.gallery}"/>${open?'':`<text y="-9.5" text-anchor="middle">🔒★${d.rep}</text>`}<text y="11.5" text-anchor="middle" class="nm">${d.name.replace(/^The /,'')}</text></g>`}
+ return svg+`</svg>`}
+function setupSheet(){HOME.from=null;if(!siteOpen(SITE))SITE='gallery';showSheet(`<h2>New contract</h2>
+ <p style="margin:0 0 4px;display:flex;justify-content:space-between"><span>Pick a building:</span><span title="Reputation: every star you earn counts">Reputation <b>★ ${repGet()}</b></span></p><div id="sitePick">${cityMap()}</div><p id="siteDesc" style="margin:0 0 6px;font-size:12px;opacity:.75">${siteDesc(SITE)}</p>
  <p style="margin-bottom:4px">Difficulty:</p><div class="pick" id="diffPick">${Object.entries(DIFF).map(([k,d])=>`<button data-d="${k}" class="${k===ST.diff?'on':''}">${d.name}</button>`).join('')}</div><p id="diffDesc" style="margin:0;font-size:12px;opacity:.75">${DIFF[ST.diff].desc}</p>
  ${(()=>{let b=0;try{b=+localStorage.getItem('ij-best')||0}catch(e){}return b?`<p style="margin:6px 0 0;font-size:12px">Best overtime run: <b>${b}</b> extra night${b===1?'':'s'}.</p>`:`<p style="margin:6px 0 0;font-size:12px;opacity:.75">Finish Friday to unlock endless overtime nights.</p>`})()}
  <div class="pick" id="tutPick" style="margin-top:12px"><button data-t="1" class="${tutWanted()?'on':''}">Tutorial on the first night</button><button data-t="0" class="${tutWanted()?'':'on'}">No tutorial</button></div>
  ${readSave()?'<p style="margin:4px 0 0;font-size:12px;opacity:.75">This replaces your saved contract.</p>':''}
  <button class="cta" id="takeBtn">Take the contract ▸</button><button class="cta" id="setBack" style="opacity:.8;margin-top:8px;font-size:16px;padding:8px">Back</button>`);
- document.querySelectorAll('#sitePick button').forEach(b=>b.onclick=()=>{SITE=b.dataset.s;try{localStorage.setItem('ij-site',SITE)}catch(e){}document.querySelectorAll('#sitePick button').forEach(o=>o.classList.toggle('on',o===b));$('siteDesc').textContent=SITES[SITE].blurb;useSite(SITE);ST.night=1;buildMap(1);resetLoot();devicesChanged();redrawStatic();AU.init();AU.click()});
+ document.querySelectorAll('#sitePick .pin').forEach(b=>b.onclick=()=>{const k=b.dataset.s;if(!siteOpen(k)){$('siteDesc').innerHTML=siteDesc(k);AU.init();AU.deny();return}SITE=k;try{localStorage.setItem('ij-site',SITE)}catch(e){}document.querySelectorAll('#sitePick .pin').forEach(o=>o.classList.toggle('on',o===b));$('siteDesc').innerHTML=siteDesc(SITE);useSite(SITE);ST.night=1;buildMap(1);resetLoot();devicesChanged();redrawStatic();AU.init();AU.click()});
  document.querySelectorAll('#diffPick button').forEach(b=>b.onclick=()=>{ST.diff=b.dataset.d;try{localStorage.setItem('ij-diff',ST.diff)}catch(e){}document.querySelectorAll('#diffPick button').forEach(o=>o.classList.toggle('on',o===b));$('diffDesc').textContent=DIFF[ST.diff].desc;AU.init();AU.click()});
  let tutOn=tutWanted();document.querySelectorAll('#tutPick button').forEach(b=>b.onclick=()=>{tutOn=b.dataset.t==='1';document.querySelectorAll('#tutPick button').forEach(o=>o.classList.toggle('on',o===b));AU.click()});
  $('takeBtn').onclick=()=>{AU.init();clearSave();newGame();if(tutOn)tutStart()};$('setBack').onclick=()=>{AU.click();showHome()}}
+function siteDesc(k){const d=SITES[k];const open=siteOpen(k);return `<b>${d.name}</b>${d.bonus?` · <span style="opacity:.8">+${money(d.bonus)} starting budget</span>`:''}<br>`+(open?d.blurb:`Locked: earn <b>★ ${d.rep}</b> reputation to take this job (you have ★ ${repGet()}). Every star you earn on any night counts.`)}
 // ================================================================ HOW TO PLAY
 const HTP=[
  ['You\'re the security','Crews will rob this building for five nights. You can\'t keep them out. You only decide what they have to walk past.','ill-plan'],
