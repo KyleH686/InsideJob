@@ -86,6 +86,9 @@ main{flex:1;display:flex;min-height:0}
 @keyframes stamp{from{transform:rotate(-12deg) scale(2.4);opacity:0}}
 #sheet .cta{margin-top:16px;width:100%;padding:12px;font-family:var(--fh);font-size:20px;background:var(--btn);color:var(--btnink);border:0}
 #sheet .pick{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+#sheet .wkgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+#sheet .wkd{border:1px solid currentColor;padding:4px 2px;text-align:center;display:flex;flex-direction:column;gap:2px;align-items:center}
+#sheet .wkd .sq{font-size:20px;line-height:1}#sheet .wkd small{font-size:9px;opacity:.75;line-height:1.2}#sheet .wkd.today{outline:2px solid var(--accent)}#sheet .wkd.fut{opacity:.35;border-style:dashed}
 #sheet .works{display:flex;flex-direction:column;gap:6px}
 #sheet .wk{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;border:1px solid currentColor;padding:6px 8px}
 #sheet .wk .ic{font-size:20px;text-align:center}#sheet .wk small{display:block;font-size:11px;opacity:.75}#sheet .wk.done{opacity:.55}
@@ -438,7 +441,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ THREE BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ THREE BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v9 · sound by Kenney (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v20 · sound by Kenney (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -1381,8 +1384,8 @@ function endNight(){
  const st=stars(ns);ST.stars[ST.night-1]=st.filter(Boolean).length;repAdd(ST.stars[ST.night-1]);
  let body=`<div class="stamp" style="color:${stampCol}">${stampTxt}</div><h2>Incident report</h2><div style="font-size:26px;letter-spacing:4px;margin:-2px 0 4px" title="Nothing stolen · Half the crew caught · Whole crew caught">${st.map(b=>`<span style="opacity:${b?1:.25}">★</span>`).join('')}</div><div style="font-size:11px;opacity:.7;margin-bottom:6px">★ nothing stolen · ★ half the crew caught · ★ whole crew caught</div><p style="margin:0 0 10px;opacity:.75">${dayName(ST.night)} night · The Marchbank Gallery</p><div class="lines">${lines}</div>${ns.mvp?`<p style="margin:10px 0 0;font-size:13px"><b>Device of the night:</b> ${ns.mvp}.</p>`:''}${ns.told&&ns.told.length?`<p style="margin:10px 0 0;font-size:13px"><b>Word gets around.</b> The thieves who got away will tell the next crew about ${[...new Set(ns.told)].join(', ')}. Move it or expect them to avoid it.</p>`:''}
  <div class="lines" style="margin-top:10px"><div><span>Stolen tonight</span><span class="big">${money(ns.stolen)}</span></div><div><span>Arrests (£150 each)</span><span>${ns.arrests}</span></div><div><span>Retainer${ns.stolen===0?' + clean-night bonus':''}</span><span>+${money(income)}</span></div><div><span>${ST.endless?'Nightly cap':'Contract total stolen'}</span><span>${money(ST.stolen)} of ${money(ST.limit)}</span></div></div>`;
- if(ST.daily){const sc=ns.stolen;let b=dailyBest();const isBest=!b||sc<b.stolen||sc===b.stolen&&ns.arrests>b.arrests;if(isBest){b={key:ST.daily.key,stolen:sc,arrests:ns.arrests};try{localStorage.setItem('ij-daily',JSON.stringify(b))}catch(e){}}
-  body+=`<h2 style="margin-top:14px">Daily job: ${ST.daily.mod.name}</h2><p>${money(sc)} lost, ${ns.arrests} arrest${ns.arrests===1?'':'s'}. ${isBest?'<b>Your best today.</b>':'Best today: '+money(b.stolen)+', '+b.arrests+' arrests.'} A new job is posted at midnight UTC.</p><button class="cta" onclick="startDaily()">Try today's job again</button><button class="cta" style="opacity:.85;margin-top:8px" onclick="titleScreen()">Back to the title</button>`;ST.done=true}
+ if(ST.daily){const sc=ns.stolen;let b=dailyBest();const isBest=!b||sc<b.stolen||sc===b.stolen&&ns.arrests>b.arrests;if(isBest){b={key:ST.daily.key,stolen:sc,arrests:ns.arrests};try{localStorage.setItem('ij-daily',JSON.stringify(b))}catch(e){}}logDaily(sc,ns.arrests,st.filter(Boolean).length);
+  body+=`<h2 style="margin-top:14px">Daily job: ${ST.daily.mod.name}</h2><p>${money(sc)} lost, ${ns.arrests} arrest${ns.arrests===1?'':'s'}. ${isBest?'<b>Your best today.</b>':'Best today: '+money(b.stolen)+', '+b.arrests+' arrests.'} A new job is posted at midnight UTC.</p><button class="cta" onclick="shareDaily()">Share my result</button><p id="shareOk" style="font-size:12px;margin:4px 0 0;min-height:1em"></p><button class="cta" style="opacity:.9;margin-top:6px" onclick="weekSheet()">This week's jobs</button><button class="cta" style="opacity:.85;margin-top:6px" onclick="startDaily()">Try today's job again</button><button class="cta" style="opacity:.85;margin-top:8px" onclick="titleScreen()">Back to the title</button>`;ST.done=true}
  else if(fired){body+=ST.endless?`<p>Overtime is over. ${money(ST.stolen)} went out in a single night, past the ${money(OT_CAP)} nightly cap.</p>`:`<p>The insurers have pulled the contract. ${money(ST.stolen)} walked out of the building on your watch.</p>`;body+=`<button class="cta" onclick="newGame()">Try the contract again</button>`;if(ST.endless){let b=0;try{b=+localStorage.getItem('ij-best')||0}catch(e){}body+=`<p style="font-size:13px">Overtime survived: <b>${ST.night-6}</b> night${ST.night-6===1?'':'s'} · best ${b}.</p>`}ST.done=true}
  else if(last){const gr=ST.stolen===0?'Impenetrable':ST.stolen<6000?'Gold standard':ST.stolen<14000?'Solid work':'Scraped through';body+=`<h2 style="margin-top:14px">Contract complete: ${gr}</h2><p>Five nights, ${ST.arrests} arrests, ${money(ST.stolen)} lost. ${SITES[SITE].name} renews your contract.</p><button class="cta" onclick="startOvertime()">Work overtime: endless nights ▸</button><button class="cta" style="opacity:.85;margin-top:8px" onclick="newGame()">New contract</button>`;ST.done=true}
  else body+=`<button class="cta" onclick="perkScreen()">Choose a perk for ${dayName(ST.night+1)} ▸</button>`;
@@ -1422,8 +1425,25 @@ function dailyKey(){const d=new Date();return d.getUTCFullYear()*10000+(d.getUTC
 function dailyInfo(){const key=dailyKey();const r=mulberry(key*7919+7);r();r();const mod=DAILY_MODS[Math.floor(r()*DAILY_MODS.length)];const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor'];
  const crew=[];let t=1.5;const n=mod.id==='big'?7:6;for(let k=0;k<n;k++){crew.push([pool[Math.floor(r()*pool.length)],+t.toFixed(1)]);t+=2.2+r()*2.4}
  return {key,mod,def:{crew,hint:`Daily job: ${mod.name}. ${mod.desc} One night, every entry open, £1,500 to spend. Lose as little as you can.`}}}
+// ---------- weekly board: every daily job this week, plus a spoiler-free result to share with friends
+function dayKeyOf(d){return d.getUTCFullYear()*10000+(d.getUTCMonth()+1)*100+d.getUTCDate()}
+function dailyLog(){try{return JSON.parse(localStorage.getItem('ij-dailylog')||'{}')}catch(e){return {}}}
+function logDaily(stolen,arrests,stars){const L=dailyLog();const k=dailyKey();const b=L[k];if(!b||stolen<b.stolen||stolen===b.stolen&&arrests>b.arrests)L[k]={stolen,arrests,stars};try{localStorage.setItem('ij-dailylog',JSON.stringify(L))}catch(e){}}
+function weekDays(){const now=new Date();const dow=(now.getUTCDay()+6)%7;const out=[];for(let k=0;k<7;k++){const d=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate()-dow+k));out.push({d,key:dayKeyOf(d),future:k>dow,today:k===dow})}return out}
+const daySq=r=>!r?'⬜':r.stolen===0?'🟩':r.stolen<10000?'🟨':'🟥';
+function shareText(){const L=dailyLog();const k=dailyKey();const r=L[k];const info=dailyInfo();const wd=weekDays();
+ return `Inside Job · daily job ${new Date().toUTCString().slice(5,11)} · ${SITES[['gallery','bank','manor'][k%3]].name}, ${info.mod.name}\n`+(r?`${money(r.stolen)} lost · ${r.arrests} arrest${r.arrests===1?'':'s'} · ${'★'.repeat(r.stars||0)}${'☆'.repeat(3-(r.stars||0))}`:'Not played yet')+`\nThis week: ${wd.map(w=>w.future?'▫️':daySq(L[w.key])).join('')}\nhttps://kyleh686.github.io/InsideJob/`}
+async function shareDaily(){const t=shareText();try{if(navigator.share){await navigator.share({text:t});return}}catch(e){if(e&&e.name==='AbortError')return}
+ try{await navigator.clipboard.writeText(t);const el=$('shareOk');if(el)el.textContent='Copied! Paste it to your friends.'}catch(e){const el=$('shareOk');if(el)el.innerHTML='<textarea style="width:100%;height:90px">'+t+'</textarea>'}}
+function weekSheet(){const L=dailyLog();const wd=weekDays();let tot=0,played=0,arr=0;
+ const rows=wd.map(w=>{const r=L[w.key];if(r){tot+=r.stolen;played++;arr+=r.arrests}const nm=w.d.toUTCString().slice(0,3);return `<div class="wkd${w.today?' today':''}${w.future?' fut':''}"><b>${nm}</b><span class="sq">${w.future?'▫️':daySq(r)}</span><small>${r?money(r.stolen)+' lost<br>'+r.arrests+' arrests':w.future?'':w.today?'today':'missed'}</small></div>`}).join('');
+ showSheet(`<h2>This week's daily jobs</h2><p style="margin:0 0 8px;font-size:13px;opacity:.8">One new job a day, the same for everyone. Lowest losses wins: share your result and compare with friends.</p><div class="wkgrid">${rows}</div>
+ <div class="lines" style="margin-top:10px"><div><span>Jobs played</span><span>${played} / 7</span></div><div><span>Total lost this week</span><span class="big">${money(tot)}</span></div><div><span>Arrests this week</span><span>${arr}</span></div></div>
+ <p style="font-size:12px;opacity:.7;margin:8px 0 0">🟩 nothing stolen · 🟨 under £10k · 🟥 £10k or more</p>
+ <button class="cta" id="wkShare">Share my result</button><p id="shareOk" style="font-size:12px;margin:4px 0 0;min-height:1em"></p>${L[dailyKey()]?'':'<button class="cta" style="opacity:.85;margin-top:6px" id="wkPlay">Play today\'s job</button>'}<button class="cta" style="opacity:.8;margin-top:6px;font-size:16px;padding:8px" id="wkBack2">Back</button>`);
+ $('wkShare').onclick=()=>{AU.click();shareDaily()};if($('wkPlay'))$('wkPlay').onclick=()=>{AU.click();hideSheet();startDaily()};$('wkBack2').onclick=()=>{AU.click();showHome()}}
 function dailyBest(){try{const b=JSON.parse(localStorage.getItem('ij-daily')||'null');return b&&b.key===dailyKey()?b:null}catch(e){return null}}
-function startDaily(){const info=dailyInfo();newGame();ST.daily=info;ST.night=5;ST.cash=1500;ST.limit=60000;resetLoot();info.mod.apply();buildMap(5);devicesChanged();redrawStatic();refreshUI();hint(info.def.hint,10);logLine('Daily job: '+info.mod.name+'.')}
+function startDaily(){const info=dailyInfo();info.site=['gallery','bank','manor'][dailyKey()%3];SITE=info.site;newGame();ST.daily=info;ST.night=5;ST.cash=1500;ST.limit=60000;resetLoot();info.mod.apply();buildMap(5);devicesChanged();redrawStatic();refreshUI();hint(info.def.hint,10);logLine('Daily job: '+info.mod.name+'.')}
 function setMTab(t){document.body.dataset.mtab=t;document.querySelectorAll('#mtabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
 const SAVE_KEY='ij-save';
 function saveGame(){if(ST.daily)return;if(ST.done){clearSave();return}try{const keep=['type','i','x','y','ang','sweep','phase','orient','route','cur','n','lv','paid','pers'];
@@ -2533,7 +2553,7 @@ function showHome(){if(ST.phase==='heist'&&ST.speed>0){HOME.speed=ST.speed;setSp
  else if(sv)main=`<button class="pri" data-h="cont">Continue<small>${dayName(sv.night)} night · ${(SITES[sv.site]||SITES.gallery).name} · ${DIFF[sv.diff]?.name||''}</small></button><button data-h="new">New contract</button>`;
  else main=`<button class="pri" data-h="new">Play</button>`;
  $('hMenu').innerHTML=main+`<button data-h="daily">Daily job<small>${di.mod.name}${db?' · best '+money(db.stolen):''}</small></button>
- <button data-h="htp">How to play</button><button data-h="rogues">Rogues' gallery</button>
+ <button data-h="htp">How to play</button><div class="hrow"><button data-h="week">📅 This week</button><button data-h="rogues">🦊 Rogues</button></div>
  <div class="hrow"><button data-h="ach">★ ${ACHS.size}/${ACH.length}</button><button data-h="look">${STYLES[theme].name}</button><button data-h="snd">${AU.on?'♪ On':'♪ Off'}</button></div>`;
  document.querySelectorAll('#hMenu button').forEach(b=>b.onclick=()=>{AU.init();AU.click&&AU.click();homeAct(b.dataset.h)});
  document.body.classList.add('home');resizeHome()}
@@ -2545,6 +2565,7 @@ function homeAct(h){
  if(h==='daily'){hideHome();HOME.from=null;startDaily();return}
  if(h==='htp'){hideHome();howToPlay(0);return}
  if(h==='rogues'){hideHome();roguesSheet();return}
+ if(h==='week'){hideHome();weekSheet();return}
  if(h==='ach'){hideHome();showSheet(`<h2>Achievements · ${ACHS.size}/${ACH.length}</h2>${achHTML()}<button class="cta" id="achBack">Back</button>`);$('achBack').onclick=()=>{AU.click();showHome()};return}
  if(h==='look'){setTheme(nextLook());showHome();return}
  if(h==='snd'){toggleMute();showHome();return}}
