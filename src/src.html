@@ -454,7 +454,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v27 · sound by Kenney, characters by KayKit (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v28 · sound by Kenney, characters by KayKit (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -2439,7 +2439,7 @@ function r3Look(look){if(!R3.ready||R3.look===look)return;R3.look=look;const SK=
  if(R3.mats)for(const k in R3.mats)R3.mats[k].dispose();R3.mats=r3Mats(SK);
  R3.sc.background.set(L.bg);R3.sc.fog.color.set(L.bg);R3.groundMat.color.set(L.ground);R3.hemi.groundColor.set(L.gnd);R3.moon.color.set(L.sun);R3.rim.color.set(L.rim);R3.rim.intensity=L.rimI;
  R3.r.toneMapping=SK?THREE.LinearToneMapping:THREE.ACESFilmicToneMapping;R3.floorMat.roughness=SK?1:.82;R3.floorMat.needsUpdate=true;R3.groundMat.needsUpdate=true;R3.dust.visible=!SK;
- r3ClearPeople();if(R3.kit){for(const m of R3.kit.mats.values()){if(m.map)m.map.dispose();m.dispose()}R3.kit.mats.clear()}R3.wkey=null;R3.dk=null;R3.sk=null}
+ r3ClearPeople();if(R3.kit){for(const m of R3.kit.mats.values()){if(m.map)m.map.dispose();m.dispose()}R3.kit.mats.clear()}R3.wkey=null;R3.dk=null;R3.sk=null;R3.warm=false}
 function r3Init(){if(R3.ready)return true;if(R3.failed||!window.THREE)return false;
  try{const gl=document.createElement('canvas');gl.id='cv3';const ov=document.createElement('canvas');ov.id='cvo';$('stage').insertBefore(gl,$('cv'));$('stage').insertBefore(ov,$('cv').nextSibling);
   const r=new THREE.WebGLRenderer({canvas:gl,antialias:true,powerPreference:'high-performance'});R3.r=r;R3.gl=gl;R3.ov=ov;R3.octx=ov.getContext('2d');
@@ -2460,7 +2460,7 @@ function r3Init(){if(R3.ready)return true;if(R3.failed||!window.THREE)return fal
   const N=500,pos=new Float32Array(N*3);for(let k=0;k<N;k++){pos[k*3]=Math.random()*W;pos[k*3+1]=.2+Math.random()*2.6;pos[k*3+2]=Math.random()*H}
   const dg=new THREE.BufferGeometry();dg.setAttribute('position',new THREE.BufferAttribute(pos,3));R3.dust=new THREE.Points(dg,new THREE.PointsMaterial({color:'#bfe3ff',size:.05,transparent:true,opacity:.45,blending:THREE.AdditiveBlending,depthWrite:false}));sc.add(R3.dust);
   R3.ray=new THREE.Raycaster();R3.plane=new THREE.Plane(new THREE.Vector3(0,1,0),0);
-  R3.ready=true;r3Quality();r3Look(LOOK==='sketch3d'?'sketch':'night');r3LoadKit();return true}catch(e){console.warn('3D unavailable',e);R3.failed=true;return false}}
+  R3.ready=true;r3Quality();r3Look(LOOK==='sketch3d'?'sketch':'night');r3LightPool();r3LoadKit();return true}catch(e){console.warn('3D unavailable',e);R3.failed=true;return false}}
 function r3Size(){if(!R3.ready)return;const st=$('stage').getBoundingClientRect();const w=Math.max(10,Math.round(st.width)),h=Math.max(10,Math.round(st.height));
  for(const el of [R3.gl,R3.ov]){el.style.left='0px';el.style.top='0px';el.style.width=w+'px';el.style.height=h+'px'}
  R3.q=r3Quality();const pr=Math.min(devicePixelRatio||1,R3.q==='high'?2:1.6);R3.r.setPixelRatio(pr);R3.r.setSize(w,h,false);R3.ov.width=Math.round(w*DPR);R3.ov.height=Math.round(h*DPR);
@@ -2491,6 +2491,23 @@ function r3Walls(){if(!R3.ready)return;const key=SITE+'|'+G.join('');if(R3.wkey=
  r3Outside();
  r3Fit()}
 function r3PanelGeo(){if(R3.pg)return R3.pg;const g=new THREE.BoxGeometry(.9,1.3,.07);g.translate(.45,.66,0);R3.pg=g;return g}
+// ---------- v28: light pool (phones) and sight cones that stop at walls
+function r3LightPool(){if(R3.q==='high'||R3.poolS)return;R3.poolS=[];R3.poolP=[];for(let i=0;i<3;i++){const s=new THREE.SpotLight('#ffffff',0,10,.5,.5,1.2),t=new THREE.Object3D();R3.sc.add(t);s.target=t;R3.sc.add(s);R3.poolS.push(s)}
+ for(let i=0;i<2;i++){const p=new THREE.PointLight('#ffefb8',0,8,1.5);R3.sc.add(p);R3.poolP.push(p)}}
+function r3PoolSync(){if(!R3.poolS)return;const LP=R3.LP,want=[];
+ for(const g of ST.guards){if(g.dazedT>0||g.dozing>0)continue;const c=Math.cos(g.face),s=Math.sin(g.face);want.push([g.x+c*.3,.6,g.y+s*.3,g.x+c*4,0,g.y+s*4,'#ffe2a8',LP.torch,10,.5])}
+ for(const it of R3.devs)if(it.cam){const d=it.d;if(d.looped>0||ST.dark)continue;const a=d.cur??d.ang;want.push([d.x+.5,1.55,d.y+.5,d.x+.5+Math.cos(a)*4,0,d.y+.5+Math.sin(a)*4,'#a8ecff',LP.cam,CAM.range+1.5,CAM.fov/2])}
+ R3.poolS.forEach((s,i)=>{const w=want[i];if(!w){s.intensity=0;return}s.position.set(w[0],w[1],w[2]);s.target.position.set(w[3],w[4],w[5]);s.color.set(w[6]);s.intensity=w[7];s.distance=w[8];s.angle=w[9]});
+ const fl=ST.dark?[]:R3.devs.filter(it=>it.lamp);R3.poolP.forEach((p,i)=>{const it=fl[i];if(!it){p.intensity=0;return}p.position.set(it.d.x+.5,1.7,it.d.y+.5);p.intensity=LP.lamp})}
+// compile every shader up front (hidden), so the first camera, guard or thief doesn't stall the game
+function r3Prewarm(){try{const T=new THREE.Group(),bg=new THREE.BoxGeometry(.1,.1,.1);T.position.set(W/2,-30,H/2);const add=(mt,rs)=>{const m=new THREE.Mesh(bg,mt);m.receiveShadow=rs;m.castShadow=true;T.add(m)};
+ for(const k in R3.mats){const mt=R3.mats[k];if(mt&&mt.isMaterial){add(mt,false);add(mt,true)}}
+ const lm=R3.look==='sketch'?r3Mat('#c7a6ff'):new THREE.MeshStandardMaterial({color:'#c7a6ff',emissive:'#c7a6ff',emissiveIntensity:.5,metalness:.5,roughness:.3});add(lm,false);add(new THREE.MeshBasicMaterial({color:'#fff'}),false);
+ const sp=r3Sprite('#ffffff',1,.5);T.add(sp);const ppl=[];for(const [k,t,b] of [['guard','guard',0],['thief','hacker',0],['thief','muscle',0],['thief','ghost',0],['thief','hacker',1]]){const m=r3Person(k,t,b,'#35c26b');r3PoseP(m,{x:W/2,y:H/2,face:0,col:'#35c26b',kind:k,moving:false,alpha:1,loot:true});T.add(m);ppl.push(m)}
+ const fan=r3FanMesh(R3.mats.cone);T.add(fan);T.traverse(o=>{o.frustumCulled=false});R3.sc.add(T);R3.r.compile(R3.sc,R3.cam);R3.r.render(R3.sc,R3.cam);R3.sc.remove(T);for(const m of ppl)r3DisposePerson(m);bg.dispose();fan.geometry.dispose();lm.dispose()}catch(e){console.warn('prewarm',e)}}
+function r3FanMesh(mat){const n=46,g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array((n+1)*3),3));const ix=[];for(let r=0;r<2;r++)for(let i=1;i<n;i++)ix.push(0,i,i+1);g.setIndex(ix);const m=new THREE.Mesh(g,mat);m.frustumCulled=false;m.renderOrder=3;m.userData.noInk=true;return m}
+function r3FanSet(m,pts,h){const p=m.geometry.attributes.position,n=p.count-1,L=pts.length-1;p.setXYZ(0,pts[0][0],h,pts[0][1]);for(let i=1;i<=n;i++){const q=pts[1+Math.round((i-1)*(L-1)/(n-1))];p.setXYZ(i,q[0],.05,q[1])}p.needsUpdate=true}
+function r3GuardFan(m,pts,on){const u=m.userData;u.beam.visible=false;if(!u.fan){u.fan=r3FanMesh(R3.mats.torch);R3.dyn.add(u.fan)}u.fan.visible=on&&!!pts;if(u.fan.visible)r3FanSet(u.fan,pts,.62)}
 // ---------- v27: watch cam (follow one person up close in 3D) and the street outside
 function r3WatchOk(o){if(!o||!R3.on||ST.phase!=='heist'||o.x==null)return false;if(ST.guards.includes(o))return true;return ST.thieves.includes(o)&&!['wait','gone','escaped'].includes(o.state)&&!(o.state==='caught'&&o.caughtT>2.2)}
 function watchPill(){const b=$('watch');if(!b)return;const w=R3.watch;b.style.display=w?'flex':'none';if(w)b.innerHTML='<span>👁</span> Watching '+(w.name||'the guard')+' <b>✕</b>'}
@@ -2520,8 +2537,8 @@ const CHAR_DATA=/*__CHARS__*/{};const KIT_H=1.15;
 function r3LoadKit(){if(R3.kitReq||!window.R3X||!CHAR_DATA.thief)return;R3.kitReq=true;const L=new R3X.GLTFLoader();
  const one=k=>new Promise((ok,no)=>{try{const bin=atob(CHAR_DATA[k]);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);L.parse(u.buffer,'',ok,no)}catch(e){no(e)}});
  Promise.all(['thief','guard','muscle'].map(one)).then(([t,g,m])=>{const img=s=>{let im=null;s.traverse(o=>{if(!im&&o.material&&o.material.map)im=o.material.map.image});return im};
-  R3.kit={scene:{thief:t.scene,guard:g.scene,muscle:m.scene},img:{thief:img(t.scene),guard:img(g.scene),muscle:img(m.scene)},clips:Object.fromEntries(t.animations.map(c=>[c.name,c])),mats:new Map()};r3ClearPeople()}).catch(e=>{console.warn('3D characters unavailable',e);R3.kit=null})}
-function r3DisposePerson(m){if(m.userData.mixer)m.userData.mixer.stopAllAction();m.traverse(x=>{if(x.isLight&&x.shadow&&x.shadow.map)x.shadow.map.dispose();if(x.geometry&&!x.userData.kit)x.geometry.dispose()})}
+  R3.kit={scene:{thief:t.scene,guard:g.scene,muscle:m.scene},img:{thief:img(t.scene),guard:img(g.scene),muscle:img(m.scene)},clips:Object.fromEntries(t.animations.map(c=>[c.name,c])),mats:new Map()};R3.warm=false;r3ClearPeople()}).catch(e=>{console.warn('3D characters unavailable',e);R3.kit=null})}
+function r3DisposePerson(m){if(m.userData.fan){R3.dyn.remove(m.userData.fan);m.userData.fan.geometry.dispose();m.userData.fan=null}if(m.userData.mixer)m.userData.mixer.stopAllAction();m.traverse(x=>{if(x.isLight&&x.shadow&&x.shadow.map)x.shadow.map.dispose();if(x.geometry&&!x.userData.kit)x.geometry.dispose()})}
 function r3ClearPeople(){if(!R3.people)return;for(const [k,m] of R3.people){R3.dyn.remove(m);r3DisposePerson(m)}R3.people.clear()}
 function r3Hsv(h,s,v){const f=n=>{const k=(n+h/60)%6;return v-v*s*Math.max(0,Math.min(k,4-k,1))};return [f(5),f(3),f(1)]}
 function r3ToHsv(r,g,b){const mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;let h=0;if(d>0){h=mx===r?((g-b)/d+6)%6:mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}return [h,mx?d/mx:0,mx]}
@@ -2551,7 +2568,7 @@ function r3KitPerson(kind,type,boss,col){const K=R3.kit,SK=R3.look==='sketch',M=
  if(model==='guard'){const hd=hang('head');const cm=M(SK?'#3f5f96':'#1f3a6e'),dk=M(SK?'#24365c':'#0f1c3a',{e:.1});const cap=new THREE.Group();cap.position.set(0,.37,-.01);cap.rotation.x=-.08;cap.scale.setScalar(1.38);hd.add(cap);
   mesh(new THREE.CylinderGeometry(.215,.235,.1,20),cm,cap,0,.04,0);mesh(new THREE.CylinderGeometry(.27,.24,.05,20),cm,cap,0,.11,0);const pk=mesh(new THREE.BoxGeometry(.3,.022,.12),dk,cap,0,-.005,.225);pk.rotation.x=.22;mesh(new THREE.SphereGeometry(.035,8,6),R3.mats.brass,cap,0,.06,.235);extras.push(cap);
   const hs=hang('handslotr');const torch=mesh(new THREE.CylinderGeometry(.045,.035,.24,10),R3.mats.dark,hs,0,0,.06);torch.rotation.x=Math.PI/2;mesh(new THREE.CylinderGeometry(.04,.04,.015,10),new THREE.MeshBasicMaterial({color:'#fff1c0'}),torch,0,.125,0);extras.push(torch);
-  const tl=new THREE.SpotLight('#ffe2a8',40,10,.5,.5,1.2);tl.position.set(.3,.55,.2);const tt=new THREE.Object3D();tt.position.set(4,0,.2);g.add(tt);tl.target=tt;g.add(tl);P.torch=tl;
+  const tl=new THREE.SpotLight('#ffe2a8',40,10,.5,.5,1.2);tl.position.set(.3,.55,.2);const tt=new THREE.Object3D();tt.position.set(4,0,.2);g.add(tt);tl.target=tt;if(R3.q==='high')g.add(tl);P.torch=tl;
   if(R3.q==='high'){tl.castShadow=true;tl.shadow.mapSize.set(1024,1024);tl.shadow.bias=-.0008;tl.shadow.radius=3}
   const beam=new THREE.Mesh(new THREE.ConeGeometry(1.7,4.6,28,1,true),R3.mats.torch);beam.rotation.z=Math.PI/2;beam.position.set(2.6,.42,.2);g.add(beam);P.beam=beam}
  else{const ch=hang('chest');const bag=new THREE.Group();const bgm=SK?M('#e6d6ac'):new THREE.MeshStandardMaterial({color:'#ffd36b',emissive:'#a8781c',emissiveIntensity:.5,roughness:.6});mesh(new THREE.SphereGeometry(.17,14,12),bgm,bag).scale.set(1,1.05,.85);mesh(new THREE.ConeGeometry(.07,.12,10),bgm,bag,0,.2,0).rotation.z=Math.PI;mesh(new THREE.TorusGeometry(.045,.014,6,12),M(SK?'#2f2c27':'#3a2a12'),bag,0,.15,0).rotation.x=Math.PI/2;bag.position.set(0,.08,-.27);bag.rotation.x=-.2;ch.add(bag);P.bag=bag;extras.push(bag);
@@ -2611,7 +2628,7 @@ function r3Person(kind,type,boss,col){if(R3.kit&&OPT.kit)return r3KitPerson(kind
   for(const s of [-1,1])mesh(new THREE.BoxGeometry(.075,.022,.085),P.darkM,spine,0,.44,s*.19*tsz/1.18);
   mesh(new THREE.BoxGeometry(.05,.08,.03),P.darkM,spine,.06,.39,-.2*tsz/1.18);
   const A=P.arms[1];const torch=mesh(new THREE.CylinderGeometry(.036,.028,.2,10),R3.mats.dark,A.b,0,A.end-.07,0);mesh(new THREE.CylinderGeometry(.03,.03,.012,10),new THREE.MeshBasicMaterial({color:'#fff1c0'}),torch,0,-.105,0);
-  const tl=new THREE.SpotLight('#ffe2a8',40,10,.5,.5,1.2);tl.position.set(.32,.76,.22);const tt=new THREE.Object3D();tt.position.set(4,0,.22);g.add(tt);tl.target=tt;g.add(tl);P.torch=tl;
+  const tl=new THREE.SpotLight('#ffe2a8',40,10,.5,.5,1.2);tl.position.set(.32,.76,.22);const tt=new THREE.Object3D();tt.position.set(4,0,.22);g.add(tt);tl.target=tt;if(R3.q==='high')g.add(tl);P.torch=tl;
   if(R3.q==='high'){tl.castShadow=true;tl.shadow.mapSize.set(1024,1024);tl.shadow.bias=-.0008;tl.shadow.radius=3}
   const beam=new THREE.Mesh(new THREE.ConeGeometry(1.7,4.6,28,1,true),R3.mats.torch);beam.rotation.z=Math.PI/2;beam.position.set(2.6,.5,.22);g.add(beam);P.beam=beam}
  else{if(type==='impostor')cap();else{const bm=P.bandM.clone();P.beanie=bm;mesh(new THREE.SphereGeometry(.166,20,10,0,Math.PI*2,0,Math.PI*.5),bm,head,0,.03,0).scale.set(.97,1.05,.95);const br=mesh(new THREE.TorusGeometry(.153,.03,8,22),bm,head,0,.04,0);br.rotation.x=Math.PI/2;mesh(new THREE.SphereGeometry(.04,8,6),bm,head,0,.215,0)}
@@ -2647,32 +2664,35 @@ function r3Sync(dt){const used=new Set();const P=R3.people;
   r3PoseP(m,{x:th.x,y:th.y-(th.drop>0?0:0),face:th.face||0,moving:mv,crouch:th.hiding||th.waiting,caught:th.state==='caught',work:th.crackT>0||th.breachT>0,col:th.col,loot:!!th.loot,kind:'thief',alpha:a});
   if(th.drop>0)m.position.y=th.drop*1.6}
  for(const g of ST.guards){const m=get(g,'guard');r3PoseP(m,{x:g.x,y:g.y,face:g.face,col:g.state==='chase'?'#ff6b78':'#7fe3ff',kind:'guard',doze:g.dozing>0,dazed:g.dazedT>0,alpha:1});
-  const u=m.userData;const on=!(g.dazedT>0)&&!(g.dozing>0);u.torch.intensity=(on?1:.2)*LP.torch;u.beam.visible=on;u.beam.material.color.set(g.state==='chase'?'#ffb0a0':'#ffe6a0')}
- if(ST.phase==='plan')for(const d of ST.devices)if(d.type==='guard'){const m=get(d,'guard');const f=-Math.PI/2+(d.route.length?Math.atan2(ty(d.route[0])-d.y,tx(d.route[0])-d.x)+Math.PI/2:0);r3PoseP(m,{x:d.x+.5,y:d.y+.5,face:f,col:'#7fe3ff',kind:'guard',moving:false,alpha:1})}
+  const u=m.userData;const on=!(g.dazedT>0)&&!(g.dozing>0);u.torch.intensity=(on?1:.2)*LP.torch;r3GuardFan(m,on?(g._pts||rays(g.x,g.y,g.face,GUARD.fov,gRange(g),30)):null,on);u.beam.material.color.set(g.state==='chase'?'#ffb0a0':'#ffe6a0')}
+ if(ST.phase==='plan')for(const d of ST.devices)if(d.type==='guard'){const m=get(d,'guard');const f=-Math.PI/2+(d.route.length?Math.atan2(ty(d.route[0])-d.y,tx(d.route[0])-d.x)+Math.PI/2:0);r3PoseP(m,{x:d.x+.5,y:d.y+.5,face:f,col:'#7fe3ff',kind:'guard',moving:false,alpha:1});r3GuardFan(m,rays(d.x+.5,d.y+.5,f,GUARD.fov,GUARD.range,30),true)}
  for(const [k,m] of P)if(!used.has(k)){R3.dyn.remove(m);r3DisposePerson(m);P.delete(k)}
  // devices & loot are rebuilt when they change; animated parts update every frame
- const dk=ST.devices.map(d=>d.type+d.i+(d.o||'')+(d.lv||'')).join(',')+'|'+ST.loot.map(l=>l.id+(l.fake?'f':'')).join(',');if(dk!==R3.dk){R3.dk=dk;r3BuildDevices()}
- for(const it of R3.devs){const d=it.d;if(it.dog){const up=d.bark>0;it.dog.rotation.y=up?-(d.face||0):.6;it.dog.position.y=.1+(up?.12+Math.abs(Math.sin(R3.t*14))*.1:Math.sin(R3.t*1.6)*.008);it.dog.scale.y=up?1.15:.8;continue}if(it.cam){const a=d.cur??d.ang;it.head.rotation.y=-a;const on=!(d.looped>0)&&!ST.dark;it.light.intensity=on?LP.cam:0;it.cone.visible=on;it.led.material=on&&Math.sin(ST.t*6)>-.2?R3.mats.led:R3.mats.dark}
+ const dk=ST.devices.map(d=>d.type+d.i+(d.o||'')+(d.lv||'')).join(',')+'|'+ST.loot.map(l=>l.id+(l.fake?'f':'')).join(',');if(dk!==R3.dk){const full=R3.dk==null;R3.dk=dk;r3BuildDevices(full)}
+ for(const it of R3.devs){const d=it.d;if(it.dog){const up=d.bark>0;it.dog.rotation.y=up?-(d.face||0):.6;it.dog.position.y=.1+(up?.12+Math.abs(Math.sin(R3.t*14))*.1:Math.sin(R3.t*1.6)*.008);it.dog.scale.y=up?1.15:.8;continue}if(it.cam){const a=d.cur??d.ang;it.head.rotation.y=-a;const on=!(d.looped>0)&&!ST.dark;it.light.intensity=on?LP.cam:0;it.cone.visible=on;if(on)r3FanSet(it.cone,d._pts||rays(d.x+.5,d.y+.5,a,CAM.fov,camRange(d)),1.5);it.led.material=on&&Math.sin(ST.t*6)>-.2?R3.mats.led:R3.mats.dark}
   if(it.lamp){const on=!ST.dark;it.light.intensity=on?LP.lamp:0;it.glow.visible=on}
   if(it.beam){it.beam.visible=!(d.broken)&&!ST.dark;it.beam.material.opacity=.7+.3*Math.sin(ST.t*20)}}
- if(R3.van)R3.van.visible=ST.phase!=='plan';
+ if(R3.van)R3.van.visible=ST.phase!=='plan';r3PoolSync();
  for(const it of R3.loot){const l=it.l;const show=!l.stolen&&!l.carrier;it.item.visible=show&&!l.dropped;if(it.item.visible){it.item.rotation.y+=dt*.6;it.item.position.y=it.y0+Math.sin(ST.t*2+l.x)*.03}it.glow.visible=it.item.visible;
   if(l.dropped&&!l.carrier){it.drop.visible=true;it.drop.position.set(tx(l.i)+.5,.14,ty(l.i)+.5)}else it.drop.visible=false}
  for(const D of R3.doors){if(D.d.vault){D.piv.position.y=ST.vaultOpen?-1.5:0;continue}const o=DOOROPEN[D.d.i]||{v:0,side:1};const blocked=isSlam(D.d.i)||ST.devices.some(v=>v.type==='steel'&&v.i===D.d.i);D.piv.visible=!blocked;D.piv.rotation.y=-(o.v*Math.PI/2*.92*o.side)}
  // slams: red shutters
  const sk=ST.slams.map(s=>s.i).join(',');if(sk!==R3.sk){R3.sk=sk;if(R3.slamG)R3.dyn.remove(R3.slamG);R3.slamG=new THREE.Group();for(const s of ST.slams){const x=tx(s.i),y=ty(s.i);const vert=G[idx(x,y-1)]===WALL;const b=new THREE.Mesh(new THREE.BoxGeometry(vert?.14:1,1.3,vert?1:.14),new THREE.MeshStandardMaterial({color:'#c8384a',emissive:'#ff3b55',emissiveIntensity:.6,metalness:.6,roughness:.3}));b.position.set(x+.5,.65,y+.5);b.castShadow=true;R3.slamG.add(b)}R3.dyn.add(R3.slamG)}
 }
-function r3BuildDevices(){if(R3.devG){R3.dyn.remove(R3.devG);R3.devG.traverse(x=>{if(x.geometry&&x.geometry!==R3.pg)x.geometry.dispose();if(x.isLight&&x.shadow&&x.shadow.map)x.shadow.map.dispose()})}
- const G3=new THREE.Group();R3.devG=G3;R3.dyn.add(G3);R3.devs=[];R3.loot=[];const M=R3.mats;
- for(const d of ST.devices){const x=d.x+.5,z=d.y+.5;
+function r3BuildDevices(full){const disp=g=>g.traverse(x=>{if(x.geometry&&x.geometry!==R3.pg)x.geometry.dispose();if(x.isLight&&x.shadow&&x.shadow.map)x.shadow.map.dispose()});
+ if(full&&R3.devG){R3.dyn.remove(R3.devG);disp(R3.devG);R3.devG=null;R3.devC=null}
+ if(!R3.devG){R3.devG=new THREE.Group();R3.dyn.add(R3.devG)}const old=R3.devC||new Map(),next=new Map();R3.devC=next;R3.devs=[];R3.loot=[];const M=R3.mats;
+ // only what changed is rebuilt: each device and loot item keeps its own group
+ const item=(key,ref,build)=>{let c=old.get(key);if(c&&c.ref===ref)old.delete(key);else{const G3=new THREE.Group();const a=R3.devs.length,b=R3.loot.length;build(G3);r3Outline(G3);c={ref,grp:G3,devs:R3.devs.splice(a),loot:R3.loot.splice(b)};R3.devG.add(G3)}next.set(key,c);R3.devs.push(...c.devs);R3.loot.push(...c.loot)};
+ for(const d of ST.devices)item(d.type+d.i+(d.o||'')+(d.lv||'')+(d.type==='laser'?'b'+laserBeam(d.x,d.y,d.o||autoOrient(d.x,d.y)).length:'')+(d.type==='steel'?'w'+G[idx(d.x,d.y-1)]:''),d,G3=>{const x=d.x+.5,z=d.y+.5;
   if(d.type==='camera'){const pole=new THREE.Mesh(new THREE.CylinderGeometry(.035,.05,1.5,10),M.dark);pole.position.set(x,.75,z);pole.castShadow=true;G3.add(pole);
    const head=new THREE.Group();head.position.set(x,1.55,z);G3.add(head);const body=new THREE.Mesh(r3Block(-.2,-.1,.44,.2,.2,.07,.03),M.dev);body.position.y=-.1;body.castShadow=true;head.add(body);
    const lens=new THREE.Mesh(new THREE.CylinderGeometry(.06,.07,.06,16),M.dark);lens.rotation.z=Math.PI/2;lens.position.set(.25,0,0);head.add(lens);const led=new THREE.Mesh(new THREE.SphereGeometry(.03,8,6),M.led);led.position.set(.12,.12,.06);head.add(led);
-   const cone=new THREE.Mesh(new THREE.ConeGeometry(Math.tan(CAM.fov/2)*CAM.range*.9,CAM.range,32,1,true),M.cone);cone.rotation.z=Math.PI/2;cone.position.set(CAM.range/2+.25,0,0);const tilt=new THREE.Group();tilt.rotation.z=-.2;tilt.add(cone);head.add(tilt);
-   const sl=new THREE.SpotLight('#a8ecff',30,CAM.range+1.5,CAM.fov/2,.55,1.2);sl.position.set(.25,0,0);const tg=new THREE.Object3D();tg.position.set(4,-1.55,0);head.add(tg);sl.target=tg;head.add(sl);
+   const cone=r3FanMesh(M.cone);G3.add(cone);
+   const sl=new THREE.SpotLight('#a8ecff',30,CAM.range+1.5,CAM.fov/2,.55,1.2);sl.position.set(.25,0,0);const tg=new THREE.Object3D();tg.position.set(4,-1.55,0);head.add(tg);sl.target=tg;if(R3.q==='high')head.add(sl);
    R3.devs.push({d,cam:true,head,light:sl,cone,led})}
   else if(d.type==='light'){const post=new THREE.Mesh(new THREE.CylinderGeometry(.04,.07,1.7,10),M.dark);post.position.set(x,.85,z);post.castShadow=true;G3.add(post);const lamp=new THREE.Mesh(new THREE.SphereGeometry(.13,16,12),new THREE.MeshBasicMaterial({color:'#fff6cc'}));lamp.position.set(x,1.72,z);G3.add(lamp);
-   const pl=new THREE.PointLight('#ffefb8',24,8,1.5);pl.position.set(x,1.7,z);if(R3.q==='high'){pl.castShadow=true;pl.shadow.mapSize.set(512,512);pl.shadow.bias=-.002}G3.add(pl);const gl=r3Sprite('#ffe9a8',2.2,.7);gl.position.set(x,1.72,z);G3.add(gl);R3.devs.push({d,lamp:true,light:pl,glow:gl})}
+   const pl=new THREE.PointLight('#ffefb8',24,8,1.5);pl.position.set(x,1.7,z);if(R3.q==='high'){pl.castShadow=true;pl.shadow.mapSize.set(512,512);pl.shadow.bias=-.002;G3.add(pl)}const gl=r3Sprite('#ffe9a8',2.2,.7);gl.position.set(x,1.72,z);G3.add(gl);R3.devs.push({d,lamp:true,light:pl,glow:gl})}
   else if(d.type==='laser'){const beam=laserBeam(d.x,d.y,d.o||autoOrient(d.x,d.y));if(beam.length){const a=beam[0],b=beam[beam.length-1];const ax=tx(a)+.5,az=ty(a)+.5,bx=tx(b)+.5,bz=ty(b)+.5;const hz=Math.abs(bx-ax)>Math.abs(bz-az);const x0=hz?Math.min(ax,bx)-.5:ax,x1=hz?Math.max(ax,bx)+.5:ax,z0=hz?az:Math.min(az,bz)-.5,z1=hz?az:Math.max(az,bz)+.5;
     const len=Math.hypot(x1-x0,z1-z0);const bm=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,len,6),M.laser.clone());bm.position.set((x0+x1)/2,.42,(z0+z1)/2);bm.rotation.z=Math.PI/2;bm.rotation.y=hz?0:Math.PI/2;G3.add(bm);
     for(const [ex,ez] of [[x0,z0],[x1,z1]]){const em=new THREE.Mesh(new THREE.BoxGeometry(.14,.6,.14),M.dark);em.position.set(ex,.3,ez);em.castShadow=true;G3.add(em);const g=r3Sprite('#ff3b55',.7,.9);g.position.set(ex,.42,ez);G3.add(g)}
@@ -2682,8 +2702,8 @@ function r3BuildDevices(){if(R3.devG){R3.dyn.remove(R3.devG);R3.devG.traverse(x=
    const hd=new THREE.Mesh(new THREE.SphereGeometry(.1,14,10),fur);hd.position.set(.2,.16,0);hd.castShadow=true;dg.add(hd);const sn=new THREE.Mesh(new THREE.SphereGeometry(.05,10,8),M.dark);sn.position.set(.29,.13,0);dg.add(sn);
    for(const s of [-1,1]){const er=new THREE.Mesh(new THREE.ConeGeometry(.04,.09,8),M.dark);er.position.set(.18,.26,s*.06);dg.add(er)}G3.add(dg);R3.devs.push({d,dog:dg})}
   else if(d.type==='speaker'){const b=new THREE.Mesh(r3Block(d.x+.3,d.y+.3,.4,.4,.5,.08,.04),M.dark);b.castShadow=true;G3.add(b);const cone=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,.02,20),M.brass);cone.position.set(x,.52,z);G3.add(cone)}
-  else if(d.type==='steel'){const vert=G[idx(d.x,d.y-1)]===WALL;const b=new THREE.Mesh(r3Block(vert?d.x+.38:d.x+.02,vert?d.y+.02:d.y+.38,vert?.24:.96,vert?.96:.24,1.32,.05,.03),M.steel);b.castShadow=true;b.receiveShadow=true;G3.add(b)}}
- for(const l of ST.loot){const x=l.x+.5,z=l.y+.5;const bl=r3Blob(1.2,.5);bl.position.set(x,.012,z);G3.add(bl);const pl=new THREE.Mesh(r3Block(l.x+.2,l.y+.2,.6,.6,.42,.08,.04),[M.plinthTop,M.plinth]);pl.castShadow=true;pl.receiveShadow=true;G3.add(pl);
+  else if(d.type==='steel'){const vert=G[idx(d.x,d.y-1)]===WALL;const b=new THREE.Mesh(r3Block(vert?d.x+.38:d.x+.02,vert?d.y+.02:d.y+.38,vert?.24:.96,vert?.96:.24,1.32,.05,.03),M.steel);b.castShadow=true;b.receiveShadow=true;G3.add(b)}});
+ for(const l of ST.loot)item('L'+l.id+(l.fake?'f':''),l,G3=>{const x=l.x+.5,z=l.y+.5;const bl=r3Blob(1.2,.5);bl.position.set(x,.012,z);G3.add(bl);const pl=new THREE.Mesh(r3Block(l.x+.2,l.y+.2,.6,.6,.42,.08,.04),[M.plinthTop,M.plinth]);pl.castShadow=true;pl.receiveShadow=true;G3.add(pl);
   const col=l.kind==='gem'?'#c7a6ff':l.kind==='gold'?'#ffd36b':l.kind==='painting'?'#ff9f6b':l.kind==='safe'?'#9fb6cc':l.kind==='statue'?'#d9a36a':l.kind==='cash'?'#8dffb5':'#e8f3ff';
   const mat=R3.look==='sketch'?r3Mat(col):new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:l.kind==='gem'?.8:.25,metalness:l.kind==='gold'||l.kind==='safe'?.8:.2,roughness:l.kind==='gem'?.1:.4});
   let item;if(l.kind==='gem')item=new THREE.Mesh(new THREE.OctahedronGeometry(.17,0),mat);else if(l.kind==='gold'){item=new THREE.Group();for(const [ox,oy,oz] of [[-.09,0,-.05],[.09,0,-.05],[0,0,.07],[0,.08,0]]){const b=new THREE.Mesh(new THREE.BoxGeometry(.16,.07,.09),mat);b.position.set(ox,oy,oz);item.add(b)}}
@@ -2694,11 +2714,11 @@ function r3BuildDevices(){if(R3.devG){R3.dyn.remove(R3.devG);R3.devG.traverse(x=
   const wrap=new THREE.Group();wrap.add(item);wrap.position.set(x,.62,z);wrap.traverse(m=>{if(m.isMesh)m.castShadow=true});G3.add(wrap);
   const gl=r3Sprite(col,l.kind==='gem'?1.8:1.1,l.kind==='gem'?.75:.4);gl.position.set(x,.66,z);G3.add(gl);
   const drop=new THREE.Mesh(new THREE.SphereGeometry(.15,12,10),new THREE.MeshStandardMaterial({color:'#ffd36b',emissive:'#ffb000',emissiveIntensity:.6}));drop.visible=false;G3.add(drop);
-  R3.loot.push({l,item:wrap,y0:.62,glow:gl,drop})}
- r3Outline(G3)}
+  R3.loot.push({l,item:wrap,y0:.62,glow:gl,drop})});
+ for(const c of old.values()){R3.devG.remove(c.grp);disp(c.grp)}}
 function r3Pick(cx,cy){const r=R3.gl.getBoundingClientRect();const v=new THREE.Vector2((cx-r.left)/r.width*2-1,-((cy-r.top)/r.height)*2+1);R3.ray.setFromCamera(v,R3.cam);const p=new THREE.Vector3();if(!R3.ray.ray.intersectPlane(R3.plane,p))return null;return [p.x,p.z]}
 function r3Proj(x,y,z){const v=new THREE.Vector3(x,y,z).project(R3.cam);return [(v.x+1)/2*R3.ov.width,(1-v.y)/2*R3.ov.height]}
-function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;
+function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;if(!R3.warm){R3.warm=true;r3Prewarm()}
  // camera: framed building, eases toward the action in slow-mo, shakes on impact
  const f=R3.fit,cam=R3.cam;const z=FX.zoom||1;const [fx,fy]=FX.focus||[W/2,H/2];const k=clamp((z-1)/.35,0,1);
  let tx_=lerp(f.tgt.x,fx,k*.8),tz_=lerp(f.tgt.z,fy,k*.8),d=f.d/(1+k*.6),el=f.el;const sh=FX.shake>0?FX.shake*.06:0;
