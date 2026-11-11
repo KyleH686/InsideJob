@@ -448,12 +448,13 @@ body[data-theme=sketch] #coach{background:#fff8d6;color:#2f2c27;border:2px solid
 #coachDot{position:fixed;z-index:43;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:3px solid #ffd36b;pointer-events:none;display:none;animation:cdot 1.2s ease-out infinite}
 @keyframes cdot{from{transform:scale(.5);opacity:1}to{transform:scale(1.6);opacity:0}}
 #homeBtn{border:1px solid color-mix(in srgb,var(--line) 50%,transparent);background:transparent;padding:4px 9px;font-size:13px}
+#watch{position:absolute;left:10px;top:10px;z-index:4;display:none;gap:6px;align-items:center;min-height:36px}#watch b{opacity:.6}.crew.wable{cursor:pointer}.crew.won{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}.crew.wable .dot{font-size:13px}
 #cv3,#cvo{position:absolute;pointer-events:none;display:none;z-index:1}
 body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;left:0;top:0;width:100%!important;height:100%!important}
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v26 · sound by Kenney, characters by KayKit (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v27 · sound by Kenney, characters by KayKit (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -461,7 +462,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
   <button id="homeBtn" title="Menu (Esc)">☰</button><button id="fsBtn" title="Full screen (F)">⛶</button><button id="mute" title="Sound (M)">♪ on</button>
  </header>
  <main>
-  <div id="toasts"></div><canvas id="loupe" width="300" height="300"></canvas><div id="stage"><canvas id="cv"></canvas><div id="hint"></div><div id="abil"></div><div id="replayBar"><span id="rpLbl">REPLAY</span><div class="bar"><i id="rpBar"></i></div><button class="small on" data-r="0">Auto</button><button class="small" data-r="2">2×</button><button class="small" data-r="4">4×</button><button class="small" data-r="8">8×</button><button class="small" id="rpSkip">Skip ▸▸</button></div><div id="rpCap"></div><div id="overlay"><div id="sheet"></div></div></div>
+  <div id="toasts"></div><canvas id="loupe" width="300" height="300"></canvas><div id="stage"><canvas id="cv"></canvas><div id="hint"></div><button id="watch" class="small"></button><div id="abil"></div><div id="replayBar"><span id="rpLbl">REPLAY</span><div class="bar"><i id="rpBar"></i></div><button class="small on" data-r="0">Auto</button><button class="small" data-r="2">2×</button><button class="small" data-r="4">4×</button><button class="small" data-r="8">8×</button><button class="small" id="rpSkip">Skip ▸▸</button></div><div id="rpCap"></div><div id="overlay"><div id="sheet"></div></div></div>
   <aside id="side">
    <section class="card"><div class="stats">
     <div class="stat"><div class="k">Night</div><div class="v" id="sNight">1 / 5</div></div>
@@ -1042,7 +1043,7 @@ $('hint').addEventListener('pointerdown',()=>{hintTimer=0;$('hint').classList.re
 function hint(s,dur=7){const h=$('hint');if(TOUCH)s=s.replace(/ \(or press \d\)/g,'').replace(/drag to aim/g,'hold to zoom in, let go to place').replace(/[Rr]ight-click/g,'tap the guard').replace(/press Enter or /g,'').replace(/\bclick/g,'tap').replace(/\bClick/g,'Tap');h.textContent=s;h.classList.add('show');hintTimer=dur}
 
 // ================================================================ HEIST SIM
-function startNight(){setTimeout(()=>{if(ST.ev&&EVENTS[ST.ev])tip('ev-'+ST.ev,EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name,EVENTS[ST.ev].desc)},1500);setMTab('crew');$('hint').classList.remove('show');hintTimer=0;setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2-1,(ST.daily?'DAILY JOB':dayName(ST.night).toUpperCase()+' NIGHT'),S.accent)},150);ST.dark=false;for(const d of ST.devices)d.work=0;ST.pc=(ST.night>=4||ST.endless||ST.daily)?{at:28+Math.random()*28,dur:ST.perks.includes('gen')?3:8,t:0,on:false,done:false}:null;if(ST.phase==='plan')saveGame();
+function startNight(){if(R3.on)setTimeout(()=>{if(ST.phase==='heist'&&R3.on)tip('watch','Watch them up close','Tap a thief or a guard, or a name in the Crew list, and the camera follows them. Tap again to pull back.')},6000);setTimeout(()=>{if(ST.ev&&EVENTS[ST.ev])tip('ev-'+ST.ev,EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name,EVENTS[ST.ev].desc)},1500);setMTab('crew');$('hint').classList.remove('show');hintTimer=0;setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2-1,(ST.daily?'DAILY JOB':dayName(ST.night).toUpperCase()+' NIGHT'),S.accent)},150);ST.dark=false;for(const d of ST.devices)d.work=0;ST.pc=(ST.night>=4||ST.endless||ST.daily)?{at:28+Math.random()*28,dur:ST.perks.includes('gen')?3:8,t:0,on:false,done:false}:null;if(ST.phase==='plan')saveGame();
  if(ST.phase!=='plan')return;
  syncDecoys();ST.danger=new Float32Array(W*H);const plans=planNight();ST.thieves=[];ST.smokes=[];ST.slams=[];ST.rec=[];ST.recEv=[];ST.recT=0;ST.vaultOpen=false;ST.alarmT=0;ST.abil={slam:ST.mods.slam,siren:ST.mods.siren};ST.abTool=null;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false;d.armed=0;d.hit=0;d.lock=null;d.lockT=0}
@@ -2229,6 +2230,7 @@ function snapTile(type,i,pt){if(i<0||canPlace(type,i))return i;let best=-1,bd=9;
  for(let y=y0-2;y<=y0+2;y++)for(let x=x0-2;x<=x0+2;x++){if(!inb(x,y))continue;const j=idx(x,y);if(!canPlace(type,j))continue;const d=Math.hypot(x+.5-px,y+.5-py);if(d<1.6&&d<bd){bd=d;best=j}}return best<0?i:best}
 function handlePress(p,e,touch){if(p.i<0)return;hoverTile=p.i;
  if(ST.phase==='heist'&&ST.abTool==='slam'){trySlam(p.i);return}
+ if(ST.phase==='heist'&&R3.on){const w=r3WatchAt(p,touch);if(w){setWatch(w);return}if(R3.watch&&!deviceAt(p.i)){setWatch(null);return}}
  if(ST.phase!=='plan'){let d=deviceAt(p.i);if(!d&&touch){for(const o of ST.devices)if(o.type==='speaker'&&Math.hypot(o.x+.5-p.x,o.y+.5-p.y)<1.3)d=o}if(d&&d.type==='speaker'&&ST.phase==='heist')fireSpeaker(d);ST.sel=d||null;refreshUI();return}
  if(ST.routeFor){const g=ST.routeFor;if(p.i===g.i){finishRoute();return}if(passable(p.i)&&G[p.i]!==OUT&&G[p.i]!==ENTRY&&g.route.length<6){g.route.push(p.i);devicesChanged();AU.click();refreshUI()}if(g.route.length>=6)finishRoute();return}
  if(ST.tool){const i=snapTile(ST.tool,p.i,[p.x,p.y]);
@@ -2317,9 +2319,10 @@ function renderCrew(){
   night.crew.forEach(([type,t],k)=>{const T=TYPES[type],p=plans&&plans[k];const col=S.crew[k%5];const cm=T.boss?{name:'The Fox'}:crewMember(k);
    html+=`<div class="crew"><div class="dot" style="background:${col}">${k+1}</div><div><b>${cm.name}</b>${cm.back?'<span class="tag" style="color:var(--danger);border-color:var(--danger)">BACK</span>':''}${!T.boss&&cm.gang&&GANGS[cm.gang]&&GANGS[cm.gang].leader===cm.name?'<span class="tag" style="color:var(--accent);border-color:var(--accent)">LEADER £200</span>':''}<span class="tag">${T.tag}</span> <span style="font-size:12px;opacity:.7">${T.name}, arrives ${fmtT(t)}</span><div class="r">${T.desc}</div>${p?`<div class="r">Likely: <b style="color:var(--ink)">${p.entry.name}</b> → ${p.loot.name} (${money(p.loot.v)}). In view ~${p.exposure.toFixed(1)}s${p.trips?', '+p.trips+' laser'+(p.trips>1?'s':''):''}.</div>`:''}</div></div>`})}
  else{ST.thieves.forEach((th,k)=>{const col=th.col;const ti=['in','out','flee'].includes(th.state)?thiefIntent(th):'';const st=ti&&!/^after |^getting out|^bolting/.test(ti)?ti:th.state==='wait'?'not arrived':th.state==='in'?'heading for '+(th.target?th.target.name:'?'):th.state==='out'?'leaving with '+(th.loot?th.loot.name:'?'):th.state==='flee'?'bolting':th.outcome||th.state;
-   html+=`<div class="crew ${['caught','escaped','gone'].includes(th.state)?'out':''}"><div class="dot" style="background:${col}">${k+1}</div><div><b>${th.name}</b>${th.leader?'<span class="tag" style="color:var(--accent);border-color:var(--accent)">LEADER</span>':''}${th.back?'<span class="tag" style="color:var(--danger);border-color:var(--danger)">BACK</span>':''}<span class="tag">${th.T.tag}</span><div class="r">${st}${th.charges&&th.counter&&!th.outcome?' · '+th.charges+' '+th.T.tag.toLowerCase()+' left':''}</div></div></div>`})}
+   const wo=r3WatchOk(th);html+=`<div class="crew ${['caught','escaped','gone'].includes(th.state)?'out':''}${wo?' wable':''}${R3.watch===th?' won':''}" ${wo?'data-w="'+k+'"':''}><div class="dot" style="background:${col}">${wo?'👁':k+1}</div><div><b>${th.name}</b>${th.leader?'<span class="tag" style="color:var(--accent);border-color:var(--accent)">LEADER</span>':''}${th.back?'<span class="tag" style="color:var(--danger);border-color:var(--danger)">BACK</span>':''}<span class="tag">${th.T.tag}</span><div class="r">${st}${th.charges&&th.counter&&!th.outcome?' · '+th.charges+' '+th.T.tag.toLowerCase()+' left':''}</div></div></div>`})}
  $('crew').innerHTML=html;
 }
+$('watch').addEventListener('click',()=>setWatch(null));$('crew').addEventListener('pointerdown',e=>{const r=e.target.closest('[data-w]');if(r&&R3.on)setWatch(ST.thieves[+r.dataset.w])});
 let crewTick=0;
 function setTheme(k){if(!STYLES[k])return;theme=k;S=STYLES[k];try{const ts=new Set(JSON.parse(localStorage.getItem('ij-styles')||'[]'));ts.add(k);localStorage.setItem('ij-styles',JSON.stringify([...ts]));if(ts.size>=2&&typeof ACHS!=='undefined')ach('style')}catch(e){}if(ST.phase==='heist'&&AU.amb&&AU.amb.rain!==(k==='noir'))AU.ambOn();document.body.dataset.theme=k;for(const th of ST.thieves)th.col=S.crew[th.id%5];redrawStatic();refreshUI();_rcKey='';try{localStorage.setItem('ij-theme',k)}catch(e){}
  if(document.fonts)document.fonts.ready.then(()=>redrawStatic())}
@@ -2485,8 +2488,33 @@ function r3Walls(){if(!R3.ready)return;const key=SITE+'|'+G.join('');if(R3.wkey=
   if(SK)r3Outline(grp);R3.world.add(grp);R3.doors.push({d,piv,grp})}
  // a soft pool of lamplight on the floor of every room
  R3.pools=[];R3.poolGeo=R3.poolGeo||new THREE.PlaneGeometry(1,1);for(const [k,rm] of ROOMS.entries()){const m=new THREE.Mesh(R3.poolGeo.clone(),new THREE.MeshBasicMaterial({map:r3Glow(),color:SK?'#f4c95d':k%3===1?'#9fd0ff':'#ffd9a0',transparent:true,opacity:0,blending:SK?THREE.NormalBlending:THREE.AdditiveBlending,depthWrite:false}));m.rotation.x=-Math.PI/2;const sz=8+((k*37)%5);m.scale.set(sz,sz*.8,1);m.position.set(rm.x,.03+k*.001,rm.y+.6);m.renderOrder=2;R3.world.add(m);R3.pools.push(m)}
+ r3Outside();
  r3Fit()}
 function r3PanelGeo(){if(R3.pg)return R3.pg;const g=new THREE.BoxGeometry(.9,1.3,.07);g.translate(.45,.66,0);R3.pg=g;return g}
+// ---------- v27: watch cam (follow one person up close in 3D) and the street outside
+function r3WatchOk(o){if(!o||!R3.on||ST.phase!=='heist'||o.x==null)return false;if(ST.guards.includes(o))return true;return ST.thieves.includes(o)&&!['wait','gone','escaped'].includes(o.state)&&!(o.state==='caught'&&o.caughtT>2.2)}
+function watchPill(){const b=$('watch');if(!b)return;const w=R3.watch;b.style.display=w?'flex':'none';if(w)b.innerHTML='<span>👁</span> Watching '+(w.name||'the guard')+' <b>✕</b>'}
+function setWatch(o){if(o&&!r3WatchOk(o))o=null;R3.watch=o&&R3.watch!==o?o:null;if(R3.watch){AU.click();hap(10)}watchPill();renderCrew()}
+function r3WatchAt(p,touch){let best=null,bd=touch?1.5:1;for(const o of [...ST.thieves,...ST.guards]){if(!r3WatchOk(o))continue;const d=Math.hypot(o.x-p.x,o.y-p.y);if(d<bd){bd=d;best=o}}return best}
+function r3Outside(){const SK=R3.look==='sketch',M=r3Mat,g=new THREE.Group();let sd=0;for(const ch of SITE)sd=(sd*31+ch.charCodeAt(0))>>>0;const rnd=()=>{sd=(sd*1664525+1013904223)>>>0;return sd/4294967296};
+ const mesh=(geo,mat,par,x,y,z)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x||0,y||0,z||0);m.castShadow=true;par.add(m);return m};
+ const leaf=[M(SK?'#8fb573':'#1f6a55',{e:.25}),M(SK?'#a4c586':'#2a8163',{e:.25})],trunk=M(SK?'#8a6a4a':'#3a2c2a'),post=M(SK?'#4a4640':'#1a2338',{e:.2}),hedge=M(SK?'#7da566':'#1c5a4c',{e:.2});
+ const doors=ENTRIES.filter(e=>!e.roof&&e.tiles.length).map(e=>e.tiles[0]);const clear=(x,z)=>doors.every(([ex,ey])=>Math.hypot(ex+.5-x,ey+.5-z)>4.2);
+ const tree=(x,z)=>{const t=new THREE.Group(),s=.8+rnd()*.5;mesh(new THREE.CylinderGeometry(.09,.13,.7,7),trunk,t,0,.35,0);const lf=leaf[rnd()<.5?0:1];if(rnd()<.5){mesh(new THREE.ConeGeometry(.62,1.25,9),lf,t,0,1.2,0);mesh(new THREE.ConeGeometry(.45,.95,9),lf,t,0,1.85,0)}else{mesh(new THREE.IcosahedronGeometry(.68,1),lf,t,0,1.25,0);mesh(new THREE.IcosahedronGeometry(.45,1),lf,t,.3,1.75,.15)}t.scale.setScalar(s);t.position.set(x,0,z);t.rotation.y=rnd()*6;g.add(t)};
+ const lamp=(x,z)=>{const t=new THREE.Group();mesh(new THREE.CylinderGeometry(.045,.07,2.1,8),post,t,0,1.05,0);mesh(new THREE.BoxGeometry(.3,.14,.3),post,t,0,2.15,0);mesh(new THREE.SphereGeometry(.13,10,8),new THREE.MeshBasicMaterial({color:SK?'#fff0b8':'#ffe2a0'}),t,0,2.05,0).castShadow=false;
+  if(!SK){const sp=r3Sprite('#ffd98a',2.6,.5);sp.position.set(0,2.05,0);t.add(sp)}const pool=new THREE.Mesh(new THREE.PlaneGeometry(5,5),new THREE.MeshBasicMaterial({map:r3Glow(),color:SK?'#f4c95d':'#ffd9a0',transparent:true,opacity:SK?.35:.3,blending:SK?THREE.NormalBlending:THREE.AdditiveBlending,depthWrite:false}));pool.rotation.x=-Math.PI/2;pool.position.y=.02;t.add(pool);t.position.set(x,0,z);g.add(t)};
+ // the crew's van waits outside the first way in
+ const e0=ENTRIES.find(e=>!e.roof&&e.tiles.length);if(e0){const [ex,ey]=e0.tiles[0];const dB=H-1-ey,dT=ey,dL=ex,dR=W-1-ex,mn=Math.min(dB,dT,dL,dR);const van=new THREE.Group();const body=M(SK?'#e9e2cf':'#c9d3e6',{e:.12}),dark=M(SK?'#3a3631':'#0d1320'),glass=M(SK?'#9cc3d6':'#5fb6e8',{e:.4});
+  mesh(new THREE.BoxGeometry(2.1,.95,1.05),body,van,-.25,.78,0);mesh(new THREE.BoxGeometry(.75,.62,1.02),body,van,1.12,.61,0);mesh(new THREE.BoxGeometry(.5,.36,.96),glass,van,1.2,1.0,0);mesh(new THREE.BoxGeometry(2.86,.1,1.07),dark,van,.1,.3,0);
+  for(const [wx,wz] of [[-.85,.5],[-.85,-.5],[1.0,.5],[1.0,-.5]]){const w=mesh(new THREE.CylinderGeometry(.24,.24,.16,14),dark,van,wx,.24,wz);w.rotation.x=Math.PI/2}
+  for(const s of [-1,1]){mesh(new THREE.SphereGeometry(.07,8,6),new THREE.MeshBasicMaterial({color:'#fff3c4'}),van,1.5,.52,s*.34).castShadow=false}
+  const stripe=mesh(new THREE.BoxGeometry(1.5,.16,1.07),M(SK?'#d9553f':'#e8742a',{e:.3}),van,-.3,.78,0);stripe.castShadow=false;
+  const off=2.6;if(mn===dB)van.position.set(ex+3.2,0,H+off-.6);else if(mn===dT){van.position.set(ex+3.2,0,-off+.6)}else if(mn===dL){van.position.set(-off+.4,0,ey+3.2);van.rotation.y=Math.PI/2}else{van.position.set(W+off-.4,0,ey+3.2);van.rotation.y=Math.PI/2}
+  g.add(van);R3.van=van}else R3.van=null;
+ // a ring of trees, hedges and street lamps just outside the plan
+ const lo=R3.q!=='high',st=lo?5.6:3.4;const ring=[];for(let x=-1;x<=W+1;x+=st){ring.push([x,-1.9,0]);ring.push([x,H+2.2,0])}for(let z=2;z<H;z+=st){ring.push([-1.9,z,1]);ring.push([W+1.9,z,1])}
+ ring.forEach(([x,z,v],k)=>{const jx=(rnd()-.5)*.9,jz=(rnd()-.5)*.7;if(!clear(x,z)||(R3.van&&Math.hypot(R3.van.position.x-x,R3.van.position.z-z)<3.4)){rnd();return}const r=k%4;if(r===0)lamp(x+(v?0:jx),z+(v?jz:0));else if(r===2&&rnd()<.6){const h=mesh(new THREE.BoxGeometry(v?.7:2.2,.55,v?2.2:.7),hedge,g,x,.275,z);h.receiveShadow=true}else tree(x+jx,z+jz)});
+ if(lo)g.traverse(m=>{m.castShadow=false});if(SK&&!lo)r3Outline(g,.03);else if(SK&&R3.van)r3Outline(R3.van,.03);R3.world.add(g)}
 // ---------- v26: real character models (KayKit Adventurers by Kay Lousberg, CC0) with baked animations
 const CHAR_DATA=/*__CHARS__*/{};const KIT_H=1.15;
 function r3LoadKit(){if(R3.kitReq||!window.R3X||!CHAR_DATA.thief)return;R3.kitReq=true;const L=new R3X.GLTFLoader();
@@ -2627,6 +2655,7 @@ function r3Sync(dt){const used=new Set();const P=R3.people;
  for(const it of R3.devs){const d=it.d;if(it.dog){const up=d.bark>0;it.dog.rotation.y=up?-(d.face||0):.6;it.dog.position.y=.1+(up?.12+Math.abs(Math.sin(R3.t*14))*.1:Math.sin(R3.t*1.6)*.008);it.dog.scale.y=up?1.15:.8;continue}if(it.cam){const a=d.cur??d.ang;it.head.rotation.y=-a;const on=!(d.looped>0)&&!ST.dark;it.light.intensity=on?LP.cam:0;it.cone.visible=on;it.led.material=on&&Math.sin(ST.t*6)>-.2?R3.mats.led:R3.mats.dark}
   if(it.lamp){const on=!ST.dark;it.light.intensity=on?LP.lamp:0;it.glow.visible=on}
   if(it.beam){it.beam.visible=!(d.broken)&&!ST.dark;it.beam.material.opacity=.7+.3*Math.sin(ST.t*20)}}
+ if(R3.van)R3.van.visible=ST.phase!=='plan';
  for(const it of R3.loot){const l=it.l;const show=!l.stolen&&!l.carrier;it.item.visible=show&&!l.dropped;if(it.item.visible){it.item.rotation.y+=dt*.6;it.item.position.y=it.y0+Math.sin(ST.t*2+l.x)*.03}it.glow.visible=it.item.visible;
   if(l.dropped&&!l.carrier){it.drop.visible=true;it.drop.position.set(tx(l.i)+.5,.14,ty(l.i)+.5)}else it.drop.visible=false}
  for(const D of R3.doors){if(D.d.vault){D.piv.position.y=ST.vaultOpen?-1.5:0;continue}const o=DOOROPEN[D.d.i]||{v:0,side:1};const blocked=isSlam(D.d.i)||ST.devices.some(v=>v.type==='steel'&&v.i===D.d.i);D.piv.visible=!blocked;D.piv.rotation.y=-(o.v*Math.PI/2*.92*o.side)}
@@ -2674,8 +2703,11 @@ function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;
  const f=R3.fit,cam=R3.cam;const z=FX.zoom||1;const [fx,fy]=FX.focus||[W/2,H/2];const k=clamp((z-1)/.35,0,1);
  let tx_=lerp(f.tgt.x,fx,k*.8),tz_=lerp(f.tgt.z,fy,k*.8),d=f.d/(1+k*.6),el=f.el;const sh=FX.shake>0?FX.shake*.06:0;
  if(ST.phase==='replay'){const p=rpFocus()||[f.tgt.x,f.tgt.z];const C=R3.cine||(R3.cine={x:p[0],z:p[1],d:f.d*.7});const a=Math.min(1,dt*1.6);C.x=lerp(C.x,p[0],a);C.z=lerp(C.z,p[1],a);C.d=lerp(C.d,f.d*(FX.slow>0?.32:.48),Math.min(1,dt*1.2));tx_=C.x;tz_=C.z;d=C.d;el=36*Math.PI/180}else R3.cine=null;
+ let ly=.4*(ST.phase==='replay');if(ST.phase!=='replay'){const w=r3WatchOk(R3.watch)?R3.watch:null;if(R3.watch&&!w){R3.watch=null;watchPill();renderCrew()}
+  if(w||R3.wc){const C=R3.wc||(R3.wc={x:tx_,z:tz_,d,el});const gx=w?w.x:tx_,gz=w?w.y:tz_,gd=w?f.d*.27*clamp(R3.gl.clientWidth/900,.55,1):d,ge=w?42*Math.PI/180:el;const a=Math.min(1,dt*(w?3.2:2.6)),b=Math.min(1,dt*2.4);C.x=lerp(C.x,gx,a);C.z=lerp(C.z,gz,a);C.d=lerp(C.d,gd,b);C.el=lerp(C.el,ge,b);
+   if(!w&&Math.abs(C.d-gd)<f.d*.01)R3.wc=null;else{tx_=C.x;tz_=C.z;d=C.d;el=C.el;ly=.5*clamp((f.d-C.d)/(f.d*.74),0,1)}}}
  const orb=ST.phase==='replay'?Math.sin(R3.t*.15)*.25:0;
- cam.position.set(tx_+Math.sin(orb)*Math.cos(el)*d+(Math.random()-.5)*sh,Math.sin(el)*d+(Math.random()-.5)*sh,tz_+Math.cos(orb)*Math.cos(el)*d);cam.lookAt(tx_,.4*(ST.phase==='replay'),tz_);
+ cam.position.set(tx_+Math.sin(orb)*Math.cos(el)*d+(Math.random()-.5)*sh,Math.sin(el)*d+(Math.random()-.5)*sh,tz_+Math.cos(orb)*Math.cos(el)*d);cam.lookAt(tx_,ly,tz_);
  // power cut: the building goes dark, emergency red
  const dark=ST.dark&&ST.phase==='heist',plan=ST.phase==='plan'||ST.phase==='report';const LP=R3.LP,li=dark?0:plan?1:2;R3.hemi.intensity=lerp(R3.hemi.intensity,LP.hemi[li],.08);R3.hemi.color.set(dark?LP.skyDark:LP.sky);R3.moon.intensity=lerp(R3.moon.intensity,LP.sunI[li],.08);
  if(R3.pools)for(const [k,m] of R3.pools.entries()){const tgt=dark?0:plan?LP.pool[0]:LP.pool[1]*(1+.15*Math.sin(R3.t*1.3+k*2.1));m.material.opacity=lerp(m.material.opacity,tgt,.06)}
@@ -2685,8 +2717,9 @@ function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;
  const pa=R3.dust.geometry.attributes.position;for(let i=0;i<pa.count;i++){let y=pa.getY(i)+dt*.05*Math.sin(i+R3.t*.3);let x=pa.getX(i)+dt*.04*Math.cos(i*1.7+R3.t*.2);if(y>2.9)y=.2;pa.setXY(i,x,y)}pa.needsUpdate=true;
  R3.tex.needsUpdate=true;R3.r.render(R3.sc,cam);
  // labels on top, anchored to the 3D positions
+ if(!R3.wc&&ST.phase!=='replay'&&!(FX.zoom>1.01)){const a=r3Proj(W/2,0,H/2),b=r3Proj(W/2+1,0,H/2);R3.s0=Math.hypot(b[0]-a[0],b[1]-a[1])}
  const o=R3.octx;o.setTransform(1,0,0,1,0,0);o.clearRect(0,0,R3.ov.width,R3.ov.height);
- const local=(x,y,h)=>{const a=r3Proj(x,h||0,y),b=r3Proj(x+1,h||0,y);const s=Math.hypot(b[0]-a[0],b[1]-a[1]);o.setTransform(s,0,0,s,a[0]-x*s,a[1]-y*s)};
+ const local=(x,y,h)=>{const a=r3Proj(x,h||0,y),b=r3Proj(x+1,h||0,y);let s=Math.hypot(b[0]-a[0],b[1]-a[1]);if(R3.wc&&R3.s0)s=R3.s0+(s-R3.s0)*.3;o.setTransform(s,0,0,s,a[0]-x*s,a[1]-y*s)};
  for(const th of ST.thieves){if(th.state==='wait'||th.state==='gone'||th.state==='escaped'||th.x==null)continue;local(th.x,th.y,.55);R3.labels=true;drawThief(o,th);R3.labels=false}
  for(const g of ST.guards){const p=gPers(g);if(p==='steady')continue;local(g.x,g.y,1.5);txt(o,g.dozing>0?'😴':PERS[p].ic,g.x,g.y-.2,.42,'#fff',{font:'Nunito'})}
  for(const fl of FX.floats){local(fl.x,fl.y,1.2);txt(o,fl.s,fl.x,fl.y-fl.t*.6,fl.big?.55:.36,fl.col,{font:S.font,alpha:fl.t<1.2?1:Math.max(0,1-(fl.t-1.2)/.6),weight:'700',stroke:['#000',.1]})}
