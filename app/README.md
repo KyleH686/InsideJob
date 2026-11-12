@@ -18,14 +18,24 @@ With a free Apple ID the app works for 7 days before it needs running from Xcode
 ## What is in here
 
 - `ios/App/App.xcodeproj`: the Xcode project.
-- `ios/App/App/public/`: the game (`index.html`) and its fonts. This is what the app shows.
+- `ios/App/App/public/`: the loader (`index.html`), the game (`game.html`), `version.json` and the fonts. This is what the app shows.
 - `ios/App/App/Assets.xcassets/`: app icon and launch screen image.
 - `ios/App/App/Info.plist`: app name, orientations, hidden status bar.
 - `capacitor.config.json`: Capacitor settings (copied into the Xcode project).
 
 ## Updating the game inside the app
 
-Each new version of the game replaces `ios/App/App/public/index.html`. Pull the repo and press Run again.
+The app updates itself. Each time it opens it asks GitHub Pages whether a newer version of the game is live. If there is one it downloads it (about 6.5 MB, a few seconds), keeps it on the phone and starts it. Game saves are kept.
+
+- No connection, a slow connection or a damaged download: the app starts the newest copy it already has. It always works offline.
+- An update that fails to start twice is dropped and the app goes back to the copy it was built with.
+- **Skip** on the update screen starts the copy already on the phone.
+
+You only need to rebuild from Xcode when the app itself changes (icon, name, settings, this loader), or, with a free Apple ID, every 7 days when the signing runs out.
+
+How it works: `public/index.html` is a small loader, `public/game.html` is the game built into the app, and `public/version.json` is the version, size and checksum. The same folder is served at `https://kyleh686.github.io/InsideJob/app/ios/App/App/public/`, which is where installed apps look. Updates only change the game page. A future version that needs new files inside the app would raise `shell` in `version.json`, and older apps would then wait for a rebuild.
+
+Note for the App Store: Apple allows updating web content this way as long as the app's purpose does not change.
 
 ## Before an App Store release
 
@@ -35,4 +45,4 @@ Each new version of the game replaces `ios/App/App/public/index.html`. Pull the 
 
 ## Not yet tested
 
-This project was generated and checked on Linux. It has not been built in Xcode yet, so the first build on a Mac is the real test.
+This project was generated and checked on Linux. The first Xcode build worked and ran on an iPhone. The self-updating loader was tested in Chromium against a stand-in server (offline, slow, damaged and broken updates) but not yet on a real iPhone.
