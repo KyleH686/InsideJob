@@ -23,4 +23,12 @@ i=re.sub(r'<link rel="preconnect"[^>]*>\n','',s)
 i,n=re.subn(r'<link href="https://fonts.googleapis.com[^>]*>','<link rel="stylesheet" href="fonts/fonts.css">',i);assert n==1
 i=i.replace('<meta name="viewport" content="width=device-width,initial-scale=1">','<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">\n<script>window.IJ_APP=true</script>',1)
 i=i.replace('</head>','<style>:root{--sat:env(safe-area-inset-top);--sar:env(safe-area-inset-right);--sab:env(safe-area-inset-bottom);--sal:env(safe-area-inset-left)}\nbody{padding:var(--sat) var(--sar) var(--sab) var(--sal)}#app{height:100%!important}</style>\n</head>',1)
-os.makedirs('ios',exist_ok=True);open('ios/index.html','w').write(i)
+# The app opens index.html, a small loader. It starts game.html, or a newer copy it fetched from GitHub Pages
+# (this same folder is served there). version.json tells installed apps which version is live.
+import hashlib
+ver=int(re.search(r'Inside Job · v(\d+) · ',s).group(1));ib=i.encode('utf-8')
+os.makedirs('ios',exist_ok=True);open('ios/game.html','wb').write(ib)
+ld=open('ios/loader.html').read();assert '/*__VER__*/0' in ld
+open('ios/index.html','w').write(ld.replace('/*__VER__*/0',str(ver)))
+open('ios/version.json','w').write(json.dumps({'v':ver,'size':len(ib),'sha256':hashlib.sha256(ib).hexdigest(),'shell':1})+'\n')
+print('ios v%d'%ver,len(ib)//1024,'KB')

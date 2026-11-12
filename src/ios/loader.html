@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Inside Job</title>
+<style>
+html,body{margin:0;height:100%;background:#0c2f57;color:#dbe9ff;font:16px -apple-system,system-ui,sans-serif;-webkit-user-select:none;user-select:none}
+#u{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0;transition:opacity .25s}
+#u.on{opacity:1}
+#bar{width:min(240px,60vw);height:6px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}
+#fill{height:100%;width:0;background:#ffd54a;transition:width .15s}
+#skip{font:inherit;color:#dbe9ff;background:none;border:1px solid rgba(255,255,255,.4);border-radius:18px;padding:8px 18px}
+</style>
+</head>
+<body>
+<div id="u"><div id="msg">Checking for updates</div><div id="bar"><div id="fill"></div></div><button id="skip">Skip</button></div>
+<script>
+/* Inside Job app loader.
+   Starts the newest copy of the game it can get: a newer one from the web if there is one,
+   otherwise the last one it downloaded, otherwise the copy built into the app.
+   Any failure (offline, slow, damaged download, update that will not start) falls back to a copy that works. */
+(function(){
+var BUNDLED=/*__VER__*/0, SHELL=1;
+var REMOTE=window.IJ_REMOTE||'https://kyleh686.github.io/InsideJob/app/ios/App/App/public/';
+var CHECK_MS=window.IJ_CHECK_MS||3000, STALL_MS=window.IJ_STALL_MS||12000;
+var $=function(i){return document.getElementById(i)};
+var ls={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+function idb(){return new Promise(function(res,rej){var r=indexedDB.open('ij-live',1);r.onupgradeneeded=function(){r.result.createObjectStore('g')};r.onsuccess=function(){res(r.result)};r.onerror=r.onblocked=function(){rej(r.error)}})}
+function idbGet(){return Promise.race([idbGet0(),new Promise(function(res){setTimeout(function(){res(null)},4000)})])}
+function idbGet0(){return idb().then(function(d){return new Promise(function(res,rej){var q=d.transaction('g').objectStore('g').get('game');q.onsuccess=function(){res(q.result||null)};q.onerror=function(){rej(q.error)}})})}
+function idbPut(v){return idb().then(function(d){return new Promise(function(res,rej){var t=d.transaction('g','readwrite');if(v)t.objectStore('g').put(v,'game');else t.objectStore('g').delete('game');t.oncomplete=function(){res()};t.onerror=t.onabort=function(){rej(t.error)}})})}
+function okHtml(h){return typeof h==='string'&&h.length>200000&&h.indexOf('<!doctype html>')===0&&h.indexOf('IJ_APP')>0&&/<\/html>\s*$/.test(h)}
+function sha(buf){if(!(window.crypto&&crypto.subtle))return Promise.resolve(null);return crypto.subtle.digest('SHA-256',buf).then(function(d){return Array.prototype.map.call(new Uint8Array(d),function(b){return(b<16?'0':'')+b.toString(16)}).join('')})}
+function failed(v){var t=(ls.get('ijx-try')||'').split(':');return +t[0]===v&&+t[1]>=2&&+ls.get('ijx-ok')!==v}
+var skipped=false,ctl=null;
+function check(){ // newest version on the web, or null
+  var c=new AbortController(),t=setTimeout(function(){c.abort()},CHECK_MS);
+  return fetch(REMOTE+'version.json?t='+Date.now(),{cache:'no-store',signal:c.signal}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){clearTimeout(t);return j&&j.v>0&&j.size>0?j:null}).catch(function(){clearTimeout(t);return null})}
+function download(info){
+  clearTimeout(dog);ctl=new AbortController();var stall,bump=function(){clearTimeout(stall);stall=setTimeout(function(){ctl.abort()},STALL_MS)};
+  $('msg').textContent='Updating to v'+info.v;$('u').className='on';bump();
+  return fetch(REMOTE+'game.html?v='+info.v,{cache:'no-store',signal:ctl.signal}).then(function(r){
+    if(!r.ok)throw new Error('http '+r.status);
+    if(!r.body||!r.body.getReader)return r.arrayBuffer();
+    var rd=r.body.getReader(),parts=[],n=0;
+    return (function pump(){return rd.read().then(function(x){if(x.done){var out=new Uint8Array(n),o=0;parts.forEach(function(p){out.set(p,o);o+=p.length});return out.buffer}
+      parts.push(x.value);n+=x.value.length;bump();$('fill').style.width=Math.min(100,100*n/info.size)+'%';return pump()})})()
+  }).then(function(buf){clearTimeout(stall);
+    if(buf.byteLength!==info.size)throw new Error('size');
+    return sha(buf).then(function(h){if(h&&info.sha256&&h!==info.sha256)throw new Error('hash');
+      var html=new TextDecoder('utf-8').decode(buf);if(!okHtml(html))throw new Error('content');return html})
+  }).catch(function(e){clearTimeout(stall);throw e})}
+var started=false;
+function run(html,v,live){
+  if(started)return;started=true;clearTimeout(dog);
+  if(live){var t=(ls.get('ijx-try')||'').split(':');ls.set('ijx-try',v+':'+(+t[0]===v?(+t[1]||0)+1:1))}
+  // the game marks itself as started; a copy that never does is dropped after two tries
+  html=html.replace(/<\/body>\s*<\/html>\s*$/,'<script>(function(){var bad=0;addEventListener("error",function(){bad++});setTimeout(function(){if(!bad&&typeof frame==="function")try{localStorage.setItem("ijx-ok","'+v+'")}catch(e){}},4000)})()<\/script>\n</body>\n</html>');
+  window.IJ_LIVE={v:v,bundled:BUNDLED,live:!!live,ms:Math.round(performance.now())};
+  document.open();document.write(html);document.close()}
+function bundled(){if(started)return;return fetch('game.html').then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(h){run(h,BUNDLED,false)}).catch(function(){if(!started){started=true;location.replace('game.html')}})}
+var dog=setTimeout(function(){if(!ctl)bundled()},CHECK_MS+5000);
+$('skip').onclick=function(){skipped=true;if(ctl)ctl.abort()};
+var show=setTimeout(function(){$('u').className='on'},700);
+idbGet().catch(function(){return null}).then(function(st){
+  if(st&&(!(st.v>BUNDLED)||!okHtml(st.html)||failed(st.v))){if(!failed(st.v))idbPut(null).catch(function(){});st=null}
+  var have=st?st.v:BUNDLED;
+  var start=function(){clearTimeout(show);if(st)run(st.html,st.v,true);else bundled()};
+  return check().then(function(info){
+    if(skipped||!info||!(info.v>have)||(info.shell||1)>SHELL||failed(info.v))return start();
+    return download(info).then(function(html){
+      return idbPut({v:info.v,html:html}).catch(function(){}).then(function(){clearTimeout(show);run(html,info.v,true)})
+    },function(){start()})})
+}).catch(function(){clearTimeout(show);bundled()});
+})();
+</script>
+</body>
+</html>
