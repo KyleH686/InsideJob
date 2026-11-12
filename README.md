@@ -19,4 +19,4 @@ The game works offline after the first visit.
 - `manifest.webmanifest`, `sw.js` and the icons make it installable to the home screen.
 - `src/` holds the source (`src.html`) and the build scripts. `build.py` injects the packed sounds (`sfx.json`, `vo.json`, built by `pack.py` and `gen.py`) into `src.html`.
 
-Sound effects are Kenney CC0. The guard voice uses the piper `en_US-ryan-high` model, which is CC BY-NC-SA, so swap it out before any commercial release. The 3D characters are from the KayKit Adventurers pack by Kay Lousberg (CC0); the trimmed models are in `src/kk/`.
+Sound effects are Kenney CC0. The guard voice uses the piper `en_US-ryan-high` model, which is CC BY-NC-SA, so swap it out before any commercial release. The 3D characters are from the KayKit Adventurers pack by Kay Lousberg (CC0); the trimmed models are in `src/kk/`. An Xcode project for a native iOS app is in `app/` (see `app/README.md`).

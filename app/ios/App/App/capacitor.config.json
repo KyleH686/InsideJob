@@ -1,0 +1,13 @@
+{
+	"appId": "com.kyleh686.insidejob",
+	"appName": "Inside Job",
+	"webDir": "www",
+	"backgroundColor": "#0c2f57",
+	"ios": {
+		"contentInset": "never",
+		"scrollEnabled": false,
+		"allowsLinkPreview": false,
+		"backgroundColor": "#0c2f57"
+	},
+	"packageClassList": []
+}

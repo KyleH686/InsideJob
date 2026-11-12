@@ -2431,7 +2431,7 @@ buildToolUI();useSite(SITE);buildMap(1);resetLoot();devicesChanged();
 try{const t=localStorage.getItem('ij-theme');if(t==='sketch3d'){theme='sketch';LOOK=t}else if(t&&STYLES[t]){theme=t;LOOK=t}const d=localStorage.getItem('ij-diff');if(d&&DIFF[d])ST.diff=d}catch(e){}
 {const mq=matchMedia('(max-width:900px),(max-height:560px)'),place=()=>{const a=$('abil');if(mq.matches)$('goCard').prepend(a);else $('stage').appendChild(a)};place();mq.addEventListener&&mq.addEventListener('change',place)}
 setTheme(theme);document.querySelectorAll('#mtabs button').forEach(b=>b.onclick=()=>{setMTab(b.dataset.t);AU.click&&AU.click()});
-addEventListener('resize',resize);resize();$('fsBtn').onclick=()=>{AU.init();toggleFS()};if(navigator.standalone||matchMedia('(display-mode: fullscreen),(display-mode: standalone)').matches)$('fsBtn').hidden=true;
+addEventListener('resize',resize);resize();$('fsBtn').onclick=()=>{AU.init();toggleFS()};if(window.IJ_APP||navigator.standalone||matchMedia('(display-mode: fullscreen),(display-mode: standalone)').matches)$('fsBtn').hidden=true;
 if(document.fonts)document.fonts.ready.then(()=>redrawStatic());
 // ================================================================ 3D NIGHT (three.js)
 function r3Quality(){const mob=matchMedia('(pointer:coarse)').matches||innerWidth<900;return mob?'med':'high'}
