@@ -466,7 +466,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v28 · sound by Kenney, characters by KayKit (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v29 · sound by Kenney, characters by KayKit (CC0) · voices by Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -995,11 +995,11 @@ const AU={on:true,ctx:null,buf:{},vo:{},master:null,sfxBus:null,voBus:null,musBu
   src.start(c.currentTime+delay);return true},
  say(key,{pri=1,cd=5}={}){if(!this.ctx||!this.on||ST.phase!=='heist')return;const now=performance.now()/1000;const cat=key.replace(/_\d+$/,'');if(this.vLast[cat]&&now-this.vLast[cat]<cd)return;this.vLast[cat]=now;
   let k=key;if(!VO_DATA[k]){const opts=Object.keys(VO_DATA).filter(n=>n.startsWith(key+'_'));if(!opts.length)return;k=opts[Math.floor(Math.random()*opts.length)]}
-  if(VO_TEXT[k])subtitle(VO_TEXT[k][1],VO_TEXT[k][0]);
-  this.vq.push({k,pri});this.vq.sort((a,b)=>b.pri-a.pri);if(this.vq.length>3)this.vq.length=3;this.pump()},
- pump(){if(this.vBusy||!this.vq.length)return;const {k}=this.vq.shift();const b=this.vo[k];if(!b){this.pump();return}const c=this.ctx;this.vBusy=true;
-  this.play('static',{vol:.35});const src=c.createBufferSource();src.buffer=b;src.playbackRate.value=k.startsWith('g_')?1.04:1;src.connect(this.voBus);src.start(c.currentTime+.08);
-  src.onended=()=>{this.play('static',{vol:.25});setTimeout(()=>{this.vBusy=false;this.pump()},180)}},
+  // radio discipline: one voice at a time, a breath between lines, and old news is dropped rather than read out late
+  this.vq.push({k,pri,t:now});this.vq.sort((a,b)=>b.pri-a.pri||a.t-b.t);if(this.vq.length>2)this.vq.length=2;this.pump()},
+ pump(){if(this.vBusy||!this.vq.length)return;const {k,pri,t}=this.vq.shift();const b=this.vo[k];if(!b||(pri<2&&performance.now()/1000-t>6)){this.pump();return}const c=this.ctx;this.vBusy=true;if(VO_TEXT[k])subtitle(VO_TEXT[k][1],VO_TEXT[k][0]);
+  this.play('static',{vol:.35});const src=c.createBufferSource();src.buffer=b;src.connect(this.voBus);src.start(c.currentTime+.08);
+  src.onended=()=>{this.play('static',{vol:.25});setTimeout(()=>{this.vBusy=false;this.pump()},this.vq.length&&this.vq[0].pri>=2?550:1100)}},
  musicOn(){this.wantMus=true;if(!this.ctx||this.mus||!this.has('musHeist'))return;const c=this.ctx;const src=c.createBufferSource();src.buffer=this.buf.musHeist.find(Boolean);src.loop=true;src.connect(this.musF);src.start();this.mus=src;this.musBus.gain.cancelScheduledValues(c.currentTime);this.musBus.gain.setValueAtTime(this.musBus.gain.value,c.currentTime);this.musBus.gain.linearRampToValueAtTime(MIX.mus,c.currentTime+2)},
  musicOff(){this.wantMus=false;if(!this.mus)return;const c=this.ctx,m=this.mus;this.musBus.gain.cancelScheduledValues(c.currentTime);this.musBus.gain.setValueAtTime(this.musBus.gain.value,c.currentTime);this.musBus.gain.linearRampToValueAtTime(0,c.currentTime+1.2);setTimeout(()=>{try{m.stop()}catch(e){}},1400);this.mus=null},
  // ---- game events (samples first, synth fallback)
