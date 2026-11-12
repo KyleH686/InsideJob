@@ -29,7 +29,7 @@ Each new version of the game replaces `ios/App/App/public/index.html`. Pull the 
 
 ## Before an App Store release
 
-- The guard voices use the Piper `en_US-ryan-high` model, which is licensed CC BY-NC-SA (non-commercial). Swap them before selling the app.
+- The guard voices (15 short lines) use the Piper `en_US-ryan-high` model, which is licensed CC BY-NC-SA (non-commercial). Swap them before selling the app. Control's voice is Kokoro (Apache 2.0) and is fine to sell.
 - Bump the version and build number in the target's General tab.
 - Sound effects are Kenney (CC0), characters are KayKit (CC0), fonts are SIL Open Font License.
 
