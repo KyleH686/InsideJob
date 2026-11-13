@@ -497,7 +497,7 @@ body.hassel:where(.tl) #worksBtn,body.hassel:where(.tl) #buildCard>h3{display:no
 :where(body.tight) #toolHelp,:where(body.tight) #buildCard>h3{display:none}
 :where(body.tl) #toolHelp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 /* squat screens (a folded Duo): all nine tools in one row */
-:where(body.row9) #tools{grid-template-columns:repeat(9,1fr)!important;gap:3px!important}
+:where(body.row9) #tools{grid-template-columns:repeat(10,1fr)!important;gap:3px!important}
 :where(body.row9) #side .tool{font-size:10px;padding:4px 0!important}
 :where(body.row9) #selBtns{grid-template-columns:repeat(6,1fr)}
 :where(body.row9) #selBtns button{font-size:12px;padding:2px 3px}
@@ -562,7 +562,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 body{padding:var(--sat) var(--sar) var(--sab) var(--sal)}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v31 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro and Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v32 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro and Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -805,6 +805,7 @@ const DEV={
  speaker:{name:'Speaker',cost:70,key:'8',desc:'A hidden PA speaker. During the night, click it to play a guard\'s voice: nearby thieves hide or turn back. Fool a crew twice and they stop believing it.'},
  dog:{name:'Guard dog',cost:130,key:'9',desc:'Asleep in its basket until someone creeps within 3 tiles. Then it barks: the nearest guards come running and the thief is rattled. It works by ear, so smoke and power cuts don\'t stop it.'},
  decoy:{name:'Decoy',cost:100,key:'7',desc:'A fake valuable that thieves can\'t tell from the real thing. Lure them past your cameras; opening it wastes their time and rattles them.'},
+ fog:{name:'Fog cannon',cost:110,key:'0',desc:'Hidden in the ceiling. When an alarm goes off within 4 tiles, it floods the area with security fog for 9 seconds. Thieves caught in it stumble at half speed while your guards close in. Fog blinds cameras too, so place it with care.'},
 };
 const BASE_COST=Object.fromEntries(Object.entries(DEV).map(([k,d])=>[k,d.cost]));
 const UPG={
@@ -817,6 +818,7 @@ const UPG={
  steel:[{name:'Vault grade',cost:60,desc:'Takes 8 seconds to force.'}],
  dog:[{name:'Light sleeper',cost:70,desc:'Hears 4.5 tiles away and is ready to bark again in 6 s instead of 10.'}],
  decoy:[{name:'Dye pack',cost:60,desc:'Bursts when opened: +40 suspicion, and the thief fills 50% faster on camera after.'}],
+ fog:[{name:'Sticky fog',cost:70,desc:'A wider cloud that lasts 14 seconds, and anyone in it gains suspicion while they stumble.'}],
 };
 const PERKS=[
  {id:'budget',icon:'£',name:'Overtime budget',desc:'+£450 to spend right now.',stack:true,apply(){ST.cash+=450}},
@@ -831,6 +833,8 @@ const PERKS=[
  {id:'memory',icon:'☰',name:'Face matching',desc:'Suspicion drains half as fast once a thief is spotted.',apply(){ST.mods.decay*=.5}},
  {id:'cams',icon:'▣',name:'Bulk cameras',desc:'Cameras cost £90 instead of £120.',apply(){DEV.camera.cost=90}},
  {id:'lasers',icon:'═',name:'Laser rebate',desc:'Lasers cost £110 instead of £150.',apply(){DEV.laser.cost=110}},
+ {id:'fogs',icon:'≈',name:'Fog contract',desc:'Fog cannons cost £70 instead of £110.',apply(){DEV.fog.cost=70}},
+ {id:'bounty',icon:'★',name:'Bounty scheme',desc:'Every arrest earns £100 more.',apply(){}},
 ];
 const STYLE_DESC={blueprint:'Architect\'s drawing, cyan on navy.',cctv:'Green night-vision security monitor.',sketch:'A crew\'s pencil plan on lined paper.',board:'Wooden tabletop with chunky pieces.',thermal:'Heat camera: thieves glow white-hot.',pixel:'Chunky 16-bit pixel art.',noir:'Rain, neon and wet reflections.',riso:'Two-ink risograph print, pink and blue.',caper:'Flat 1960s heist-film title card in bold blocks.',comic:'Pop-art comic panel with halftone dots.',water:'Soft washes and ink on cold-press paper.',term:'Amber phosphor roguelike terminal, all ASCII.',paper:'Cut card and kraft paper, layered by hand.'};
 const ICON={
@@ -843,6 +847,7 @@ const ICON={
  speaker:'<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>',
  dog:'<svg viewBox="0 0 24 24"><path d="M5 20v-7l-2-3 3-1 2-4 3 3h4l4 4v8h-3v-4h-5v4z"/><circle cx="8" cy="10" r=".7"/></svg>',
  decoy:'<svg viewBox="0 0 24 24"><path d="M6 4h12l3 5-9 11L3 9z"/><path d="M10 9.5a2 2 0 1 1 3 1.7c-.8.5-1 1-1 1.8M12 16v.5"/></svg>',
+ fog:'<svg viewBox="0 0 24 24"><path d="M8 3h8v4H8z"/><path d="M12 7v3"/><path d="M4 15c2-2 4-2 6 0s4 2 6 0 4-2 4-2M4 19c2-2 4-2 6 0s4 2 6 0 4-2 4-2"/></svg>',
  slam:'<svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18"/><path d="M14 12h1M2 8l2 1M2 16l2-1"/></svg>',
  siren:'<svg viewBox="0 0 24 24"><path d="M7 18v-6a5 5 0 0 1 10 0v6M5 18h14v3H5zM12 2v3M4 6l2 2M20 6l-2 2"/></svg>',
 };
@@ -858,18 +863,19 @@ const TYPES={
  impostor:{name:'Impostor',speed:2.5,camSus:.22,guardSus:1.7,disguise:true,tag:'DISGUISE',desc:'Dressed in one of your guard uniforms. Cameras barely register them. Real guards, plates and lasers still do.'},
  magpie:{name:'Magpie',speed:2.8,counter:'lure',charges:2,tag:'LURE',desc:'Throws a noise-maker to pull guards off their patrol before slipping past.'},
  muscle:{name:'Muscle',speed:2.2,maxSus:150,breach:.25,carry:.95,tag:'TANK',desc:'Shoulders doors open, carries at full pace, takes longer to identify.'},
+ climber:{name:'Climber',speed:2.9,roof:true,tag:'ROOF',desc:'Comes in through the roof, even on nights the roof is shut to everyone else. Drops straight into the room nearest the prize.'},
 };
 const NAMES=['Wren','Tally','Moth','Juno','Pike','Vesper','Dutch','Sable','Rook','Kes','Fig','Nettle','Bram','Ivo','Lark','Odette'];
 const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday'];
 function dayName(n){if(ST.daily)return 'Daily job';return n<=5?DAYS[n-1]:'Overtime '+(n-5)}
 const OT_CAP=15000;
-function nightDef(n){if(ST.daily)return ST.daily.def;if(n<=5){const h=SITES[SITE].hints&&SITES[SITE].hints[n-1];return h?{...NIGHTS[n-1],hint:h}:NIGHTS[n-1]}const r=mulberry(n*7919+(ST.otSeed||0));const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor'];
+function nightDef(n){if(ST.daily)return ST.daily.def;if(n<=5){const h=SITES[SITE].hints&&SITES[SITE].hints[n-1];return h?{...NIGHTS[n-1],hint:h}:NIGHTS[n-1]}const r=mulberry(n*7919+(ST.otSeed||0));const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor','climber'];
  const size=Math.min(10,5+Math.floor((n-5)/2)+(ST.otMod&&ST.otMod.id==='big'?1:0));const crew=[];let t=1.5;for(let k=0;k<size;k++){crew.push([pool[Math.floor(r()*pool.length)],+t.toFixed(1)]);t+=2+r()*2.6}
  return {crew,hint:`Overtime night ${n-5}${ST.otMod?' · '+ST.otMod.name+': '+(ST.otMod.id==='budget'?'£400 docked from your budget.':ST.otMod.desc):''} The gallery restocked, every entry is open and the crews keep growing. Lose more than ${money(OT_CAP)} in one night and it ends.`}}
 const NIGHTS=[
  {crew:[['runner',1.5],['cracker',8]],hint:'Pick Camera (or press 1) and click near the front doors to fit one; drag to aim. Thieves route around what you can see, so watch their dotted routes bend.'},
  {crew:[['runner',1.5],['ghost',6],['cracker',11]],hint:'A back door opens tonight. Thieves pick the least-watched way in, so cover both.'},
- {crew:[['hacker',1.5],['magpie',5],['muscle',10]],hint:'The loading dock opens. Hackers loop cameras on their route, and the Magpie throws noise-makers to drag guards away. Back cameras up with plates.'},
+ {crew:[['hacker',1.5],['magpie',5],['muscle',10],['climber',15]],hint:'The loading dock opens. Hackers loop cameras on their route, and the Magpie throws noise-makers to drag guards away. Back cameras up with plates.'},
  {crew:[['scout',1.5],['lens',5],['ghost',9],['cracker',14],['impostor',18]],hint:'From tonight the crew cuts the power once, briefly. Someone will come through the skylight. The scout radios your plates to the crew, the lensman walks through one laser, and an Impostor in a guard uniform walks straight past cameras.'},
  {crew:[['hacker',1.5],['smoke',4],['lens',8],['muscle',12],['ghost',16],['magpie',20],['fox',26]],hint:'Last night. Six of them, a storm drain into the store room, and at 01:26 the Fox: a professional who goes straight for the biggest prize.'},
 ];
@@ -898,7 +904,7 @@ const DIFF={easy:{name:'Easy',cash:1000,limit:40000,detect:1.3,smart:.5,tackle:.
 const ST={diff:'normal',limit:30000,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},danger:null,mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],abil:{slam:0,siren:0},abTool:null,slams:[],rec:[],recEv:[],stars:[],night:1,cash:800,stolen:0,arrests:0,phase:'plan',devices:[],loot:[],thieves:[],guards:[],smokes:[],t:0,clock:0,speed:1,routes:true,heat:false,thoughts:true,tool:null,sel:null,routeFor:null,report:[],nightStats:null,nameSeed:0,devId:1,done:false};
 function resetLoot(){ST.loot=LOOT_DEF.map(l=>({...l,i:idx(l.x,l.y),stolen:false,carrier:null}))}
 function syncDecoys(){if(ST.phase==='heist')return;ST.loot=ST.loot.filter(l=>!l.fake);for(const d of ST.devices)if(d.type==='decoy')ST.loot.push({id:'decoy'+d.id,name:'Decoy jewels',x:d.x,y:d.y,i:d.i,v:6500,crack:2.5,kind:'gem',fake:true,dev:d,stolen:false,carrier:null,spent:false})}
-const camRange=d=>CAM.range+(d.lv>=1?2:0)+ST.mods.camRange+(ST.works&&ST.works.cctv?1:0)+(ST.ev==='fog'&&ST.phase==='heist'?-1.5:0);
+const camRange=d=>CAM.range+(d.lv>=1?2:0)+ST.mods.camRange+(ST.works&&ST.works.cctv?1:0)+(ST.ev==='fog'&&ST.phase==='heist'?-1.5:0)+(ST.ev==='moon'&&ST.phase==='heist'?1:0);
 const isSlam=i=>ST.slams.some(s=>s.i===i);
 
 // ================================================================ VISION
@@ -1034,10 +1040,14 @@ function chooseTarget(kn,typeCrack,fromI,claimed,exits){
  }
  return best;
 }
+// v32: the Climber always comes in through the nearest roof entry to the best prize, open tonight or not
+function roofChoice(kn,crack,claimed){const roofs=ENTRIES.filter(e=>e.roof&&!(ST.works&&ST.works.sealed.includes(e.id)));if(!roofs.length)return chooseTarget(kn,crack,null,claimed);
+ const cost=costFor(kn);const ex=exitDists(cost);const rs=roofs.map(e=>({e,res:dijkstra(spawnI(e),cost)}));const b=chooseTarget(kn,crack,null,claimed,ex.concat(rs.filter(r=>!ex.some(x=>x.e===r.e))));if(!b)return null;
+ const rb=rs.map(r=>({r,d:r.res.d[b.loot.i]})).sort((p,q)=>p.d-q.d)[0];if(rb&&rb.d<Infinity){b.entry=rb.r.e;b.res=rb.r.res}return b}
 function planNight(){
  const night=nightDef(ST.night);const claimed=new Set();const plans=[];
  night.crew.forEach(([type,t],k)=>{const T=TYPES[type];const kn={mirror:T.counter==='mirror',scout:T.counter==='scout',crack:T.crack||1,disguise:!!T.disguise};
-  const b=chooseTarget(kn,T.crack,null,claimed);if(!b){plans.push(null);return}claimed.add(b.loot.id);
+  const b=T.roof?roofChoice(kn,T.crack,claimed):chooseTarget(kn,T.crack,null,claimed);if(!b){plans.push(null);return}claimed.add(b.loot.id);
   const cost=costFor(kn);const pin=pathTo(b.res,b.loot.i);const exr=dijkstra(spawnI(b.exit),cost);const pout=pathTo(exr,b.loot.i);if(pout)pout.reverse();
   let exposure=0;const tt=1/T.speed;for(const i of pin||[])exposure+=watchSeconds(i)*tt;for(const i of pout||[])exposure+=watchSeconds(i)*tt/(T.carry||.72);
   let trips=0;for(const i of [...(pin||[]),...(pout||[])])if(laserMap[i]>=0&&!kn.mirror)trips++;
@@ -1162,7 +1172,7 @@ function hint(s,dur=7){const h=$('hint');if(TOUCH)s=s.replace(/ \(or press \d\)/
 function startNight(){if(R3.on)setTimeout(()=>{if(ST.phase==='heist'&&R3.on)tip('watch','Watch them up close','Tap a thief or a guard, or a name in the Crew list, and the camera follows them. Tap again to pull back.')},6000);setTimeout(()=>{if(ST.ev&&EVENTS[ST.ev])tip('ev-'+ST.ev,EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name,EVENTS[ST.ev].desc)},1500);setMTab('crew');$('hint').classList.remove('show');hintTimer=0;setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2-1,(ST.daily?'DAILY JOB':dayName(ST.night).toUpperCase()+' NIGHT'),S.accent)},150);ST.dark=false;for(const d of ST.devices)d.work=0;ST.pc=(ST.night>=4||ST.endless||ST.daily)?{at:28+Math.random()*28,dur:ST.perks.includes('gen')?3:8,t:0,on:false,done:false}:null;if(ST.phase==='plan')saveGame();
  if(ST.phase!=='plan')return;
  syncDecoys();ST.danger=new Float32Array(W*H);const plans=planNight();ST.thieves=[];ST.smokes=[];ST.slams=[];ST.rec=[];ST.recEv=[];ST.recT=0;ST.vaultOpen=false;ST.alarmT=0;ST.abil={slam:ST.mods.slam,siren:ST.mods.siren};ST.abTool=null;
- for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false;d.armed=0;d.hit=0;d.lock=null;d.lockT=0}
+ for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false;d.armed=0;d.hit=0;d.lock=null;d.lockT=0;d.cd=0;d.fired=0}
  devicesChanged();
  nightDef(ST.night).crew.forEach(([type,t],k)=>{const T=TYPES[type];
   const cm=T.boss?{name:'The Fox',gang:null}:crewMember(k);const ldr=!!(cm.gang&&GANGS[cm.gang]&&GANGS[cm.gang].leader===cm.name);
@@ -1173,7 +1183,7 @@ function startNight(){if(R3.on)setTimeout(()=>{if(ST.phase==='heist'&&R3.on)tip(
  ST.ev=nightEvent();ST.lt=4;ST.litOff=false;ST.police=null;ST.abil.police=ST.ev==='police'?1:0;
  ST.t=0;ST.clock=0;ST.phase='heist';ST.tool=null;ST.sel=null;ST.routeFor=null;ST.report=[];ST.endT=0;
  ST.nightStats={arrests:0,scared:0,stolen:0,saved:0,items:[]};
- if(ST.ev){if(ST.ev==='fog')for(const c of ST.devices)if(c.type==='camera')c.cov=camCoverage(c);computeLit();rebuildWatch();setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2+1.2,EVENTS[ST.ev].name.toUpperCase(),S.danger)},1700);logLine(EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name+'.')}
+ if(ST.ev){if(ST.ev==='fog'||ST.ev==='moon')for(const c of ST.devices)if(c.type==='camera')c.cov=camCoverage(c);computeLit();rebuildWatch();setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2+1.2,EVENTS[ST.ev].name.toUpperCase(),S.danger)},1700);logLine(EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name+'.')}
  AU.start();AU.bell(2);AU.droneOn();AU.vq=[];AU.vLast={};logLine('Night '+ST.night+' begins. All systems armed.');setTimeout(()=>AU.say('night_start',{cd:0}),300);if(ST.ev)setTimeout(()=>AU.say('ev_'+ST.ev,{cd:0,pri:2}),3200);
  refreshUI();
 }
@@ -1183,7 +1193,9 @@ const EVENTS={
  cleaners:{ic:'🧹',name:'Cleaners working late',desc:'The lights stay on for the first 30 seconds. Every room counts as lit, so cameras fill suspicion faster and the crew hangs back.'},
  fog:{ic:'🌫',name:'Thick fog',desc:'Fog presses on the windows. Every camera sees 1.5 tiles less tonight.'},
  football:{ic:'⚽',name:'Football on TV',desc:'The guards are watching the match. For the first 40 seconds they patrol slowly and are slow to notice anyone.'},
- police:{ic:'🚓',name:'Police patrol nearby',desc:'You can call the police once tonight (E). A car arrives 6 s later and waits 15 s at the busiest exit, arresting anyone who leaves through it.'}};
+ police:{ic:'🚓',name:'Police patrol nearby',desc:'You can call the police once tonight (E). A car arrives 6 s later and waits 15 s at the busiest exit, arresting anyone who leaves through it.'},
+ moon:{ic:'🌕',name:'Full moon',desc:'Bright moonlight through every window. Cameras see 1 tile further tonight.'},
+ inspector:{ic:'📋',name:'Insurance inspector',desc:'The insurer is watching tonight. Every arrest earns a £100 bonus on top of the usual reward.'}};
 function nightEvent(n){n=n||ST.night;if(ST.daily||n<2||(n>4&&!ST.endless))return null;const r=mulberry((ST.evSeed||1)*31+n*977)();if(r<.25)return null;const k=Object.keys(EVENTS);return k[Math.floor((r-.25)/.75*k.length)%k.length]}
 function eventTick(dt){const ev=ST.ev;if(!ev)return;
  if(ev==='storm'){ST.lt=(ST.lt??4)-dt;if(ST.lt<=0){ST.lt=6+Math.random()*6;FX.flash=.45;FX.flashCol='#e8f4ff';R3.bolt=.5;SYN.noise(2.6,{vol:.32,f:140,q:.5,type:'lowpass',delay:.5+Math.random()*.6,slide:.4});SYN.noise(.25,{vol:.18,f:2400,q:.4,type:'highpass'});
@@ -1233,7 +1245,7 @@ function roguesSheet(){let R={};try{R=JSON.parse(localStorage.getItem('ij-rogues
  showSheet(h+`<button class="cta" id="rgBack">Back</button>`);$('rgBack').onclick=()=>{AU.click();showHome()}}
 function spawnThief(th){
  const kn=knowledge(th);const claimed=new Set(ST.thieves.filter(o=>o!==th&&o.target).map(o=>o.target.id));
- const b=chooseTarget(kn,th.crack,null,claimed);
+ const b=th.T.roof?roofChoice(kn,th.crack,claimed):chooseTarget(kn,th.crack,null,claimed);
  if(!b){th.state='gone';th.outcome='stayed home (nothing left worth taking)';return}
  th.target=b.loot;if(th.T.boss){const big=ST.loot.filter(l=>!l.stolen&&!l.carrier&&!l.fake&&!l.spent).sort((a,b)=>b.v-a.v)[0];if(big)th.target=big;setTimeout(()=>AU.say('fox_in',{cd:0,pri:3}),300);FX.slow=.9;FX.focus=[th.x,th.y];logLine('<b>The Fox is in the building.</b> He is going for '+th.target.name+'.');FX.flash=.4;FX.flashCol=S.accent}th.entry=b.entry;const si=spawnI(b.entry);th.tile=si;th.x=tx(si)+.5;th.y=ty(si)+.5;th.state='in';if(th.counter==='scout'&&ST.thieves.some(o=>o!==th&&o.state!=='caught'&&o.state!=='escaped')){logLine('<i>'+th.name+' is on the crew radio, calling out where your pressure plates are.</i>');for(const o of ST.thieves)o.needReplan=true}
  if(b.entry.roof){th.drop=1.2}
@@ -1263,7 +1275,7 @@ function replan(th){
  }
  th.replanT=.9;
 }
-function thiefSpeed(th){let s=th.speed;if(th.sprint>0)s*=th.type==='runner'?1.55:1.4;if(th.hiding)s*=1.15;if(th.loot)s*=(th.T.carry||.72);if(th.hurry>0)s*=1.3;if(th.state==='flee')s*=1.3;return s}
+function thiefSpeed(th){let s=th.speed;const fg=ST.smokes&&ST.smokes.length?inSecFog(th.x,th.y):null;if(fg)s*=.5;if(th.sprint>0)s*=th.type==='runner'?1.55:1.4;if(th.hiding)s*=1.15;if(th.loot)s*=(th.T.carry||.72);if(th.hurry>0)s*=1.3;if(th.state==='flee')s*=1.3;return s}
 function canSeeTileNow(i,th){
  const px=tx(i)+.5,py=ty(i)+.5;
  for(const d of ST.devices)if(d.type==='camera'&&!(d.looped>0)&&inCone(d.x+.5,d.y+.5,d.cur,CAM.fov,camRange(d),px,py)>0)return true;
@@ -1284,11 +1296,16 @@ function roomOf(i){const x=tx(i),y=ty(i);if(G[i]===OUT)return 'street';return SI
 function addSus(th,v,src){th.sus+=v*(th.T.sus||1)*(th.susMul||1);th.seenBy=src;th.unseen=0;th.hurry=2.5;if(th.sus>=th.maxSus)catchThief(th,src)}
 function alarm(x,y,msg,kind){hap([30,40,30]);
  logLine('<b style="color:var(--danger)">ALARM</b> '+msg+'.');if(ST.phase==='heist')ST.recEv.push({t:ST.t,x,y,k:'alarm',s:msg});ST.alarmT=8;if(ST.works&&ST.works.autolock){FX.flash=Math.max(FX.flash,.2);AU.play('slam',{vol:.4});AU.say('autolock',{cd:25});for(const th of ST.thieves)th.needReplan=true}const rk=roomOf(idx(Math.floor(x),Math.floor(y))).replace(' ','_');if(kind&&rk!=='street')AU.say(kind+'_'+rk,{cd:4,pri:2});
- addDanger(x,y,3,14);
+ addDanger(x,y,3,14);fireFog(x,y);
  const free=ST.guards.filter(g=>g.state!=='chase').map(g=>({g,d:Math.hypot(g.x-x,g.y-y)})).sort((a,b)=>a.d-b.d).slice(0,2);
  for(const {g} of free){g.state='investigate';g.lastSeen=[x,y];g.path=guardPath(g,idx(Math.floor(x),Math.floor(y)));g.look=0}
  for(const th of ST.thieves)if(th.state==='in'||th.state==='out')th.hurry=Math.max(th.hurry,3);
 }
+// v32: fog cannons fire on any alarm within 4 tiles, then need 20 s to refill
+function fireFog(x,y){for(const d of ST.devices){if(d.type!=='fog'||d.cd>0||Math.hypot(d.x+.5-x,d.y+.5-y)>4.2)continue;d.cd=20;d.fired=1;
+  ST.smokes.push({x:d.x+.5,y:d.y+.5,r:0,R:d.lv?3.3:2.6,t:d.lv?14:9,sec:true,lv:d.lv});costCache={};AU.smoke(d.x+.5);burst(d.x+.5,d.y+.5,16,S.accent,2.2,.9,.08);
+  floatText(d.x+.5,d.y-.3,'FOG!',S.accent);logLine('A fog cannon floods the '+roomOf(d.i)+'.');ST.recEv.push({t:ST.t,x:d.x+.5,y:d.y+.5,k:'alarm',s:'Fog in the '+roomOf(d.i)});for(const th of ST.thieves)th.needReplan=true}}
+function inSecFog(x,y){for(const s of ST.smokes){if(!s.sec)continue;const dx=x-s.x,dy=y-s.y;if(dx*dx+dy*dy<s.r*s.r)return s}return null}
 function noise(x,y,r,fromCatch){if(ST.ev==='storm')r*=.6;
  FX.rings.push({x,y,r,t:0});const src=idx(Math.floor(x),Math.floor(y));if(!passable(src))return;const res=dijkstra(src,flatCost());
  let told=false;
@@ -1316,14 +1333,14 @@ function searchPoints(p){if(!p)return [];const x0=Math.floor(p[0]),y0=Math.floor
 function guardPath(g,dst){const cur=idx(Math.floor(g.x),Math.floor(g.y));const p=pathTo(dijkstra(cur,flatCost(),dst),dst);return p?p.slice(1):[]}
 function catchThief(th,by){hap(70);
  if(th.state==='caught'||th.state==='escaped')return;
- const srcName={police:'by the police at the door',lightning:'in a lightning flash',dog:'after the dog barked',camera:'on camera',guard:'tackled by a guard',laser:'after tripping a laser',plate:'after stepping on a pressure plate'}[by]||'on camera';
+ const srcName={fog:'stumbling in the fog',police:'by the police at the door',lightning:'in a lightning flash',dog:'after the dog barked',camera:'on camera',guard:'tackled by a guard',laser:'after tripping a laser',plate:'after stepping on a pressure plate'}[by]||'on camera';
  th.outcome='caught '+srcName+(th.loot?' holding '+th.loot.name:'');th.state='caught';th.caughtT=0;th.caughtBy=by;AU.play('cuffs',{vol:.55,x:th.x,delay:.45});
  ach('first');if(th.loot)ach('bag');if(th.T.boss){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900);ST.cash+=500;floatText(th.x,th.y-1.6,'THE FOX! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.leader){AU.say('leader_caught',{cd:0,pri:3});ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
  if(th.loot){const l=th.loot;l.carrier=null;th.loot=null;if(G[th.tile]===FLOOR||G[th.tile]===DOOR){l.home=l.home??l.i;l.i=th.tile;l.dropped=true;setTimeout(()=>floatText(tx(l.i)+.5,ty(l.i)-.2,'DROPPED',S.accent),400);logLine(th.name+' drops '+l.name+'. It is lying in the '+roomOf(l.i)+'.')}}
  {let n=0;for(const o of ST.thieves){if(o===th||!['in','out','flee'].includes(o.state))continue;n++;o.spooked=1;o.needReplan=true;
    if(o.state==='in'&&!o.crackT&&o.sus>o.maxSus*.3&&Math.random()<.75){o.state='flee';o.needReplan=true;o.hiding=false;floatText(o.x,o.y-.7,'ABORT',S.accent)}else o.hurry=0}
   if(n)setTimeout(()=>{if(ST.phase==='heist')logLine('<i>Crew radio goes quiet. The others get careful.</i>')},700)}
- ST.arrests++;ST.nightStats.arrests++;ST.cash+=150;
+ ST.arrests++;ST.nightStats.arrests++;ST.cash+=150+(ST.perks.includes('bounty')?100:0);if(ST.ev==='inspector'){ST.cash+=100;setTimeout(()=>floatText(th.x,th.y-1.9,'INSPECTOR +£100',S.good,true),500)}if(ST.perks.includes('bounty'))setTimeout(()=>floatText(th.x,th.y-2.3,'BOUNTY +£100',S.good,true),900);
  FX.slow=1.1;FX.focus=[th.x,th.y];FX.flash=.8;FX.flashCol=S.danger;FX.shake=.5;
  stamp(th.x,th.y,theme==='comic'?'KAPOW!':theme==='caper'?'NABBED':theme==='paper'?'caught!':theme==='board'?'BUSTED!':theme==='sketch'?'Got you!':theme==='cctv'?'IDENTIFIED':theme==='thermal'?'TARGET LOCKED':'CAUGHT',S.danger);
  floatText(th.x,th.y-1,'+£150',S.good,true);burst(th.x,th.y,40,S.danger,4,1.1,.1);burst(th.x,th.y,20,S.ink,2,1.4,.06);
@@ -1486,6 +1503,8 @@ function stepSim(dt){
  ST.t+=dt;ST.clock+=dt*.5;
  for(const d of ST.devices){if(d.type==='camera'){if(d.lockT>0&&d.lock&&['in','out','flee'].includes(d.lock.state)){d.lockT-=dt;const ta=Math.atan2(d.lock.y-d.y-.5,d.lock.x-d.x-.5);d.trk=(d.trk??d.cur)+angDiff(ta,d.trk??d.cur)*Math.min(1,dt*7);d.cur=d.trk}else{d.trk=null;d.lock=null;d.cur=camAngle(d,ST.t)}d.seeing=false;if(d.looped>0){d.looped-=dt;if(d.looped<=0){d.looped=0;rebuildWatch();for(const th of ST.thieves)th.needReplan=true}}}if(d.armed>0)d.armed-=dt;if(d.hit>0)d.hit-=dt*1.5}
  for(const s of ST.smokes){s.t-=dt;s.r=Math.min(s.R,s.r+dt*4);if(s.t<1)s.r=Math.max(0,s.R*s.t)}
+ for(const d of ST.devices)if(d.type==='fog'&&d.cd>0)d.cd-=dt;
+ for(const th of ST.thieves)if(['in','out','flee'].includes(th.state)&&th.x!=null){const fg=ST.smokes.length?inSecFog(th.x,th.y):null;if(fg&&fg.lv){th.sus+=dt*4*(th.T.sus||1);if(th.sus>=th.maxSus)catchThief(th,'fog')}}
  const nsm=ST.smokes.length;ST.smokes=ST.smokes.filter(s=>s.t>0);if(ST.smokes.length!==nsm)costCache={};
  for(const g of ST.guards)updateGuard(g,dt);
  for(const th of ST.thieves)updateThief(th,dt);
@@ -1551,7 +1570,7 @@ const DAILY_MODS=[{id:'fog',name:'Fogged lenses',desc:'Every camera sees 2 tiles
  {id:'pricey',name:'Supplier strike',desc:'Cameras cost £180.',apply(){DEV.camera.cost=180}},{id:'nolight',name:'Power rationing',desc:'No floodlights tonight.',apply(){DEV.light.cost=99999}},
  {id:'guards',name:'Skeleton staff',desc:'Guards cost £400.',apply(){DEV.guard.cost=400}},{id:'pros',name:'Professionals',desc:'Every thief moves 20% faster.',apply(){ST.mods.tspeed=1.2}},{id:'big',name:'Busy night',desc:'Seven thieves instead of six.',apply(){}}];
 function dailyKey(){const d=new Date();return d.getUTCFullYear()*10000+(d.getUTCMonth()+1)*100+d.getUTCDate()}
-function dailyInfo(){const key=dailyKey();const r=mulberry(key*7919+7);r();r();const mod=DAILY_MODS[Math.floor(r()*DAILY_MODS.length)];const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor'];
+function dailyInfo(){const key=dailyKey();const r=mulberry(key*7919+7);r();r();const mod=DAILY_MODS[Math.floor(r()*DAILY_MODS.length)];const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor','climber'];
  const crew=[];let t=1.5;const n=mod.id==='big'?7:6;for(let k=0;k<n;k++){crew.push([pool[Math.floor(r()*pool.length)],+t.toFixed(1)]);t+=2.2+r()*2.4}
  return {key,mod,def:{crew,hint:`Daily job: ${mod.name}. ${mod.desc} One night, every entry open, £1,500 to spend. Lose as little as you can.`}}}
 // ---------- weekly board: every daily job this week, plus a spoiler-free result to share with friends
@@ -1977,6 +1996,7 @@ function staticThermal(c){
 // ---------------------------------------------------------------- dynamic draw
 const low=document.createElement('canvas');low.width=W*16;low.height=H*16;const lctx=low.getContext('2d');
 function render(dtReal){
+ if(R3.on&&R3.ready&&!homeOn()){const GL=GOVL[GOV.lvl]||GOVL[2];GOV.fd+=dtReal||.016;if(ST.phase!=='plan'&&(GOV.k=(GOV.k+1)%GL.floor)!==0){doorAnim(Math.min(.05,dtReal||.016));r3Frame(Math.min(.05,dtReal||.016));return}GOV.dt3=Math.min(.05,dtReal||.016);dtReal=Math.min(.15,GOV.fd);GOV.fd=0;R3.floorDirty=true}else GOV.dt3=Math.min(.05,dtReal||.016)
  doorAnim(Math.min(.05,dtReal||.016));
  const PIX=theme==='pixel';const c=PIX?lctx:ctx;const base=PIX?16:T*DPR;
  ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,PIX?low.width:cv.width,PIX?low.height:cv.height);c.imageSmoothingEnabled=!PIX;
@@ -2008,7 +2028,7 @@ function render(dtReal){
  drawFX(c,dtReal);
  if(PIX){ctx.setTransform(1,0,0,1,0,0);ctx.imageSmoothingEnabled=false;ctx.drawImage(low,0,0,cv.width,cv.height);ctx.imageSmoothingEnabled=true}
  ctx.setTransform(1,0,0,1,0,0);
- if(R3.on)r3Frame(Math.min(.05,dtReal||.016));else post(ctx);
+ if(R3.on)r3Frame(GOV.dt3||.016);else post(ctx);
 }
 function drawSlams(c){for(const sl of ST.slams){const x=tx(sl.i),y=ty(sl.i);const vert=G[idx(x,y-1)]===WALL;c.save();c.fillStyle=S.danger;c.globalAlpha=.9;if(vert)c.fillRect(x+.25,y-.05,.5,1.1);else c.fillRect(x-.05,y+.25,1.1,.5);c.globalAlpha=1;txt(c,Math.ceil(sl.t)+'s',x+.5,y-.35,.28,S.danger,{font:S.mono,weight:'700'});c.restore()}
  if(ST.phase==='heist'&&ST.abTool==='slam'){const t=.5+.5*Math.sin(ST.t*6);for(const d of doorTiles()){if(d.vault||isSlam(d.i))continue;c.save();c.strokeStyle=S.danger;c.globalAlpha=.4+t*.5;c.lineWidth=.06;c.strokeRect(d.x+.05,d.y+.05,.9,.9);c.restore()}}}
@@ -2096,6 +2116,7 @@ function drawDevices(c){for(const d of ST.devices){
  else if(d.type==='steel')drawSteel(c,d);
  else if(d.type==='speaker')drawSpeaker(c,x,y,d);
  else if(d.type==='dog')drawDog(c,x,y,d);
+ else if(d.type==='fog')drawFogDev(c,x,y,d);
  c.restore();
  if(sel){c.save();c.strokeStyle=S.accent;c.lineWidth=.05;c.setLineDash([.12,.08]);c.lineDashOffset=-ST.t;c.beginPath();c.arc(x,y,.62,0,7);c.stroke();c.restore()}
 }}
@@ -2130,6 +2151,14 @@ function drawSpeaker(c,x,y,d){
  c.beginPath();c.arc(x,y,.13,0,7);c.stroke();c.fillStyle=col;c.beginPath();c.arc(x,y,.04,0,7);c.fill();
  if(ST.phase==='heist'){const ready=!(d.cd>0);if(ready){const p=.5+.5*Math.sin(ST.t*4);c.globalAlpha=.35+.4*p;c.strokeStyle=S.accent;c.beginPath();c.arc(x,y,.4+p*.06,-.7,.7);c.stroke();c.beginPath();c.arc(x,y,.4+p*.06,Math.PI-.7,Math.PI+.7);c.stroke()}
   else{c.globalAlpha=.8;c.strokeStyle=S.accent;c.lineWidth=.06;c.beginPath();c.arc(x,y,.36,-Math.PI/2,-Math.PI/2+Math.PI*2*(1-d.cd/(d.lv?6:12)));c.stroke()}}
+ c.restore();if(d.lv&&ST.phase==='plan')txt(c,'★',x+.38,y-.4,.22,S.accent,{font:'Nunito',weight:'800'});
+}
+function drawFogDev(c,x,y,d){
+ c.save();const col=theme==='board'?'#2b1d14':S.devCol,fill=theme==='board'?'#d9e6ef':S.devFill;
+ if(S.glow){c.shadowColor=col;c.shadowBlur=6*DPR}c.fillStyle=fill;c.strokeStyle=col;c.lineWidth=.05;c.beginPath();c.arc(x,y,.24,0,7);c.fill();c.stroke();c.shadowBlur=0;
+ for(let k=0;k<3;k++){const a=k*2.094+.5;c.beginPath();c.arc(x+Math.cos(a)*.11,y+Math.sin(a)*.11,.045,0,7);c.stroke()}
+ if(ST.phase==='heist'&&d.cd>0){c.globalAlpha=.8;c.strokeStyle=S.accent;c.lineWidth=.06;c.beginPath();c.arc(x,y,.36,-Math.PI/2,-Math.PI/2+Math.PI*2*(1-d.cd/20));c.stroke()}
+ else if(ST.phase==='plan'&&ST.sel===d){c.globalAlpha=.25;c.setLineDash([.12,.1]);c.strokeStyle=S.accent;c.beginPath();c.arc(x,y,4.2,0,7);c.stroke()}
  c.restore();if(d.lv&&ST.phase==='plan')txt(c,'★',x+.38,y-.4,.22,S.accent,{font:'Nunito',weight:'800'});
 }
 function drawCamera(c,x,y,a,d){
@@ -2410,7 +2439,7 @@ function selectTool(t){if(ST.routeFor)finishRoute();ST.tool=ST.tool===t?null:t;S
 function setSpeed(s){ST.speed=s;document.querySelectorAll('#speedRow button').forEach(b=>b.classList.toggle('on',+b.dataset.s===s))}
 
 // ================================================================ UI
-const SHORT={plate:'Plate',light:'Light',steel:'Door',floodlight:'Light',speaker:'Speaker',dog:'Dog',camera:'Camera',laser:'Laser',guard:'Guard',decoy:'Decoy'};
+const SHORT={plate:'Plate',light:'Light',steel:'Door',floodlight:'Light',speaker:'Speaker',dog:'Dog',camera:'Camera',laser:'Laser',guard:'Guard',decoy:'Decoy',fog:'Fog'};
 function buildToolUI(){$('tools').innerHTML=Object.entries(DEV).map(([k,d])=>`<button class="tool" data-t="${k}">${ICON[k]}<span><span class="nm">${d.name}</span><span class="sn">${SHORT[k]||d.name}</span><span class="c">${money(d.cost)}</span></span><kbd>${d.key}</kbd></button>`).join('');
  document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{AU.init();selectTool(b.dataset.t)});
  $('routeDone').onclick=()=>{if(ST.routeFor)finishRoute()};$('worksBtn').onclick=()=>{AU.init();AU.click();worksSheet()};$('styles').innerHTML='<button id="lookBtn"></button>';$('lookBtn').onclick=()=>{AU.init();AU.click();setTheme(nextLook())};
@@ -2531,7 +2560,7 @@ function frame(now){
   crewTick-=dt;if(crewTick<=0){crewTick=.4;renderCrew();$('sClock').textContent=fmtClock();if(ST.sel)refreshSelOnly()}}
  else if(ST.phase==='replay'){updateReplay(dt)}
  else if(ST.phase==='plan'){ST.t+=dt;for(const d of ST.devices)if(d.type==='camera')d.cur=aimDrag&&aimDrag.dev===d?d.ang:camAngle(d,ST.t)}
- if(homeOn())drawHome();else render(dt);drawLoupe();syncTheme(dt);if((tutTick._n=(tutTick._n||0)+1)%6===0)tutTick();
+ govTick(dt);if(homeOn())drawHome();else render(dt);drawLoupe();syncTheme(dt);if((tutTick._n=(tutTick._n||0)+1)%6===0)tutTick();
  requestAnimationFrame(frame);
 }
 function refreshSelOnly(){}
@@ -2542,7 +2571,19 @@ setTheme(theme);document.querySelectorAll('#mtabs button').forEach(b=>b.onclick=
 addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,250));resize();$('fsBtn').onclick=()=>{AU.init();toggleFS()};if(window.IJ_APP||navigator.standalone||matchMedia('(display-mode: fullscreen),(display-mode: standalone)').matches)$('fsBtn').hidden=true;
 if(document.fonts)document.fonts.ready.then(()=>redrawStatic());
 // ================================================================ 3D NIGHT (three.js)
-function r3Quality(){const mob=matchMedia('(pointer:coarse)').matches||innerWidth<900;return mob?'med':'high'}
+function r3Touch(){return !!window.IJ_APP||/iPhone|iPad|iPod|Android/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)||matchMedia('(any-pointer:coarse)').matches}
+function r3Quality(){if(R3.qFix)return R3.qFix;const mob=r3Touch()||innerWidth<900;return mob?'med':'high'}
+// v32: frame-time governor. It watches real frame times and steps the 3D detail down (or back up) to keep the game smooth:
+// level 3 = desktop, 2 = phone default, 1 and 0 = struggling device. Each level sets render resolution, how often the
+// floor plan texture and the shadows are refreshed, and the dust. No level changes the lights, so no shader recompiles.
+const GOV={lvl:-1,max:3,acc:0,n:0,lo:0,hi:0,k:0,sk:0,fd:0,lock:0};
+const GOVL=[{pr:1,floor:3,shadow:3,dust:false},{pr:1.3,floor:2,shadow:2,dust:false},{pr:1.6,floor:1,shadow:1,dust:true},{pr:2,floor:1,shadow:1,dust:true}];
+function govInit(){if(GOV.lvl>=0)return;GOV.max=r3Quality()==='high'?3:2;let v=GOV.max;try{const s=+localStorage.getItem('ij-gov');if(s>=0&&s<=GOV.max)v=s}catch(e){}GOV.lvl=v}
+function govSet(l){l=clamp(l,0,GOV.max);if(l===GOV.lvl)return;GOV.lvl=l;GOV.acc=GOV.n=GOV.lo=GOV.hi=0;GOV.lock=1.5;try{localStorage.setItem('ij-gov',l)}catch(e){}r3Size()}
+function govTick(dt){if(!R3.on||homeOn()||document.hidden)return;if(GOV.lock>0){GOV.lock-=dt;return}if(dt>.2)return;GOV.acc+=dt;GOV.sq=(GOV.sq||0)+dt*dt;GOV.n++;if(GOV.acc<1)return;const avg=GOV.acc/GOV.n,sd=Math.sqrt(Math.max(0,GOV.sq/GOV.n-avg*avg));GOV.acc=GOV.n=GOV.sq=0;
+ // a steady 30 fps with no jitter is a frame-rate cap (iOS Low Power Mode), not a struggling GPU: leave the detail alone
+ const capped=avg>.03&&avg<.037&&sd<.003;
+ if(avg>1/42&&!capped){GOV.hi=0;if(++GOV.lo>=2)govSet(GOV.lvl-1)}else if(avg<1/56){GOV.lo=0;if(++GOV.hi>=6)govSet(GOV.lvl+1)}else{GOV.lo=0;GOV.hi=0}}
 function r3Glow(){if(R3.glowTex)return R3.glowTex;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');const g=x.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.25,'rgba(255,255,255,.55)');g.addColorStop(.6,'rgba(255,255,255,.12)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,128,128);R3.glowTex=new THREE.CanvasTexture(c);return R3.glowTex}
 function r3Blob(size,op){if(!R3.blobTex){const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(0,0,0,1)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,64,64);R3.blobTex=new THREE.CanvasTexture(c)}const m=new THREE.Mesh(new THREE.PlaneGeometry(size,size),new THREE.MeshBasicMaterial({map:R3.blobTex,transparent:true,opacity:op??.55,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.y=.012;m.renderOrder=1;return m}
 function r3Sprite(col,size,op){const SK=R3.look==='sketch';const m=new THREE.SpriteMaterial({map:r3Glow(),color:col,transparent:true,opacity:(op??.8)*(SK?.55:1),blending:SK?THREE.NormalBlending:THREE.AdditiveBlending,depthWrite:false,fog:true});const s=new THREE.Sprite(m);s.scale.set(size,size,1);return s}
@@ -2552,7 +2593,7 @@ function r3Block(x,y,w,h,ht,r,bev){bev=bev??.05;const sh=r3RoundRect(x,-(y+h),w,
 function r3Hatch(){if(R3.hatch)return R3.hatch;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');x.fillStyle='#f3ecd9';x.fillRect(0,0,128,128);const r=mulberry(5);x.strokeStyle='rgba(60,52,40,.34)';x.lineCap='round';
  for(let k=-128;k<256;k+=7){x.lineWidth=.7+r()*1.1;x.beginPath();const o=r()*5,a=r()*30,b=128-r()*30;x.moveTo(k+o+a,a);x.lineTo(k+o+b,b);x.stroke()}
  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(1.3,1.3);t.colorSpace=THREE.SRGBColorSpace;R3.hatch=t;return t}
-function r3Mats(SK){if(!SK)return {wall:new THREE.MeshStandardMaterial({color:'#2a5d99',roughness:.5,metalness:.1}),cap:new THREE.MeshStandardMaterial({color:'#5f9ad8',emissive:'#2f86e8',emissiveIntensity:.35,roughness:.35,metalness:.1}),
+function r3Mats(SK){if(!SK)return {wall:new THREE.MeshStandardMaterial({color:'#2a5d99',roughness:.5,metalness:.1,emissive:'#1d4a85',emissiveIntensity:.4}),cap:new THREE.MeshStandardMaterial({color:'#5f9ad8',emissive:'#2f86e8',emissiveIntensity:.35,roughness:.35,metalness:.1}),
    door:new THREE.MeshStandardMaterial({color:'#3f86cf',roughness:.45,metalness:.2}),brass:new THREE.MeshStandardMaterial({color:'#ffd36b',emissive:'#7a5a10',emissiveIntensity:.4,metalness:.8,roughness:.3}),
    steel:new THREE.MeshStandardMaterial({color:'#8ea3b8',metalness:.6,roughness:.4,emissive:'#3a4a5c',emissiveIntensity:.55}),plinth:new THREE.MeshStandardMaterial({color:'#153b69',roughness:.5,metalness:.1}),plinthTop:new THREE.MeshStandardMaterial({color:'#2a5d96',roughness:.4,emissive:'#103a6a',emissiveIntensity:.4}),
    dev:new THREE.MeshStandardMaterial({color:'#dbeeff',roughness:.35,metalness:.3}),dark:new THREE.MeshStandardMaterial({color:'#0b1626',roughness:.6,metalness:.4}),led:new THREE.MeshBasicMaterial({color:'#ff4a5a'}),laser:new THREE.MeshBasicMaterial({color:'#ff3b55',transparent:true,opacity:.95,blending:THREE.AdditiveBlending,depthWrite:false}),
@@ -2561,17 +2602,17 @@ function r3Mats(SK){if(!SK)return {wall:new THREE.MeshStandardMaterial({color:'#
  return {wall:T('#ffffff',{map:r3Hatch()}),cap:T('#f8f1de'),door:T('#c9a36a'),brass:T('#e0a020'),steel:T('#aab3bb'),plinth:T('#e4d9bd'),plinthTop:T('#fbf6e8'),dev:T('#f7f2e4'),dark:T('#3a3631'),led:new THREE.MeshBasicMaterial({color:'#c8382b'}),
   laser:new THREE.MeshBasicMaterial({color:'#c8382b',transparent:true,opacity:.9,depthWrite:false}),cone:new THREE.MeshBasicMaterial({color:'#2c5aa0',transparent:true,opacity:.06,depthWrite:false,side:THREE.DoubleSide}),torch:new THREE.MeshBasicMaterial({color:'#f4c95d',transparent:true,opacity:.2,depthWrite:false,side:THREE.DoubleSide}),
   ink:new THREE.MeshBasicMaterial({color:'#2f2c27',side:THREE.BackSide}),line:new THREE.LineBasicMaterial({color:'#2f2c27'})}}
-const R3LP={night:{bg:'#06162d',ground:'#0a2142',sky:'#5d8fd6',skyDark:'#a03040',gnd:'#02060f',sun:'#9cc4ff',rim:'#6fb4ff',rimI:.35,hemi:[.12,.95,.34],sunI:[.35,1.6,1.5],floorE:[.3,.07],exp:[1.35,1.2],pool:[.1,.2],torch:40,cam:30,lamp:24,vig:'rgba(0,0,0,.45)'},
+const R3LP={night:{bg:'#06162d',ground:'#0a2142',sky:'#5d8fd6',skyDark:'#a03040',gnd:'#02060f',sun:'#9cc4ff',rim:'#6fb4ff',rimI:.9,hemi:[.12,.95,.34],sunI:[.35,1.6,1.5],floorE:[.3,.07],exp:[1.35,1.2],pool:[.1,.2],torch:40,cam:30,lamp:24,vig:'rgba(0,0,0,.45)'},
  sketch:{bg:'#d9cdb2',ground:'#cfc2a4',sky:'#fff8ea',skyDark:'#c98a8a',gnd:'#b9a988',sun:'#fff2dc',rim:'#dfe8ff',rimI:.5,hemi:[.9,2.0,1.75],sunI:[.8,2.3,2.0],floorE:[.12,.06],exp:[1,1],pool:[0,.09],torch:14,cam:9,lamp:10,vig:'rgba(70,50,20,.2)'}};
 function r3Look(look){if(!R3.ready||R3.look===look)return;R3.look=look;const SK=look==='sketch',L=R3.LP=R3LP[look];
  if(R3.mats)for(const k in R3.mats)R3.mats[k].dispose();R3.mats=r3Mats(SK);
  R3.sc.background.set(L.bg);R3.sc.fog.color.set(L.bg);R3.groundMat.color.set(L.ground);R3.hemi.groundColor.set(L.gnd);R3.moon.color.set(L.sun);R3.rim.color.set(L.rim);R3.rim.intensity=L.rimI;
- R3.r.toneMapping=SK?THREE.LinearToneMapping:THREE.ACESFilmicToneMapping;R3.floorMat.roughness=SK?1:.82;R3.floorMat.needsUpdate=true;R3.groundMat.needsUpdate=true;R3.dust.visible=!SK;
+ R3.ov.style.background='radial-gradient(circle,rgba(0,0,0,0) 34%,'+L.vig+' 130%)';R3.r.toneMapping=SK?THREE.LinearToneMapping:THREE.ACESFilmicToneMapping;R3.floorMat.roughness=SK?1:.82;R3.floorMat.needsUpdate=true;R3.groundMat.needsUpdate=true;R3.dust.visible=!SK&&(GOVL[GOV.lvl]||GOVL[2]).dust;
  r3ClearPeople();if(R3.kit){for(const m of R3.kit.mats.values()){if(m.map)m.map.dispose();m.dispose()}R3.kit.mats.clear()}R3.wkey=null;R3.dk=null;R3.sk=null;R3.warm=false}
 function r3Init(){if(R3.ready)return true;if(R3.failed||!window.THREE)return false;
  try{const gl=document.createElement('canvas');gl.id='cv3';const ov=document.createElement('canvas');ov.id='cvo';$('stage').insertBefore(gl,$('cv'));$('stage').insertBefore(ov,$('cv').nextSibling);
   const r=new THREE.WebGLRenderer({canvas:gl,antialias:true,powerPreference:'high-performance'});R3.r=r;R3.gl=gl;R3.ov=ov;R3.octx=ov.getContext('2d');
-  r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.25;r.outputColorSpace=THREE.SRGBColorSpace;
+  r.shadowMap.enabled=true;r.shadowMap.autoUpdate=false;r.shadowMap.type=THREE.PCFSoftShadowMap;r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.25;r.outputColorSpace=THREE.SRGBColorSpace;
   const sc=new THREE.Scene();R3.sc=sc;sc.background=new THREE.Color('#06162d');sc.fog=new THREE.FogExp2('#06162d',.014);
   R3.cam=new THREE.PerspectiveCamera(26,1,.1,300);
   // floor = the live 2D plan (routes, cones, plates and all) as a texture
@@ -2582,16 +2623,16 @@ function r3Init(){if(R3.ready)return true;if(R3.failed||!window.THREE)return fal
   R3.hemi=new THREE.HemisphereLight('#4a7cc4','#02060f',.55);sc.add(R3.hemi);
   const moon=new THREE.DirectionalLight('#9cc4ff',.75);moon.position.set(W/2-14,34,H/2-20);moon.target.position.set(W/2,0,H/2);sc.add(moon,moon.target);moon.castShadow=true;R3.moon=moon;
   Object.assign(moon.shadow.camera,{left:-W*.62,right:W*.62,top:H*.75,bottom:-H*.75,near:5,far:90});moon.shadow.bias=-.0004;moon.shadow.normalBias=.02;moon.shadow.radius=5;moon.shadow.blurSamples=16;
-  const rim=new THREE.DirectionalLight('#6fb4ff',.35);R3.rim=rim;rim.position.set(W/2+18,10,H/2+30);rim.target.position.set(W/2,0,H/2);sc.add(rim,rim.target);
+  const rim=new THREE.DirectionalLight('#6fb4ff',.35);R3.rim=rim;rim.position.set(W/2+6,16,H/2+34);rim.target.position.set(W/2,0,H/2);sc.add(rim,rim.target);
   R3.world=new THREE.Group();sc.add(R3.world);R3.dyn=new THREE.Group();sc.add(R3.dyn);
   // drifting dust in the light
   const N=500,pos=new Float32Array(N*3);for(let k=0;k<N;k++){pos[k*3]=Math.random()*W;pos[k*3+1]=.2+Math.random()*2.6;pos[k*3+2]=Math.random()*H}
   const dg=new THREE.BufferGeometry();dg.setAttribute('position',new THREE.BufferAttribute(pos,3));R3.dust=new THREE.Points(dg,new THREE.PointsMaterial({color:'#bfe3ff',size:.05,transparent:true,opacity:.45,blending:THREE.AdditiveBlending,depthWrite:false}));sc.add(R3.dust);
   R3.ray=new THREE.Raycaster();R3.plane=new THREE.Plane(new THREE.Vector3(0,1,0),0);
-  R3.ready=true;r3Quality();r3Look(LOOK==='sketch3d'?'sketch':'night');r3LightPool();r3LoadKit();return true}catch(e){console.warn('3D unavailable',e);R3.failed=true;return false}}
+  R3.ready=true;R3.q=r3Quality();govInit();r3Look(LOOK==='sketch3d'?'sketch':'night');r3LoadKit();return true}catch(e){console.warn('3D unavailable',e);R3.failed=true;return false}}
 function r3Size(){if(!R3.ready)return;const st=$('stage').getBoundingClientRect();const w=Math.max(10,Math.round(st.width)),h=Math.max(10,Math.round(st.height));
  for(const el of [R3.gl,R3.ov]){el.style.left='0px';el.style.top='0px';el.style.width=w+'px';el.style.height=h+'px'}
- R3.q=r3Quality();const pr=Math.min(devicePixelRatio||1,R3.q==='high'?2:1.6);R3.r.setPixelRatio(pr);R3.r.setSize(w,h,false);R3.ov.width=Math.round(w*DPR);R3.ov.height=Math.round(h*DPR);
+ R3.q=r3Quality();govInit();const GL=GOVL[GOV.lvl];const pr=Math.min(devicePixelRatio||1,GL.pr);R3.r.setPixelRatio(pr);R3.dust.visible=GL.dust&&R3.look!=='sketch';R3.r.setSize(w,h,false);R3.ov.width=Math.round(w*DPR);R3.ov.height=Math.round(h*DPR);
  const sm=R3.q==='high'?4096:2048;if(R3.moon.shadow.mapSize.x!==sm){R3.moon.shadow.mapSize.set(sm,sm);if(R3.moon.shadow.map){R3.moon.shadow.map.dispose();R3.moon.shadow.map=null}}
  R3.cam.aspect=w/h;R3.fit=null;R3.cam.updateProjectionMatrix()}
 function r3Fit(){// frame the whole building at a 56° tilt
@@ -2613,11 +2654,96 @@ function r3Walls(){if(!R3.ready)return;const key=SITE+'|'+G.join('');if(R3.wkey=
   if(d.vault){const vd=new THREE.Mesh(new THREE.CylinderGeometry(.62,.62,.18,32),R3.mats.steel);vd.rotation.x=Math.PI/2;if(d.vert)vd.rotation.z=Math.PI/2;vd.position.y=.66;vd.castShadow=true;piv.add(vd);const hub=new THREE.Mesh(new THREE.TorusGeometry(.27,.04,8,24),R3.mats.brass);hub.position.y=.66;hub.rotation.copy(vd.rotation);hub.rotation.x+=Math.PI/2;piv.add(hub);grp.position.set(d.x+.5,0,d.y+.5)}
   else{const L=.9;const p=new THREE.Mesh(r3PanelGeo(),R3.mats.door);p.castShadow=true;piv.add(p);const kn=new THREE.Mesh(new THREE.SphereGeometry(.04,10,8),R3.mats.brass);kn.position.set(L*.82,.6,.06);piv.add(kn);
    if(d.vert){grp.position.set(d.x+.5,0,d.y+.04);grp.rotation.y=-Math.PI/2}else grp.position.set(d.x+.04,0,d.y+.5)}
-  if(SK)r3Outline(grp);R3.world.add(grp);R3.doors.push({d,piv,grp})}
+  grp.userData.keep=true;if(SK)r3Outline(grp);R3.world.add(grp);R3.doors.push({d,piv,grp})}
  // a soft pool of lamplight on the floor of every room
- R3.pools=[];R3.poolGeo=R3.poolGeo||new THREE.PlaneGeometry(1,1);for(const [k,rm] of ROOMS.entries()){const m=new THREE.Mesh(R3.poolGeo.clone(),new THREE.MeshBasicMaterial({map:r3Glow(),color:SK?'#f4c95d':k%3===1?'#9fd0ff':'#ffd9a0',transparent:true,opacity:0,blending:SK?THREE.NormalBlending:THREE.AdditiveBlending,depthWrite:false}));m.rotation.x=-Math.PI/2;const sz=8+((k*37)%5);m.scale.set(sz,sz*.8,1);m.position.set(rm.x,.03+k*.001,rm.y+.6);m.renderOrder=2;R3.world.add(m);R3.pools.push(m)}
- r3Outside();
+ R3.pools=[];R3.poolGeo=R3.poolGeo||new THREE.PlaneGeometry(1,1);for(const [k,rm] of ROOMS.entries()){const m=new THREE.Mesh(R3.poolGeo.clone(),new THREE.MeshBasicMaterial({map:r3Glow(),color:SK?'#f4c95d':k%3===1?'#9fd0ff':'#ffd9a0',transparent:true,opacity:0,blending:SK?THREE.NormalBlending:THREE.AdditiveBlending,depthWrite:false}));m.rotation.x=-Math.PI/2;const sz=8+((k*37)%5);m.scale.set(sz,sz*.8,1);m.position.set(rm.x,.03+k*.001,rm.y+.6);m.renderOrder=2;m.userData.keep=true;R3.world.add(m);R3.pools.push(m)}
+ r3Outside();r3Props();
+ r3MergeStatic(R3.world);R3.shNow=true;
  r3Fit()}
+// v32: everything that never moves (walls, ink lines, trees, lamps, props) is merged into one mesh per material,
+// which takes the scene from a few hundred draw calls to a few dozen. Anything marked userData.keep is left alone.
+function r3MergeStatic(root){root.updateMatrixWorld(true);const B=new Map(),done=[];
+ const walk=o=>{if(o.userData.keep)return;for(const c of o.children)walk(c);if(!(o.isMesh||o.isLineSegments)||o.isSkinnedMesh||o.isInstancedMesh)return;
+  const mats=Array.isArray(o.material)?o.material:[o.material];const g=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();g.applyMatrix4(o.matrixWorld);
+  const grs=g.groups.length&&Array.isArray(o.material)?g.groups:[{start:0,count:g.attributes.position.count,materialIndex:0}];
+  for(const gr of grs){const m=mats[gr.materialIndex||0];if(!m)continue;const key=(o.isLineSegments?'L':'M')+m.uuid+(o.castShadow?1:0)+(o.receiveShadow?1:0)+(o.renderOrder||0);let b=B.get(key);if(!b)B.set(key,b={m,line:o.isLineSegments,cs:o.castShadow,rs:o.receiveShadow,ro:o.renderOrder,parts:[]});b.parts.push([g,gr.start,Math.min(gr.count,g.attributes.position.count-gr.start)])}
+  done.push(o)};
+ walk(root);
+ for(const b of B.values()){let n=0;for(const [,,c] of b.parts)n+=c;const out=new THREE.BufferGeometry();
+  for(const k of b.line?['position']:['position','normal','uv']){const arr=new Float32Array(n*(k==='uv'?2:3));let o=0;const sz=k==='uv'?2:3;
+   for(const [g,st,c] of b.parts){const a=g.attributes[k];if(a)arr.set(a.array.subarray(st*sz,(st+c)*sz),o);o+=c*sz}out.setAttribute(k,new THREE.BufferAttribute(arr,sz))}
+  const m=b.line?new THREE.LineSegments(out,b.m):new THREE.Mesh(out,b.m);m.castShadow=b.cs;m.receiveShadow=b.rs;m.renderOrder=b.ro||0;m.userData.merged=true;root.add(m)}
+ const geos=new Set();for(const o of done){if(o.parent)o.parent.remove(o);geos.add(o.geometry)}for(const g of geos)if(g!==R3.pg&&g!==R3.poolGeo)g.dispose();
+ for(const b of B.values())for(const [g] of b.parts)g.dispose();
+ // drop groups left empty
+ const prune=o=>{for(const c of [...o.children])prune(c);if(o!==root&&o.type==='Group'&&!o.children.length&&o.parent)o.parent.remove(o)};prune(root)}
+// v32: furnishing. Every wall face that looks into a room gets a skirting board, and some get something that fits the room:
+// paintings in galleries, shelves in stores and libraries, deposit boxes in vaults, neon in the casino. Everything hugs the
+// wall (under a quarter tile deep) so nobody walks through it, keeps clear of doors and loot, and is merged into a few meshes.
+// a small made-up painting for each canvas: sky, hills, a sun or moon, a figure. Same name, same picture.
+function r3Canvas(name){R3.art=R3.art||new Map();if(R3.art.has(name))return R3.art.get(name);let h=9;for(const ch of name)h=(h*31+ch.charCodeAt(0))>>>0;const r=()=>{h=(h*1664525+1013904223)>>>0;return h/4294967296};
+ const c=document.createElement('canvas');c.width=128;c.height=96;const x=c.getContext('2d');const hue=Math.floor(r()*360);const sky=x.createLinearGradient(0,0,0,96);sky.addColorStop(0,`hsl(${hue},45%,${30+r()*30}%)`);sky.addColorStop(1,`hsl(${(hue+40)%360},55%,${55+r()*25}%)`);x.fillStyle=sky;x.fillRect(0,0,128,96);
+ x.fillStyle=`hsl(${(hue+180)%360},60%,80%)`;x.beginPath();x.arc(20+r()*90,15+r()*25,6+r()*8,0,7);x.fill();
+ for(let k=0;k<3;k++){x.fillStyle=`hsl(${(hue+90+k*25)%360},${30+k*10}%,${35-k*8}%)`;x.beginPath();x.moveTo(0,96);let yy=50+k*12+r()*10;x.lineTo(0,yy);for(let px=0;px<=128;px+=16){yy+=(r()-.5)*14;x.lineTo(px,yy)}x.lineTo(128,96);x.fill()}
+ if(r()<.6){x.fillStyle='rgba(20,15,10,.8)';const fx=30+r()*70,fy=60+r()*10;x.fillRect(fx-2,fy-12,4,12);x.beginPath();x.arc(fx,fy-15,3.5,0,7);x.fill()}
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;R3.art.set(name,t);return t}
+// sixteen little paintings in one texture, so every painting on every wall shares one material
+function r3Atlas(){if(R3.atlas)return R3.atlas;const c=document.createElement('canvas');c.width=512;c.height=384;const x=c.getContext('2d');
+ for(let k=0;k<16;k++){const t=r3Canvas('wall'+k);x.drawImage(t.image,(k%4)*128,(3-Math.floor(k/4))*96,128,96)}const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;R3.atlas=t;return t}
+function r3Props(){const SK=R3.look==='sketch',g=new THREE.Group();let sd=7;for(const ch of SITE)sd=(sd*31+ch.charCodeAt(0))>>>0;const rnd=()=>{sd=(sd*1664525+1013904223)>>>0;return sd/4294967296};
+ const C=R3.propM||(R3.propM={});const M=(k,col,o)=>C[k+R3.look]||(C[k+R3.look]=r3Mat(col,o));
+ const wood=M('wood',SK?'#c9a36a':'#6b4a33',{e:.12}),dark=M('dk',SK?'#5b5850':'#16263d',{e:.12}),skirt=M('sk',SK?'#8d8577':'#173f6e',{e:.1}),
+  metal=M('mt',SK?'#b8bec4':'#7d93ab',{m:.6,r:.35,e:.18}),brass=M('br',SK?'#e0a020':'#e8b84a',{m:.7,r:.3,e:.3}),paper=M('pp',SK?'#fbf6e8':'#d8e6f5',{e:.2}),
+  cork=M('ck',SK?'#c98a4b':'#9a6a3e',{e:.15}),leaf=M('lf',SK?'#8fb573':'#2a8163',{e:.25}),pot=M('pt',SK?'#c46a4a':'#a3523a',{e:.15}),
+  glass=C['gl'+R3.look]||(C['gl'+R3.look]=new THREE.MeshBasicMaterial({color:SK?'#b9d7e6':'#ffd98a',transparent:true,opacity:SK?.85:.55})),
+  glow=C['gw'+R3.look]||(C['gw'+R3.look]=new THREE.MeshBasicMaterial({color:SK?'#f4c95d':'#fff1c2'})),
+  neon=[0,1,2].map(k=>C['ne'+k+R3.look]||(C['ne'+k+R3.look]=new THREE.MeshBasicMaterial({color:SK?['#c8382b','#2c5aa0','#3d9a4a'][k]:['#ff4fd8','#4ff0ff','#ffe34f'][k]}))),
+  art=['#c8553d','#2c5aa0','#e0a020','#3d9a4a','#8a4fd8','#2f2c27','#d98a8a'].map((c,k)=>M('ar'+k,c,{e:.3})),
+  atlas=C['at'+R3.look]||(C['at'+R3.look]=SK?new THREE.MeshToonMaterial({map:r3Atlas(),gradientMap:r3Grad()}):new THREE.MeshStandardMaterial({map:r3Atlas(),emissive:'#ffffff',emissiveMap:r3Atlas(),emissiveIntensity:.3,roughness:.8})),
+  books=['#8b2e2e','#2e4f8b','#2e8b57','#b0802a','#5a3e7a'].map((c,k)=>M('bk'+k,c,{e:.15}));
+ const box=(p,w,h,d,mat,x,y,z,cs)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=!!cs;m.receiveShadow=true;p.add(m);return m};
+ const isW=(x,y)=>inb(x,y)&&G[idx(x,y)]===WALL;const fl=(x,y)=>inb(x,y)&&G[idx(x,y)]===FLOOR;
+ const busy=new Set();for(const l of LOOT_DEF)busy.add(idx(l.x,l.y));for(const e of ENTRIES)busy.add(idx(e.spawn[0],e.spawn[1]));
+ for(let i=0;i<W*H;i++)if(G[i]===DOOR||G[i]===ENTRY){const x=tx(i),y=ty(i);for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)if(inb(x+a,y+b))busy.add(idx(x+a,y+b))}
+ for(const e of ENTRIES)for(const [x,y] of e.tiles)for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)if(inb(x+a,y+b))busy.add(idx(x+a,y+b));
+ const KIND={gallery:'art',['long gallery']:'art',showroom:'art',['egyptian room']:'art',['great hall']:'art',['drawing room']:'art',['grand hall']:'art',
+  office:'office',study:'office',security:'office',['count room']:'office',library:'books',archive:'books',['store room']:'store',['loading dock']:'store',workshop:'store',armoury:'store',
+  lobby:'lobby',['banking hall']:'lobby',['atm lobby']:'lobby',corridor:'lobby',kitchen:'kitchen',vault:'vault',['deposit room']:'vault',['gem room']:'vault',['cashier cage']:'vault',
+  ['gaming floor']:'casino',['vip lounge']:'casino',bar:'casino',conservatory:'green'};
+ const items={
+  art:[[.5,'painting'],[.12,'sconce']],office:[[.16,'cabinet'],[.14,'board'],[.07,'clock'],[.1,'radiator'],[.1,'shelf']],books:[[.65,'books']],store:[[.4,'shelf']],
+  lobby:[[.18,'sconce'],[.14,'painting'],[.1,'radiator']],kitchen:[[.6,'counter']],vault:[[.55,'deposit']],casino:[[.3,'neon'],[.1,'painting']],green:[[.45,'plant']]};
+ const build={
+  painting(p){const w=.42+rnd()*.24,h=.3+rnd()*.18;box(p,w+.08,h+.08,.03,SK?wood:brass,0,.86,.015);const pg=new THREE.PlaneGeometry(w,h),cell=Math.floor(rnd()*16),u0=(cell%4)/4,v0=Math.floor(cell/4)/4,uv=pg.attributes.uv;for(let i=0;i<uv.count;i++)uv.setXY(i,u0+uv.getX(i)*.25,v0+uv.getY(i)*.25);const pm=new THREE.Mesh(pg,atlas);pm.position.set(0,.86,.032);p.add(pm);box(p,.16,.03,.06,brass,0,.86+h/2+.09,.04)},
+  sconce(p){box(p,.08,.14,.04,brass,0,1.02,.02);const b=new THREE.Mesh(new THREE.SphereGeometry(.06,10,8),glow);b.position.set(0,1.12,.07);p.add(b)},
+  cabinet(p){box(p,.42,.72,.24,metal,0,.36,.12,1);for(let k=0;k<3;k++){box(p,.36,.02,.01,dark,0,.15+k*.22,.245);box(p,.1,.025,.02,brass,0,.24+k*.22,.25)}},
+  board(p){box(p,.56,.38,.025,cork,0,.92,.012);for(let k=0;k<4;k++)box(p,.1+rnd()*.06,.12+rnd()*.05,.03,paper,(rnd()-.5)*.36,.92+(rnd()-.5)*.18,.015)},
+  clock(p){const c=new THREE.Mesh(new THREE.CylinderGeometry(.11,.11,.03,18),paper);c.rotation.x=Math.PI/2;c.position.set(0,1.15,.02);p.add(c);box(p,.012,.08,.01,dark,0,1.17,.04);box(p,.06,.012,.01,dark,.025,1.15,.04)},
+  radiator(p){for(let k=0;k<6;k++)box(p,.06,.3,.06,paper,-.18+k*.072,.2,.04)},
+  shelf(p,bk){const w=.84;box(p,w,1.04,.02,wood,0,.52,.01,1);for(const s of [-1,1])box(p,.03,1.04,.24,wood,s*(w/2-.015),.52,.12,1);for(let k=0;k<4;k++){const y=.06+k*.32;box(p,w,.025,.24,wood,0,y,.12);
+   let x=-w/2+.05;while(x<w/2-.08){if(bk){const bw=.04+rnd()*.04,bh=.16+rnd()*.08;box(p,bw,bh,.16,books[Math.floor(rnd()*books.length)],x+bw/2,y+.012+bh/2,.1);x+=bw+.006}else{const bw=.12+rnd()*.12,bh=.1+rnd()*.12;if(rnd()<.75)box(p,bw,bh,.18,rnd()<.5?cork:paper,x+bw/2,y+.012+bh/2,.11);x+=bw+.03}}}},
+  books(p){build.shelf(p,true)},
+  counter(p){box(p,.98,.46,.24,wood,0,.23,.12,1);box(p,1,.04,.26,paper,0,.48,.13)},
+  deposit(p){box(p,.94,.9,.04,metal,0,.55,.02,0);for(let r=0;r<4;r++)for(let c=0;c<4;c++){box(p,.2,.18,.02,metal,-.33+c*.22,.22+r*.22,.045);box(p,.03,.03,.02,brass,-.33+c*.22,.22+r*.22,.06)}},
+  neon(p){box(p,.86,.035,.03,neon[Math.floor(rnd()*3)],0,1.12,.02);box(p,.6,.035,.03,neon[Math.floor(rnd()*3)],0,1.04,.02)},
+  plant(p){const s=.8+rnd()*.4;const pt=new THREE.Mesh(new THREE.CylinderGeometry(.13*s,.1*s,.24*s,10),pot);pt.position.set(0,.12*s,.14);pt.castShadow=true;p.add(pt);const l=new THREE.Mesh(new THREE.IcosahedronGeometry(.2*s,0),leaf);l.position.set(0,.36*s,.14);l.castShadow=true;p.add(l);const l2=new THREE.Mesh(new THREE.IcosahedronGeometry(.13*s,0),leaf);l2.position.set(.07,.52*s,.12);p.add(l2)}};
+ const pick=list=>{let r=rnd();for(const [p,k] of list){if(r<p)return k;r-=p}return null};
+ const dirs=[[1,0],[-1,0],[0,1],[0,-1]];const winAt=new Set();
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(!isW(x,y))continue;const out=dirs.find(([a,b])=>inb(x+a,y+b)&&G[idx(x+a,y+b)]===OUT);if(!out)continue;const hz=out[1]!==0;
+  if(hz?!(isW(x-1,y)&&isW(x+1,y)):!(isW(x,y-1)&&isW(x,y+1)))continue;if((hz?x:y)%3!==1)continue;const inn=[x-out[0],y-out[1]];if(!fl(inn[0],inn[1])||busy.has(idx(inn[0],inn[1])))continue;winAt.add(idx(x,y))}
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(!isW(x,y))continue;const nW=dirs.filter(([a,b])=>isW(x+a,y+b)).length;
+  for(const [dx,dy] of dirs){const nx=x+dx,ny=y+dy;if(!fl(nx,ny))continue;
+   const face=new THREE.Group();const fo=SK?.51:.528;face.position.set(x+.5+dx*fo,0,y+.5+dy*fo);face.rotation.y=Math.atan2(dx,dy);g.add(face);
+   box(face,1,.075,.025,skirt,0,.0375,.0125);
+   if(nW<2||winAt.has(idx(x,y))||busy.has(idx(nx,ny)))continue;const k=pick(items[KIND[roomOf(idx(nx,ny))]]||[]);if(k)build[k](face)}}
+ // corners: a plant or a stack of boxes
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(!fl(x,y)||busy.has(idx(x,y)))continue;const sx=isW(x-1,y)?-1:isW(x+1,y)?1:0,sy=isW(x,y-1)?-1:isW(x,y+1)?1:0;if(!sx||!sy||rnd()>.35)continue;
+  const kd=KIND[roomOf(idx(x,y))];const p=new THREE.Group();p.position.set(x+.5+sx*.3,0,y+.5+sy*.3);g.add(p);
+  if(kd==='store'){box(p,.3,.24,.3,cork,0,.12,0,1);box(p,.22,.18,.22,cork,.02,.33,-.02,1)}else if(kd==='vault')box(p,.26,.3,.26,metal,0,.15,0,1);else{p.position.x-=sx*.14;p.position.z-=sy*.14;build.plant(p);p.children.forEach(c=>{c.position.z-=.14})}}
+ // windows in the outside walls, every third tile along a straight run
+ for(const wi of winAt){const x=tx(wi),y=ty(wi);const out=dirs.find(([a,b])=>inb(x+a,y+b)&&G[idx(x+a,y+b)]===OUT);const hz=out[1]!==0;
+  const wnd=new THREE.Group();wnd.position.set(x+.5,0,y+.5);wnd.rotation.y=hz?0:Math.PI/2;g.add(wnd);const wd=SK?1.03:1.07;box(wnd,.62,.5,wd,glass,0,.86,0);for(const s of [-1,1])box(wnd,.05,.56,wd+.02,SK?wood:dark,s*.33,.86,0);box(wnd,.7,.05,wd+.02,SK?wood:dark,0,.59,0);box(wnd,.7,.05,wd+.02,SK?wood:dark,0,1.13,0);box(wnd,.03,.5,wd+.02,SK?wood:dark,0,.86,0)}
+ if(SK)r3Outline(g,.015);if(R3.q!=='high')g.traverse(m=>{if(m.isMesh&&m.position.y<.3)m.castShadow=false});R3.world.add(g)}
 function r3PanelGeo(){if(R3.pg)return R3.pg;const g=new THREE.BoxGeometry(.9,1.3,.07);g.translate(.45,.66,0);R3.pg=g;return g}
 // ---------- v28: light pool (phones) and sight cones that stop at walls
 function r3LightPool(){if(R3.q==='high'||R3.poolS)return;R3.poolS=[];R3.poolP=[];for(let i=0;i<3;i++){const s=new THREE.SpotLight('#ffffff',0,10,.5,.5,1.2),t=new THREE.Object3D();R3.sc.add(t);s.target=t;R3.sc.add(s);R3.poolS.push(s)}
@@ -2646,8 +2772,9 @@ function r3Outside(){const SK=R3.look==='sketch',M=r3Mat,g=new THREE.Group();let
  const leaf=[M(SK?'#8fb573':'#1f6a55',{e:.25}),M(SK?'#a4c586':'#2a8163',{e:.25})],trunk=M(SK?'#8a6a4a':'#3a2c2a'),post=M(SK?'#4a4640':'#1a2338',{e:.2}),hedge=M(SK?'#7da566':'#1c5a4c',{e:.2});
  const doors=ENTRIES.filter(e=>!e.roof&&e.tiles.length).map(e=>e.tiles[0]);const clear=(x,z)=>doors.every(([ex,ey])=>Math.hypot(ex+.5-x,ey+.5-z)>4.2);
  const tree=(x,z)=>{const t=new THREE.Group(),s=.8+rnd()*.5;mesh(new THREE.CylinderGeometry(.09,.13,.7,7),trunk,t,0,.35,0);const lf=leaf[rnd()<.5?0:1];if(rnd()<.5){mesh(new THREE.ConeGeometry(.62,1.25,9),lf,t,0,1.2,0);mesh(new THREE.ConeGeometry(.45,.95,9),lf,t,0,1.85,0)}else{mesh(new THREE.IcosahedronGeometry(.68,1),lf,t,0,1.25,0);mesh(new THREE.IcosahedronGeometry(.45,1),lf,t,.3,1.75,.15)}t.scale.setScalar(s);t.position.set(x,0,z);t.rotation.y=rnd()*6;g.add(t)};
- const lamp=(x,z)=>{const t=new THREE.Group();mesh(new THREE.CylinderGeometry(.045,.07,2.1,8),post,t,0,1.05,0);mesh(new THREE.BoxGeometry(.3,.14,.3),post,t,0,2.15,0);mesh(new THREE.SphereGeometry(.13,10,8),new THREE.MeshBasicMaterial({color:SK?'#fff0b8':'#ffe2a0'}),t,0,2.05,0).castShadow=false;
-  if(!SK){const sp=r3Sprite('#ffd98a',2.6,.5);sp.position.set(0,2.05,0);t.add(sp)}const pool=new THREE.Mesh(new THREE.PlaneGeometry(5,5),new THREE.MeshBasicMaterial({map:r3Glow(),color:SK?'#f4c95d':'#ffd9a0',transparent:true,opacity:SK?.35:.3,blending:SK?THREE.NormalBlending:THREE.AdditiveBlending,depthWrite:false}));pool.rotation.x=-Math.PI/2;pool.position.y=.02;t.add(pool);t.position.set(x,0,z);g.add(t)};
+ const bulbM=new THREE.MeshBasicMaterial({color:SK?'#fff0b8':'#ffe2a0'}),poolM=new THREE.MeshBasicMaterial({map:r3Glow(),color:SK?'#f4c95d':'#ffd9a0',transparent:true,opacity:SK?.35:.3,blending:SK?THREE.NormalBlending:THREE.AdditiveBlending,depthWrite:false});
+ const lamp=(x,z)=>{const t=new THREE.Group();mesh(new THREE.CylinderGeometry(.045,.07,2.1,8),post,t,0,1.05,0);mesh(new THREE.BoxGeometry(.3,.14,.3),post,t,0,2.15,0);mesh(new THREE.SphereGeometry(.13,10,8),bulbM,t,0,2.05,0).castShadow=false;
+  if(!SK){const sp=r3Sprite('#ffd98a',2.6,.5);sp.position.set(0,2.05,0);t.add(sp)}const pool=new THREE.Mesh(new THREE.PlaneGeometry(5,5),poolM);pool.rotation.x=-Math.PI/2;pool.position.y=.02;pool.castShadow=false;t.add(pool);t.position.set(x,0,z);g.add(t)};
  // the crew's van waits outside the first way in
  const e0=ENTRIES.find(e=>!e.roof&&e.tiles.length);if(e0){const [ex,ey]=e0.tiles[0];const dB=H-1-ey,dT=ey,dL=ex,dR=W-1-ex,mn=Math.min(dB,dT,dL,dR);const van=new THREE.Group();const body=M(SK?'#e9e2cf':'#c9d3e6',{e:.12}),dark=M(SK?'#3a3631':'#0d1320'),glass=M(SK?'#9cc3d6':'#5fb6e8',{e:.4});
   mesh(new THREE.BoxGeometry(2.1,.95,1.05),body,van,-.25,.78,0);mesh(new THREE.BoxGeometry(.75,.62,1.02),body,van,1.12,.61,0);mesh(new THREE.BoxGeometry(.5,.36,.96),glass,van,1.2,1.0,0);mesh(new THREE.BoxGeometry(2.86,.1,1.07),dark,van,.1,.3,0);
@@ -2655,7 +2782,7 @@ function r3Outside(){const SK=R3.look==='sketch',M=r3Mat,g=new THREE.Group();let
   for(const s of [-1,1]){mesh(new THREE.SphereGeometry(.07,8,6),new THREE.MeshBasicMaterial({color:'#fff3c4'}),van,1.5,.52,s*.34).castShadow=false}
   const stripe=mesh(new THREE.BoxGeometry(1.5,.16,1.07),M(SK?'#d9553f':'#e8742a',{e:.3}),van,-.3,.78,0);stripe.castShadow=false;
   const off=2.6;if(mn===dB)van.position.set(ex+3.2,0,H+off-.6);else if(mn===dT){van.position.set(ex+3.2,0,-off+.6)}else if(mn===dL){van.position.set(-off+.4,0,ey+3.2);van.rotation.y=Math.PI/2}else{van.position.set(W+off-.4,0,ey+3.2);van.rotation.y=Math.PI/2}
-  g.add(van);R3.van=van}else R3.van=null;
+  van.userData.keep=true;g.add(van);R3.van=van}else R3.van=null;
  // a ring of trees, hedges and street lamps just outside the plan
  const lo=R3.q!=='high',st=lo?5.6:3.4;const ring=[];for(let x=-1;x<=W+1;x+=st){ring.push([x,-1.9,0]);ring.push([x,H+2.2,0])}for(let z=2;z<H;z+=st){ring.push([-1.9,z,1]);ring.push([W+1.9,z,1])}
  ring.forEach(([x,z,v],k)=>{const jx=(rnd()-.5)*.9,jz=(rnd()-.5)*.7;if(!clear(x,z)||(R3.van&&Math.hypot(R3.van.position.x-x,R3.van.position.z-z)<3.4)){rnd();return}const r=k%4;if(r===0)lamp(x+(v?0:jx),z+(v?jz:0));else if(r===2&&rnd()<.6){const h=mesh(new THREE.BoxGeometry(v?.7:2.2,.55,v?2.2:.7),hedge,g,x,.275,z);h.receiveShadow=true}else tree(x+jx,z+jz)});
@@ -2801,7 +2928,11 @@ function r3Sync(dt){const used=new Set();const P=R3.people;
   if(it.lamp){const on=!ST.dark;it.light.intensity=on?LP.lamp:0;it.glow.visible=on}
   if(it.beam){it.beam.visible=!(d.broken)&&!ST.dark;it.beam.material.opacity=.7+.3*Math.sin(ST.t*20)}}
  if(R3.van)R3.van.visible=ST.phase!=='plan';r3PoolSync();
- for(const it of R3.loot){const l=it.l;const show=!l.stolen&&!l.carrier;it.item.visible=show&&!l.dropped;if(it.item.visible){it.item.rotation.y+=dt*.6;it.item.position.y=it.y0+Math.sin(ST.t*2+l.x)*.03}it.glow.visible=it.item.visible;
+ // v32: smoke and security fog as soft billowing puffs
+ {const SM=R3.smk||(R3.smk=[]),SK=R3.look==='sketch';let n=0;if(ST.phase==='heist'||ST.phase==='replay')for(const sm of ST.smokes||[]){if(sm.r<=.05)continue;for(let k=0;k<7;k++){let sp=SM[n];if(!sp){sp=new THREE.Sprite(new THREE.SpriteMaterial({map:r3Glow(),transparent:true,depthWrite:false}));sp.renderOrder=3;R3.dyn.add(sp);SM.push(sp)}
+   const a=k*.9+R3.t*.25*(k%2?1:-1),rr=sm.r*(k?.55:0);sp.position.set(sm.x+Math.cos(a)*rr,.3+(k%3)*.32,sm.y+Math.sin(a)*rr);const sc=sm.r*(1.5+.25*Math.sin(R3.t*.8+k));sp.scale.set(sc,sc,1);
+   sp.material.color.set(sm.sec?(SK?'#8fb3c9':'#cfeeff'):(SK?'#8d8577':'#a9b3c0'));sp.material.opacity=Math.min(1,sm.t*.5)*(SK?.55:.32);sp.visible=true;n++}}for(;n<SM.length;n++)SM[n].visible=false}
+ for(const it of R3.loot){const l=it.l;const show=!l.stolen&&!l.carrier;it.item.visible=show&&!l.dropped;if(it.item.visible){if(it.spin)it.item.rotation.y+=dt*.6;if(it.bob)it.item.position.y=it.y0+Math.sin(ST.t*2+l.x)*.03}it.glow.visible=it.item.visible;
   if(l.dropped&&!l.carrier){it.drop.visible=true;it.drop.position.set(tx(l.i)+.5,.14,ty(l.i)+.5)}else it.drop.visible=false}
  for(const D of R3.doors){if(D.d.vault){D.piv.position.y=ST.vaultOpen?-1.5:0;continue}const o=DOOROPEN[D.d.i]||{v:0,side:1};const blocked=isSlam(D.d.i)||ST.devices.some(v=>v.type==='steel'&&v.i===D.d.i);D.piv.visible=!blocked;D.piv.rotation.y=-(o.v*Math.PI/2*.92*o.side)}
  // slams: red shutters
@@ -2829,23 +2960,49 @@ function r3BuildDevices(full){const disp=g=>g.traverse(x=>{if(x.geometry&&x.geom
    const fur=R3.mats.fur||(R3.mats.fur=R3.look==='sketch'?r3Mat('#c98a4b'):new THREE.MeshStandardMaterial({color:'#c98a4b',roughness:.8,emissive:'#5a3410',emissiveIntensity:.5}));const body=new THREE.Mesh(new THREE.CapsuleGeometry(.11,.22,6,12),fur);body.rotation.z=Math.PI/2;body.position.y=.1;body.castShadow=true;dg.add(body);
    const hd=new THREE.Mesh(new THREE.SphereGeometry(.1,14,10),fur);hd.position.set(.2,.16,0);hd.castShadow=true;dg.add(hd);const sn=new THREE.Mesh(new THREE.SphereGeometry(.05,10,8),M.dark);sn.position.set(.29,.13,0);dg.add(sn);
    for(const s of [-1,1]){const er=new THREE.Mesh(new THREE.ConeGeometry(.04,.09,8),M.dark);er.position.set(.18,.26,s*.06);dg.add(er)}G3.add(dg);R3.devs.push({d,dog:dg})}
+  else if(d.type==='fog'){const post=new THREE.Mesh(new THREE.CylinderGeometry(.035,.05,1.25,10),M.dark);post.position.set(x,.62,z);post.castShadow=true;G3.add(post);
+   const can=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,.34,16),M.steel);can.position.set(x,1.38,z);can.castShadow=true;G3.add(can);const cap=new THREE.Mesh(new THREE.SphereGeometry(.16,16,8,0,Math.PI*2,0,Math.PI/2),M.steel);cap.position.set(x,1.55,z);G3.add(cap);
+   for(let k=0;k<3;k++){const a=k*2.094;const nz=new THREE.Mesh(new THREE.CylinderGeometry(.03,.05,.12,8),M.dark);nz.position.set(x+Math.cos(a)*.1,1.18,z+Math.sin(a)*.1);G3.add(nz)}
+   const band=new THREE.Mesh(new THREE.TorusGeometry(.165,.02,6,20),M.brass);band.rotation.x=Math.PI/2;band.position.set(x,1.3,z);G3.add(band)}
   else if(d.type==='speaker'){const b=new THREE.Mesh(r3Block(d.x+.3,d.y+.3,.4,.4,.5,.08,.04),M.dark);b.castShadow=true;G3.add(b);const cone=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,.02,20),M.brass);cone.position.set(x,.52,z);G3.add(cone)}
   else if(d.type==='steel'){const vert=G[idx(d.x,d.y-1)]===WALL;const b=new THREE.Mesh(r3Block(vert?d.x+.38:d.x+.02,vert?d.y+.02:d.y+.38,vert?.24:.96,vert?.96:.24,1.32,.05,.03),M.steel);b.castShadow=true;b.receiveShadow=true;G3.add(b)}});
- for(const l of ST.loot)item('L'+l.id+(l.fake?'f':''),l,G3=>{const x=l.x+.5,z=l.y+.5;const bl=r3Blob(1.2,.5);bl.position.set(x,.012,z);G3.add(bl);const pl=new THREE.Mesh(r3Block(l.x+.2,l.y+.2,.6,.6,.42,.08,.04),[M.plinthTop,M.plinth]);pl.castShadow=true;pl.receiveShadow=true;G3.add(pl);
+ for(const l of ST.loot)item('L'+l.id+(l.fake?'f':''),l,G3=>{const x=l.x+.5,z=l.y+.5,SK=R3.look==='sketch';const bl=r3Blob(1.2,.5);bl.position.set(x,.012,z);G3.add(bl);
   const col=l.kind==='gem'?'#c7a6ff':l.kind==='gold'?'#ffd36b':l.kind==='painting'?'#ff9f6b':l.kind==='safe'?'#9fb6cc':l.kind==='statue'?'#d9a36a':l.kind==='cash'?'#8dffb5':'#e8f3ff';
-  const mat=R3.look==='sketch'?r3Mat(col):new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:l.kind==='gem'?.8:.25,metalness:l.kind==='gold'||l.kind==='safe'?.8:.2,roughness:l.kind==='gem'?.1:.4});
-  let item;if(l.kind==='gem')item=new THREE.Mesh(new THREE.OctahedronGeometry(.17,0),mat);else if(l.kind==='gold'){item=new THREE.Group();for(const [ox,oy,oz] of [[-.09,0,-.05],[.09,0,-.05],[0,0,.07],[0,.08,0]]){const b=new THREE.Mesh(new THREE.BoxGeometry(.16,.07,.09),mat);b.position.set(ox,oy,oz);item.add(b)}}
-  else if(l.kind==='painting'){item=new THREE.Group();const fr=new THREE.Mesh(new THREE.BoxGeometry(.04,.36,.46),R3.mats.brass);item.add(fr);const cnv=new THREE.Mesh(new THREE.BoxGeometry(.045,.3,.4),mat);item.add(cnv)}
-  else if(l.kind==='safe'){item=new THREE.Mesh(r3Block(-.2,-.2,.4,.4,.38,.05,.03),mat);item.position.y=-.19}
-  else if(l.kind==='statue'){item=new THREE.Mesh(new THREE.LatheGeometry([[0,0],[.12,0],[.06,.08],[.1,.2],[.04,.3],[.07,.36],[0,.38]].map(([a,b])=>new THREE.Vector2(a,b)),16),mat);item.position.y=-.19}
-  else{item=new THREE.Mesh(r3Block(-.16,-.12,.32,.24,.16,.04,.02),mat);item.position.y=-.08}
-  const wrap=new THREE.Group();wrap.add(item);wrap.position.set(x,.62,z);wrap.traverse(m=>{if(m.isMesh)m.castShadow=true});G3.add(wrap);
-  const gl=r3Sprite(col,l.kind==='gem'?1.8:1.1,l.kind==='gem'?.75:.4);gl.position.set(x,.66,z);G3.add(gl);
+  const std=(c,o)=>SK?r3Mat(c):new THREE.MeshStandardMaterial(Object.assign({color:c,emissive:c,emissiveIntensity:.22,metalness:.2,roughness:.45},o||{}));
+  const mesh=(geo,mt,par,px,py,pz)=>{const m=new THREE.Mesh(geo,mt);m.position.set(px||0,py||0,pz||0);m.castShadow=true;par.add(m);return m};
+  // v32: proper models. Safes and crates stand on the floor; the rest sit on a plinth, small things turn slowly under glass.
+  const floor=l.kind==='safe'||l.kind==='crate',spin=l.kind==='gem'||l.kind==='gold'||l.kind==='statue'||l.kind==='cash';
+  if(!floor){const pl=new THREE.Mesh(r3Block(l.x+.2,l.y+.2,.6,.6,.42,.08,.04),[M.plinthTop,M.plinth]);pl.castShadow=true;pl.receiveShadow=true;G3.add(pl);
+   const trim=new THREE.Mesh(r3Block(l.x+.17,l.y+.17,.66,.66,.06,.05,.02),M.brass);G3.add(trim)}
+  const wrap=new THREE.Group(),item=new THREE.Group();wrap.add(item);let y0=.62;
+  if(l.kind==='gem'){const gm=SK?r3Mat(col):new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.85,metalness:.3,roughness:.08,flatShading:true});
+   const g1=mesh(new THREE.OctahedronGeometry(.13,0),gm,item,0,.05,0);g1.scale.set(1,1.25,1);mesh(new THREE.CylinderGeometry(.13,.02,.09,8),gm,item,0,-.05,0);
+   mesh(new THREE.CylinderGeometry(.16,.18,.04,16),std(SK?'#c8382b':'#7a1f3a',{emissiveIntensity:.15}),G3,x,.44,z);
+   const glassM=R3.glassM||(R3.glassM=new THREE.MeshBasicMaterial({color:SK?'#9cc3d6':'#bfe8ff',transparent:true,opacity:SK?.18:.12,depthWrite:false}));const cs=new THREE.Mesh(new THREE.BoxGeometry(.44,.5,.44),glassM);cs.position.set(x,.67,z);cs.userData.noInk=true;G3.add(cs);
+   const ed=new THREE.LineSegments(new THREE.EdgesGeometry(cs.geometry),SK?R3.mats.line:new THREE.LineBasicMaterial({color:'#9fdcff',transparent:true,opacity:.5}));ed.position.copy(cs.position);ed.userData.noInk=true;G3.add(ed);y0=.66}
+  else if(l.kind==='gold'){const gm=std(col,{metalness:.85,roughness:.25,emissiveIntensity:.3});const bar=r3Block(-.075,-.04,.15,.08,.06,.015,.012);
+   for(const [ox,oy,oz] of [[-.08,0,-.05],[.08,0,-.05],[-.08,0,.05],[.08,0,.05],[0,.065,-.05],[0,.065,.05],[0,.13,0]])mesh(bar,gm,item,ox,oy,oz);y0=.45}
+  else if(l.kind==='painting'){const tex=r3Canvas(l.name||l.id);const fr=std(SK?'#c9a36a':'#c99a3a',{metalness:.6,roughness:.35,emissiveIntensity:.25});
+   const ease=std(SK?'#8a6a4a':'#5a3c26',{emissiveIntensity:.1});for(const s of [-1,1]){const lg=mesh(new THREE.BoxGeometry(.035,.62,.035),ease,item,s*.16,-.02,.04);lg.rotation.z=s*.12}mesh(new THREE.BoxGeometry(.035,.6,.035),ease,item,0,-.02,-.12).rotation.x=-.25;
+   mesh(new THREE.BoxGeometry(.5,.035,.08),ease,item,0,.08,.05);mesh(new THREE.BoxGeometry(.52,.42,.04),fr,item,0,.31,.04);const cv_=new THREE.Mesh(new THREE.PlaneGeometry(.44,.34),SK?new THREE.MeshToonMaterial({map:tex,gradientMap:r3Grad()}):new THREE.MeshStandardMaterial({map:tex,emissive:'#ffffff',emissiveMap:tex,emissiveIntensity:.35,roughness:.8}));cv_.position.set(0,.31,.062);cv_.userData.noInk=true;item.add(cv_);y0=.75}
+  else if(l.kind==='safe'){const bd=std(SK?'#aab3bb':'#4f6378',{metalness:.7,roughness:.35,emissiveIntensity:.18}),dk=std(SK?'#3a3631':'#1a2433',{metalness:.6}),br=M.brass;
+   mesh(r3Block(-.3,-.28,.6,.56,.7,.05,.03),bd,item,0,0,0);mesh(r3Block(-.24,-.02,.48,.04,.56,.03,.015),bd,item,0,.07,.27);
+   const dial=mesh(new THREE.CylinderGeometry(.08,.08,.04,20),dk,item,.04,.42,.31);dial.rotation.x=Math.PI/2;const kn=mesh(new THREE.CylinderGeometry(.03,.03,.05,10),br,item,.04,.42,.33);kn.rotation.x=Math.PI/2;
+   mesh(new THREE.BoxGeometry(.04,.16,.04),br,item,-.13,.3,.32);for(const hy of [.18,.56])mesh(new THREE.CylinderGeometry(.02,.02,.08,8),dk,item,.25,hy,.29);for(const [fx,fz] of [[-.24,-.22],[.24,-.22],[-.24,.22],[.24,.22]])mesh(new THREE.BoxGeometry(.06,.04,.06),dk,item,fx,-.02,fz);y0=.02}
+  else if(l.kind==='statue'){const bz=std(col,{metalness:.75,roughness:.3,emissiveIntensity:.25});
+   mesh(new THREE.LatheGeometry([[0,0],[.13,0],[.13,.03],[.08,.06],[.055,.12],[.09,.2],[.11,.27],[.08,.34],[.05,.36],[.07,.4],[0,.41]].map(([a,b])=>new THREE.Vector2(a,b)),20),bz,item,0,0,0);
+   for(const s of [-1,1]){const h=mesh(new THREE.TorusGeometry(.05,.012,6,12,Math.PI),bz,item,s*.1,.28,0);h.rotation.z=s*Math.PI/2}y0=.44}
+  else if(l.kind==='cash'){const nt=std(SK?'#8fb573':'#4fbf7a',{emissiveIntensity:.25}),band=std(SK?'#fbf6e8':'#f2f6ff',{emissiveIntensity:.3});
+   for(const [ox,oy,oz,r] of [[-.06,0,-.04,.1],[.07,0,.02,-.15],[0,.055,0,.3],[-.02,.11,.03,-.05]]){const b=mesh(new THREE.BoxGeometry(.2,.05,.1),nt,item,ox,oy,oz);b.rotation.y=r;const bb=mesh(new THREE.BoxGeometry(.04,.054,.104),band,item,ox,oy,oz);bb.rotation.y=r}y0=.46}
+  else{const wd=std(SK?'#c9a36a':'#8a6a44',{emissiveIntensity:.12}),sl=std(SK?'#8a6a4a':'#5a4026',{emissiveIntensity:.1});mesh(r3Block(-.28,-.24,.56,.48,.5,.03,.015),wd,item,0,0,0);
+   for(const yy of [.12,.38])for(const zz of [-.245,.245])mesh(new THREE.BoxGeometry(.58,.05,.02),sl,item,0,yy,zz);for(const xx of [-.285,.285])mesh(new THREE.BoxGeometry(.02,.5,.5),sl,item,xx,.25,0);y0=.02}
+  wrap.position.set(x,y0,z);wrap.traverse(m=>{if(m.isMesh){m.castShadow=true}});G3.add(wrap);
+  const gl=r3Sprite(col,l.kind==='gem'?1.8:1.1,l.kind==='gem'?.75:.4);gl.position.set(x,floor?.5:.66,z);G3.add(gl);
   const drop=new THREE.Mesh(new THREE.SphereGeometry(.15,12,10),new THREE.MeshStandardMaterial({color:'#ffd36b',emissive:'#ffb000',emissiveIntensity:.6}));drop.visible=false;G3.add(drop);
-  R3.loot.push({l,item:wrap,y0:.62,glow:gl,drop})});
+  R3.loot.push({l,item:wrap,y0,glow:gl,drop,spin,bob:!floor&&l.kind!=='painting'})});
  for(const c of old.values()){R3.devG.remove(c.grp);disp(c.grp)}}
 function r3Pick(cx,cy){const r=R3.gl.getBoundingClientRect();const v=new THREE.Vector2((cx-r.left)/r.width*2-1,-((cy-r.top)/r.height)*2+1);R3.ray.setFromCamera(v,R3.cam);const p=new THREE.Vector3();if(!R3.ray.ray.intersectPlane(R3.plane,p))return null;return [p.x,p.z]}
-function r3Proj(x,y,z){const v=new THREE.Vector3(x,y,z).project(R3.cam);return [(v.x+1)/2*R3.ov.width,(1-v.y)/2*R3.ov.height]}
+function r3Proj(x,y,z){const v=(R3.pv||(R3.pv=new THREE.Vector3())).set(x,y,z).project(R3.cam);return [(v.x+1)/2*R3.ov.width,(1-v.y)/2*R3.ov.height]}
 function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;if(!R3.warm){R3.warm=true;r3Prewarm()}
  // camera: framed building, eases toward the action in slow-mo, shakes on impact
  const f=R3.fit,cam=R3.cam;const z=FX.zoom||1;const [fx,fy]=FX.focus||[W/2,H/2];const k=clamp((z-1)/.35,0,1);
@@ -2862,8 +3019,8 @@ function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;i
  if(R3.bolt>0){R3.bolt-=dt;const b=Math.max(0,R3.bolt/.5);R3.moon.intensity=LP.sunI[2]+b*(R3.look==='sketch'?1.5:5);R3.hemi.intensity+=b*(R3.look==='sketch'?.4:.9)}
  R3.floorMat.emissiveIntensity=lerp(R3.floorMat.emissiveIntensity,LP.floorE[plan?0:1],.08);R3.r.toneMappingExposure=lerp(R3.r.toneMappingExposure,LP.exp[plan?0:1],.08);
  r3Sync(dt);
- const pa=R3.dust.geometry.attributes.position;for(let i=0;i<pa.count;i++){let y=pa.getY(i)+dt*.05*Math.sin(i+R3.t*.3);let x=pa.getX(i)+dt*.04*Math.cos(i*1.7+R3.t*.2);if(y>2.9)y=.2;pa.setXY(i,x,y)}pa.needsUpdate=true;
- R3.tex.needsUpdate=true;R3.r.render(R3.sc,cam);
+ if(R3.dust.visible){const pa=R3.dust.geometry.attributes.position;for(let i=0;i<pa.count;i++){let y=pa.getY(i)+dt*.05*Math.sin(i+R3.t*.3);let x=pa.getX(i)+dt*.04*Math.cos(i*1.7+R3.t*.2);if(y>2.9)y=.2;pa.setXY(i,x,y)}pa.needsUpdate=true}
+ if(R3.floorDirty){R3.tex.needsUpdate=true;R3.floorDirty=false}const GL=GOVL[GOV.lvl]||GOVL[2];R3.r.shadowMap.needsUpdate=(GOV.sk=(GOV.sk+1)%GL.shadow)===0||R3.shNow;R3.shNow=false;R3.r.render(R3.sc,cam);
  // labels on top, anchored to the 3D positions
  if(!R3.wc&&ST.phase!=='replay'&&!(FX.zoom>1.01)){const a=r3Proj(W/2,0,H/2),b=r3Proj(W/2+1,0,H/2);R3.s0=Math.hypot(b[0]-a[0],b[1]-a[1])}
  const o=R3.octx;o.setTransform(1,0,0,1,0,0);o.clearRect(0,0,R3.ov.width,R3.ov.height);
@@ -2871,8 +3028,7 @@ function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;i
  for(const th of ST.thieves){if(th.state==='wait'||th.state==='gone'||th.state==='escaped'||th.x==null)continue;local(th.x,th.y,.55);R3.labels=true;drawThief(o,th);R3.labels=false}
  for(const g of ST.guards){const p=gPers(g);if(p==='steady')continue;local(g.x,g.y,1.5);txt(o,g.dozing>0?'😴':PERS[p].ic,g.x,g.y-.2,.42,'#fff',{font:'Nunito'})}
  for(const fl of FX.floats){local(fl.x,fl.y,1.2);txt(o,fl.s,fl.x,fl.y-fl.t*.6,fl.big?.55:.36,fl.col,{font:S.font,alpha:fl.t<1.2?1:Math.max(0,1-(fl.t-1.2)/.6),weight:'700',stroke:['#000',.1]})}
- o.setTransform(1,0,0,1,0,0);const w=R3.ov.width,h=R3.ov.height;const vg=o.createRadialGradient(w/2,h/2,Math.min(w,h)*.35,w/2,h/2,Math.max(w,h)*.75);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,LP.vig);o.fillStyle=vg;o.fillRect(0,0,w,h);
- post(o)}
+ o.setTransform(1,0,0,1,0,0);post(o)}
 function r3Enable(on){if(on&&!r3Init()){{const t=document.createElement('div');t.className='toast';t.innerHTML='<b>3D needs WebGL</b>This device can\'t run the 3D style.';$('toasts').appendChild(t);requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));setTimeout(()=>t.remove(),5000)}return false}
  R3.on=on;document.body.classList.toggle('r3',on);if(on){r3Size();R3.wkey=null;R3.dk=null;r3Walls()}return true}
 
