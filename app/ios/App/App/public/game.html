@@ -637,7 +637,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 body{padding:var(--sat) var(--sar) var(--sab) var(--sal)}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v37 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v38 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -689,7 +689,7 @@ const OUT=0,FLOOR=1,WALL=2,DOOR=3,ENTRY=4;
 const G=new Uint8Array(W*H);
 const idx=(x,y)=>y*W+x, tx=i=>i%W, ty=i=>(i/W)|0;
 const inb=(x,y)=>x>=0&&y>=0&&x<W&&y<H;
-const DOORS=[{x:13,y:7},{x:8,y:12},{x:13,y:19,shut:2},{x:17,y:16},{x:22,y:16,shut:2},{x:26,y:13},{x:33,y:15},{x:31,y:11,vault:true}];
+const DOORS=[{x:13,y:7},{x:8,y:12},{x:13,y:19,shut:2,shutFrom:2},{x:17,y:16},{x:22,y:16,shut:2},{x:26,y:13},{x:33,y:15},{x:31,y:11,vault:true}];
 const ENTRIES=[
  {id:'main',name:'Front doors',tiles:[[19,23],[20,23]],spawn:[19,24],night:1},
  {id:'back',name:'Back door',tiles:[[2,18]],spawn:[1,18],night:2},
@@ -716,7 +716,7 @@ const LOOT_DEF=[
 const SITES={
  gallery:{name:'The Marchbank Gallery',caption:'THE MARCHBANK GALLERY · SECURITY LAYOUT · DRG 07/B',note1:'Marchbank job - who gets in, and how?',note2:['gallery = soft target?',24.5,24.9],
   blurb:'A quiet art gallery. Paintings upstairs, a diamond in the vault. The place to start.',
-   hints:['Pick Camera (or press 1) and click near the front doors to fit one; drag to aim. Thieves route around what you can see, so watch their dotted routes bend. Padlocked doors stay shut until Wednesday.','A back door opens tonight. Thieves pick the least-watched way in, so cover both. The two padlocked inner doors stay shut until Wednesday.','The loading dock opens, and the padlocked inner doors are unlocked from tonight, so there are more ways through. Hackers loop cameras on their route, and the Magpie throws noise-makers to drag guards away. Back cameras up with plates.'],
+   hints:['Pick Camera (or press 1) and click near the front doors to fit one; drag to aim. Thieves route around what you can see, so watch their dotted routes bend. The padlocked gallery door stays shut until Wednesday.','A back door opens tonight. Thieves pick the least-watched way in, so cover both. Two inner doors are padlocked tonight: the store room is cut off from the lobby, and the lobby has one way into the gallery. Both open on Wednesday.','The loading dock opens, and the padlocked inner doors are unlocked from tonight, so there are more ways through. Hackers loop cameras on their route, and the Magpie throws noise-makers to drag guards away. Back cameras up with plates.'],
   walls(hl,vl){vl(13,2,23);hl(2,13,12);vl(26,2,23);hl(26,37,11);hl(26,37,15);hl(13,26,16)},
   doors:DOORS.map(d=>({...d})),entries:ENTRIES.map(e=>({...e})),rooms:ROOMS.map(r=>({...r})),loot:LOOT_DEF.map(l=>({...l})),
   roomOf(x,y){if(x<13)return y<12?'office':'store room';if(x<26)return y<16?'gallery':'lobby';if(y<11)return 'vault';if(y<15)return 'corridor';return 'loading dock'}},
@@ -894,7 +894,7 @@ function buildMap(night){
  SITES[SITE].walls(hl,vl);
  for(const d of DOORS)G[idx(d.x,d.y)]=DOOR;
  // v37: some inner doors stay locked for the first nights of a contract, so a starter budget can cover the way to the loot
- SHUT.fill(0);if(!ST.daily&&!ST.endless)for(const d of DOORS)if(d.shut&&night<=d.shut)SHUT[idx(d.x,d.y)]=1;try{costCache={};_rcKey=''}catch(e){}
+ SHUT.fill(0);if(!ST.daily&&!ST.endless)for(const d of DOORS)if(d.shut&&night<=d.shut&&night>=(d.shutFrom||1))SHUT[idx(d.x,d.y)]=1;try{costCache={};_rcKey=''}catch(e){}
  for(const e of ENTRIES)if(e.night<=night&&!(ST.works&&ST.works.sealed.includes(e.id)))for(const [x,y] of e.tiles)G[idx(x,y)]=ENTRY;
 }
 const SHUT=new Uint8Array(W*H);
