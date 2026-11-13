@@ -1,0 +1,8 @@
+# build.py outputs (run from src/)
+src/web/
+src/pub/
+src/inside-job.html
+src/ios/*.html
+!src/ios/loader.html
+src/ios/version.json
+__pycache__/
