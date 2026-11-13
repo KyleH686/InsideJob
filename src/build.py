@@ -14,6 +14,8 @@ os.makedirs('pub',exist_ok=True);open('pub/inside-job.html','w').write(p)
 print(len(s)//1024,'KB')
 # --- GitHub Pages / home-screen build
 w=s.replace('<meta name="viewport" content="width=device-width,initial-scale=1">','<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">\n<meta name="theme-color" content="#0c2f57">\n<meta name="mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-status-bar-style" content="black">\n<meta name="apple-mobile-web-app-title" content="Inside Job">\n<link rel="manifest" href="manifest.webmanifest">\n<link rel="apple-touch-icon" href="icon-180.png">\n<link rel="icon" href="icon-192.png">\n<meta property="og:title" content="Inside Job">\n<meta property="og:description" content="A heist game from the other side. Five nights, six buildings, one security consultant.">\n<meta property="og:image" content="https://kyleh686.github.io/InsideJob/banner.png">\n<meta name="twitter:card" content="summary_large_image">',1)
+# v37: the page draws edge to edge (viewport-fit=cover), so keep the game clear of the notch and home bar
+w=w.replace('</head>','<style>body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box}#app{height:100%!important}</style>\n</head>',1)
 w=w.replace('</body>\n</html>','<script>if("serviceWorker"in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{})</script>\n</body>\n</html>')
 os.makedirs('web',exist_ok=True);open('web/index.html','w').write(w)
 
