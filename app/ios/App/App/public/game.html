@@ -69,6 +69,7 @@ main{flex:1;display:flex;min-height:0}
 #sheet .xClose:active{transform:scale(.92)}
 :where(body.tl) #sheet button{min-height:44px}
 #sheet .xClose{width:46px;height:46px}
+#homeX{position:absolute;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:20;width:46px;height:46px;border-radius:50%;font-size:20px;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(6,22,45,.75);border:1.5px solid rgba(255,255,255,.45);box-shadow:0 2px 8px rgba(0,0,0,.3)}
 /* a cue that a menu carries on below the fold (its buttons are often at the bottom) */
 #sheetMore{position:absolute;left:50%;transform:translateX(-50%);bottom:max(22px,calc(env(safe-area-inset-bottom) + 10px));z-index:6;display:none;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:700;color:var(--btnink,#06162d);background:var(--btn,#7fe3ff);box-shadow:0 3px 10px rgba(0,0,0,.35);border:0;pointer-events:auto}
 #overlay.more #sheetMore{display:block}
@@ -596,7 +597,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 body{padding:var(--sat) var(--sar) var(--sab) var(--sal)}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v33 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro and Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v34 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro and Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -3099,7 +3100,7 @@ function homeFit(){const hw=document.querySelector('#home .hwrap');if(!hw||!home
  hw.style.setProperty('--hz',1);hw.style.width=dw+'px';hw.style.height='auto';const nat=hw.offsetHeight||1;
  const z=Math.max(.5,Math.min(r.width/dw,r.height/nat,(window.IJ_APP||TOUCH)?2.2:1.5));hw.style.setProperty('--hz',z);hw.style.height=(r.height/z)+'px'}
 function showHome(){if(ST.phase==='heist'&&ST.speed>0){HOME.speed=ST.speed;setSpeed(0)}hideSheet();coachHide();
- const inGame=HOME.from==='game';const sv=readSave();const di=dailyInfo(),db=dailyBest();
+ const inGame=HOME.from==='game';homeX(inGame);const sv=readSave();const di=dailyInfo(),db=dailyBest();
  let main='';
  if(inGame)main=`<button class="pri" data-h="resume">Resume<small>${ST.daily?'Daily job':dayName(ST.night)+' night'} · ${SITES[SITE].name}</small></button><button data-h="new">New contract</button>`;
  else if(sv)main=`<button class="pri" data-h="cont">Continue<small>${dayName(sv.night)} night · ${(SITES[sv.site]||SITES.gallery).name} · ${DIFF[sv.diff]?.name||''}</small></button><button data-h="new">New contract</button>`;
@@ -3110,8 +3111,10 @@ function showHome(){if(ST.phase==='heist'&&ST.speed>0){HOME.speed=ST.speed;setSp
  document.querySelectorAll('#hMenu button').forEach(b=>b.onclick=()=>{AU.init();AU.click&&AU.click();homeAct(b.dataset.h)});
  document.body.classList.add('home');resizeHome();homeFit()}
 function hideHome(){document.body.classList.remove('home')}
+// v34: the ☰ menu opened during a game gets the same ✕ as every other menu, and it resumes the game
+function homeX(on){let x=$('homeX');if(!on){if(x)x.remove();return}if(!x){x=document.createElement('button');x.id='homeX';x.className='xClose';x.type='button';x.setAttribute('aria-label','Back to the game');x.textContent='✕';x.onclick=e=>{e.stopPropagation();AU.click&&AU.click();homeAct('resume')};$('home').appendChild(x)}}
 function homeAct(h){
- if(h==='resume'){hideHome();HOME.from=null;if(ST.phase==='heist'&&HOME.speed){setSpeed(HOME.speed);HOME.speed=0}return}
+ if(h==='resume'){homeX(false);hideHome();HOME.from=null;if(ST.phase==='heist'&&HOME.speed){setSpeed(HOME.speed);HOME.speed=0}return}
  if(h==='cont'){hideHome();HOME.from=null;loadGame();return}
  if(h==='new'){hideHome();setupSheet();return}
  if(h==='daily'){hideHome();HOME.from=null;startDaily();return}
