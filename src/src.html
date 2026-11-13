@@ -543,6 +543,46 @@ body:not([data-phase=heist]):where(.tl) #speedRow{display:none!important}
 :where(body.tl) #top #speedRow{display:flex;gap:4px;margin:0 0 0 2px;flex:none;flex-wrap:nowrap}
 body[data-phase=heist]:where(.tl) #top .ttl{display:none}
 body[data-phase=heist]:where(.tl:not(.ls)) #styles{display:none}
+/* ===== v37: phone pass. Text 13px or more, 44px touch targets, night controls in thumb reach at the bottom,
+   and in landscape the map runs the full height of the screen (the top bar sits over the side panel). ===== */
+:where(body.tl) .stat .k,:where(body.tl) #sStolen{font-size:13px!important;letter-spacing:0!important}
+:where(body.tl) .stat .v{font-size:17px!important}
+:where(body.tl) #side small,:where(body.tl) #phaseTag,:where(body.tl) #crew .tag,:where(body.tl) #crew .dot{font-size:13px!important}
+:where(body.tl) .toast,:where(body.tl) #toolHelp,:where(body.tl) #worksBtn,:where(body.tl) #crew .r{font-size:13px!important}
+/* landscape side panel is narrow: the clock speaks for itself, and the theft meter fits on one line */
+:where(body.ls) .stat:nth-child(2) .k{display:none}
+:where(body.ls) .stats{gap:0 8px!important}
+:where(body.tl) #hint{font-size:14px!important}
+:where(body.tl) #side .tool,:where(body.tl) .tool .c{font-size:13px!important}
+:where(body.tl) #side .tool{min-height:48px!important}
+:where(body.tl) #homeBtn,:where(body.tl) #fsBtn,:where(body.tl) #mute,:where(body.tl) #lookBtn{font-size:14px!important;min-height:44px!important;min-width:44px!important;white-space:nowrap}
+:where(body.tl) #worksBtn,:where(body.tl) #mtabs button,:where(body.tl) #abil button,:where(body.tl) #selBtns button{min-height:44px!important}
+/* speed buttons live at the bottom with Slam and Siren, where a thumb reaches them */
+:where(body.tl) #goCard{flex-wrap:wrap}
+:where(body.tl) #goCard #abil{flex:1 1 auto;min-width:0}
+:where(body.tl) #goCard #speedRow{flex:none;gap:4px}
+:where(body.tl) #goCard #speedRow button{min-height:44px!important;min-width:44px!important;font-size:15px!important;padding:4px 6px!important;margin:0}
+/* squat screens: ten tools in a row leave no room for names, so show the icon and price */
+:where(body.row9) #side .tool .sn{display:none!important}
+:where(body.row9) #side .tool{font-size:13px!important;min-height:44px!important}
+/* landscape: the map takes the whole left side, top to bottom */
+:where(body.ls) #app{display:grid!important;grid-template-columns:minmax(0,1fr) calc(var(--sideW,340px)*var(--u,1));grid-template-rows:auto minmax(0,1fr)}
+:where(body.ls) main{display:contents!important}
+:where(body.ls) #stage{grid-column:1;grid-row:1/3;min-height:0;height:auto!important}
+:where(body.ls) #top{grid-column:2;grid-row:1;min-width:0;justify-content:flex-end;border-bottom:0;padding:6px 8px 0!important}
+:where(body.ls) #top .ttl{display:none!important}
+:where(body.ls) #styles{margin-left:0}
+:where(body.ls) #side{grid-column:2;grid-row:2;width:auto!important;min-height:0}
+body[data-phase=heist]:where(.ls) #styles{display:none}
+:where(body.ls) #side{padding-left:4px!important;padding-right:4px!important}
+:where(body.ls) #side>.card{padding-left:6px!important;padding-right:6px!important}
+:where(body.ls) #tools{gap:2px!important}
+:where(body.ls) #buildCard>h3{display:none!important}
+:where(body.ls) .stat .v{font-size:15px!important}
+:where(body.ls) #side .tool{min-height:44px!important;padding:3px 1px!important}
+:where(body.ls) #side .tool{min-width:44px}
+/* the night report and other menus */
+:where(body.tl) #sheet small,:where(body.tl) #sheet .rstars span,:where(body.tl) #sheet .rstars b{font-size:13px!important}
 body[data-phase=heist]:where(.tl:not(.ls)) #homeBtn{margin-left:auto}
 /* roomy: spare height under the map, so bigger controls */
 :where(body.roomy) #tools{gap:7px}
@@ -596,7 +636,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v36 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v37 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -640,7 +680,7 @@ const OUT=0,FLOOR=1,WALL=2,DOOR=3,ENTRY=4;
 const G=new Uint8Array(W*H);
 const idx=(x,y)=>y*W+x, tx=i=>i%W, ty=i=>(i/W)|0;
 const inb=(x,y)=>x>=0&&y>=0&&x<W&&y<H;
-const DOORS=[{x:13,y:7},{x:8,y:12},{x:13,y:19},{x:17,y:16},{x:22,y:16},{x:26,y:13},{x:33,y:15},{x:31,y:11,vault:true}];
+const DOORS=[{x:13,y:7},{x:8,y:12},{x:13,y:19,shut:2},{x:17,y:16},{x:22,y:16,shut:2},{x:26,y:13},{x:33,y:15},{x:31,y:11,vault:true}];
 const ENTRIES=[
  {id:'main',name:'Front doors',tiles:[[19,23],[20,23]],spawn:[19,24],night:1},
  {id:'back',name:'Back door',tiles:[[2,18]],spawn:[1,18],night:2},
@@ -667,13 +707,14 @@ const LOOT_DEF=[
 const SITES={
  gallery:{name:'The Marchbank Gallery',caption:'THE MARCHBANK GALLERY · SECURITY LAYOUT · DRG 07/B',note1:'Marchbank job - who gets in, and how?',note2:['gallery = soft target?',24.5,24.9],
   blurb:'A quiet art gallery. Paintings upstairs, a diamond in the vault. The place to start.',
+   hints:['Pick Camera (or press 1) and click near the front doors to fit one; drag to aim. Thieves route around what you can see, so watch their dotted routes bend. Padlocked doors stay shut until Wednesday.','A back door opens tonight. Thieves pick the least-watched way in, so cover both. The two padlocked inner doors stay shut until Wednesday.','The loading dock opens, and the padlocked inner doors are unlocked from tonight, so there are more ways through. Hackers loop cameras on their route, and the Magpie throws noise-makers to drag guards away. Back cameras up with plates.'],
   walls(hl,vl){vl(13,2,23);hl(2,13,12);vl(26,2,23);hl(26,37,11);hl(26,37,15);hl(13,26,16)},
   doors:DOORS.map(d=>({...d})),entries:ENTRIES.map(e=>({...e})),rooms:ROOMS.map(r=>({...r})),loot:LOOT_DEF.map(l=>({...l})),
   roomOf(x,y){if(x<13)return y<12?'office':'store room';if(x<26)return y<16?'gallery':'lobby';if(y<11)return 'vault';if(y<15)return 'corridor';return 'loading dock'}},
  bank:{name:'Pell Street Bank',caption:'PELL STREET BANK · BRANCH SECURITY PLAN · DRG 12/A',note1:'Pell Street - in through the hall?',note2:['pillars = blind spots!',22,24.9],
   blurb:'Harder. An old high-street bank: pillars break up the hall, and the strongroom is one room from the staff door.',
   walls(hl,vl,G){vl(12,2,12);hl(2,25,12);vl(25,2,23);hl(25,37,8);hl(25,37,16);hl(2,8,17);vl(8,17,23);for(const [x,y] of [[15,15],[21,15],[15,20],[21,20]])hl(x,x,y)},
-  doors:[{x:12,y:7},{x:6,y:12},{x:19,y:12},{x:8,y:20},{x:25,y:19},{x:25,y:13},{x:31,y:16},{x:31,y:8,vault:true}],
+  doors:[{x:12,y:7},{x:6,y:12,shut:2},{x:19,y:12},{x:8,y:20},{x:25,y:19,shut:2},{x:25,y:13},{x:31,y:16},{x:31,y:8,vault:true}],
   entries:[{id:'main',name:'Front doors',tiles:[[14,23],[15,23]],spawn:[14,24],night:1},
    {id:'side',name:'Staff door',tiles:[[37,20]],spawn:[38,20],night:2,lab:[-2.3,-1.5]},
    {id:'atm',name:'ATM wall',tiles:[[2,20]],spawn:[1,20],night:3,lab:[2.2,-1.5]},
@@ -690,8 +731,8 @@ const SITES={
    {id:'gold2',name:'Gold bars',x:35,y:3,v:8000,crack:4,kind:'gold'},
    {id:'cage',name:'Cash cage',x:27,y:22,v:5000,crack:3,kind:'crate'},
    {id:'atm',name:'ATM cassettes',x:3,y:22,v:2500,crack:2.5,kind:'cash'}],
-  hints:[null,'The staff door on the east side opens tonight. Thieves pick the least-watched way in, so cover both.',
-   'Someone has cut through the ATM wall. Hackers loop cameras on their route, and the Magpie throws noise-makers to drag guards away. Back cameras up with plates.',
+  hints:['Thieves come in through the front doors. Two inner doors are padlocked until Wednesday, so the hall has only two ways on: to the deposit room and to security.','The staff door on the east side opens tonight. Thieves pick the least-watched way in, so cover both.',
+   'Someone has cut through the ATM wall, and the padlocked doors are unlocked from tonight. Hackers loop cameras on their route, and the Magpie throws noise-makers to drag guards away. Back cameras up with plates.',
    'From tonight the crew cuts the power once, briefly. Someone will drop through the roof hatch into the deposit room. The scout radios your plates, the lensman walks through one laser, and an Impostor in a guard uniform walks straight past cameras.',
    'Last night. Six of them, a sewer tunnel up into the cash room, and at 01:26 the Fox: a professional who goes straight for the Pell Sapphire.'],
   roomOf(x,y){if(x<25){if(y<12)return x<12?'office':'deposit room';return x<8&&y>17?'atm lobby':'banking hall'}if(y<8)return 'strongroom';if(y<16)return 'security room';return 'cash room'}},
@@ -843,9 +884,12 @@ function buildMap(night){
  hl(2,37,2);hl(2,37,23);vl(2,2,23);vl(37,2,23);
  SITES[SITE].walls(hl,vl);
  for(const d of DOORS)G[idx(d.x,d.y)]=DOOR;
+ // v37: some inner doors stay locked for the first nights of a contract, so a starter budget can cover the way to the loot
+ SHUT.fill(0);if(!ST.daily&&!ST.endless)for(const d of DOORS)if(d.shut&&night<=d.shut)SHUT[idx(d.x,d.y)]=1;try{costCache={};_rcKey=''}catch(e){}
  for(const e of ENTRIES)if(e.night<=night&&!(ST.works&&ST.works.sealed.includes(e.id)))for(const [x,y] of e.tiles)G[idx(x,y)]=ENTRY;
 }
-const passable=i=>G[i]!==WALL;
+const SHUT=new Uint8Array(W*H);
+const passable=i=>G[i]!==WALL&&!SHUT[i];
 
 // ================================================================ DATA
 const DEV={
@@ -966,7 +1010,7 @@ let lit=new Float32Array(W*H),strobe=new Uint8Array(W*H);
 function opaqueAt(x,y){
  const ix=Math.floor(x),iy=Math.floor(y);if(!inb(ix,iy))return true;const i=iy*W+ix;const g=G[i];
  if(g===WALL||g===ENTRY)return true;
- if(g===DOOR&&(lockAt(i)>0||isSlam(i)))return true;
+ if(g===DOOR&&(SHUT[i]||lockAt(i)>0||isSlam(i)))return true;
  for(const s of ST.smokes){const dx=x-s.x,dy=y-s.y;if(dx*dx+dy*dy<s.r*s.r)return true}
  return false;
 }
@@ -1675,7 +1719,7 @@ function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SIT
 function nextNight(){setTimeout(()=>{if(ST.phase!=='plan')return;if(!ST.daily)tip('works','Building works','Open Building works under the tools to brick up an entry, reinforce the vault or wire the doors to the alarm.');const gk=nightGang();if(gk)setTimeout(()=>tip('gang','A gang is in town','The crew panel shows who is coming. Catch their leader for a £200 bounty. Anyone who escapes will be back.'),4000)},1200);setMTab('build');hideSheet();ST.night++;for(const l of ST.loot)if(l.dropped){l.i=l.home;l.dropped=false}if(ST.endless){resetLoot();ST.stolen=0;ST.limit=OT_CAP;ST.intel.plates.clear();otMod()}buildMap(ST.night);ST.phase='plan';ST.thieves=[];ST.guards=[];ST.smokes=[];ST.vaultOpen=false;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false}
  devicesChanged();redrawStatic();refreshUI();hint(nightDef(ST.night).hint,9);logLine(dayName(ST.night)+': new intel on tonight\'s crew.');saveGame()}
-function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],back:[],jailed:[],busted:[],works:{sealed:[],vault:false,cctv:false},evSeed:1+Math.floor(Math.random()*1e6),slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});ST.cash+=SITES[SITE].bonus||0;resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(NIGHTS[0].hint,12)}
+function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],back:[],jailed:[],busted:[],works:{sealed:[],vault:false,cctv:false},evSeed:1+Math.floor(Math.random()*1e6),slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});ST.cash+=SITES[SITE].bonus||0;resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(nightDef(1).hint,12)}
 
 // ================================================================ ABILITIES
 function useSiren(){if(ST.phase!=='heist'||ST.abil.siren<=0)return;ST.abil.siren--;AU.siren();AU.say('siren',{cd:0,pri:3});FX.flash=.7;FX.flashCol=S.danger;FX.shake=.4;ST.alarmT=6;logLine('<b style="color:var(--danger)">PANIC SIREN</b> sounded.');
@@ -1683,7 +1727,7 @@ function useSiren(){if(ST.phase!=='heist'||ST.abil.siren<=0)return;ST.abil.siren
  for(const th of act){addSus(th,15,'camera');if(th.state==='caught')continue;th.hurry=5;if(th.sus>45&&th.state==='in'){th.state='flee';th.needReplan=true;floatText(th.x,th.y-.7,'BOLTING',S.accent)}}
  for(const g of ST.guards){if(g.state==='chase')continue;let best=null;for(const th of act){if(th.state==='caught')continue;const d=Math.hypot(th.x-g.x,th.y-g.y);if(!best||d<best.d)best={d,th}}if(best){g.state='investigate';g.lastSeen=[best.th.x,best.th.y];g.path=guardPath(g,idx(Math.floor(best.th.x),Math.floor(best.th.y)));g.look=0}}
  renderAbil()}
-function trySlam(i){if(ST.abil.slam<=0||G[i]!==DOOR||i===VAULT_I||isSlam(i)){AU.deny();return false}
+function trySlam(i){if(ST.abil.slam<=0||G[i]!==DOOR||SHUT[i]||i===VAULT_I||isSlam(i)){AU.deny();return false}
  if(ST.thieves.some(t=>['in','out','flee'].includes(t.state)&&Math.hypot(t.x-tx(i)-.5,t.y-ty(i)-.5)<.75)){AU.deny();floatText(tx(i)+.5,ty(i),'blocked',S.danger);return false}
  ST.abil.slam--;ST.slams.push({i,t:7});costCache={};for(const th of ST.thieves)th.needReplan=true;AU.slam(tx(i));AU.say('slam',{cd:8});FX.shake=.3;burst(tx(i)+.5,ty(i)+.5,16,S.ink,2.5);logLine('Door slammed shut in the '+roomOf(i)+'.');if(ST.abil.slam<=0)ST.abTool=null;renderAbil();return true}
 function renderAbil(){const a=$('abil');a.classList.toggle('show',ST.phase==='heist');if(ST.phase!=='heist')return;
@@ -1728,27 +1772,30 @@ function layoutMode(){const w=innerWidth,h=innerHeight,touch=!!window.IJ_APP||ma
  for(const e of [document.documentElement,document.body]){e.classList.toggle('tl',tl);e.classList.toggle('ls',ls);e.classList.toggle('short',ls&&h<500)}
  document.documentElement.style.setProperty('--u',u);
  if(ls){// panel as narrow as is comfortable, wider when the map cannot use the width anyway
-  const top=$('top')?$('top').getBoundingClientRect().height:46*u,mapW=(h-top-6)*W/H;let sw=Math.max(Math.min(250*u,.5*w),Math.min(340*u,.4*w));if(w-mapW>sw)sw=Math.min(w-mapW,430*u,.5*w);
+  const mapW=(h-6)*W/H;let sw=Math.max(Math.min(250*u,.4*w),Math.min(w-mapW,430*u,.5*w));
   document.documentElement.style.setProperty('--sideW',(sw/u)+'px')}
- const sp=$('speedRow');if(sp){if(tl){if(sp.parentNode!==$('top'))$('top').insertBefore(sp,$('styles'))}else if(sp.parentNode!==$('goCard'))$('goCard').appendChild(sp)}
+ const sp=$('speedRow');if(sp&&sp.parentNode!==$('goCard'))$('goCard').appendChild(sp);
  const a=$('abil');if(a){if(tl){if(a.parentNode!==$('goCard'))$('goCard').prepend(a)}else if(a.parentNode!==$('stage'))$('stage').appendChild(a)}
  return ch}
 function resize(){
  layoutMode();const st=$('stage');const mobile=LAY.tl;const land=LAY.ls;
  if(land||!mobile){st.style.height='';document.body.classList.remove('roomy','tight','row9')}const r=st.getBoundingClientRect();
- let aw,ah;if(land){aw=r.width-6;ah=r.height-6}else if(mobile){aw=r.width;const top=$('top')?$('top').getBoundingClientRect().height:46;const app=$('app').getBoundingClientRect().height;const full=aw*H/W,u=LAY.u,tight=app-top-412*u<full,row9=tight&&aw/u>=430&&app-top-358*u<full;ah=Math.min(full,app-top-(row9?312:tight?358:412)*u);document.body.classList.toggle('tight',tight);document.body.classList.toggle('row9',row9);document.body.classList.toggle('roomy',!tight&&app-top-ah-412*u>70*u)}else{aw=r.width-20;ah=r.height-20}
+ let aw,ah;if(land){aw=r.width-6;ah=r.height-6}else if(mobile){aw=r.width;const top=$('top')?$('top').getBoundingClientRect().height:46;const app=$('app').getBoundingClientRect().height;const full=aw*H/W,u=LAY.u,tight=app-top-412*u<full,row9=tight&&aw/u>=430&&app-top-358*u<full;const night=ST.phase==='heist'||ST.phase==='replay';ah=Math.min(full,app-top-(night?290:row9?312:tight?358:412)*u);document.body.classList.toggle('tight',tight);document.body.classList.toggle('row9',row9);document.body.classList.toggle('roomy',!tight&&app-top-ah-412*u>70*u)}else{aw=r.width-20;ah=r.height-20}
  T=Math.max(6,Math.min(aw/W,ah/H));DPR=Math.min(2,window.devicePixelRatio||1);
  cv.width=Math.round(W*T*DPR);cv.height=Math.round(H*T*DPR);cv.style.width=W*T+'px';cv.style.height=H*T+'px';
  if(mobile&&!land)st.style.height=(H*T+12)+'px';else st.style.height='';
  stat.width=cv.width;stat.height=cv.height;wallC.width=cv.width;wallC.height=cv.height;redrawStatic();if(typeof R3!=='undefined'&&R3.ready)r3Size();
 }
 function txt(c,s,x,y,size,col,{font=S.mono,align='center',base='middle',weight='',alpha=1,rot=0,stroke=null,glow=0}={}){
+  if(LAY.tl&&typeof s==='string'&&(s===SITES[SITE].caption||/^\d+\.00 m$/.test(s)||s.includes('EDITION OF')||s===SITES[SITE].note1||(SITES[SITE].note2&&s===SITES[SITE].note2[0])))return;
  const m=c.getTransform(),p=m.transformPoint(new DOMPoint(x,y)),sc=Math.hypot(m.a,m.b);
- c.save();c.setTransform(1,0,0,1,p.x,p.y);if(rot)c.rotate(rot);c.globalAlpha*=alpha;c.font=`${weight} ${Math.max(theme==='pixel'?5:6,theme==='pixel'?Math.round(size*sc):size*sc)}px "${font}"`;c.textAlign=align;c.textBaseline=base;
+ c.save();c.setTransform(1,0,0,1,p.x,p.y);if(rot)c.rotate(rot);c.globalAlpha*=alpha;c.font=`${weight} ${Math.max(LAY.tl?11*DPR:theme==='pixel'?5:6,theme==='pixel'?Math.round(size*sc):size*sc)}px "${font}"`;c.textAlign=align;c.textBaseline=base;
  if(glow){c.shadowColor=col;c.shadowBlur=glow*sc}
  if(stroke){c.lineWidth=stroke[1]*sc;c.strokeStyle=stroke[0];c.lineJoin='round';c.strokeText(s,0,0)}
  c.fillStyle=col;c.fillText(s,0,0);c.restore();
 }
+// how much the 11px floor enlarges a map label of this size (in tiles) on a touch screen
+function lblK(size){return LAY.tl?Math.max(1,11/(size*T)):1}
 let rng=mulberry(7);
 function wob(c,x1,y1,x2,y2,j=.05,passes=2){for(let p=0;p<passes;p++){const mx=(x1+x2)/2+(rng()-.5)*j*2,my=(y1+y2)/2+(rng()-.5)*j*2;c.beginPath();c.moveTo(x1+(rng()-.5)*j,y1+(rng()-.5)*j);c.quadraticCurveTo(mx,my,x2+(rng()-.5)*j,y2+(rng()-.5)*j);c.stroke()}}
 function wallPath(c){c.beginPath();for(let i=0;i<W*H;i++)if(G[i]===WALL)c.rect(tx(i),ty(i),1,1)}
@@ -1807,7 +1854,7 @@ function drawNight(c){if(window.NONIGHT||!DEPTH||theme!=='blueprint'||(ST.phase!
 
 const DOOROPEN={};
 function doorAnim(dt){if(ST.phase!=='heist'&&ST.phase!=='replay'&&ST.phase!=='plan')return;
- for(const d of doorTiles()){if(d.vault)continue;const cx=d.x+.5,cy=d.y+.5;let near=false,who=null;
+ for(const d of doorTiles()){if(d.vault||SHUT[d.i])continue;const cx=d.x+.5,cy=d.y+.5;let near=false,who=null;
   for(const th of ST.thieves)if(['in','out','flee'].includes(th.state)&&Math.abs(th.x-cx)<1.15&&Math.abs(th.y-cy)<1.15){near=true;who=th;break}
   if(!near)for(const g of ST.guards)if(Math.abs(g.x-cx)<1.15&&Math.abs(g.y-cy)<1.15){near=true;who=g;break}
   const o=DOOROPEN[d.i]||{v:0,cd:0,side:1};o.cd-=dt;
@@ -2095,8 +2142,11 @@ function render(dtReal){
  ctx.setTransform(1,0,0,1,0,0);
  if(R3.on)r3Frame(GOV.dt3||.016);else post(ctx);
 }
+function drawShut(c,d){const x=d.x,y=d.y;c.save();c.fillStyle=S.ink;c.globalAlpha=.85;if(d.vert)c.fillRect(x+.36,y-.02,.28,1.04);else c.fillRect(x-.02,y+.36,1.04,.28);c.globalAlpha=1;
+  const px=x+.5,py=y+.55;c.fillStyle=S.accent;c.strokeStyle=S.accent;c.lineWidth=.1;c.beginPath();c.arc(px,py-.2,.22,Math.PI,0);c.stroke();c.fillRect(px-.32,py-.2,.64,.5);c.fillStyle=S.devFill||'#0f3a6b';c.fillRect(px-.06,py-.06,.12,.2);c.restore()}
 function drawSlams(c){for(const sl of ST.slams){const x=tx(sl.i),y=ty(sl.i);const vert=G[idx(x,y-1)]===WALL;c.save();c.fillStyle=S.danger;c.globalAlpha=.9;if(vert)c.fillRect(x+.25,y-.05,.5,1.1);else c.fillRect(x-.05,y+.25,1.1,.5);c.globalAlpha=1;txt(c,Math.ceil(sl.t)+'s',x+.5,y-.35,.28,S.danger,{font:S.mono,weight:'700'});c.restore()}
- if(ST.phase==='heist'&&ST.abTool==='slam'){const t=.5+.5*Math.sin(ST.t*6);for(const d of doorTiles()){if(d.vault||isSlam(d.i))continue;c.save();c.strokeStyle=S.danger;c.globalAlpha=.4+t*.5;c.lineWidth=.06;c.strokeRect(d.x+.05,d.y+.05,.9,.9);c.restore()}}}
+ for(const d of doorTiles())if(SHUT[d.i])drawShut(c,d);
+  if(ST.phase==='heist'&&ST.abTool==='slam'){const t=.5+.5*Math.sin(ST.t*6);for(const d of doorTiles()){if(d.vault||isSlam(d.i)||SHUT[d.i])continue;c.save();c.strokeStyle=S.danger;c.globalAlpha=.4+t*.5;c.lineWidth=.06;c.strokeRect(d.x+.05,d.y+.05,.9,.9);c.restore()}}}
 function drawHeat(c){for(let i=0;i<W*H;i++){const w=watch[i];if(w<.5||!passable(i))continue;c.fillStyle=theme==='sketch'?`rgba(200,56,43,${Math.min(.35,w/40)})`:theme==='board'?`rgba(214,60,47,${Math.min(.45,w/35)})`:`rgba(255,90,110,${Math.min(.4,w/40)})`;c.fillRect(tx(i),ty(i),1,1)}}
 function drawLights(c){for(const d of ST.devices)if(d.type==='light'){const g=c.createRadialGradient(d.x+.5,d.y+.5,.2,d.x+.5,d.y+.5,3.6);g.addColorStop(0,S.light.replace(/[\d.]+\)$/,m=>(parseFloat(m)*2.2)+')'));g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;for(let i=0;i<W*H;i++)if(lit[i]>0&&Math.abs(tx(i)-d.x)<=4&&Math.abs(ty(i)-d.y)<=4)c.fillRect(tx(i),ty(i),1.01,1.01)}}
 function drawPlates(c){for(const d of ST.devices)if(d.type==='plate'){const x=d.x,y=d.y,hit=d.hit>0;if(ST.intel.plates.has(d.i)&&ST.phase==='plan')txt(c,'KNOWN',x+.5,y-.2,.2,S.danger,{font:S.mono,weight:'700'});
@@ -2332,8 +2382,8 @@ function drawThief(c,th){
  const lc=S.paper?S.labelInk:S.ink;
  if(ST.thoughts){const it=thiefIntent(th);if(it!==th._it){th._it=it;th._itT=0}th._itT=(th._itT||0)+1/60;
   const hov=hoverTile>=0&&Math.hypot(hoverPt[0]-x,hoverPt[1]-y)<1.2;const a=hov?1:Math.max(0,Math.min(1,(3.2-th._itT)*2));
-  if(a>0&&it){c.save();c.globalAlpha=a;const fy=y+dy-(th.sus>.5?1.1:.8)-(useFigures()?.45:0);const px=theme==='pixel';const w=it.length*(px?.31:.205)+.4;const lx=Math.max(w/2+.1,Math.min(W-w/2-.1,x));
-   c.fillStyle=S.paper?'rgba(255,255,255,.85)':'rgba(0,0,0,.62)';if(px)c.fillRect(lx-w/2,fy-.3,w,.6);else{rr(c,lx-w/2,fy-.27,w,.52,.14);c.fill()}txt(c,it,lx,fy+(px?.03:0),px?.5:.38,S.paper?S.labelInk:'#fff',{font:px?'Silkscreen':theme==='cctv'||theme==='term'?'VT323':'Nunito',weight:px?'':'700'});c.restore()}}
+  if(a>0&&it){c.save();c.globalAlpha=a;const fy=y+dy-(th.sus>.5?1.1:.8)-(useFigures()?.45:0);const px=theme==='pixel';const k=lblK(px?.5:.38);const w=it.length*(px?.31:.205)*k+.4;const lx=Math.max(w/2+.1,Math.min(W-w/2-.1,x));
+   c.fillStyle=S.paper?'rgba(255,255,255,.85)':'rgba(0,0,0,.62)';if(px)c.fillRect(lx-w/2,fy-.3*k,w,.6*k);else{rr(c,lx-w/2,fy-.27*k,w,.52*k,.14);c.fill()}txt(c,it,lx,fy+(px?.03:0),px?.5:.38,S.paper?S.labelInk:'#fff',{font:px?'Silkscreen':theme==='cctv'||theme==='term'?'VT323':'Nunito',weight:px?'':'700'});c.restore()}}
  if(theme==='cctv')txt(c,'SUBJ-'+(th.id+1)+' '+th.name.toUpperCase(),x+.48,y+dy-.42,.42,'#eaffef',{font:'VT323',align:'left'});
  else txt(c,th.name,x,y+dy+.58,.3,lc,{font:S.font,stroke:theme==='board'?['#f3e6c6',.12]:null});
  if(th.sus>0.5){const w=.95,h=.13,bx=x-w/2,by=y+dy-.68-(useFigures()?.42:0);const f=th.sus/th.maxSus;
@@ -2423,7 +2473,7 @@ function post(c){
 function deviceAt(i){return ST.devices.find(d=>d.i===i)}
 function canPlace(type,i){
  if(i<0)return false;if(ST.cash<DEV[type].cost)return false;
- if(type==='steel')return G[i]===DOOR&&i!==VAULT_I&&!deviceAt(i);
+ if(type==='steel')return G[i]===DOOR&&!SHUT[i]&&i!==VAULT_I&&!deviceAt(i);
  if(G[i]!==FLOOR)return false;if(ST.loot.some(l=>l.i===i))return false;if(deviceAt(i))return false;
  if(ENTRIES.some(e=>e.roof&&spawnI(e)===i))return false;
  if(type==='laser'&&laserBeam(tx(i),ty(i),autoOrient(tx(i),ty(i))).length>9)return false;
@@ -2455,13 +2505,13 @@ function snapTile(type,i,pt){if(i<0||canPlace(type,i))return i;let best=-1,bd=9;
 function handlePress(p,e,touch){if(p.i<0)return;hoverTile=p.i;
  if(ST.phase==='heist'&&ST.abTool==='slam'){trySlam(p.i);return}
  if(ST.phase==='heist'&&R3.on){const w=r3WatchAt(p,touch);if(w){setWatch(w);return}if(R3.watch&&!deviceAt(p.i)){setWatch(null);return}}
- if(ST.phase!=='plan'){let d=deviceAt(p.i);if(!d&&touch){for(const o of ST.devices)if(o.type==='speaker'&&Math.hypot(o.x+.5-p.x,o.y+.5-p.y)<1.3)d=o}if(d&&d.type==='speaker'&&ST.phase==='heist')fireSpeaker(d);ST.sel=d||null;refreshUI();return}
+ if(ST.phase!=='plan'){let d=deviceAt(p.i);if(!d&&touch){let bd=Math.max(1.3,26/T);for(const o of ST.devices){const dd=Math.hypot(o.x+.5-p.x,o.y+.5-p.y);if(dd<bd&&(o.type==='speaker'||ST.phase!=='heist')){bd=dd;d=o}}if(!d){bd=Math.max(1.3,26/T);for(const o of ST.devices){const dd=Math.hypot(o.x+.5-p.x,o.y+.5-p.y);if(dd<bd){bd=dd;d=o}}}}if(d&&d.type==='speaker'&&ST.phase==='heist')fireSpeaker(d);ST.sel=d||null;refreshUI();return}
  if(ST.routeFor){const g=ST.routeFor;if(p.i===g.i){finishRoute();return}if(passable(p.i)&&G[p.i]!==OUT&&G[p.i]!==ENTRY&&g.route.length<6){g.route.push(p.i);devicesChanged();AU.click();refreshUI()}if(g.route.length>=6)finishRoute();return}
  if(ST.tool){const i=snapTile(ST.tool,p.i,[p.x,p.y]);
   if(ST.tool==='camera'&&canPlace('camera',i)&&!touch){aimDrag={x:tx(i),y:ty(i),i,ang:bestAim(tx(i),ty(i)),moved:false,placing:true};cv.setPointerCapture(e.pointerId);return}
   const d=place(ST.tool,i);if(d&&touch){if((d.type==='camera'||d.type==='laser')&&!ST.routeFor){ST.sel=d;ST.tool=null;hint(DEV[d.type].name+' fitted. Turn it with the buttons below, then tap Done.',4)}else if(!ST.routeFor)hint(DEV[d.type].name+' placed. Tap it to turn, upgrade or sell it.',3)}if(ST.cash<DEV[ST.tool]?.cost)ST.tool=null;refreshUI();return}
  let d=deviceAt(p.i)||ST.devices.find(d=>d.type==='guard'&&d.i===p.i);
- if(!d&&touch){let bd=1.2;for(const o of ST.devices){const dd=Math.hypot(o.x+.5-p.x,o.y+.5-p.y);if(dd<bd){bd=dd;d=o}}}
+ if(!d&&touch){let bd=Math.max(1.2,24/T);for(const o of ST.devices){const dd=Math.hypot(o.x+.5-p.x,o.y+.5-p.y);if(dd<bd){bd=dd;d=o}}}
  ST.sel=d||null;if(d)setMTab('build');if(d&&d.type==='camera'&&!touch){aimDrag={x:d.x,y:d.y,dev:d,ang:d.ang,moved:false};cv.setPointerCapture(e.pointerId)}
  AU.click();refreshUI();
 }
@@ -2516,7 +2566,7 @@ function refreshUI(){if($('worksBtn'))$('worksBtn').hidden=ST.phase!=='plan'||!!
  $('sStolen').textContent=money(ST.stolen)+' / '+money(ST.limit);$('sStolenBar').style.width=Math.min(100,ST.stolen/ST.limit*100)+'%';if(ST.stolen>HUDC.st){const sb=$('sStolenBar');sb.classList.remove('hit');void sb.offsetWidth;sb.classList.add('hit')}HUDC.st=ST.stolen;
  document.querySelectorAll('.tool').forEach(b=>{const t=b.dataset.t;b.classList.toggle('on',ST.tool===t);b.disabled=ST.phase!=='plan'||ST.cash<DEV[t].cost});
  $('toolHelp').textContent=(TOUCH?(x=>x.replace(/Drag when placing to aim it\./,'Hold to zoom in; turn it once placed.').replace(/click/g,'tap').replace(/Click/g,'Tap').replace('Enter or right-click to finish','Tap the guard again to finish')):(x=>x))(ST.routeFor?(TOUCH?'Drawing patrol: tap floor tiles (hold to zoom), then press Done.':'Drawing patrol: click floor tiles. Enter or right-click to finish.')+(TOUCH?'':''):ST.tool?DEV[ST.tool].desc:ST.phase==='plan'?'Pick a device, or click one you placed to adjust it. Thieves can see cameras, lasers, lights and guards, but never plates.':'The crew is inside. Click a device to inspect it.');
- document.body.dataset.phase=ST.phase;$('phaseTag').textContent=ST.phase==='heist'?'night in progress':ST.phase==='plan'?'planning':'';
+ {const ph=document.body.dataset.phase;document.body.dataset.phase=ST.phase;if(ph&&ph!==ST.phase&&LAY.tl&&!LAY.ls)requestAnimationFrame(resize)}$('phaseTag').textContent=ST.phase==='heist'?'night in progress':ST.phase==='plan'?'planning':'';
  $('routeDone').hidden=!ST.routeFor;if(ST.routeFor)$('routeDone').textContent=ST.routeFor.route.length?'Done: set '+ST.routeFor.route.length+'-point patrol':'Done: make a sentry';const d=ST.sel;$('selBox').hidden=!d;document.body.classList.toggle('hassel',!!d&&ST.phase==='plan'&&!ST.routeFor);document.body.classList.toggle('routing',!!ST.routeFor);
  if(d){$('selName').innerHTML=`<b>${DEV[d.type].name}${d.n?' C'+d.n:''}</b>`+(d.type==='camera'?` · ${d.sweep?'sweeping':'fixed'}${d.looped>0?' · LOOPED':''}`:'')+(d.type==='guard'?` · ${d.route.length?d.route.length+' patrol points':'sentry'} · ${PERS[d.pers||'steady'].ic} ${PERS[d.pers||'steady'].name}<div style="font-size:12px;opacity:.75;margin-top:2px">${PERS[d.pers||'steady'].desc}</div>`:'')+(d.broken?' · broken':'')+(d.forced?' · forced':'');
   const b=[];if(ST.phase==='plan'){if(d.type==='camera')b.push(['⟲','rotSel(-1)'],['⟳','rotSel(1)'],[d.sweep?'Fix in place':'Sweep','toggleSweep()']);if(d.type==='laser')b.push(['Turn beam','rotSel(1)']);if(d.type==='guard')b.push(['Redraw patrol','redrawRoute()'],[`${PERS[d.pers||'steady'].ic} ${PERS[d.pers||'steady'].name} ▸`,'cyclePers()']);const up=(UPG[d.type]||[])[d.lv||0];if(up)b.push([`★ ${up.name} ${money(up.cost)}`,'upgradeSel()',ST.cash<up.cost]);b.push(['Sell '+money(Math.round(d.paid*.8)),'sellSel()']);if(TOUCH)b.push(['✓ Done','deselSel()'])}
@@ -3011,9 +3061,9 @@ function r3Sync(dt){const used=new Set();const P=R3.people;
    sp.material.color.set(sm.sec?(SK?'#8fb3c9':'#cfeeff'):(SK?'#8d8577':'#a9b3c0'));sp.material.opacity=Math.min(1,sm.t*.5)*(SK?.55:.32);sp.visible=true;n++}}for(;n<SM.length;n++)SM[n].visible=false}
  for(const it of R3.loot){const l=it.l;const show=!l.stolen&&!l.carrier;it.item.visible=show&&!l.dropped;if(it.item.visible){if(it.spin)it.item.rotation.y+=dt*.6;if(it.bob)it.item.position.y=it.y0+Math.sin(ST.t*2+l.x)*.03}it.glow.visible=it.item.visible;
   if(l.dropped&&!l.carrier){it.drop.visible=true;it.drop.position.set(tx(l.i)+.5,.14,ty(l.i)+.5)}else it.drop.visible=false}
- for(const D of R3.doors){if(D.d.vault){D.piv.position.y=ST.vaultOpen?-1.5:0;continue}const o=DOOROPEN[D.d.i]||{v:0,side:1};const blocked=isSlam(D.d.i)||ST.devices.some(v=>v.type==='steel'&&v.i===D.d.i);D.piv.visible=!blocked;D.piv.rotation.y=-(o.v*Math.PI/2*.92*o.side)}
+ for(const D of R3.doors){if(D.d.vault){D.piv.position.y=ST.vaultOpen?-1.5:0;continue}const o=DOOROPEN[D.d.i]||{v:0,side:1};const blocked=ST.slams.some(s=>s.i===D.d.i)||ST.devices.some(v=>v.type==='steel'&&v.i===D.d.i);D.piv.visible=!blocked;D.piv.rotation.y=-(o.v*Math.PI/2*.92*o.side)}
  // slams: red shutters
- const sk=ST.slams.map(s=>s.i).join(',');if(sk!==R3.sk){R3.sk=sk;if(R3.slamG)R3.dyn.remove(R3.slamG);R3.slamG=new THREE.Group();for(const s of ST.slams){const x=tx(s.i),y=ty(s.i);const vert=G[idx(x,y-1)]===WALL;const b=new THREE.Mesh(new THREE.BoxGeometry(vert?.14:1,1.3,vert?1:.14),new THREE.MeshStandardMaterial({color:'#c8384a',emissive:'#ff3b55',emissiveIntensity:.6,metalness:.6,roughness:.3}));b.position.set(x+.5,.65,y+.5);b.castShadow=true;R3.slamG.add(b)}R3.dyn.add(R3.slamG)}
+ const sk=ST.slams.map(s=>s.i).join(',')+'|'+ST.night+SITE;if(sk!==R3.sk){R3.sk=sk;if(R3.slamG)R3.dyn.remove(R3.slamG);R3.slamG=new THREE.Group();for(let i=0;i<W*H;i++)if(SHUT[i]){const x=tx(i),y=ty(i);const vert=G[idx(x,y-1)]===WALL;for(const s of [-1,1]){const pl=new THREE.Mesh(new THREE.BoxGeometry(vert?.1:.2,.24,vert?.2:.1),new THREE.MeshStandardMaterial({color:'#d9a441',emissive:'#7a5410',emissiveIntensity:.5,metalness:.8,roughness:.3}));pl.position.set(x+.5+(vert?s*.12:0),.9,y+.5+(vert?0:s*.12));R3.slamG.add(pl)}}for(const s of ST.slams){const x=tx(s.i),y=ty(s.i);const vert=G[idx(x,y-1)]===WALL;const b=new THREE.Mesh(new THREE.BoxGeometry(vert?.14:1,1.3,vert?1:.14),new THREE.MeshStandardMaterial({color:'#c8384a',emissive:'#ff3b55',emissiveIntensity:.6,metalness:.6,roughness:.3}));b.position.set(x+.5,.65,y+.5);b.castShadow=true;R3.slamG.add(b)}R3.dyn.add(R3.slamG)}
 }
 function r3BuildDevices(full){const disp=g=>g.traverse(x=>{if(x.geometry&&x.geometry!==R3.pg)x.geometry.dispose();if(x.isLight&&x.shadow&&x.shadow.map)x.shadow.map.dispose()});
  if(full&&R3.devG){R3.dyn.remove(R3.devG);disp(R3.devG);R3.devG=null;R3.devC=null}
