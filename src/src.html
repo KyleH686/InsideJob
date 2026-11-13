@@ -63,6 +63,17 @@ main{flex:1;display:flex;min-height:0}
 @keyframes fadein{from{opacity:0;transform:translateY(-4px)}}
 #overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);z-index:5;padding:16px}
 #overlay.show{display:flex}
+/* v33: a close cross pinned to the top right of every menu that has a way back, plus room for the notch */
+#overlay{padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+#sheet .xClose{position:sticky;top:-14px;float:right;z-index:4;width:44px;height:44px;margin:-14px -16px 0 8px;padding:0;border-radius:50%;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;color:inherit;
+ background:color-mix(in srgb,var(--panel,#0c2f57) 88%,currentColor);border:1.5px solid color-mix(in srgb,currentColor 45%,transparent);box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer}
+#sheet .xClose:active{transform:scale(.92)}
+:where(body.tl) #sheet button{min-height:44px}
+#sheet .xClose{width:46px;height:46px}
+/* a cue that a menu carries on below the fold (its buttons are often at the bottom) */
+#sheetMore{position:absolute;left:50%;transform:translateX(-50%);bottom:max(22px,calc(env(safe-area-inset-bottom) + 10px));z-index:6;display:none;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:700;color:var(--btnink,#06162d);background:var(--btn,#7fe3ff);box-shadow:0 3px 10px rgba(0,0,0,.35);border:0;pointer-events:auto}
+#overlay.more #sheetMore{display:block}
+:where(body.tl) #sheet{padding:20px 18px}
 #sheet{max-width:560px;width:100%;max-height:100%;overflow:auto;padding:26px 28px;position:relative;animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
 @keyframes pop{from{transform:scale(.85) rotate(-2deg);opacity:0}}
 #sheet h1{font-family:var(--fh);font-weight:normal;margin:0 0 4px;font-size:40px;letter-spacing:.04em;line-height:1}
@@ -316,7 +327,7 @@ button{touch-action:manipulation}
 body.hassel:where(.tl) #tools,body.hassel:where(.tl) #toolHelp{display:none}
 body.routing:where(.tl) #selBox,body.routing:where(.tl) #tools{display:none}
 :where(body.tl) #selBox button{min-height:40px}
-html:where(.tl),body:where(.tl){position:fixed;inset:0;overflow:hidden;overscroll-behavior:none;touch-action:none}
+html:where(.tl),body:where(.tl){position:fixed;inset:0;overflow:hidden;overscroll-behavior:none;touch-action:manipulation}
 :where(body.tl) #app{height:100%;min-height:0}
 :where(body.tl) #top{padding:6px 10px;gap:8px;flex-wrap:nowrap}
 :where(body.tl) #top .ttl{font-size:19px!important;white-space:nowrap}
@@ -415,7 +426,30 @@ body[data-theme=sketch] #home h1 .o::after{border-color:#2f2c27;box-shadow:2px 2
 #home .hmenu>*{animation:hUp .45s cubic-bezier(.2,1.2,.4,1) both}
 #home .hmenu>*:nth-child(2){animation-delay:.06s}#home .hmenu>*:nth-child(3){animation-delay:.12s}#home .hmenu>*:nth-child(4){animation-delay:.18s}#home .hmenu>*:nth-child(5){animation-delay:.24s}#home .hmenu>*:nth-child(6){animation-delay:.3s}
 #home .hmenu button.pri{animation:hUp .45s cubic-bezier(.2,1.2,.4,1) both,pulse 2.4s ease-in-out .5s infinite}
-.rstar{display:inline-block;opacity:.25}.rstar.on{opacity:1;animation:rstar .5s cubic-bezier(.2,1.6,.4,1) both}
+.rstar{display:inline-block;opacity:.25}
+#sheet .rstars{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:16px 0 8px}
+#sheet .stamp:has(~ .rstars){top:8px;font-size:24px;padding:2px 10px;border-width:3px}
+#sheet .rstars div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border:1.5px dashed color-mix(in srgb,currentColor 30%,transparent);border-radius:10px;opacity:.55;text-align:center}
+#sheet .rstars div.on{opacity:1;border-style:solid;border-color:#ffd36b}
+#sheet .rstars i{font-style:normal;font-size:28px;line-height:1;color:color-mix(in srgb,currentColor 35%,transparent)}
+#sheet .rstars div.on i{color:#ffd36b;text-shadow:0 0 10px rgba(255,211,107,.6)}
+#sheet .rstars span{font-size:11px;line-height:1.2}
+#sheet .rstars b{font-size:12px}
+#starShow{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(3,10,24,.72);color:#fff;text-align:center;animation:ssFade .3s both;cursor:pointer;padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom)}
+#starShow.out{animation:ssFade .35s reverse both}
+@keyframes ssFade{from{opacity:0}}
+#starShow small{font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+#starShow h2{font-family:var(--fh);font-weight:normal;font-size:clamp(30px,8vw,52px);margin:4px 0 14px;animation:ssFade .5s .1s both}
+#starShow .ssRow{display:flex;gap:clamp(10px,4vw,28px);justify-content:center}
+#starShow .ssS{display:flex;flex-direction:column;align-items:center;width:clamp(84px,24vw,140px)}
+#starShow .ssS i{font-style:normal;font-size:clamp(60px,18vw,110px);line-height:1;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.4);animation:ssMiss .5s var(--d) both}
+#starShow .ssS.on i{color:#ffd36b;-webkit-text-stroke:0;text-shadow:0 0 24px rgba(255,211,107,.75);animation:ssHit .6s var(--d) cubic-bezier(.2,1.6,.4,1) both}
+#starShow .ssS span{font-size:clamp(11px,3vw,14px);margin-top:6px;opacity:.85}
+#starShow .ssS:not(.on) span{opacity:.5}
+#starShow p{margin:16px 0 0;font-size:13px;opacity:.7}
+@keyframes ssHit{from{transform:scale(3) rotate(-35deg);opacity:0}}
+@keyframes ssMiss{from{opacity:0;transform:translateY(8px)}}
+.rstar.on{opacity:1;animation:rstar .5s cubic-bezier(.2,1.6,.4,1) both}
 @keyframes rstar{from{transform:scale(2.8) rotate(-40deg);opacity:0}}
 #sCash{display:inline-block;transition:color .5s}#sCash.up{color:var(--good);animation:cbump .35s}#sCash.dn{animation:cbump .3s}
 @keyframes cbump{40%{transform:scale(1.18)}}
@@ -561,7 +595,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v32 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro and Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v33 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro and Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -1507,6 +1541,7 @@ function stepSim(dt){
  if(ST.thieves.every(t=>['caught','escaped','gone'].includes(t.state))){ST.endT+=dt;if(ST.endT>1.8)endNight()}
 }
 function recordFrame(){ST.rec.push({t:ST.t,th:ST.thieves.map(t=>[t.x,t.y,t.sus,t.state,t.loot?1:0,t.unseen<.15?1:0,t.drop>0?t.drop:0,t.face]),g:ST.guards.map(g=>[g.x,g.y,g.face,g.state]),c:ST.devices.filter(d=>d.type==='camera').map(d=>[d.cur,d.looped>0?1:0,d.seeing?1:0]),sm:ST.smokes.map(s=>({...s})),sl:ST.slams.map(s=>({...s})),lz:ST.devices.filter(d=>d.type==='laser').map(d=>d.broken?1:0)})}
+const STAR_LBL=['Nothing stolen','Half the crew caught','Whole crew caught'];
 function stars(ns){const n=ST.thieves.filter(t=>t.state!=='gone').length;return [ns.stolen===0,ns.arrests>=Math.ceil(n/2),ns.arrests===n&&n>0]}
 function endNight(){
  if(ST.phase!=='heist')return;ST.phase='report';if(ST.dark){ST.dark=false;computeLit();rebuildWatch()}AU.droneOff();
@@ -1521,7 +1556,7 @@ function endNight(){
  const lines=ST.thieves.map(t=>`<div><span>${t.name}${t.back?' <small style="color:var(--danger)">BACK</small>':''} <small style="opacity:.7">(${t.T.name})</small></span><span style="text-align:right">${t.outcome||'—'}</span></div>`).join('');
  const stampTxt=ns.stolen===0?'SECURE':'BREACHED';const stampCol=ns.stolen===0?'var(--good)':'var(--danger)';
  const st=stars(ns);ST.stars[ST.night-1]=st.filter(Boolean).length;repAdd(ST.stars[ST.night-1]);
- let body=`<div class="stamp" style="color:${stampCol}">${stampTxt}</div><h2>Incident report</h2><div style="font-size:26px;letter-spacing:4px;margin:-2px 0 4px" title="Nothing stolen · Half the crew caught · Whole crew caught">${st.map((b,k)=>`<span class="rstar${b?' on':''}" style="animation-delay:${.35+k*.3}s">★</span>`).join('')}</div><div style="font-size:11px;opacity:.7;margin-bottom:6px">★ nothing stolen · ★ half the crew caught · ★ whole crew caught</div><p style="margin:0 0 10px;opacity:.75">${dayName(ST.night)} night · The Marchbank Gallery</p><div class="lines">${lines}</div>${ns.mvp?`<p style="margin:10px 0 0;font-size:13px"><b>Device of the night:</b> ${ns.mvp}.</p>`:''}${ns.told&&ns.told.length?`<p style="margin:10px 0 0;font-size:13px"><b>Word gets around.</b> The thieves who got away will tell the next crew about ${[...new Set(ns.told)].join(', ')}. Move it or expect them to avoid it.</p>`:''}
+ let body=`<div class="stamp" style="color:${stampCol}">${stampTxt}</div><h2>Incident report</h2><div class="rstars">${st.map((b,k)=>`<div class="${b?'on':''}"><i>★</i><span>${STAR_LBL[k]}</span><b>${b?'✓':'✗'}</b></div>`).join('')}</div><p style="margin:0 0 10px;opacity:.75">${dayName(ST.night)} night · ${SITES[SITE].name} · ${st.filter(Boolean).length} of 3 stars</p><div class="lines">${lines}</div>${ns.mvp?`<p style="margin:10px 0 0;font-size:13px"><b>Device of the night:</b> ${ns.mvp}.</p>`:''}${ns.told&&ns.told.length?`<p style="margin:10px 0 0;font-size:13px"><b>Word gets around.</b> The thieves who got away will tell the next crew about ${[...new Set(ns.told)].join(', ')}. Move it or expect them to avoid it.</p>`:''}
  <div class="lines" style="margin-top:10px"><div><span>Stolen tonight</span><span class="big">${money(ns.stolen)}</span></div><div><span>Arrests (£150 each)</span><span>${ns.arrests}</span></div><div><span>Retainer${ns.stolen===0?' + clean-night bonus':''}</span><span>+${money(income)}</span></div><div><span>${ST.endless?'Nightly cap':'Contract total stolen'}</span><span>${money(ST.stolen)} of ${money(ST.limit)}</span></div></div>`;
  if(ST.daily){const sc=ns.stolen;let b=dailyBest();const isBest=!b||sc<b.stolen||sc===b.stolen&&ns.arrests>b.arrests;if(isBest){b={key:ST.daily.key,stolen:sc,arrests:ns.arrests};try{localStorage.setItem('ij-daily',JSON.stringify(b))}catch(e){}}logDaily(sc,ns.arrests,st.filter(Boolean).length);
   body+=`<h2 style="margin-top:14px">Daily job: ${ST.daily.mod.name}</h2><p>${money(sc)} lost, ${ns.arrests} arrest${ns.arrests===1?'':'s'}. ${isBest?'<b>Your best today.</b>':'Best today: '+money(b.stolen)+', '+b.arrests+' arrests.'} A new job is posted at midnight UTC.</p><button class="cta" onclick="shareDaily()">Share my result</button><p id="shareOk" style="font-size:12px;margin:4px 0 0;min-height:1em"></p><button class="cta" style="opacity:.9;margin-top:6px" onclick="weekSheet()">This week's jobs</button><button class="cta" style="opacity:.85;margin-top:6px" onclick="startDaily()">Try today's job again</button><button class="cta" style="opacity:.85;margin-top:8px" onclick="titleScreen()">Back to the title</button>`;ST.done=true}
@@ -1533,8 +1568,15 @@ function endNight(){
  body+=`<button class="cta" style="opacity:.85;margin-top:8px;font-size:16px;padding:8px" onclick="startReplay()">▶ Watch the replay</button>`;
  if(ST.done)clearSave();
  {const A=[];if(ns.stolen===0)A.push('clean');if(st[2])A.push('sweep');if(ns.stolen===0&&ST.devices.length<=4)A.push('frugal');if(last&&!fired&&!ST.daily){A.push('contract');if(ST.stolen===0)A.push('impenetrable');if(ST.diff==='hard')A.push('hard')}if(ST.endless&&!fired&&ST.night-5>=5)A.push('ot5');A.forEach((a,k)=>setTimeout(()=>ach(a),900+k*700))}
- ST.lastReport=body;showSheet(body);refreshUI();if(ns.stolen===0)setTimeout(confetti,500);st.forEach((b,k)=>b&&setTimeout(()=>{SYN.tone(880*Math.pow(1.26,k),.3,{type:'triangle',vol:.16});SYN.tone(1760*Math.pow(1.26,k),.2,{type:'sine',vol:.06,delay:.03});hap(15)},350+k*300));
+ ST.lastReport=body;showSheet(body);refreshUI();starShow(st);if(ns.stolen===0)setTimeout(confetti,500);st.forEach((b,k)=>b&&setTimeout(()=>{SYN.tone(880*Math.pow(1.26,k),.3,{type:'triangle',vol:.16});SYN.tone(1760*Math.pow(1.26,k),.2,{type:'sine',vol:.06,delay:.03});hap(15)},450+k*450));
 }
+// v33: the night's stars, presented big before the report. Earned stars stamp in gold one by one, missed ones stay hollow.
+// Tap anywhere (or wait) to carry on to the report underneath.
+function starShow(st){const old=$('starShow');if(old)old.remove();const n=st.filter(Boolean).length;const d=document.createElement('div');d.id='starShow';
+ const title=ST.daily?'Daily job':dayName(ST.night)+' night';const verdict=['A rough night','Not bad','Good work','A perfect night'][n];
+ d.innerHTML=`<div class="ssIn"><small>${title} · ${SITES[SITE].name}</small><h2>${verdict}</h2><div class="ssRow">${st.map((b,k)=>`<div class="ssS${b?' on':''}" style="--d:${.45+k*.45}s"><i>★</i><span>${STAR_LBL[k]}</span></div>`).join('')}</div><p>${n} of 3 stars · tap to see the report</p></div>`;
+ document.body.appendChild(d);const close=()=>{if(!d.parentNode)return;d.classList.add('out');setTimeout(()=>d.remove(),350)};d.onclick=close;setTimeout(close,2000+st.length*450+(n===3?600:0));
+ st.forEach((b,k)=>{if(!b)setTimeout(()=>SYN.tone(220,.12,{type:'triangle',vol:.08}),450+k*450)})}
 function perkScreen(){
  const pool=PERKS.filter(p=>p.stack||!ST.perks.includes(p.id));const pick=[];const r=mulberry(ST.night*977+ST.arrests*13+ST.stolen);
  while(pick.length<3&&pool.length){pick.push(pool.splice(Math.floor(r()*pool.length),1)[0])}
@@ -2409,6 +2451,7 @@ function finishRoute(){const g=ST.routeFor;ST.routeFor=null;devicesChanged();hin
 addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;AU.init();const k=e.key.toLowerCase();
  if(homeOn()){if(k==='escape'&&HOME.from==='game')homeAct('resume');return}
  const tk=Object.keys(DEV).find(t=>DEV[t].key===k);if(tk&&ST.phase==='plan'){selectTool(tk);return}
+ if(k==='escape'&&closeSheet())return;
  if(k==='escape'){if(!ST.routeFor&&!ST.tool&&!ST.sel&&!$('overlay').classList.contains('show')){HOME.from='game';showHome();return}if(ST.routeFor)finishRoute();ST.tool=null;ST.sel=null;refreshUI()}
  if(k==='enter'&&ST.routeFor)finishRoute();
  if(k===' '){e.preventDefault();if(ST.phase==='plan')startNight();else if(ST.phase==='heist')setSpeed(ST.speed?0:1)}
@@ -2491,8 +2534,18 @@ $('go').onclick=()=>{AU.init();startNight()};
 $('tRoutes').onclick=()=>{ST.routes=!ST.routes;refreshUI()};$('tThink').onclick=()=>{ST.thoughts=!ST.thoughts;refreshUI()};$('tKeys').onclick=()=>showKeys();
 $('tHeat').onclick=()=>{ST.heat=!ST.heat;refreshUI()};
 document.querySelectorAll('#speedRow button').forEach(b=>b.onclick=()=>setSpeed(+b.dataset.s));
-function showSheet(html){$('sheet').innerHTML=html;$('overlay').classList.add('show')}
+function showSheet(html){$('sheet').innerHTML=html;$('sheet').scrollTop=0;$('overlay').classList.add('show');sheetX()}
+// v33: the way back out of whatever menu is showing: its Back / Done / OK / Close button. Report and perk screens have none,
+// so they keep no cross and the backdrop does nothing there.
+function sheetBack(){const bs=[...$('sheet').querySelectorAll('button:not(.xClose)')];return bs.find(b=>b.id==='optBack')||bs.reverse().find(b=>/^\s*(◂\s*)?(back|done|ok|close|got it)\b/i.test(b.textContent))||null}
+function sheetX(){const sh=$('sheet');let x=sh.querySelector(':scope>.xClose');const b=sheetBack();if(!b){if(x)x.remove();return}
+ if(!x){x=document.createElement('button');x.className='xClose';x.type='button';x.setAttribute('aria-label','Close');x.textContent='✕';x.onclick=e=>{e.stopPropagation();closeSheet()};sh.prepend(x)}}
+function sheetMoreTick(){const sh=$('sheet'),ov=$('overlay');ov.classList.toggle('more',ov.classList.contains('show')&&sh.scrollHeight-sh.clientHeight-sh.scrollTop>40)}
+function closeSheet(){if(!$('overlay').classList.contains('show'))return false;const b=sheetBack();if(!b)return false;b.click();return true}
 function hideSheet(){$('overlay').classList.remove('show')}
+new MutationObserver(()=>{if($('overlay').classList.contains('show')&&!$('sheet').querySelector(':scope>.xClose'))sheetX()}).observe($('sheet'),{childList:true});
+$('overlay').addEventListener('click',e=>{if(e.target===$('overlay'))closeSheet()});
+{const m=document.createElement('button');m.id='sheetMore';m.type='button';m.textContent='More below ▾';m.onclick=e=>{e.stopPropagation();const sh=$('sheet');sh.scrollTo({top:sh.scrollHeight,behavior:'smooth'})};$('overlay').appendChild(m);$('sheet').addEventListener('scroll',sheetMoreTick,{passive:true});new MutationObserver(()=>setTimeout(sheetMoreTick,60)).observe($('sheet'),{childList:true,subtree:true});new MutationObserver(()=>setTimeout(sheetMoreTick,60)).observe($('overlay'),{attributes:true,attributeFilter:['class']});addEventListener('resize',()=>setTimeout(sheetMoreTick,400))}
 const THUMBS={};
 function thumb(k){if(THUMBS[k])return THUMBS[k];const cvs=document.createElement('canvas');cvs.width=W*8;cvs.height=H*8;const x=cvs.getContext('2d');const ot=theme,oS=S;theme=k;S=STYLES[k];rng=mulberry(11);x.setTransform(8,0,0,8,0,0);STATIC[k](x);
  coneShape(x,rays(19.5,21.5,-Math.PI/2-.4,CAM.fov,CAM.range),'cam');coneShape(x,rays(30.5,9.5,-1.9,CAM.fov,CAM.range),'hot');drawCamera(x,19.5,21.5,-Math.PI/2-.4,{id:1,n:1,looped:0});
@@ -3203,6 +3256,11 @@ $('home').prepend(hcv);if(LOOK==='night3d'||LOOK==='sketch3d')setTheme(LOOK);add
 titleScreen();refreshUI();
 requestAnimationFrame(frame);
 
+// v33: folding phones. Folding or unfolding changes the screen in one jump, and iOS reports the final size a beat late,
+// so lay everything out again straight away and once more when it settles. The night carries on underneath.
+{let ft=0,last='';const relayout=()=>{const k=innerWidth+'x'+innerHeight;if(k===last)return;last=k;resize();if(homeOn()){resizeHome();homeFit()}if(TUT.on)tutPlace()};
+ const kick=()=>{relayout();clearTimeout(ft);ft=setTimeout(()=>{last='';relayout()},350)};
+ addEventListener('resize',kick);if(window.visualViewport)visualViewport.addEventListener('resize',kick);if(screen.orientation&&screen.orientation.addEventListener)screen.orientation.addEventListener('change',kick)}
 // lockdown: no pinch/double-tap zoom, no page scroll except inside panels that actually scroll
 (function(){
  const pv=e=>e.preventDefault();
