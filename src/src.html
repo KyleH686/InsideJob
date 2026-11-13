@@ -596,7 +596,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v34 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro and Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v36 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -800,6 +800,33 @@ const SITES={
    'Last night. A crew will come up the service tunnel into the cashier cage, and the Fox wants the night\'s takings.'],
   roomOf(x,y){if(x<24){if(y<9)return x<12?'vip lounge':'cashier cage';return 'gaming floor'}if(y<8)return 'count room';if(y<15)return 'security';return 'bar'}},
 };
+ SITES.auction={name:"Lockwood's Auction House",short:"Lockwood's",caption:"LOCKWOOD'S AUCTION HOUSE · RIVERSIDE · SECURITY DRG 33/L",note1:"Lockwood's - sale day tomorrow",n1x:14,note2:['river stairs = way in?',6,24.9],rep:28,bonus:500,city:[80,42],boss:'auctioneer',
+  blurb:'An old riverside auction house the night before a big sale. Every lot is out on view, the strongroom holds the star of the catalogue, and the river stairs give the crews a back way in.',
+  walls(hl,vl){vl(12,2,23);hl(2,12,12);vl(27,2,23);hl(12,27,8);hl(27,37,9);hl(27,37,15);for(const [x,y] of [[16,13],[22,13],[16,18],[22,18]])hl(x,x+1,y)},
+  doors:[{x:12,y:6},{x:7,y:12},{x:12,y:18},{x:19,y:8},{x:27,y:12},{x:27,y:19},{x:32,y:15},{x:32,y:9,vault:true}],
+  entries:[{id:'main',name:'Front doors',tiles:[[19,23],[20,23]],spawn:[19,24],night:1},
+   {id:'dock',name:'Loading bay',tiles:[[31,23],[32,23],[33,23]],spawn:[32,24],night:1},
+   {id:'river',name:'River stairs',tiles:[[2,17]],spawn:[1,17],night:2,lab:[2.6,-1.4]},
+   {id:'lantern',name:'Roof lantern',tiles:[],spawn:[19,11],night:3,roof:true},
+   {id:'sewer',name:'Old sewer',tiles:[],spawn:[5,20],night:5,roof:true}],
+  rooms:[{n:'VIEWING GALLERY',x:7,y:7},{n:'PACKING ROOM',x:7,y:17.6},{n:'VALUATION OFFICE',x:19.5,y:5},{n:'SALEROOM',x:19.5,y:15.8},{n:'STRONGROOM',x:32,y:5.8},{n:'CORRIDOR',x:32,y:12},{n:'LOADING BAY',x:32,y:19.2}],
+  loot:[{id:'lot1',name:'"Storm over Wapping"',x:5,y:3,v:5500,crack:3,kind:'painting'},
+   {id:'lot2',name:'"The Ferryman\'s Daughter"',x:10,y:3,v:6000,crack:3,kind:'painting'},
+   {id:'vase',name:'Lot 40: porcelain vase',x:3,y:10,v:4000,crack:2.5,kind:'statue'},
+   {id:'dep',name:'Bidders\' deposits',x:14,y:3,v:4000,crack:2,kind:'cash'},
+   {id:'vsafe',name:'Valuer\'s safe',x:25,y:3,v:6000,crack:5,kind:'safe'},
+   {id:'emerald',name:'The Lockwood Emerald',x:32,y:3,v:16000,crack:7,kind:'gem'},
+   {id:'sov',name:'Sovereign hoard',x:36,y:3,v:8000,crack:4,kind:'gold'},
+   {id:'watches',name:'Pocket watches',x:36,y:11,v:4500,crack:2,kind:'gold'},
+   {id:'clock',name:'Bracket clock',x:14,y:21,v:3000,crack:2,kind:'statue'},
+   {id:'port',name:'Lot 212: vintage port',x:36,y:22,v:3000,crack:1.5,kind:'crate'},
+   {id:'cons',name:'Unopened consignment',x:3,y:22,v:3500,crack:2,kind:'crate'}],
+  hints:['Two ways in tonight: the front doors into the saleroom and the loading bay. The display stands on the saleroom floor give thieves cover.',
+   'The river stairs open tonight: a door straight into the packing room on the west side.',
+   'Someone will come down through the roof lantern into the middle of the saleroom tonight.',
+   'The crews know the building now. The strongroom door is one room from the loading bay; watch the corridor.',
+   'Sale day. A crew is coming up the old sewer into the packing room, and the Auctioneer herself wants the Lockwood Emerald. She has bribed her way out before: you will have to catch her twice.'],
+  roomOf(x,y){if(x<12)return y<12?'viewing gallery':'packing room';if(x<27)return y<8?'valuation office':'saleroom';if(y<9)return 'strongroom';if(y<15)return 'corridor';return 'loading bay'}};
 SITES.gallery.city=[22,24];SITES.bank.city=[44,54];SITES.manor.city=[82,20];
 let SITE='gallery';try{const v=localStorage.getItem('ij-site');if(v&&SITES[v])SITE=v}catch(e){}
 function useSite(id){if(!SITES[id])id='gallery';SITE=id;const S_=SITES[id];
@@ -889,13 +916,14 @@ const TYPES={
  impostor:{name:'Impostor',speed:2.5,camSus:.22,guardSus:1.7,disguise:true,tag:'DISGUISE',desc:'Dressed in one of your guard uniforms. Cameras barely register them. Real guards, plates and lasers still do.'},
  magpie:{name:'Magpie',speed:2.8,counter:'lure',charges:2,tag:'LURE',desc:'Throws a noise-maker to pull guards off their patrol before slipping past.'},
  muscle:{name:'Muscle',speed:2.2,maxSus:150,breach:.25,carry:.95,tag:'TANK',desc:'Shoulders doors open, carries at full pace, takes longer to identify.'},
+ auctioneer:{name:'The Auctioneer',speed:2.9,crack:.5,sus:.8,maxSus:130,counter:'loop',charges:1,knowsPlates:true,boss:true,bribe:true,tag:'BOSS',desc:'Runs the auction-house job. The first time she is caught she bribes her way out and bolts, so you have to catch her twice. Knows your plates, loops one camera, and goes for the biggest prize.'},
  climber:{name:'Climber',speed:2.9,roof:true,tag:'ROOF',desc:'Comes in through the roof, even on nights the roof is shut to everyone else. Drops straight into the room nearest the prize.'},
 };
 const NAMES=['Wren','Tally','Moth','Juno','Pike','Vesper','Dutch','Sable','Rook','Kes','Fig','Nettle','Bram','Ivo','Lark','Odette'];
 const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday'];
 function dayName(n){if(ST.daily)return 'Daily job';return n<=5?DAYS[n-1]:'Overtime '+(n-5)}
 const OT_CAP=15000;
-function nightDef(n){if(ST.daily)return ST.daily.def;if(n<=5){const h=SITES[SITE].hints&&SITES[SITE].hints[n-1];return h?{...NIGHTS[n-1],hint:h}:NIGHTS[n-1]}const r=mulberry(n*7919+(ST.otSeed||0));const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor','climber'];
+function nightDef(n){if(ST.daily)return ST.daily.def;if(n<=5){const bs=SITES[SITE].boss;const base=bs&&n===5?{...NIGHTS[4],crew:NIGHTS[4].crew.map(([t,w])=>[t==='fox'?bs:t,w])}:NIGHTS[n-1];const h=SITES[SITE].hints&&SITES[SITE].hints[n-1];return h?{...base,hint:h}:base}const r=mulberry(n*7919+(ST.otSeed||0));const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor','climber'];
  const size=Math.min(10,5+Math.floor((n-5)/2)+(ST.otMod&&ST.otMod.id==='big'?1:0));const crew=[];let t=1.5;for(let k=0;k<size;k++){crew.push([pool[Math.floor(r()*pool.length)],+t.toFixed(1)]);t+=2+r()*2.6}
  return {crew,hint:`Overtime night ${n-5}${ST.otMod?' · '+ST.otMod.name+': '+(ST.otMod.id==='budget'?'£400 docked from your budget.':ST.otMod.desc):''} The gallery restocked, every entry is open and the crews keep growing. Lose more than ${money(OT_CAP)} in one night and it ends.`}}
 const NIGHTS=[
@@ -1201,7 +1229,7 @@ function startNight(){if(R3.on)setTimeout(()=>{if(ST.phase==='heist'&&R3.on)tip(
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false;d.armed=0;d.hit=0;d.lock=null;d.lockT=0;d.cd=0;d.fired=0}
  devicesChanged();
  nightDef(ST.night).crew.forEach(([type,t],k)=>{const T=TYPES[type];
-  const cm=T.boss?{name:'The Fox',gang:null}:crewMember(k);const ldr=!!(cm.gang&&GANGS[cm.gang]&&GANGS[cm.gang].leader===cm.name);
+  const cm=T.boss?{name:type==='fox'?'The Fox':T.name,gang:null}:crewMember(k);const ldr=!!(cm.gang&&GANGS[cm.gang]&&GANGS[cm.gang].leader===cm.name);
   ST.thieves.push({id:k,type,T,name:cm.name,gang:cm.gang,back:!!cm.back,leader:ldr,susMul:(cm.back?.85:1)*(ldr?.9:1),col:S.crew[k%5],spawnT:t,state:'wait',x:0,y:0,tile:-1,path:[],sus:0,maxSus:T.maxSus||100,speed:T.speed*(ST.mods.tspeed||1),crack:T.crack||1,counter:T.counter,charges:T.charges||0,unseen:9,hurry:0,trail:[],face:0,loot:null,target:null,exit:null,waitT:0,crackT:0,breachT:0,seenBy:null,reported:false,outcome:null,beepT:0,smokeArmed:true,dist:0,climbT:0,plan:plans[k]})});
  for(const th of ST.thieves)if(th.leader){th.charges=(th.charges||0)+1;th.speed*=1.08}
  ST.guards=ST.devices.filter(d=>d.type==='guard').map(d=>({dev:d,x:d.x+.5,y:d.y+.5,i:d.i,face:-Math.PI/2,loopPath:guardLoop(d),lp:0,state:'patrol',path:[],look:0,target:null,lastSeen:null,lostT:0,pause:0,stepT:0}));
@@ -1273,8 +1301,8 @@ function spawnThief(th){
  const kn=knowledge(th);const claimed=new Set(ST.thieves.filter(o=>o!==th&&o.target).map(o=>o.target.id));
  const b=th.T.roof?roofChoice(kn,th.crack,claimed):chooseTarget(kn,th.crack,null,claimed);
  if(!b){th.state='gone';th.outcome='stayed home (nothing left worth taking)';return}
- th.target=b.loot;if(th.T.boss){const big=ST.loot.filter(l=>!l.stolen&&!l.carrier&&!l.fake&&!l.spent).sort((a,b)=>b.v-a.v)[0];if(big)th.target=big;setTimeout(()=>AU.say('fox_in',{cd:0,pri:3}),300);FX.slow=.9;FX.focus=[th.x,th.y];logLine('<b>The Fox is in the building.</b> He is going for '+th.target.name+'.');FX.flash=.4;FX.flashCol=S.accent}th.entry=b.entry;const si=spawnI(b.entry);th.tile=si;th.x=tx(si)+.5;th.y=ty(si)+.5;th.state='in';if(th.counter==='scout'&&ST.thieves.some(o=>o!==th&&o.state!=='caught'&&o.state!=='escaped')){logLine('<i>'+th.name+' is on the crew radio, calling out where your pressure plates are.</i>');for(const o of ST.thieves)o.needReplan=true}
- if(b.entry.roof){th.drop=1.2}
+ th.target=b.loot;if(th.T.boss){const big=ST.loot.filter(l=>!l.stolen&&!l.carrier&&!l.fake&&!l.spent).sort((a,b)=>b.v-a.v)[0];if(big)th.target=big;if(th.type==='fox')setTimeout(()=>AU.say('fox_in',{cd:0,pri:3}),300);FX.slow=.9;FX.focus=[th.x,th.y];logLine(th.type==='fox'?'<b>The Fox is in the building.</b> He is going for '+th.target.name+'.':'<b>'+th.name+' is in the building.</b> She is going for '+th.target.name+'.');FX.flash=.4;FX.flashCol=S.accent}th.entry=b.entry;const si=spawnI(b.entry);th.tile=si;th.x=tx(si)+.5;th.y=ty(si)+.5;th.state='in';if(th.counter==='scout'&&ST.thieves.some(o=>o!==th&&o.state!=='caught'&&o.state!=='escaped')){logLine('<i>'+th.name+' is on the crew radio, calling out where your pressure plates are.</i>');for(const o of ST.thieves)o.needReplan=true}
+ if(b.entry.roof){th.drop=1.2;if(th.T.roof)tip('climber','Someone on the roof','The Climber drops in through the roof, even on nights it is shut to everyone else. Cover the rooms under the roof entries.')}
  th.path=[];replan(th);
  logLine((b.entry.roof?'Movement at the ':'Someone at the ')+b.entry.name.toLowerCase()+'.');
  AU.say('ent_'+b.entry.id,{cd:3});
@@ -1359,9 +1387,11 @@ function searchPoints(p){if(!p)return [];const x0=Math.floor(p[0]),y0=Math.floor
 function guardPath(g,dst){const cur=idx(Math.floor(g.x),Math.floor(g.y));const p=pathTo(dijkstra(cur,flatCost(),dst),dst);return p?p.slice(1):[]}
 function catchThief(th,by){hap(70);
  if(th.state==='caught'||th.state==='escaped')return;
+ if(th.T.bribe&&!th.bribed){th.bribed=true;th.sus=th.maxSus*.35;th.sprint=4;th.hurry=4;th.stun=0;th.needReplan=true;if(th.loot){const l=th.loot;l.carrier=null;th.loot=null;if(G[th.tile]===FLOOR||G[th.tile]===DOOR){l.home=l.home??l.i;l.i=th.tile;l.dropped=true}}
+  for(const g of ST.guards)if(g.target===th||Math.hypot(g.x-th.x,g.y-th.y)<2.2){g.dazedT=2.5;g.state='patrol';g.path=[]}stamp(th.x,th.y,'BRIBED!',S.accent);floatText(th.x,th.y-1,'She paid her way out!',S.accent,true);burst(th.x,th.y,24,S.accent,3);FX.shake=.4;logLine('<b>'+th.name+'</b> bribes her way out and bolts. Catch her again!');ST.recEv.push({t:ST.t,x:th.x,y:th.y,k:'alarm',s:th.name+' bribed her way out'});AU.play('jingBad',{vol:.4});refreshUI();return}
  const srcName={fog:'stumbling in the fog',police:'by the police at the door',lightning:'in a lightning flash',dog:'after the dog barked',camera:'on camera',guard:'tackled by a guard',laser:'after tripping a laser',plate:'after stepping on a pressure plate'}[by]||'on camera';
  th.outcome='caught '+srcName+(th.loot?' holding '+th.loot.name:'');th.state='caught';th.caughtT=0;th.caughtBy=by;AU.play('cuffs',{vol:.55,x:th.x,delay:.45});
- ach('first');if(th.loot)ach('bag');if(th.T.boss){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900);ST.cash+=500;floatText(th.x,th.y-1.6,'THE FOX! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.leader){AU.say('leader_caught',{cd:0,pri:3});ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
+ ach('first');if(th.loot)ach('bag');if(th.T.boss){if(th.type==='fox'){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900)}else ach('auctioneer');ST.cash+=500;floatText(th.x,th.y-1.6,th.name.toUpperCase()+'! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.type==='climber')ach('climber');if(ST.smokes&&ST.smokes.length&&inSecFog(th.x,th.y))ach('fogged');if(th.leader){AU.say('leader_caught',{cd:0,pri:3});ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
  if(th.loot){const l=th.loot;l.carrier=null;th.loot=null;if(G[th.tile]===FLOOR||G[th.tile]===DOOR){l.home=l.home??l.i;l.i=th.tile;l.dropped=true;setTimeout(()=>floatText(tx(l.i)+.5,ty(l.i)-.2,'DROPPED',S.accent),400);logLine(th.name+' drops '+l.name+'. It is lying in the '+roomOf(l.i)+'.')}}
  {let n=0;for(const o of ST.thieves){if(o===th||!['in','out','flee'].includes(o.state))continue;n++;o.spooked=1;o.needReplan=true;
    if(o.state==='in'&&!o.crackT&&o.sus>o.maxSus*.3&&Math.random()<.75){o.state='flee';o.needReplan=true;o.hiding=false;floatText(o.x,o.y-.7,'ABORT',S.accent)}else o.hurry=0}
@@ -1568,7 +1598,7 @@ function endNight(){
  if(ns.bust)body+=`<p style="margin:10px 0 0;padding:8px 10px;border:1px solid var(--good);color:var(--good)"><b>Gang busted!</b> Every member of ${ns.bust} is behind bars.</p>`;
  body+=`<button class="cta" style="opacity:.85;margin-top:8px;font-size:16px;padding:8px" onclick="startReplay()">▶ Watch the replay</button>`;
  if(ST.done)clearSave();
- {const A=[];if(ns.stolen===0)A.push('clean');if(st[2])A.push('sweep');if(ns.stolen===0&&ST.devices.length<=4)A.push('frugal');if(last&&!fired&&!ST.daily){A.push('contract');if(ST.stolen===0)A.push('impenetrable');if(ST.diff==='hard')A.push('hard')}if(ST.endless&&!fired&&ST.night-5>=5)A.push('ot5');A.forEach((a,k)=>setTimeout(()=>ach(a),900+k*700))}
+ {const A=[];if(ns.stolen===0)A.push('clean');if(st[2])A.push('sweep');if(ns.stolen===0&&ST.devices.length<=4)A.push('frugal');if(last&&!fired&&!ST.daily){A.push('contract');if(ST.stars.length>=5&&ST.stars.slice(0,5).every(n=>n===3))A.push('perfect');if(ST.stolen===0)A.push('impenetrable');if(ST.diff==='hard')A.push('hard')}if(ST.endless&&!fired&&ST.night-5>=5)A.push('ot5');A.forEach((a,k)=>setTimeout(()=>ach(a),900+k*700))}
  ST.lastReport=body;showSheet(body);refreshUI();starShow(st);if(ns.stolen===0)setTimeout(confetti,500);st.forEach((b,k)=>b&&setTimeout(()=>{SYN.tone(880*Math.pow(1.26,k),.3,{type:'triangle',vol:.16});SYN.tone(1760*Math.pow(1.26,k),.2,{type:'sine',vol:.06,delay:.03});hap(15)},450+k*450));
 }
 // v33: the night's stars, presented big before the report. Earned stars stamp in gold one by one, missed ones stay hollow.
@@ -1592,7 +1622,8 @@ function takePerk(id){const p=PERKS.find(p=>p.id===id);p.apply();ST.perks.push(i
 const ACH=[['first','First collar','Catch a thief.'],['bag','Bag man','Catch a thief carrying loot.'],['clean','Clean sheet','A night with nothing stolen.'],['sweep','Full house','Catch the whole crew in one night.'],
  ['frugal','Minimalist','A clean night with 4 devices or fewer.'],['bluff','Ventriloquist','Fool 3 thieves with speakers in one night.'],['decoy','Fool\'s gold','A thief opens a decoy.'],['recover','Lost property','A guard recovers dropped loot.'],
  ['impostor','Nice uniform','Catch the Impostor.'],['magpie','Caught the bird','Catch the Magpie after it throws a lure.'],['contract','Renewed','Finish the five-night contract.'],['impenetrable','Impenetrable','Finish the contract with nothing stolen.'],
- ['hard','Hard case','Finish the contract on Hard.'],['ot5','Overtime veteran','Survive 5 overtime nights.'],['style','Two looks','Play in both art styles.'],['fox','Outfoxed','Catch the Fox.']];
+ ['hard','Hard case','Finish the contract on Hard.'],['ot5','Overtime veteran','Survive 5 overtime nights.'],['style','Two looks','Play in both art styles.'],['fox','Outfoxed','Catch the Fox.'],
+ ['climber','Roof patrol','Catch the Climber.'],['auctioneer','Sold!','Catch the Auctioneer, twice.'],['fogged','Lost in the fog','Catch a thief while they stumble in security fog.'],['perfect','Five-star service','Earn all three stars on every night of a contract.']];
 let ACHS=new Set();try{ACHS=new Set(JSON.parse(localStorage.getItem('ij-ach')||'[]'))}catch(e){}
 function ach(id){if(ACHS.has(id))return;const a=ACH.find(a=>a[0]===id);if(!a)return;ACHS.add(id);try{localStorage.setItem('ij-ach',JSON.stringify([...ACHS]))}catch(e){}
  const t=document.createElement('div');t.className='toast';t.innerHTML='<b>★ '+a[1]+'</b>'+a[2];$('toasts').appendChild(t);while($('toasts').children.length>3)$('toasts').firstChild.remove();requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));AU.play('upgrade',{vol:.5});setTimeout(()=>{t.classList.remove('in');setTimeout(()=>t.remove(),600)},4200)}
@@ -2407,6 +2438,7 @@ function place(type,i,opts={}){
  if(type==='laser')d.orient=opts.orient||autoOrient(d.x,d.y);
  ST.cash-=DEV[type].cost;d.paid=DEV[type].cost;ST.devices.push(d);devicesChanged();AU.place();
  burst(d.x+.5,d.y+.5,10,S.accent,2,.5,.06);(FX.drops=FX.drops||[]).push({x:d.x+.5,y:d.y+.5,t:0});hap(12);if(type==='guard')tip('pers','Guards have personalities','Select a guard and tap the personality button: a Veteran sees further, a Rookie is cheap, a Dozy one nods off.');
+ if(type==='fog')tip('fog','Fog cannon','It fires when a laser, plate or dog raises the alarm within 4 tiles (the dashed circle). Thieves in the fog stumble at half speed, but your cameras can\'t see through it either.');
  if(type==='speaker'&&!opts.noRoute)hint('Speaker fitted. During the night, click it to bluff: thieves nearby hide or turn back. Recharges in 12 s.',6);
  if(type==='guard'&&!opts.noRoute){ST.routeFor=d;ST.tool=null;hint(TOUCH?'Tap up to 6 patrol points, then press Done. No points makes a stationary sentry.':'Click up to 6 patrol points for this guard. Click the guard again, press Enter or right-click to finish. No points makes a stationary sentry.',10)}
  ST.sel=d;refreshUI();return d;
@@ -2754,7 +2786,7 @@ function r3Props(){const SK=R3.look==='sketch',g=new THREE.Group();let sd=7;for(
  const KIND={gallery:'art',['long gallery']:'art',showroom:'art',['egyptian room']:'art',['great hall']:'art',['drawing room']:'art',['grand hall']:'art',
   office:'office',study:'office',security:'office',['count room']:'office',library:'books',archive:'books',['store room']:'store',['loading dock']:'store',workshop:'store',armoury:'store',
   lobby:'lobby',['banking hall']:'lobby',['atm lobby']:'lobby',corridor:'lobby',kitchen:'kitchen',vault:'vault',['deposit room']:'vault',['gem room']:'vault',['cashier cage']:'vault',
-  ['gaming floor']:'casino',['vip lounge']:'casino',bar:'casino',conservatory:'green'};
+  ['gaming floor']:'casino',['vip lounge']:'casino',bar:'casino',conservatory:'green',['viewing gallery']:'art',['packing room']:'store',['valuation office']:'office',saleroom:'art',strongroom:'vault',['loading bay']:'store'};
  const items={
   art:[[.5,'painting'],[.12,'sconce']],office:[[.16,'cabinet'],[.14,'board'],[.07,'clock'],[.1,'radiator'],[.1,'shelf']],books:[[.65,'books']],store:[[.4,'shelf']],
   lobby:[[.18,'sconce'],[.14,'painting'],[.1,'radiator']],kitchen:[[.6,'counter']],vault:[[.55,'deposit']],casino:[[.3,'neon'],[.1,'painting']],green:[[.45,'plant']]};
@@ -2991,15 +3023,19 @@ function r3BuildDevices(full){const disp=g=>g.traverse(x=>{if(x.geometry&&x.geom
  for(const d of ST.devices)item(d.type+d.i+(d.o||'')+(d.lv||'')+(d.type==='laser'?'b'+laserBeam(d.x,d.y,d.o||autoOrient(d.x,d.y)).length:'')+(d.type==='steel'?'w'+G[idx(d.x,d.y-1)]:''),d,G3=>{const x=d.x+.5,z=d.y+.5;
   if(d.type==='camera'){const pole=new THREE.Mesh(new THREE.CylinderGeometry(.035,.05,1.5,10),M.dark);pole.position.set(x,.75,z);pole.castShadow=true;G3.add(pole);
    const head=new THREE.Group();head.position.set(x,1.55,z);G3.add(head);const body=new THREE.Mesh(r3Block(-.2,-.1,.44,.2,.2,.07,.03),M.dev);body.position.y=-.1;body.castShadow=true;head.add(body);
-   const lens=new THREE.Mesh(new THREE.CylinderGeometry(.06,.07,.06,16),M.dark);lens.rotation.z=Math.PI/2;lens.position.set(.25,0,0);head.add(lens);const led=new THREE.Mesh(new THREE.SphereGeometry(.03,8,6),M.led);led.position.set(.12,.12,.06);head.add(led);
+   const lens=new THREE.Mesh(new THREE.CylinderGeometry(.06,.07,.06,16),M.dark);lens.rotation.z=Math.PI/2;lens.position.set(.25,0,0);head.add(lens);
+   const hood=new THREE.Mesh(new THREE.BoxGeometry(.5,.025,.26),M.dev);hood.position.set(.04,.13,0);hood.castShadow=true;head.add(hood);const glass=new THREE.Mesh(new THREE.CircleGeometry(.05,16),new THREE.MeshBasicMaterial({color:'#7fe3ff'}));glass.rotation.y=Math.PI/2;glass.position.set(.285,0,0);head.add(glass);
+   const joint=new THREE.Mesh(new THREE.SphereGeometry(.06,12,8),M.dark);joint.position.set(x,1.47,z);G3.add(joint);const base=new THREE.Mesh(new THREE.CylinderGeometry(.14,.16,.05,16),M.dark);base.position.set(x,.025,z);base.receiveShadow=true;G3.add(base);const led=new THREE.Mesh(new THREE.SphereGeometry(.03,8,6),M.led);led.position.set(.12,.12,.06);head.add(led);
    const cone=r3FanMesh(M.cone);G3.add(cone);
    const sl=new THREE.SpotLight('#a8ecff',30,CAM.range+1.5,CAM.fov/2,.55,1.2);sl.position.set(.25,0,0);const tg=new THREE.Object3D();tg.position.set(4,-1.55,0);head.add(tg);sl.target=tg;if(R3.q==='high')head.add(sl);
    R3.devs.push({d,cam:true,head,light:sl,cone,led})}
-  else if(d.type==='light'){const post=new THREE.Mesh(new THREE.CylinderGeometry(.04,.07,1.7,10),M.dark);post.position.set(x,.85,z);post.castShadow=true;G3.add(post);const lamp=new THREE.Mesh(new THREE.SphereGeometry(.13,16,12),new THREE.MeshBasicMaterial({color:'#fff6cc'}));lamp.position.set(x,1.72,z);G3.add(lamp);
+  else if(d.type==='light'){const post=new THREE.Mesh(new THREE.CylinderGeometry(.04,.07,1.7,10),M.dark);post.position.set(x,.85,z);post.castShadow=true;G3.add(post);const lamp=new THREE.Mesh(new THREE.SphereGeometry(.11,16,12),new THREE.MeshBasicMaterial({color:'#fff6cc'}));lamp.position.set(x,1.7,z);G3.add(lamp);
+   const shade=new THREE.Mesh(new THREE.CylinderGeometry(.1,.24,.2,18,1,true),M.dark);shade.material.side=THREE.DoubleSide;shade.position.set(x,1.76,z);shade.castShadow=true;G3.add(shade);const cap=new THREE.Mesh(new THREE.SphereGeometry(.1,14,6,0,Math.PI*2,0,Math.PI/2),M.dark);cap.position.set(x,1.85,z);G3.add(cap);
+   const fb=new THREE.Mesh(new THREE.CylinderGeometry(.15,.18,.06,16),M.dark);fb.position.set(x,.03,z);fb.receiveShadow=true;G3.add(fb);
    const pl=new THREE.PointLight('#ffefb8',24,8,1.5);pl.position.set(x,1.7,z);if(R3.q==='high'){pl.castShadow=true;pl.shadow.mapSize.set(512,512);pl.shadow.bias=-.002;G3.add(pl)}const gl=r3Sprite('#ffe9a8',2.2,.7);gl.position.set(x,1.72,z);G3.add(gl);R3.devs.push({d,lamp:true,light:pl,glow:gl})}
   else if(d.type==='laser'){const beam=laserBeam(d.x,d.y,d.o||autoOrient(d.x,d.y));if(beam.length){const a=beam[0],b=beam[beam.length-1];const ax=tx(a)+.5,az=ty(a)+.5,bx=tx(b)+.5,bz=ty(b)+.5;const hz=Math.abs(bx-ax)>Math.abs(bz-az);const x0=hz?Math.min(ax,bx)-.5:ax,x1=hz?Math.max(ax,bx)+.5:ax,z0=hz?az:Math.min(az,bz)-.5,z1=hz?az:Math.max(az,bz)+.5;
     const len=Math.hypot(x1-x0,z1-z0);const bm=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,len,6),M.laser.clone());bm.position.set((x0+x1)/2,.42,(z0+z1)/2);bm.rotation.z=Math.PI/2;bm.rotation.y=hz?0:Math.PI/2;G3.add(bm);
-    for(const [ex,ez] of [[x0,z0],[x1,z1]]){const em=new THREE.Mesh(new THREE.BoxGeometry(.14,.6,.14),M.dark);em.position.set(ex,.3,ez);em.castShadow=true;G3.add(em);const g=r3Sprite('#ff3b55',.7,.9);g.position.set(ex,.42,ez);G3.add(g)}
+    for(const [ex,ez] of [[x0,z0],[x1,z1]]){const em=new THREE.Mesh(new THREE.BoxGeometry(.14,.6,.14),M.dark);em.position.set(ex,.3,ez);em.castShadow=true;G3.add(em);const eb=new THREE.Mesh(new THREE.BoxGeometry(.22,.04,.22),M.steel);eb.position.set(ex,.02,ez);G3.add(eb);const et=new THREE.Mesh(new THREE.BoxGeometry(.16,.04,.16),M.steel);et.position.set(ex,.62,ez);G3.add(et);const ln=new THREE.Mesh(new THREE.SphereGeometry(.035,10,8),M.laser);ln.position.set(ex,.42,ez);G3.add(ln);const g=r3Sprite('#ff3b55',.7,.9);g.position.set(ex,.42,ez);G3.add(g)}
     const gg=r3Sprite('#ff2a48',Math.min(4,len*.6),.25);gg.position.copy(bm.position);G3.add(gg);R3.devs.push({d,beam:bm})}}
   else if(d.type==='dog'){const bk=new THREE.Mesh(new THREE.TorusGeometry(.3,.09,10,28),M.plinthTop);bk.rotation.x=Math.PI/2;bk.position.set(x,.09,z);bk.castShadow=true;G3.add(bk);const dg=new THREE.Group();dg.position.set(x,.1,z);
    const fur=R3.mats.fur||(R3.mats.fur=R3.look==='sketch'?r3Mat('#c98a4b'):new THREE.MeshStandardMaterial({color:'#c98a4b',roughness:.8,emissive:'#5a3410',emissiveIntensity:.5}));const body=new THREE.Mesh(new THREE.CapsuleGeometry(.11,.22,6,12),fur);body.rotation.z=Math.PI/2;body.position.y=.1;body.castShadow=true;dg.add(body);
@@ -3163,12 +3199,12 @@ function repAdd(n){if(!n)return;const before=repGet();const now=before+n;try{loc
 function siteBest(k){try{return (JSON.parse(localStorage.getItem('ij-sitebest')||'{}'))[k]||null}catch(e){return null}}
 function recordSiteBest(){try{const B=JSON.parse(localStorage.getItem('ij-sitebest')||'{}');const st=ST.stars.reduce((a,b)=>a+(b||0),0);const o=B[SITE];if(!o||st>o.stars||st===o.stars&&ST.stolen<o.stolen)B[SITE]={stars:st,stolen:ST.stolen,diff:ST.diff};localStorage.setItem('ij-sitebest',JSON.stringify(B))}catch(e){}}
 function siteOpen(k){return repGet()>=(SITES[k].rep||0)}
-function cityMap(){const R=repGet();const B={gallery:'M-7 6V-3L0-8 7-3V6Z',bank:'M-8 6V-2H8V6ZM-9-2 0-8 9-2Z',manor:'M-9 6V-1L-4-6 0-2 4-6 9-1V6Z',museum:'M-9 6V-3H9V6ZM-9-3 0-9 9-3ZM-6-3V6M-2-3V6M2-3V6M6-3V6',jeweller:'M-6 6V-5H6V6ZM-3-2H3',casino:'M-9 6V-4H9V6ZM-4-4V-8H4V-4Z'};
+function cityMap(){const R=repGet();const B={gallery:'M-7 6V-3L0-8 7-3V6Z',bank:'M-8 6V-2H8V6ZM-9-2 0-8 9-2Z',manor:'M-9 6V-1L-4-6 0-2 4-6 9-1V6Z',museum:'M-9 6V-3H9V6ZM-9-3 0-9 9-3ZM-6-3V6M-2-3V6M2-3V6M6-3V6',jeweller:'M-6 6V-5H6V6ZM-3-2H3',casino:'M-9 6V-4H9V6ZM-4-4V-8H4V-4Z',auction:'M-9 6V-2H9V6ZM-9-2-5-7H5L9-2ZM-1 6V1H1V6'};
  let svg=`<svg viewBox="0 0 100 86" class="city" aria-label="City map">`;
  // streets and the river
  svg+=`<path d="M0 44 Q30 40 50 46 T100 40" class="riv"/>`;for(const [a,b,c,d] of [[0,14,100,14],[0,76,100,78],[12,0,14,86],[40,0,42,86],[60,0,58,86],[96,0,94,86],[0,38,100,36],[0,56,100,60]])svg+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" class="st"/>`;
  for(const [k,d] of Object.entries(SITES)){const [x,y]=d.city||[50,50];const open=R>=(d.rep||0);
-  svg+=`<g class="pin${k===SITE?' on':''}${open?'':' lock'}" data-s="${k}" transform="translate(${x} ${y})"><circle r="7.5" class="hit"/><path transform="scale(.62)" d="${B[k]||B.gallery}"/>${open?(siteBest(k)?`<text y="-9.5" text-anchor="middle" class="best">★${siteBest(k).stars}/15</text>`:''):`<text y="-9.5" text-anchor="middle">🔒★${d.rep}</text>`}<text y="11.5" text-anchor="middle" class="nm">${d.name.replace(/^The /,'')}</text></g>`}
+  svg+=`<g class="pin${k===SITE?' on':''}${open?'':' lock'}" data-s="${k}" transform="translate(${x} ${y})"><circle r="7.5" class="hit"/><path transform="scale(.62)" d="${B[k]||B.gallery}"/>${open?(siteBest(k)?`<text y="-9.5" text-anchor="middle" class="best">★${siteBest(k).stars}/15</text>`:''):`<text y="-9.5" text-anchor="middle">🔒★${d.rep}</text>`}<text y="11.5" text-anchor="middle" class="nm">${d.short||d.name.replace(/^The /,'')}</text></g>`}
  return svg+`</svg>`}
 function setupSheet(){HOME.from=null;if(!siteOpen(SITE))SITE='gallery';showSheet(`<h2>New contract</h2>
  <p style="margin:0 0 4px;display:flex;justify-content:space-between"><span>Pick a building:</span><span title="Reputation: every star you earn counts">Reputation <b>★ ${repGet()}</b></span></p><div id="sitePick">${cityMap()}</div><p id="siteDesc" style="margin:0 0 6px;font-size:12px;opacity:.75">${siteDesc(SITE)}</p>

@@ -2,7 +2,7 @@
 
 ![Inside Job](banner.png)
 
-A heist game from the other side. You're the security consultant: place cameras, lasers, plates, lights, guards, doors and fog cannons, and watch the crews pathfind around what you can see. Five nights, six buildings to unlock, Blueprint and Sketchbook styles.
+A heist game from the other side. You're the security consultant: place cameras, lasers, plates, lights, guards, doors and fog cannons, and watch the crews pathfind around what you can see. Five nights, seven buildings to unlock, Blueprint and Sketchbook styles.
 
 ## Play on a phone, full screen
 
@@ -20,4 +20,4 @@ The game works offline after the first visit.
 - `src/` holds the source (`src.html`) and the build scripts. `build.py` injects the packed sounds (`sfx.json`, `vo.json`, built by `pack.py` and `gen.py`) into `src.html`.
 - To build: `cd src && python3 build.py`. It writes `web/index.html` (copy to the repo root as `index.html`) and `ios/` (the app's `game.html`, `index.html`, `version.json`). `three.min.js` (three.js r160) and the packed sounds in `src/snd/` are committed so the build needs nothing else.
 
-Sound effects are Kenney CC0. Control's voice is Kokoro `bf_lily` (Apache 2.0, commercial use allowed; made by `src/gen2.py`). The guard voice still uses the piper `en_US-ryan-high` model, which is CC BY-NC-SA, so swap it out before any commercial release. The 3D characters are from the KayKit Adventurers pack by Kay Lousberg (CC0); the trimmed models are in `src/kk/`. An Xcode project for a native iOS app is in `app/` (see `app/README.md`).
+Sound effects are Kenney CC0. All voices are Kokoro (Apache 2.0, commercial use allowed): Control is `bf_lily` (made by `src/gen2.py`) and the guards are `bm_george` through a radio filter (made by `src/gen3.py`). The 3D characters are from the KayKit Adventurers pack by Kay Lousberg (CC0); the trimmed models are in `src/kk/`. An Xcode project for a native iOS app is in `app/` (see `app/README.md`).
