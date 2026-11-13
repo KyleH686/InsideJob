@@ -309,61 +309,88 @@ input,textarea{-webkit-user-select:auto;user-select:auto}
 button{touch-action:manipulation}
 .tool .sn{display:none}
 @media (max-width:380px){#goCard #abil svg{display:none}#goCard #abil button{font-size:12px}}
-@media (max-width:900px),(max-height:560px){
- .tool .nm{display:none} .tool .sn{display:inline} body.hassel #tools,body.hassel #toolHelp{display:none} body.routing #selBox,body.routing #tools{display:none} #selBox button{min-height:40px}
- html,body{position:fixed;inset:0;overflow:hidden;overscroll-behavior:none;touch-action:none}
- #app{height:100%;min-height:0}
- #top{padding:6px 10px;gap:8px;flex-wrap:nowrap}
- #top .ttl{font-size:19px!important;white-space:nowrap}#top .ttl small{display:none}
- #styles{margin-left:auto}#lookBtn,#mute,#fsBtn{font-size:12px!important;padding:5px 9px!important}
- main{flex-direction:column;min-height:0}
- #stage{flex:none;padding:0;position:relative;touch-action:none}
- #cv{touch-action:none}
- #side{width:100%;flex:1;min-height:0;border-left:0;padding:6px 8px 8px;gap:6px;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box}
- #side>.card{padding:7px 10px;margin:0;flex:none;order:0}
- #side>.card[data-mt]{order:1}#side>#goCard{order:2}#side>#mtabs{order:3}
- #side>.card[data-mt]{display:none;flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
- body[data-mtab=build] #side>.card[data-mt=build],body[data-mtab=crew] #side>.card[data-mt=crew],body[data-mtab=radio] #side>.card[data-mt=radio]{display:block}
- body[data-mtab=more] #viewCard{display:block;flex:none}body[data-mtab=more] #side>.card[data-mt=more]:not(#viewCard){display:block}
- #mtabs{display:flex;gap:4px;flex:none}
- #mtabs button{flex:1;padding:8px 0;font-size:14px;font-family:var(--fh);background:transparent;color:var(--ink);border:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
- #mtabs button.on{background:var(--btn);color:var(--btnink);border-color:var(--btn)}
- .stats{grid-template-columns:repeat(4,1fr);gap:0 8px}
- .stat .v{font-size:17px}.stat .k{font-size:9px;letter-spacing:.05em}
- .stat.meter{grid-column:1/-1;margin-top:3px}
- #perkList{display:none}
- #goCard{display:flex;gap:6px;align-items:center}
- #goCard #go{flex:1;padding:9px 6px;font-size:17px;margin:0}
- #goCard #speedRow{margin:0;flex:none;flex-wrap:nowrap}#speedRow>span{display:none}
- #speedRow button{padding:7px 9px}
- .card h3{font-size:16px;margin-bottom:6px}
- #tools{gap:4px;grid-template-columns:repeat(4,1fr)}
- #side .tool{flex-direction:row;gap:5px;padding:5px 4px;text-align:left;font-size:12px;line-height:1.1;align-items:center;justify-content:flex-start;min-height:0}#side .tool svg{width:18px;height:18px;flex:none}.tool kbd{display:none}.tool .c{font-size:10.5px;display:block}.tool>span{display:flex;flex-direction:column;min-width:0}
- #toolHelp{font-size:12px;margin-top:6px}
- #goCard #go{font-size:15px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
- #overlay{position:fixed;z-index:40;padding:10px;background:rgba(0,0,0,.55)}
- #sheet{max-height:calc(100% - 20px);padding:18px 16px;touch-action:pan-y;overscroll-behavior:contain}
- #sheet h1{font-size:42px!important}
- #hint{pointer-events:auto;position:absolute;left:8px!important;right:8px;top:calc(100% + 4px)!important;bottom:auto;transform:none!important;max-width:none!important;font-size:12.5px!important;line-height:1.3!important;padding:5px 10px!important;z-index:30}
- #goCard #abil{position:static;left:auto;bottom:auto;transform:none;flex-wrap:nowrap;gap:5px;flex:1 1 0;min-width:0}#goCard #abil button{flex:1 1 0;min-width:0;justify-content:center;font-size:13px;padding:6px 3px;gap:3px;min-height:44px;white-space:nowrap}#goCard #abil svg{width:16px;height:16px;flex:none} #goCard:has(#abil.show) #go{display:none}#abil kbd,#abil .ln{display:none}#abil .sh{display:inline} #lookBtn .lb{display:none} #lookBtn{white-space:nowrap}
- #toasts{left:8px;right:auto;top:52px;bottom:auto;pointer-events:none}.toast{max-width:230px;font-size:12px;padding:6px 10px}.toast b,.toast strong{font-size:14px}
- #log{font-size:12px}
-}
-@media (max-width:900px) and (min-aspect-ratio:5/4),(max-height:560px) and (min-aspect-ratio:5/4){
- main{flex-direction:row!important}
- #stage{flex:1 1 auto!important;min-width:0;height:auto!important;align-self:stretch}
- #side{width:min(340px,44vw)!important;flex:none!important;border-left:1px solid color-mix(in srgb,var(--line) 30%,transparent)!important;padding:6px 8px!important}
- .stats{grid-template-columns:repeat(4,1fr)!important;gap:0 6px!important}
- .stat .v{font-size:15px!important}body[data-theme=sketch] .stat .v{font-size:19px!important}
- #top{padding:3px 10px!important}#top .ttl{font-size:16px!important}
- #go{font-size:14px!important;padding:8px 6px!important}body[data-theme=sketch] #go{font-size:18px!important}
- #hint{font-size:11px!important;padding:3px 8px!important}
- #tools{grid-template-columns:repeat(4,1fr)!important;gap:3px!important}
- #side .tool{flex-direction:column!important;align-items:center!important;text-align:center!important;padding:3px 1px!important;gap:1px!important;font-size:10.5px!important}#side .tool svg{width:15px!important;height:15px!important}.tool .c{font-size:9.5px!important}
- #side>.card h3{margin-bottom:4px}
- #hint{top:auto!important;bottom:6px!important;opacity:.95}
- #toasts{top:auto!important;bottom:8px!important}
-}
+/* ===== touch layout (phones, tablets, folding phones). Classes tl / ls / roomy and --u are set by layoutMode() ===== */
+:where(body.tl) .tool .nm{display:none}
+:where(body.tl) .tool .sn{display:inline}
+body.hassel:where(.tl) #tools,body.hassel:where(.tl) #toolHelp{display:none}
+body.routing:where(.tl) #selBox,body.routing:where(.tl) #tools{display:none}
+:where(body.tl) #selBox button{min-height:40px}
+html:where(.tl),body:where(.tl){position:fixed;inset:0;overflow:hidden;overscroll-behavior:none;touch-action:none}
+:where(body.tl) #app{height:100%;min-height:0}
+:where(body.tl) #top{padding:6px 10px;gap:8px;flex-wrap:nowrap}
+:where(body.tl) #top .ttl{font-size:19px!important;white-space:nowrap}
+:where(body.tl) #top .ttl small{display:none}
+:where(body.tl) #styles{margin-left:auto}
+:where(body.tl) #lookBtn,:where(body.tl) #mute,:where(body.tl) #fsBtn{font-size:12px!important;padding:5px 9px!important}
+:where(body.tl) main{flex-direction:column;min-height:0}
+:where(body.tl) #stage{flex:none;padding:0;position:relative;touch-action:none}
+:where(body.tl) #cv{touch-action:none}
+:where(body.tl) #side{width:100%;flex:1;min-height:0;border-left:0;padding:6px 8px 8px;gap:6px;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box}
+:where(body.tl) #side>.card{padding:7px 10px;margin:0;flex:none;order:0}
+:where(body.tl) #side>.card[data-mt]{order:1}
+:where(body.tl) #side>#goCard{order:2}
+:where(body.tl) #side>#mtabs{order:3}
+:where(body.tl) #side>.card[data-mt]{display:none;flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+body[data-mtab=build]:where(.tl) #side>.card[data-mt=build],body[data-mtab=crew]:where(.tl) #side>.card[data-mt=crew],body[data-mtab=radio]:where(.tl) #side>.card[data-mt=radio]{display:block}
+body[data-mtab=more]:where(.tl) #viewCard{display:block;flex:none}
+body[data-mtab=more]:where(.tl) #side>.card[data-mt=more]:not(#viewCard){display:block}
+:where(body.tl) #mtabs{display:flex;gap:4px;flex:none}
+:where(body.tl) #mtabs button{flex:1;padding:8px 0;font-size:14px;font-family:var(--fh);background:transparent;color:var(--ink);border:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
+:where(body.tl) #mtabs button.on{background:var(--btn);color:var(--btnink);border-color:var(--btn)}
+:where(body.tl) .stats{grid-template-columns:repeat(4,1fr);gap:0 8px}
+:where(body.tl) .stat .v{font-size:17px}
+:where(body.tl) .stat .k{font-size:9px;letter-spacing:.05em}
+:where(body.tl) .stat.meter{grid-column:1/-1;margin-top:3px}
+:where(body.tl) #perkList{display:none}
+:where(body.tl) #goCard{display:flex;gap:6px;align-items:center}
+:where(body.tl) #goCard #go{flex:1;padding:9px 6px;font-size:17px;margin:0}
+:where(body.tl) #goCard #speedRow{margin:0;flex:none;flex-wrap:nowrap}
+:where(body.tl) #speedRow>span{display:none}
+:where(body.tl) #speedRow button{padding:7px 9px}
+:where(body.tl) .card h3{font-size:16px;margin-bottom:6px}
+:where(body.tl) #tools{gap:4px;grid-template-columns:repeat(4,1fr)}
+:where(body.tl) #side .tool{flex-direction:row;gap:5px;padding:5px 4px;text-align:left;font-size:12px;line-height:1.1;align-items:center;justify-content:flex-start;min-height:0}
+:where(body.tl) #side .tool svg{width:18px;height:18px;flex:none}
+:where(body.tl) .tool kbd{display:none}
+:where(body.tl) .tool .c{font-size:10.5px;display:block}
+:where(body.tl) .tool>span{display:flex;flex-direction:column;min-width:0}
+:where(body.tl) #toolHelp{font-size:12px;margin-top:6px}
+:where(body.tl) #goCard #go{font-size:15px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+:where(body.tl) #overlay{position:fixed;z-index:40;padding:10px;background:rgba(0,0,0,.55)}
+:where(body.tl) #sheet{max-height:calc(100% - 20px);padding:18px 16px;touch-action:pan-y;overscroll-behavior:contain}
+:where(body.tl) #sheet h1{font-size:42px!important}
+:where(body.tl) #hint{pointer-events:auto;position:absolute;left:8px!important;right:8px;top:calc(100% + 4px)!important;bottom:auto;transform:none!important;max-width:none!important;font-size:12.5px!important;line-height:1.3!important;padding:5px 10px!important;z-index:30}
+:where(body.tl) #goCard #abil{position:static;left:auto;bottom:auto;transform:none;flex-wrap:nowrap;gap:5px;flex:1 1 0;min-width:0}
+:where(body.tl) #goCard #abil button{flex:1 1 0;min-width:0;justify-content:center;font-size:13px;padding:6px 3px;gap:3px;min-height:44px;white-space:nowrap}
+:where(body.tl) #goCard #abil svg{width:16px;height:16px;flex:none}
+:where(body.tl) #goCard:has(#abil.show) #go{display:none}
+:where(body.tl) #abil kbd,:where(body.tl) #abil .ln{display:none}
+:where(body.tl) #abil .sh{display:inline}
+:where(body.tl) #lookBtn .lb{display:none}
+:where(body.tl) #lookBtn{white-space:nowrap}
+:where(body.tl) #toasts{left:8px;right:auto;top:52px;bottom:auto;pointer-events:none}
+:where(body.tl) .toast{max-width:230px;font-size:12px;padding:6px 10px}
+:where(body.tl) .toast b,:where(body.tl) .toast strong{font-size:14px}
+:where(body.tl) #log{font-size:12px}
+/* landscape: map left, panel right */
+:where(body.ls) main{flex-direction:row!important}
+:where(body.ls) #stage{flex:1 1 auto!important;min-width:0;height:auto!important;align-self:stretch}
+:where(body.ls) #side{width:min(340px,44vw)!important;flex:none!important;border-left:1px solid color-mix(in srgb,var(--line) 30%,transparent)!important;padding:6px 8px!important}
+:where(body.ls) .stats{grid-template-columns:repeat(4,1fr)!important;gap:0 6px!important}
+:where(body.ls) .stat .v{font-size:15px!important}
+body[data-theme=sketch]:where(.ls) .stat .v{font-size:19px!important}
+:where(body.ls) #top{padding:3px 10px!important}
+:where(body.ls) #top .ttl{font-size:16px!important}
+:where(body.ls) #go{font-size:14px!important;padding:8px 6px!important}
+body[data-theme=sketch]:where(.ls) #go{font-size:18px!important}
+:where(body.ls) #hint{font-size:11px!important;padding:3px 8px!important}
+:where(body.ls) #tools{grid-template-columns:repeat(4,1fr)!important;gap:3px!important}
+:where(body.ls) #side .tool{flex-direction:column!important;align-items:center!important;text-align:center!important;padding:3px 1px!important;gap:1px!important;font-size:10.5px!important}
+:where(body.ls) #side .tool svg{width:15px!important;height:15px!important}
+:where(body.ls) .tool .c{font-size:9.5px!important}
+:where(body.ls) #side>.card h3{margin-bottom:4px}
+:where(body.ls) #hint{top:auto!important;bottom:6px!important;opacity:.95}
+:where(body.ls) #toasts{top:auto!important;bottom:8px!important}
 /* ===== home / title page ===== */
 #home{position:fixed;inset:0;z-index:45;display:none;overflow:hidden;background:radial-gradient(120% 90% at 50% 30%,#14467f 0%,#0b2a4f 55%,#061a33 100%);color:#e8f3ff}
 body.home #home{display:block}
@@ -419,12 +446,92 @@ body[data-theme=sketch] #home .hmenu button.pri{background:#2c5aa0;color:#fbf6e8
 body[data-theme=sketch] #home .hmenu button small{font-family:'Patrick Hand',cursive;font-size:13px}
 body[data-theme=sketch] #home .hrow button{font-size:19px}
 #home .hfoot{font-size:10px;opacity:.5;margin-top:10px;font-family:'Share Tech Mono',monospace;text-align:center}
-@media (max-height:560px) and (min-aspect-ratio:5/4){
- #home .hwrap{max-width:none;grid-template-columns:minmax(0,1fr) minmax(260px,340px);grid-template-rows:auto 1fr auto;column-gap:22px;align-items:center;padding:max(10px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) 8px max(18px,env(safe-area-inset-left))}
- #home .hlogo{grid-column:1;grid-row:1;margin-top:0}#hScene{grid-column:1;grid-row:2;min-height:80px;align-self:stretch}
- #home .hmenu{grid-column:2;grid-row:1/3;gap:7px}#home .hmenu button{padding:8px 10px;font-size:16px}#home .hmenu button.pri{font-size:21px;padding:10px}
- #home h1{font-size:clamp(44px,10vw,72px)}#home .hfoot{grid-column:1/3;margin-top:4px}
-}
+/* home, landscape */
+:where(body.hls) #home .hwrap{max-width:none;grid-template-columns:minmax(0,1fr) minmax(260px,340px);grid-template-rows:auto 1fr auto;column-gap:22px;align-items:center;padding:max(10px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) 8px max(18px,env(safe-area-inset-left))}
+:where(body.hls) #home .hlogo{grid-column:1;grid-row:1;margin-top:0}
+:where(body.hls) #hScene{grid-column:1;grid-row:2;min-height:80px;align-self:stretch}
+:where(body.hls) #home .hmenu{grid-column:2;grid-row:1/3;gap:7px}
+:where(body.hls) #home .hmenu button{padding:8px 10px;font-size:16px}
+:where(body.hls) #home .hmenu button.pri{font-size:21px;padding:10px}
+:where(body.hls) #home h1{font-size:clamp(44px,10vw,72px)}
+:where(body.hls) #home .hfoot{grid-column:1/3;margin-top:4px}
+/* ===== v31: sizing for iPhone / iPad / folding phones ===== */
+:where(body.tl) #top,:where(body.tl) #side,:where(body.tl) #sheet,:where(body.tl) #hint,:where(body.tl) #toasts,:where(body.tl) #watch,:where(body.tl) #replayBar,:where(body.tl) #rpCap{zoom:var(--u,1)}
+:where(body.tl) #stage>#abil{zoom:var(--u,1)}
+:where(body.tl) #coach{font-size:calc(14px*var(--u,1))!important;max-width:min(calc(330px*var(--u,1)),calc(100vw - 20px))}
+body[data-theme=sketch]:where(.tl) #coach{font-size:calc(16px*var(--u,1))!important}
+:where(body.tl) #coach .cbtns button{font-size:calc(13px*var(--u,1));padding:calc(7px*var(--u,1)) calc(13px*var(--u,1))}
+:where(body.tl) #lookBtn,:where(body.tl) #mute,:where(body.tl) #homeBtn{min-height:38px;min-width:40px;font-size:13px!important}
+:where(body.tl) #speedRow button{min-height:40px;min-width:38px;font-size:13px}
+:where(body.tl) #worksBtn{min-height:38px}
+:where(body.tl) #mtabs button{min-height:42px;font-size:15px}
+:where(body.tl) #goCard #go{min-height:44px}
+:where(body.tl) #side .tool{min-height:44px}
+:where(body.tl) #hint{top:6px!important;bottom:auto!important}
+:where(body.ls) #hint{top:auto!important;bottom:6px!important}
+:where(body.tl) #hint:not(.show){pointer-events:none!important}
+:where(body.tl) #watch{top:auto;bottom:8px}
+:where(body.ls) #watch{top:10px;bottom:auto}
+:where(body.ls) #side{width:var(--sideW,340px)!important}
+:where(body.ls) #mtabs button{min-height:38px}
+:where(body.ls) #side .tool{min-height:42px}
+/* nine tools in two rows of five */
+:where(body.tl) #tools{grid-template-columns:repeat(5,1fr)!important}
+:where(body.tl) #side .tool{flex-direction:column!important;align-items:center!important;text-align:center!important;gap:2px!important;padding:4px 1px!important;font-size:11.5px}
+:where(body.tl) #side .tool svg{width:19px;height:19px}
+:where(body.tl) #side .tool>span{align-items:center}
+:where(body.tl) #side>.card:first-of-type{padding:4px 10px 6px}
+:where(body.ls) #side>.card h3{font-size:19px!important;margin-bottom:3px!important;line-height:1.1}
+:where(body.ls.short) #lookBtn,:where(body.ls.short) #mute,:where(body.ls.short) #homeBtn{min-height:30px}
+/* compact stats strip and card titles */
+:where(body.tl) .stats{display:flex!important;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:0 10px!important}
+:where(body.tl) .stat{display:flex;align-items:baseline;gap:4px;white-space:nowrap}
+:where(body.tl) .stat .k{font-size:8.5px!important;letter-spacing:.04em}
+:where(body.tl) .stat.meter{display:block;flex:1 0 100%;margin-top:1px}
+/* a selected device: its actions take the whole card, as big buttons */
+body.hassel:where(.tl) #worksBtn,body.hassel:where(.tl) #buildCard>h3{display:none}
+:where(body.tl) #selName{margin-top:0!important;font-size:14px}
+:where(body.tl) #selBtns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+:where(body.tl) #selBtns button{min-height:44px;font-size:13.5px;padding:4px 6px}
+:where(body.tl) #side>.card h3{font-size:19px!important;margin-bottom:4px!important;line-height:1.1}
+:where(body.tight) #toolHelp,:where(body.tight) #buildCard>h3{display:none}
+:where(body.tl) #toolHelp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* squat screens (a folded Duo): all nine tools in one row */
+:where(body.row9) #tools{grid-template-columns:repeat(9,1fr)!important;gap:3px!important}
+:where(body.row9) #side .tool{font-size:10px;padding:4px 0!important}
+:where(body.row9) #selBtns{grid-template-columns:repeat(6,1fr)}
+:where(body.row9) #selBtns button{font-size:12px;padding:2px 3px}
+:where(body.tight) #selName>div,:where(body.short) #selName>div{display:none}
+/* speed buttons only matter during a night */
+body:not([data-phase=heist]):where(.tl) #speedRow{display:none!important}
+:where(body.tl) #top #speedRow{display:flex;gap:4px;margin:0 0 0 2px;flex:none;flex-wrap:nowrap}
+body[data-phase=heist]:where(.tl) #top .ttl{display:none}
+body[data-phase=heist]:where(.tl:not(.ls)) #styles{display:none}
+body[data-phase=heist]:where(.tl:not(.ls)) #homeBtn{margin-left:auto}
+/* roomy: spare height under the map, so bigger controls */
+:where(body.roomy) #tools{gap:7px}
+:where(body.roomy) #side .tool{min-height:60px;padding:7px 2px!important;font-size:13.5px;gap:4px!important}
+:where(body.roomy) #side .tool svg{width:24px;height:24px}
+:where(body.roomy) .tool .c{font-size:12px}
+:where(body.roomy) #toolHelp{font-size:13.5px;line-height:1.4;margin-top:9px}
+:where(body.roomy) #side>.card{padding:10px 12px}
+:where(body.roomy) #side{gap:9px;padding:9px 10px 10px}
+:where(body.roomy) .stat .v{font-size:21px}
+:where(body.roomy) .stat .k{font-size:10.5px}
+:where(body.roomy) #goCard #go{min-height:52px;font-size:18px!important}
+:where(body.roomy) #speedRow button{min-height:46px;min-width:42px}
+:where(body.roomy) #mtabs button{min-height:48px;font-size:16px}
+:where(body.roomy) #worksBtn{min-height:44px;font-size:14px}
+:where(body.roomy) #log{font-size:14px}
+/* home: laid out at a fixed design size, then scaled to fit by homeFit() */
+#home .hwrap{zoom:var(--hz,1);max-width:none!important;margin:0 auto;padding:max(16px,calc(env(safe-area-inset-top)/var(--hz,1))) 16px max(10px,calc(env(safe-area-inset-bottom)/var(--hz,1)))!important}
+:where(body.hls) #home .hwrap{padding:max(10px,calc(env(safe-area-inset-top)/var(--hz,1))) max(16px,calc(env(safe-area-inset-right)/var(--hz,1))) max(8px,calc(env(safe-area-inset-bottom)/var(--hz,1))) max(16px,calc(env(safe-area-inset-left)/var(--hz,1)))!important}
+#home h1{font-size:62px!important}
+:where(body.hls) #home h1{font-size:70px!important}
+#home .hlogo{margin-top:6px!important}
+#home .htape{width:calc(100% + 400px)!important;left:-200px!important}
+#home .hmenu{width:100%!important;max-width:360px}
+:where(body.hls) #home .hmenu{max-width:none}
 /* how to play */
 .htp{text-align:center}.htp .ill{height:120px;display:flex;align-items:center;justify-content:center;gap:16px;margin:4px 0 6px}
 .htp .ill svg{width:54px;height:54px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
@@ -455,7 +562,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 body{padding:var(--sat) var(--sar) var(--sab) var(--sal)}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v30 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro and Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SIX BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v31 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro and Piper</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -1529,10 +1636,23 @@ const cv=$('cv'),ctx=cv.getContext('2d');let T=24,DPR=1;
 const stat=document.createElement('canvas'),sctx=stat.getContext('2d');
 const wallC=document.createElement('canvas'),wctx=wallC.getContext('2d');const WALL_H=.42;let DEPTH=true;
 const noiseC=document.createElement('canvas');noiseC.width=noiseC.height=256;{const n=noiseC.getContext('2d'),im=n.createImageData(256,256);for(let i=0;i<im.data.length;i+=4){const v=Math.random()*255;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255}n.putImageData(im,0,0)}
+const LAY={tl:false,ls:false,u:1};
+// Which layout to use. tl = touch layout (any phone, tablet or folding phone, or a small window), ls = map left / panel right, u = control scale.
+function layoutMode(){const w=innerWidth,h=innerHeight,touch=!!window.IJ_APP||matchMedia('(pointer:coarse)').matches;
+ const tl=w<=900||h<=560||touch,ls=tl&&w/h>=1.25,u=tl&&touch?Math.max(1,Math.min(1.45,Math.min(w,h)/440)):1;
+ const ch=tl!==LAY.tl;LAY.tl=tl;LAY.ls=ls;LAY.u=u;
+ for(const e of [document.documentElement,document.body]){e.classList.toggle('tl',tl);e.classList.toggle('ls',ls);e.classList.toggle('short',ls&&h<500)}
+ document.documentElement.style.setProperty('--u',u);
+ if(ls){// panel as narrow as is comfortable, wider when the map cannot use the width anyway
+  const top=$('top')?$('top').getBoundingClientRect().height:46*u,mapW=(h-top-6)*W/H;let sw=Math.max(Math.min(250*u,.5*w),Math.min(340*u,.4*w));if(w-mapW>sw)sw=Math.min(w-mapW,430*u,.5*w);
+  document.documentElement.style.setProperty('--sideW',(sw/u)+'px')}
+ const sp=$('speedRow');if(sp){if(tl){if(sp.parentNode!==$('top'))$('top').insertBefore(sp,$('styles'))}else if(sp.parentNode!==$('goCard'))$('goCard').appendChild(sp)}
+ const a=$('abil');if(a){if(tl){if(a.parentNode!==$('goCard'))$('goCard').prepend(a)}else if(a.parentNode!==$('stage'))$('stage').appendChild(a)}
+ return ch}
 function resize(){
- const st=$('stage');const mobile=matchMedia('(max-width:900px),(max-height:560px)').matches;const land=mobile&&matchMedia('(min-aspect-ratio:5/4)').matches;
- if(land||!mobile)st.style.height='';const r=st.getBoundingClientRect();
- let aw,ah;if(land){aw=r.width-6;ah=r.height-6}else if(mobile){aw=r.width;const top=$('top')?$('top').getBoundingClientRect().height:46;ah=Math.min(aw*H/W,innerHeight-top-320)}else{aw=r.width-20;ah=r.height-20}
+ layoutMode();const st=$('stage');const mobile=LAY.tl;const land=LAY.ls;
+ if(land||!mobile){st.style.height='';document.body.classList.remove('roomy','tight','row9')}const r=st.getBoundingClientRect();
+ let aw,ah;if(land){aw=r.width-6;ah=r.height-6}else if(mobile){aw=r.width;const top=$('top')?$('top').getBoundingClientRect().height:46;const app=$('app').getBoundingClientRect().height;const full=aw*H/W,u=LAY.u,tight=app-top-412*u<full,row9=tight&&aw/u>=430&&app-top-358*u<full;ah=Math.min(full,app-top-(row9?312:tight?358:412)*u);document.body.classList.toggle('tight',tight);document.body.classList.toggle('row9',row9);document.body.classList.toggle('roomy',!tight&&app-top-ah-412*u>70*u)}else{aw=r.width-20;ah=r.height-20}
  T=Math.max(6,Math.min(aw/W,ah/H));DPR=Math.min(2,window.devicePixelRatio||1);
  cv.width=Math.round(W*T*DPR);cv.height=Math.round(H*T*DPR);cv.style.width=W*T+'px';cv.style.height=H*T+'px';
  if(mobile&&!land)st.style.height=(H*T+12)+'px';else st.style.height='';
@@ -2300,7 +2420,7 @@ function refreshUI(){if($('worksBtn'))$('worksBtn').hidden=ST.phase!=='plan'||!!
  $('sStolen').textContent=money(ST.stolen)+' / '+money(ST.limit);$('sStolenBar').style.width=Math.min(100,ST.stolen/ST.limit*100)+'%';if(ST.stolen>HUDC.st){const sb=$('sStolenBar');sb.classList.remove('hit');void sb.offsetWidth;sb.classList.add('hit')}HUDC.st=ST.stolen;
  document.querySelectorAll('.tool').forEach(b=>{const t=b.dataset.t;b.classList.toggle('on',ST.tool===t);b.disabled=ST.phase!=='plan'||ST.cash<DEV[t].cost});
  $('toolHelp').textContent=(TOUCH?(x=>x.replace(/Drag when placing to aim it\./,'Hold to zoom in; turn it once placed.').replace(/click/g,'tap').replace(/Click/g,'Tap').replace('Enter or right-click to finish','Tap the guard again to finish')):(x=>x))(ST.routeFor?(TOUCH?'Drawing patrol: tap floor tiles (hold to zoom), then press Done.':'Drawing patrol: click floor tiles. Enter or right-click to finish.')+(TOUCH?'':''):ST.tool?DEV[ST.tool].desc:ST.phase==='plan'?'Pick a device, or click one you placed to adjust it. Thieves can see cameras, lasers, lights and guards, but never plates.':'The crew is inside. Click a device to inspect it.');
- $('phaseTag').textContent=ST.phase==='heist'?'night in progress':ST.phase==='plan'?'planning':'';
+ document.body.dataset.phase=ST.phase;$('phaseTag').textContent=ST.phase==='heist'?'night in progress':ST.phase==='plan'?'planning':'';
  $('routeDone').hidden=!ST.routeFor;if(ST.routeFor)$('routeDone').textContent=ST.routeFor.route.length?'Done: set '+ST.routeFor.route.length+'-point patrol':'Done: make a sentry';const d=ST.sel;$('selBox').hidden=!d;document.body.classList.toggle('hassel',!!d&&ST.phase==='plan'&&!ST.routeFor);document.body.classList.toggle('routing',!!ST.routeFor);
  if(d){$('selName').innerHTML=`<b>${DEV[d.type].name}${d.n?' C'+d.n:''}</b>`+(d.type==='camera'?` · ${d.sweep?'sweeping':'fixed'}${d.looped>0?' · LOOPED':''}`:'')+(d.type==='guard'?` · ${d.route.length?d.route.length+' patrol points':'sentry'} · ${PERS[d.pers||'steady'].ic} ${PERS[d.pers||'steady'].name}<div style="font-size:12px;opacity:.75;margin-top:2px">${PERS[d.pers||'steady'].desc}</div>`:'')+(d.broken?' · broken':'')+(d.forced?' · forced':'');
   const b=[];if(ST.phase==='plan'){if(d.type==='camera')b.push(['⟲','rotSel(-1)'],['⟳','rotSel(1)'],[d.sweep?'Fix in place':'Sweep','toggleSweep()']);if(d.type==='laser')b.push(['Turn beam','rotSel(1)']);if(d.type==='guard')b.push(['Redraw patrol','redrawRoute()'],[`${PERS[d.pers||'steady'].ic} ${PERS[d.pers||'steady'].name} ▸`,'cyclePers()']);const up=(UPG[d.type]||[])[d.lv||0];if(up)b.push([`★ ${up.name} ${money(up.cost)}`,'upgradeSel()',ST.cash<up.cost]);b.push(['Sell '+money(Math.round(d.paid*.8)),'sellSel()']);if(TOUCH)b.push(['✓ Done','deselSel()'])}
@@ -2418,9 +2538,8 @@ function refreshSelOnly(){}
 window.IJ={FX,ST,place,startNight,setSpeed,setTheme,planNight,stepSim,newGame,nextNight,endNight,devicesChanged};
 buildToolUI();useSite(SITE);buildMap(1);resetLoot();devicesChanged();
 try{const t=localStorage.getItem('ij-theme');if(t==='sketch3d'){theme='sketch';LOOK=t}else if(t&&STYLES[t]){theme=t;LOOK=t}const d=localStorage.getItem('ij-diff');if(d&&DIFF[d])ST.diff=d}catch(e){}
-{const mq=matchMedia('(max-width:900px),(max-height:560px)'),place=()=>{const a=$('abil');if(mq.matches)$('goCard').prepend(a);else $('stage').appendChild(a)};place();mq.addEventListener&&mq.addEventListener('change',place)}
 setTheme(theme);document.querySelectorAll('#mtabs button').forEach(b=>b.onclick=()=>{setMTab(b.dataset.t);AU.click&&AU.click()});
-addEventListener('resize',resize);resize();$('fsBtn').onclick=()=>{AU.init();toggleFS()};if(window.IJ_APP||navigator.standalone||matchMedia('(display-mode: fullscreen),(display-mode: standalone)').matches)$('fsBtn').hidden=true;
+addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,250));resize();$('fsBtn').onclick=()=>{AU.init();toggleFS()};if(window.IJ_APP||navigator.standalone||matchMedia('(display-mode: fullscreen),(display-mode: standalone)').matches)$('fsBtn').hidden=true;
 if(document.fonts)document.fonts.ready.then(()=>redrawStatic());
 // ================================================================ 3D NIGHT (three.js)
 function r3Quality(){const mob=matchMedia('(pointer:coarse)').matches||innerWidth<900;return mob?'med':'high'}
@@ -2765,6 +2884,11 @@ const _setTheme0=setTheme;setTheme=function(k){let is3=k==='night3d'||k==='sketc
 // ================================================================ HOME / TITLE PAGE
 const HOME={from:null,t0:performance.now()};
 function homeOn(){return document.body.classList.contains('home')}
+// The menu is laid out at one design size and scaled to fit the screen, so it fits every phone, tablet and folding phone.
+function homeFit(){const hw=document.querySelector('#home .hwrap');if(!hw||!homeOn())return;const r=$('home').getBoundingClientRect();if(!r.width||!r.height)return;
+ const ls=r.width/r.height>=1.25;document.body.classList.toggle('hls',ls);const dw=ls?700:380;
+ hw.style.setProperty('--hz',1);hw.style.width=dw+'px';hw.style.height='auto';const nat=hw.offsetHeight||1;
+ const z=Math.max(.5,Math.min(r.width/dw,r.height/nat,(window.IJ_APP||TOUCH)?2.2:1.5));hw.style.setProperty('--hz',z);hw.style.height=(r.height/z)+'px'}
 function showHome(){if(ST.phase==='heist'&&ST.speed>0){HOME.speed=ST.speed;setSpeed(0)}hideSheet();coachHide();
  const inGame=HOME.from==='game';const sv=readSave();const di=dailyInfo(),db=dailyBest();
  let main='';
@@ -2775,7 +2899,7 @@ function showHome(){if(ST.phase==='heist'&&ST.speed>0){HOME.speed=ST.speed;setSp
  <button data-h="htp">How to play</button><div class="hrow"><button data-h="week">📅 This week</button><button data-h="rogues">🦊 Rogues</button></div>
  <div class="hrow"><button data-h="ach">★ ${ACHS.size}/${ACH.length}</button><button data-h="opt">⚙ Options</button></div>`;
  document.querySelectorAll('#hMenu button').forEach(b=>b.onclick=()=>{AU.init();AU.click&&AU.click();homeAct(b.dataset.h)});
- document.body.classList.add('home');resizeHome()}
+ document.body.classList.add('home');resizeHome();homeFit()}
 function hideHome(){document.body.classList.remove('home')}
 function homeAct(h){
  if(h==='resume'){hideHome();HOME.from=null;if(ST.phase==='heist'&&HOME.speed){setSpeed(HOME.speed);HOME.speed=0}return}
@@ -2914,7 +3038,7 @@ function tutPlace(){const st=TUTS[TUT.i],c=$('coach'),dot=$('coachDot');if(!st||
  document.querySelectorAll('.tutHi').forEach(e=>{if(!st.el||!e.matches(st.el))e.classList.remove('tutHi')});
  let el=st.el?[...document.querySelectorAll(st.el)].find(e=>e.offsetParent):null;let ax=null,top,left,dir='none';
  if(el){el.classList.add('tutHi');const r=el.getBoundingClientRect();ax=r.left+r.width/2;if(r.top-ch-14>8){top=r.top-ch-14;dir='up'}else{top=Math.min(vh-ch-8,r.bottom+14);dir='down'}left=ax-cw/2}
- else{const r=$('stage').getBoundingClientRect(),mob=matchMedia('(max-width:900px),(max-height:560px)').matches&&!matchMedia('(min-aspect-ratio:5/4)').matches;if(mob){left=r.left+r.width/2-cw/2;top=Math.min(vh-ch-8,r.bottom+8)}else{left=r.left+10;top=Math.max(8,r.top+10)}}
+ else{const r=$('stage').getBoundingClientRect(),mob=LAY.tl&&!LAY.ls;if(mob){left=r.left+r.width/2-cw/2;top=Math.min(vh-ch-8,r.bottom+8)}else{left=r.left+10;top=Math.max(8,r.top+10)}}
  left=Math.max(8,Math.min(vw-cw-8,left));c.style.left=left+'px';c.style.top=top+'px';c.classList.remove('up','down','none');c.classList.add(dir);if(ax!==null)c.style.setProperty('--ax',(ax-left)+'px');
  const p=st.pt&&st.pt();if(p&&dot){const r=cv.getBoundingClientRect();dot.style.display='block';dot.style.left=(r.left+p[0]/W*r.width)+'px';dot.style.top=(r.top+p[1]/H*r.height)+'px'}else if(dot)dot.style.display='none'}
 function tutTick(){if(!TUT.on)return;if(homeOn()||$('overlay').classList.contains('show')){coachHide();return}const st=TUTS[TUT.i];if(!$('coach').classList.contains('show'))tutShow();
@@ -2928,7 +3052,7 @@ function syncTheme(dt){themeTick-=dt;if(themeTick>0)return;themeTick=.3;if(!AU.c
  if(want&&!AU.th)AU.themeOn();else if(!want&&AU.th)AU.themeOff();const h=homeOn();if(AU.th&&h!==themeWasHome)AU.themeLevel();themeWasHome=h}
 document.addEventListener('pointerdown',()=>{if(!AU.ctx)AU.init()},{capture:true});
 
-$('home').prepend(hcv);if(LOOK==='night3d'||LOOK==='sketch3d')setTheme(LOOK);addEventListener('resize',()=>{if(homeOn())resizeHome()});$('homeBtn').onclick=()=>{AU.init();AU.click();HOME.from='game';showHome()};
+$('home').prepend(hcv);if(LOOK==='night3d'||LOOK==='sketch3d')setTheme(LOOK);addEventListener('resize',()=>{if(homeOn()){resizeHome();homeFit()}});if(document.fonts)document.fonts.ready.then(homeFit);$('homeBtn').onclick=()=>{AU.init();AU.click();HOME.from='game';showHome()};
 titleScreen();refreshUI();
 requestAnimationFrame(frame);
 
