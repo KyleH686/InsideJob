@@ -1,3 +1,4 @@
+# Old piper generator, no longer used: every voice is now Kokoro (gen2.py for Control, gen3.py for the guards).
 import wave,subprocess,json,sys,os
 sys.path.insert(0,'.')
 from lines import L

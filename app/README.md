@@ -39,7 +39,7 @@ Note for the App Store: Apple allows updating web content this way as long as th
 
 ## Before an App Store release
 
-- The guard voices (15 short lines) use the Piper `en_US-ryan-high` model, which is licensed CC BY-NC-SA (non-commercial). Swap them before selling the app. Control's voice is Kokoro (Apache 2.0) and is fine to sell.
+- All voices are Kokoro (Apache 2.0) and fine to sell: Control is `bf_lily`, the guards are `bm_george`.
 - Bump the version and build number in the target's General tab.
 - Sound effects are Kenney (CC0), characters are KayKit (CC0), fonts are SIL Open Font License.
 
