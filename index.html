@@ -111,6 +111,7 @@ main{flex:1;display:flex;min-height:0}
 #sheet .mug.got::after{content:'CAUGHT';position:absolute;right:4px;top:4px;font-size:9px;color:var(--good);border:1px solid;padding:0 3px;transform:rotate(8deg)}
 #sitePick .city{width:100%;max-height:40vh;display:block;margin:4px 0 8px;border:1px solid currentColor;background:color-mix(in srgb,currentColor 5%,transparent)}
 .city .st{stroke:currentColor;stroke-width:2.2;opacity:.12}.city .riv{fill:none;stroke:#3d8fd6;stroke-width:4;opacity:.35}
+.city .rail{fill:none;stroke:currentColor;stroke-width:1.2;stroke-dasharray:1.6 1.2;opacity:.4}
 .city .pin{cursor:pointer}.city .pin .hit{fill:var(--panel);stroke:currentColor;stroke-width:.6;opacity:.9}.city .pin path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round}
 .city .pin text{font-size:4px;fill:currentColor;font-family:var(--mono,monospace)}.city .pin .nm{font-size:3.4px;opacity:.85}.city .pin .best{fill:var(--accent);font-size:3.6px}
 .city .pin.on .hit{fill:var(--accent);stroke:var(--accent)}.city .pin.on path{stroke:var(--btnink,#000)}.city .pin.lock{opacity:.5}
@@ -667,7 +668,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v45 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v46 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -935,6 +936,34 @@ const SITES={
    'The crews know the hotel now. The corridor joins the lobby, the dock and the vault, so watch it.',
    'Last night. A crew will drop down the laundry chute into the office, and the Concierge wants the Belvedere Tiara. His master key opens steel doors and the vault door in a moment.'],
   roomOf(x,y){if(x<12)return y<10?'office':'kitchen';if(x<26)return y<9?'bar':'lobby';if(y<8)return 'vault';if(y<14)return 'corridor';return 'loading dock'}};
+// v46: the ninth job is a moving train. Five carriages in a row, gangway doors between them, and the bullion in the strongroom van.
+SITES.train={name:'The Midnight Express',short:'Express',caption:'THE MIDNIGHT EXPRESS · LONDON TO EDINBURGH · SECURITY DRG 46/T',note1:'Express - bullion in the strongroom van',n1x:14,note2:['platform side = way in?',6,19.6],rep:42,bonus:600,city:[47,73],boss:'conductor',
+  blurb:'The overnight sleeper to Edinburgh, carrying a duchess, a diplomat and a strongroom van full of gold bullion. The crews will board it on the move.',
+  cut:[[2,2,37,7],[2,18,37,23]],walls(hl,vl){vl(9,2,23);vl(17,2,23);vl(26,2,23);vl(32,2,23);hl(10,16,12);vl(13,9,11);hl(28,30,10);for(const [x,y] of [[20,10],[23,10],[20,15],[23,15]])hl(x,x,y)},
+  doors:[{x:9,y:14},{x:17,y:14},{x:26,y:14},{x:11,y:12},{x:15,y:12},{x:32,y:14,vault:true}],
+  entries:[{id:'main',name:'Platform doors',tiles:[[21,17],[22,17]],spawn:[21,18],night:1},
+   {id:'van',name:'Guard\'s van door',tiles:[[2,12]],spawn:[1,12],night:1,lab:[1.4,-1.2]},
+   {id:'roof',name:'Roof hatch',tiles:[],spawn:[29,13],night:2,roof:true},
+   {id:'sleeper',name:'Sleeper door',tiles:[[14,17]],spawn:[14,18],night:3},
+   {id:'hatch',name:'Baggage hatch',tiles:[],spawn:[5,11],night:5,roof:true}],
+  rooms:[{n:'BAGGAGE CAR',x:5.5,y:13.6},{n:'SLEEPER CAR',x:13,y:15.6},{n:'DINING CAR',x:21.5,y:12.6},{n:'BAR CAR',x:29.5,y:15.6},{n:'STRONGROOM',x:34.5,y:12.6}],
+  loot:[{id:'mail',name:'Mail sacks',x:4,y:10,v:2500,crack:1.5,kind:'crate'},
+   {id:'post',name:'Registered post',x:7,y:15,v:3500,crack:2,kind:'cash'},
+   {id:'trunk',name:'Antique trunk',x:4,y:15,v:3000,crack:2,kind:'crate'},
+   {id:'jewels',name:'The Duchess\'s jewel case',x:11,y:10,v:7000,crack:3,kind:'gem'},
+   {id:'brief',name:'A diplomat\'s briefcase',x:15,y:10,v:5000,crack:2.5,kind:'cash'},
+   {id:'silver',name:'Silver service',x:24,y:9,v:3000,crack:2,kind:'gold'},
+   {id:'champ',name:'Champagne crate',x:18,y:16,v:2500,crack:1.5,kind:'crate'},
+   {id:'till',name:'Bar takings',x:31,y:9,v:3000,crack:2,kind:'cash'},
+   {id:'port',name:'Vintage port',x:27,y:16,v:2000,crack:1.5,kind:'crate'},
+   {id:'bullion',name:'Gold bullion',x:35,y:10,v:15000,crack:7,kind:'gold'},
+   {id:'notes',name:'Bank notes',x:35,y:15,v:8000,crack:4,kind:'cash'}],
+  hints:['The crew boards on the move: through the platform doors into the dining car, or the guard\'s van door at the back. Every carriage joins the next through one gangway door, so a camera on a gangway watches two carriages at once.',
+   'Someone will come down through the roof hatch into the bar car, one door from the strongroom. The train goes through tunnels every so often, and the wireless cameras lose signal for a few seconds.',
+   'The sleeper door opens tonight, straight into the sleeper corridor.',
+   'The crews know the train now. Everything has to pass through the gangways, so guard them.',
+   'Last night. A crew will drop through the baggage hatch at the back, and the Conductor wants the bullion. When he is spotted he pulls the emergency brake and every guard stumbles.'],
+  roomOf(x,y){if(x<9)return 'baggage car';if(x<17)return y<12?'sleeper car':'corridor';if(x<26)return 'dining car';if(x<32)return 'bar';return 'strongroom'}};
 // v42: every building has its own floors, walls, furniture and surroundings.
 // floor: the main finish; wall/cap: 3D wall colours (sketch, night); ground: the land around it; out: what stands outside; prop: what its free-standing pillars become.
 const SITE_LOOK={
@@ -945,7 +974,8 @@ const SITE_LOOK={
  jeweller:{floor:'checker',sk:{wall:'#5a5664',cap:'#8a8598',ground:'#c9c0ad'},nt:{wall:'#3b3a6a',cap:'#9d97e8',ground:'#0d0d26'},out:'shop',prop:'counter'},
  casino:{floor:'carpet',sk:{wall:'#e0a84a',cap:'#9a2f3c',ground:'#cdbf9f'},nt:{wall:'#6a2340',cap:'#ff5c8a',ground:'#1a0716'},out:'neon',prop:'table'},
  auction:{floor:'darkwood',sk:{wall:'#c9a98a',cap:'#e9d6bd',ground:'#c7bea2'},nt:{wall:'#4a4870',cap:'#a7a0d8',ground:'#0c1430'},out:'river',prop:'plinth'},
- hotel:{floor:'bluecarpet',sk:{wall:'#c99a52',cap:'#efe2c6',ground:'#cfc4a8'},nt:{wall:'#3a4f8a',cap:'#e8c46a',ground:'#0a1636'},out:'awning',prop:'column'}};
+ hotel:{floor:'bluecarpet',sk:{wall:'#c99a52',cap:'#efe2c6',ground:'#cfc4a8'},nt:{wall:'#3a4f8a',cap:'#e8c46a',ground:'#0a1636'},out:'awning',prop:'column'},
+ train:{floor:'carpet',sk:{wall:'#8a2f3a',cap:'#e9d6a8',ground:'#b7c48f'},nt:{wall:'#5a2a4a',cap:'#e8c46a',ground:'#081c16'},out:'rails',prop:'table'}};
 function siteLook(){return SITE_LOOK[SITE]||SITE_LOOK.gallery}
 SITES.gallery.city=[22,24];SITES.bank.city=[44,54];SITES.manor.city=[82,20];
 let SITE='gallery';try{const v=localStorage.getItem('ij-site');if(v&&SITES[v])SITE=v}catch(e){}
@@ -1047,6 +1077,7 @@ const TYPES={
  muscle:{name:'Muscle',speed:2.2,maxSus:150,breach:.25,carry:.95,tag:'TANK',desc:'Shoulders doors open, carries at full pace, takes longer to identify.'},
  auctioneer:{name:'The Auctioneer',speed:2.9,crack:.5,sus:.8,maxSus:130,counter:'loop',charges:1,knowsPlates:true,boss:true,bribe:true,tag:'BOSS',desc:'Runs the auction-house job. The first time she is caught she bribes her way out and bolts, so you have to catch her twice. Knows your plates, loops one camera, and goes for the biggest prize.'},
  jammer:{name:'Jammer',speed:2.6,jam:2.5,tag:'JAM',desc:'Carries a signal jammer. Cameras, lasers and pressure plates within 2½ tiles of them go dead while they pass. Guards, dogs and seismic sensors still work.'},
+ conductor:{name:'The Conductor',speed:2.8,crack:.6,sus:.8,maxSus:130,knowsPlates:true,boss:true,brake:true,he:true,tag:'BOSS',desc:'Runs the train job and knows every carriage. The first time he is spotted or chased he pulls the emergency brake: the train lurches and every guard stumbles for 2 s.'},
  concierge:{name:'The Concierge',speed:2.9,crack:.5,sus:.75,maxSus:135,knowsPlates:true,boss:true,master:true,he:true,tag:'BOSS',desc:'Runs the hotel job. Carries a master key: steel doors and the vault door open for him in a moment. Knows your plates and goes for the biggest prize.'},
  climber:{name:'Climber',speed:2.9,roof:true,tag:'ROOF',desc:'Comes in through the roof, even on nights the roof is shut to everyone else. Drops straight into the room nearest the prize.'},
 };
@@ -1372,7 +1403,7 @@ function startNight(){if(R3.on)setTimeout(()=>{if(ST.phase==='heist'&&R3.on)tip(
  for(const th of ST.thieves)if(th.leader){th.charges=(th.charges||0)+1;th.speed*=1.08}
  ST.guards=ST.devices.filter(d=>d.type==='guard').map(d=>({dev:d,x:d.x+.5,y:d.y+.5,i:d.i,face:-Math.PI/2,loopPath:guardLoop(d),lp:0,state:'patrol',path:[],look:0,target:null,lastSeen:null,lostT:0,pause:0,stepT:0}));
  for(const g of ST.guards){const k=g.loopPath.indexOf(g.i);g.lp=Math.max(0,k)}
- ST.ev=nightEvent();ST.prints=[];ST.flick=0;ST.pcx=[];{const r=Math.random();if(ST.ev==='blackout')ST.pcx=[{at:12+r*10,dur:6,t:0,warn:1,src:'grid'},{at:38+r*12,dur:6,t:0,warn:1,src:'grid'}];else if(ST.ev==='storm')ST.pcx=[{at:18+r*24,dur:5,t:0,src:'storm'}]}ST.lt=4;ST.litOff=false;ST.police=null;ST.abil.police=ST.ev==='police'?1:0;
+ ST.ev=nightEvent();ST.prints=[];ST.flick=0;ST.pcx=[];{const r=Math.random();if(ST.ev==='blackout')ST.pcx=[{at:12+r*10,dur:6,t:0,warn:1,src:'grid'},{at:38+r*12,dur:6,t:0,warn:1,src:'grid'}];else if(ST.ev==='storm')ST.pcx=[{at:18+r*24,dur:5,t:0,src:'storm'}];if(SITE==='train')for(const a of [14,36,60])ST.pcx.push({at:a+Math.random()*5,dur:4,t:0,src:'tunnel'})}ST.brakeT=0;ST.tunnel=false;ST.lt=4;ST.litOff=false;ST.police=null;ST.abil.police=ST.ev==='police'?1:0;
  ST.t=0;ST.clock=0;ST.phase='heist';ST.tool=null;ST.sel=null;ST.routeFor=null;ST.report=[];ST.endT=0;
  ST.nightStats={arrests:0,scared:0,stolen:0,saved:0,items:[]};
  if(ST.ev){if(ST.ev==='fog'||ST.ev==='moon')for(const c of ST.devices)if(c.type==='camera')c.cov=camCoverage(c);computeLit();rebuildWatch();setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2+1.2,EVENTS[ST.ev].name.toUpperCase(),S.danger)},1700);logLine(EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name+'.')}
@@ -1551,7 +1582,7 @@ function catchThief(th,by){hap(70);
   for(const g of ST.guards)if(g.target===th||Math.hypot(g.x-th.x,g.y-th.y)<2.2){g.dazedT=2.5;g.state='patrol';g.path=[]}stamp(th.x,th.y,'BRIBED!',S.accent);floatText(th.x,th.y-1,'She paid her way out!',S.accent,true);burst(th.x,th.y,24,S.accent,3);FX.shake=.4;logLine('<b>'+th.name+'</b> bribes her way out and bolts. Catch her again!');ST.recEv.push({t:ST.t,x:th.x,y:th.y,k:'alarm',s:th.name+' bribed her way out'});AU.play('jingBad',{vol:.4});refreshUI();return}
  const srcName={fog:'stumbling in the fog',police:'by the police at the door',lightning:'in a lightning flash',dog:'after the dog barked',camera:'on camera',guard:'tackled by a guard',laser:'after tripping a laser',plate:'after stepping on a pressure plate'}[by]||'on camera';
  th.outcome='caught '+srcName+(th.loot?' holding '+th.loot.name:'');th.state='caught';th.caughtT=0;th.caughtBy=by;AU.play('cuffs',{vol:.55,x:th.x,delay:.45});
- ach('first');if(th.loot)ach('bag');if(th.T.boss){if(th.type==='fox'){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900)}else ach(th.type==='concierge'?'concierge':'auctioneer');ST.cash+=500;floatText(th.x,th.y-1.6,th.name.toUpperCase()+'! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.type==='climber')ach('climber');if(th.type==='jammer')ach('jammer');if(th.tremor)ach('tremor');if(ST.smokes&&ST.smokes.length&&inSecFog(th.x,th.y))ach('fogged');if(th.leader){AU.say('leader_caught',{cd:0,pri:3});ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
+ ach('first');if(th.loot)ach('bag');if(th.T.boss){if(th.type==='fox'){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900)}else ach({concierge:'concierge',conductor:'conductor'}[th.type]||'auctioneer');ST.cash+=500;floatText(th.x,th.y-1.6,th.name.toUpperCase()+'! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.type==='climber')ach('climber');if(th.type==='jammer')ach('jammer');if(th.tremor)ach('tremor');if(ST.smokes&&ST.smokes.length&&inSecFog(th.x,th.y))ach('fogged');if(th.leader){AU.say('leader_caught',{cd:0,pri:3});ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
  if(th.loot){const l=th.loot;l.carrier=null;th.loot=null;if(G[th.tile]===FLOOR||G[th.tile]===DOOR){l.home=l.home??l.i;l.i=th.tile;l.dropped=true;setTimeout(()=>floatText(tx(l.i)+.5,ty(l.i)-.2,'DROPPED',S.accent),400);logLine(th.name+' drops '+l.name+'. It is lying in the '+roomOf(l.i)+'.')}}
  {let n=0;for(const o of ST.thieves){if(o===th||!['in','out','flee'].includes(o.state))continue;n++;o.spooked=1;o.needReplan=true;
    if(o.state==='in'&&!o.crackT&&o.sus>o.maxSus*.3&&Math.random()<.75){o.state='flee';o.needReplan=true;o.hiding=false;floatText(o.x,o.y-.7,'ABORT',S.accent)}else o.hurry=0}
@@ -1711,11 +1742,15 @@ function fireSpeaker(d){
 function powerTick(dt){if(ST.flick>0){ST.flick-=dt;if(Math.random()<dt*7){FX.flash=Math.max(FX.flash,.18);FX.flashCol='#000'}}
  for(const pc of [ST.pc,...(ST.pcx||[])]){if(!pc||pc.done)continue;pc.t+=dt;
  if(!pc.on&&pc.warn&&!pc.warned&&pc.t>=pc.at-2){pc.warned=true;ST.flick=2;AU.play('click',{vol:.4});logLine('The lights flicker...')}
- if(!pc.on&&pc.t>=pc.at){if(ST.dark){pc.at+=2;continue}pc.on=true;ST.dark=true;computeLit();rebuildWatch();AU.play('boom',{vol:.5});AU.say('power_off',{cd:0,pri:3});FX.flash=.5;FX.flashCol=pc.src==='storm'?'#e8f4ff':'#000';FX.shake=.25;if(pc.src==='storm')R3.bolt=.5;
+ if(!pc.on&&pc.t>=pc.at){if(ST.dark){pc.at+=2;continue}pc.on=true;ST.dark=true;computeLit();rebuildWatch();if(pc.src==='tunnel'){ST.tunnel=true;SYN.noise(4.2,{vol:.28,f:110,q:.5,type:'lowpass'});FX.flash=.25;FX.flashCol='#000';logLine('<b style="color:var(--danger)">TUNNEL</b> The wireless cameras lose signal and the lights dip.');ST.recEv.push({t:ST.t,x:W/2,y:H/2,k:'alarm',s:'Into a tunnel'});for(const th of ST.thieves)if(['in','out','flee'].includes(th.state))th.needReplan=true;continue}AU.play('boom',{vol:.5});AU.say('power_off',{cd:0,pri:3});FX.flash=.5;FX.flashCol=pc.src==='storm'?'#e8f4ff':'#000';FX.shake=.25;if(pc.src==='storm')R3.bolt=.5;
   const msg=pc.src==='storm'?'Lightning hits the substation. Cameras and floodlights are down.':pc.src==='grid'?'The grid drops out. Cameras and floodlights are down.':'Cameras and floodlights are down.';
   logLine('<b style="color:var(--danger)">POWER CUT</b> '+msg);ST.recEv.push({t:ST.t,x:W/2,y:H/2,k:'alarm',s:'Power cut'});
   for(const th of ST.thieves)if(['in','out','flee'].includes(th.state)){th.needReplan=true;if(!pc.src){th.hurry=pc.dur;th.waitT=9}}}
- else if(pc.on&&pc.t>=pc.at+pc.dur){pc.on=false;pc.done=true;ST.dark=false;computeLit();rebuildWatch();AU.say('power_on',{cd:0,pri:3});AU.play('confirm',{vol:.4});logLine('Power restored.');for(const th of ST.thieves)th.needReplan=true}}}
+ else if(pc.on&&pc.t>=pc.at+pc.dur){pc.on=false;pc.done=true;ST.dark=false;computeLit();rebuildWatch();if(pc.src==='tunnel'){ST.tunnel=false;logLine('Out of the tunnel. The cameras are back.');for(const th of ST.thieves)th.needReplan=true;continue}AU.say('power_on',{cd:0,pri:3});AU.play('confirm',{vol:.4});logLine('Power restored.');for(const th of ST.thieves)th.needReplan=true}}}
+function brakeTick(dt){if(ST.brakeT>0)ST.brakeT-=dt;for(const th of ST.thieves){if(!th.T.brake||th.braked||!['in','out','flee'].includes(th.state)||th.x==null)continue;if(th.sus<th.maxSus*.4&&!ST.guards.some(g=>g.target===th))continue;
+ th.braked=true;ST.brakeT=8;FX.shake=.9;FX.flash=.3;FX.flashCol='#fff';hap([60,40,120]);AU.play('boom',{vol:.6});AU.play('slam',{vol:.5});SYN.noise(1.6,{vol:.3,f:3200,q:4,slide:.3});
+ for(const g of ST.guards){g.dazedT=Math.max(g.dazedT||0,2.2);floatText(g.x,g.y-.7,'WHOA!',S.guard)}th.sprint=3;th.hurry=3;stamp(th.x,th.y,'EMERGENCY BRAKE!',S.danger);
+ logLine(th.name+' pulls the emergency brake. The train lurches and every guard stumbles.');ST.recEv.push({t:ST.t,x:th.x,y:th.y,k:'alarm',s:th.name+' pulls the emergency brake'})}}
 // v44: rain and snow leave footprints. A patrolling guard who comes across fresh prints follows them to the thief.
 function printsTick(dt){if(!ST.prints||!ST.prints.length)return;if(ST.ev==='rain')while(ST.prints.length&&ST.t-ST.prints[0].t>20)ST.prints.shift();if(ST.prints.length>900)ST.prints.splice(0,ST.prints.length-900);
  for(const g of ST.guards){if(g.trackCd>0){g.trackCd-=dt;continue}if(g.state!=='patrol'||g.dazedT>0||g.dozing>0)continue;g.pchk=(g.pchk||0)-dt;if(g.pchk>0)continue;g.pchk=.3;
@@ -1723,7 +1758,7 @@ function printsTick(dt){if(!ST.prints||!ST.prints.length)return;if(ST.ev==='rain
   if(!hit)continue;const th=hit;g.trackCd=10;g.state='investigate';g.lastSeen=[th.x,th.y];g.path=guardPath(g,idx(Math.floor(th.x),Math.floor(th.y)));g.look=0;g.search=null;floatText(g.x,g.y-.7,'TRACKS!',S.guard);AU.play('click',{vol:.35,x:g.x});
   ST.recEv.push({t:ST.t,x:g.x,y:g.y,k:'tracks',s:'A guard follows '+th.name+'\'s footprints'});logLine((ST.ev==='snow'?'A guard spots snowy footprints':'A guard spots wet footprints')+' and follows them towards '+th.name+'.');ach('tracks')}}
 function stepSim(dt){
- powerTick(dt);printsTick(dt);
+ powerTick(dt);printsTick(dt);brakeTick(dt);
  for(const d of ST.devices)if(d.type==='speaker'&&d.cd>0)d.cd-=dt;
  dogTick(dt);jamTick(dt);seismicTick(dt);eventTick(dt);AU.life(dt);
  ST.t+=dt;ST.clock+=dt*.5;
@@ -1793,7 +1828,7 @@ const ACH=[['first','First collar','Catch a thief.'],['bag','Bag man','Catch a t
  ['frugal','Minimalist','A clean night with 4 devices or fewer.'],['bluff','Ventriloquist','Fool 3 thieves with speakers in one night.'],['decoy','Fool\'s gold','A thief opens a decoy.'],['recover','Lost property','A guard recovers dropped loot.'],
  ['impostor','Nice uniform','Catch the Impostor.'],['magpie','Caught the bird','Catch the Magpie after it throws a lure.'],['contract','Renewed','Finish the five-night contract.'],['impenetrable','Impenetrable','Finish the contract with nothing stolen.'],
  ['hard','Hard case','Finish the contract on Hard.'],['ot5','Overtime veteran','Survive 5 overtime nights.'],['style','Two looks','Play in both art styles.'],['fox','Outfoxed','Catch the Fox.'],
- ['climber','Roof patrol','Catch the Climber.'],['jammer','Signal lost','Catch the Jammer.'],['tremor','Felt that','Catch a thief a seismic sensor found.'],['auctioneer','Sold!','Catch the Auctioneer, twice.'],['concierge','Checked out','Catch the Concierge.'],['fogged','Lost in the fog','Catch a thief while they stumble in security fog.'],['tracks','Fresh tracks','A guard follows a thief\'s footprints.'],['academy','Academy graduates','Train your guards in all five courses in one contract.'],['perfect','Five-star service','Earn all three stars on every night of a contract.']];
+ ['climber','Roof patrol','Catch the Climber.'],['jammer','Signal lost','Catch the Jammer.'],['tremor','Felt that','Catch a thief a seismic sensor found.'],['auctioneer','Sold!','Catch the Auctioneer, twice.'],['concierge','Checked out','Catch the Concierge.'],['conductor','End of the line','Catch the Conductor.'],['fogged','Lost in the fog','Catch a thief while they stumble in security fog.'],['tracks','Fresh tracks','A guard follows a thief\'s footprints.'],['academy','Academy graduates','Train your guards in all five courses in one contract.'],['perfect','Five-star service','Earn all three stars on every night of a contract.']];
 let ACHS=new Set();try{ACHS=new Set(JSON.parse(localStorage.getItem('ij-ach')||'[]'))}catch(e){}
 function ach(id){if(ACHS.has(id))return;const a=ACH.find(a=>a[0]===id);if(!a)return;ACHS.add(id);try{localStorage.setItem('ij-ach',JSON.stringify([...ACHS]))}catch(e){}
  const t=document.createElement('div');t.className='toast';t.innerHTML='<b>★ '+a[1]+'</b>'+a[2];$('toasts').appendChild(t);while($('toasts').children.length>3)$('toasts').firstChild.remove();requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));AU.play('upgrade',{vol:.5});setTimeout(()=>{t.classList.remove('in');setTimeout(()=>t.remove(),600)},4200)}
@@ -1845,7 +1880,7 @@ function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SIT
 function nextNight(){setTimeout(()=>{if(ST.phase!=='plan')return;if(!ST.daily)tip('works','Building works','Open Building works under the tools to brick up an entry, reinforce the vault or wire the doors to the alarm.');const gk=nightGang();if(gk)setTimeout(()=>tip('gang','A gang is in town','The crew panel shows who is coming. Catch their leader for a £200 bounty. Anyone who escapes will be back.'),4000)},1200);setMTab('build');hideSheet();ST.night++;for(const l of ST.loot)if(l.dropped){l.i=l.home;l.dropped=false}if(ST.endless){resetLoot();ST.stolen=0;ST.limit=OT_CAP;ST.intel.plates.clear();otMod()}buildMap(ST.night);ST.phase='plan';ST.thieves=[];ST.guards=[];ST.smokes=[];ST.vaultOpen=false;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false}
  devicesChanged();redrawStatic();refreshUI();hint(nightDef(ST.night).hint,9);logLine(dayName(ST.night)+': new intel on tonight\'s crew.');saveGame()}
-function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],back:[],jailed:[],busted:[],works:{sealed:[],vault:false,cctv:false},train:{},evSeed:1+Math.floor(Math.random()*1e6),slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});ST.cash+=SITES[SITE].bonus||0;resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(nightDef(1).hint,12)}
+function newGame(){if(typeof hideHome==='function')hideHome();useSite(SITE);setMTab('build');hideSheet();for(const k in BASE_COST)DEV[k].cost=BASE_COST[k];const D=DIFF[ST.diff];Object.assign(ST,{limit:D.limit,intel:{plates:new Set(),cams:new Set(),lasers:new Set(),dogs:new Set()},mods:{camRange:0,plate:0,slam:3,siren:1,guardSpeed:1,decay:1},perks:[],stars:[],back:[],jailed:[],busted:[],works:{sealed:[],vault:false,cctv:false},train:{},evSeed:1+Math.floor(Math.random()*1e6),slams:[],abTool:null,night:1,endless:false,daily:null,otMod:null,otSnap:null,cash:D.cash,stolen:0,arrests:0,phase:'plan',devices:[],thieves:[],guards:[],smokes:[],done:false,tool:null,sel:null,routeFor:null});ST.cash+=SITES[SITE].bonus||0;resetLoot();buildMap(1);devicesChanged();redrawStatic();refreshUI();hint(nightDef(1).hint,12);setTimeout(()=>{if(ST.phase==='plan')redrawStatic()},80)}
 
 // ================================================================ ABILITIES
 function useSiren(){if(ST.phase!=='heist'||ST.abil.siren<=0)return;ST.abil.siren--;AU.siren();AU.say('siren',{cd:0,pri:3});FX.flash=.7;FX.flashCol=S.danger;FX.shake=.4;ST.alarmT=6;logLine('<b style="color:var(--danger)">PANIC SIREN</b> sounded.');
@@ -1954,7 +1989,7 @@ function doorTiles(){return DOORS.map(d=>({...d,i:idx(d.x,d.y),vert:G[idx(d.x,d.
 
 function isW(x,y){return inb(x,y)&&G[idx(x,y)]===WALL}
 function buildWalls3D(){
- const c=wctx;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,wallC.width,wallC.height);if(!DEPTH||(theme!=='blueprint'&&theme!=='sketch'&&theme!=='night3d'))return;
+ const c=wctx;wallC.width=wallC.width;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,wallC.width,wallC.height);if(!DEPTH||(theme!=='blueprint'&&theme!=='sketch'&&theme!=='night3d'))return;
  c.setTransform(T*DPR,0,0,T*DPR,0,0);const h=WALL_H,SK=theme==='sketch';rng=mulberry(5);
  const walls=[];for(let i=0;i<W*H;i++)if(G[i]===WALL)walls.push([tx(i),ty(i)]);
  // cast shadow (light from top-left)
@@ -2181,7 +2216,7 @@ function roomLabels(c,col,size,font,opts={}){for(const r of ROOMS)txt(c,r.n,r.x,
 function entryMarks(c,col,draw){for(const e of ENTRIES){if(e.night>ST.night||(ST.works&&ST.works.sealed.includes(e.id)))continue;draw(e)}}
 // v42: room floors. The 3D views use this same drawing as their floor, so it shows there too.
 const VAULTISH=new Set(['vault','strongroom','gem room','deposit room','cashier cage','count room']),STOREISH=new Set(['loading dock','loading bay','store room','workshop','packing room','armoury']);
-function finishFor(r){const L=siteLook();if(VAULTISH.has(r))return 'steel';if(r==='kitchen')return 'kitchen';if(STOREISH.has(r))return 'concrete';if(r==='corridor')return 'runner';if(SITE==='hotel'&&r==='bar')return 'darkwood';if(SITE==='casino'&&(r==='bar'||r==='vip lounge'))return 'darkwood';if(SITE==='manor'&&(r==='library'||r==='study'))return 'carpet';return L.floor}
+function finishFor(r){const L=siteLook();if(SITE==='train'){if(r==='sleeper car')return 'bluecarpet';if(r==='bar')return 'darkwood';if(r==='baggage car')return 'oak'}if(VAULTISH.has(r))return 'steel';if(r==='kitchen')return 'kitchen';if(STOREISH.has(r))return 'concrete';if(r==='corridor')return 'runner';if(SITE==='hotel'&&r==='bar')return 'darkwood';if(SITE==='casino'&&(r==='bar'||r==='vip lounge'))return 'darkwood';if(SITE==='manor'&&(r==='library'||r==='study'))return 'carpet';return L.floor}
 const FIN={// [sketch colour, sketch alpha, blueprint tint]
  oak:['#e2c08a',.5,'rgba(255,214,150,0.154)'],marble:['#e9e6df',.55,'rgba(255,255,255,0.154)'],parquet:['#c08a52',.5,'rgba(255,190,120,0.176)'],slab:['#d6cfbf',.5,'rgba(220,235,255,0.11)'],
  checker:['#f3f0ea',.6,'rgba(255,255,255,0.11)'],carpet:['#b8323f',.45,'rgba(255,80,120,0.264)'],darkwood:['#8a5a36',.45,'rgba(255,170,110,0.198)'],bluecarpet:['#2f4f9a',.42,'rgba(120,150,255,0.264)'],
@@ -2295,6 +2330,7 @@ function render(dtReal){
  const z=R3.on?1:FX.zoom,[fx,fy]=FX.focus;const sh=FX.shake>0&&!R3.on?FX.shake*.25:0;const ox=(Math.random()-.5)*sh,oy=(Math.random()-.5)*sh;
  const s=base*z;c.setTransform(s,0,0,s,base*(fx*(1-z)+ox*z),base*(fy*(1-z)+oy*z));
  c.drawImage(stat,0,0,W,H);
+ if(SITE==='train'&&!R3.on)drawTrainOut(c,dtReal||.016);
  if(ST.heat||ST.phase==='plan'&&ST.tool)drawHeat(c);
  drawLights(c);
  drawPlates(c);
@@ -2396,6 +2432,15 @@ function drawLoot(c){for(const l of ST.loot){if(l.stolen&&ST.phase!=='plan'){}
  if(ST.phase==='plan'||hoverTile===l.i)txt(c,'£'+(l.v/1000)+'k',x,y+.62,.27,theme==='board'?'#2b1d14':theme==='sketch'?'#b8741a':S.accent,{font:S.mono,weight:theme==='board'?'800':''});
  c.restore()}}
 function drawSmokes(c){for(const s of ST.smokes){for(let k=0;k<9;k++){const a=k*.7+ST.t*.3,r=s.r*(.45+.25*Math.sin(k*2.1+ST.t));const x=s.x+Math.cos(a)*s.r*.45,y=s.y+Math.sin(a)*s.r*.45;const g=c.createRadialGradient(x,y,0,x,y,r);const col=theme==='thermal'?'90,60,160':theme==='sketch'?'110,105,95':theme==='board'?'230,230,230':theme==='cctv'?'120,200,150':'210,225,240';g.addColorStop(0,`rgba(${col},.75)`);g.addColorStop(1,`rgba(${col},0)`);c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,7);c.fill()}}}
+const TRAIN2D={x:0,v:0};
+function drawTrainOut(c,dt){const tgt=ST.phase==='heist'||ST.phase==='replay'?(ST.brakeT>0?0:6):1.2;TRAIN2D.v=lerp(TRAIN2D.v,tgt,Math.min(1,dt*(ST.brakeT>0?3:.8)));TRAIN2D.x=(TRAIN2D.x+TRAIN2D.v*dt)%120;const o=TRAIN2D.x;
+ c.save();c.strokeStyle=S.ink;c.fillStyle=S.ink;c.globalAlpha=.35;c.lineWidth=.06;
+ for(const y of [20.6,21.4]){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}
+ c.globalAlpha=.22;for(let x=-(o%.9);x<W;x+=.9)c.fillRect(x,20.35,.22,1.3);
+ c.globalAlpha=.4;for(let x=-(o%6);x<W+1;x+=6){c.beginPath();c.arc(x,5,.16,0,7);c.fill()}c.globalAlpha=.25;c.beginPath();c.moveTo(0,4.9);c.lineTo(W,4.9);c.stroke();
+ c.globalAlpha=.3;c.fillStyle=theme==='sketch'?'#6f8f4f':S.good;for(let k=0;k<14;k++){const x=((k*8.7-o*.9)%W+W)%W;c.beginPath();c.arc(x,2.6+(k%3)*.5,.45+(k%2)*.2,0,7);c.fill();const x2=((k*6.3+3-o*.9)%W+W)%W;c.beginPath();c.arc(x2,23.4+(k%3)*.4,.45+(k%2)*.2,0,7);c.fill()}
+ if(ST.tunnel){c.globalAlpha=.55;c.fillStyle='#000';c.fillRect(0,0,W,7.6);c.fillRect(0,18.4,W,H-18.4)}
+ c.restore()}
 function drawPrints(c){const P=ST.prints;if(!P||!P.length||!(ST.phase==='heist'||ST.phase==='replay'))return;const snow=ST.ev==='snow';const lightBg=theme==='sketch'||theme==='board'||LOOK==='sketch3d';
  c.save();c.fillStyle=snow?(lightBg?'#6f8092':'#e6f3ff'):(lightBg?'#3f6f9e':'#8fc3ff');for(const p of P){if(p.t>ST.t)continue;const age=ST.t-p.t;const a=snow?Math.max(.3,.8-age/60):Math.max(0,.75*(1-age/20));if(a<=0)continue;c.globalAlpha=a;c.save();c.translate(p.x,p.y);c.rotate(p.a);c.beginPath();c.ellipse(0,0,.1,.05,0,0,7);c.fill();c.restore()}c.restore()}
 function drawWeather(c){const ev=ST.ev;if(!(ev==='rain'||ev==='snow')||!(ST.phase==='heist'||ST.phase==='replay'))return;const t=performance.now()/1000;c.save();
@@ -2628,7 +2673,7 @@ function drawFX(c,dt){
  c.globalAlpha=1;FX.parts=FX.parts.filter(p=>p.life>0);
  for(const f of FX.floats){f.t+=dt;if(R3.on)continue;const a=f.t<1.2?1:Math.max(0,1-(f.t-1.2)/.6);txt(c,f.s,f.x,f.y-f.t*.6,f.big?.55:.36,f.col,{font:S.font,alpha:a,weight:'700',stroke:[S.paper?'#fff':'#000',.1]})}
  FX.floats=FX.floats.filter(f=>f.t<1.8);
- for(const r of FX.rings){r.t+=dt;const k=r.t/1.1;c.save();c.strokeStyle=S.accent;c.globalAlpha=Math.max(0,.6*(1-k));c.lineWidth=.05;c.setLineDash([.15,.12]);c.beginPath();c.arc(r.x,r.y,r.r*Math.min(1,k*1.2),0,7);c.stroke();c.restore()}
+ for(const r of FX.rings){r.t+=dt;const k=r.t/1.1;c.save();c.strokeStyle=S.accent;c.globalAlpha=Math.max(0,.6*(1-k));c.lineWidth=.05;c.setLineDash([.15,.12]);c.beginPath();c.arc(r.x,r.y,Math.max(0,r.r*Math.min(1,k*1.2)),0,7);c.stroke();c.restore()}
  FX.rings=FX.rings.filter(r=>r.t<1.1);
  if(ST.phase==='heist'||ST.phase==='replay')for(const t of ST.thieves)if(t.T.jam&&['in','out','flee'].includes(t.state)&&t.x!=null&&!(t.drop>0)){c.save();c.strokeStyle=S.danger;c.globalAlpha=.45+.2*Math.sin(ST.t*9);c.lineWidth=.05;c.setLineDash([.1,.14]);c.lineDashOffset=ST.t*.6;c.beginPath();c.arc(t.x,t.y,t.T.jam,0,7);c.stroke();c.restore()}
  if(ST.tremors&&ST.tremors.length){for(const m of ST.tremors){m.t+=dt;const a=Math.max(0,1-m.t/2.2);c.save();c.strokeStyle=S.accent;c.lineWidth=.06;c.globalAlpha=a;for(let k=0;k<3;k++){const r=.25+((m.t*.9+k*.33)%1)*.9;c.beginPath();c.arc(m.x,m.y,r,0,7);c.stroke()}c.restore();if(m.t<.1&&!R3.on)floatText(m.x,m.y-.8,'TREMOR',S.accent)}ST.tremors=ST.tremors.filter(m=>m.t<2.2)}
@@ -3133,7 +3178,7 @@ function r3SiteOut(g,mesh,rnd,SK,clear,tree,lamp){const M=r3Mat,out=siteLook().o
   const boat=new THREE.Group();mesh(new THREE.BoxGeometry(2.4,.35,.8),M(SK?'#c46a4a':'#8a3a2a'),boat,0,.18,0);mesh(new THREE.BoxGeometry(.8,.4,.6),white,boat,.2,.55,0);boat.position.set(-4.5,0,H/2+5);g.add(boat)}
  else{for(let x=6;x<36;x+=3.2){if(Math.abs(x-mid)<ew/2+1)continue;mesh(new THREE.CylinderGeometry(.08,.1,.6,8),dark,g,x,.3,fz+dir*1.6)}for(const sx of [-1,1])mesh(new THREE.BoxGeometry(.04,1.2,.6),M(SK?'#2c5aa0':'#5f9ad8',{e:.3}),g,mid+sx*(ew/2+1.2),1.6,fz-dir*.05)}
 }
-function r3CutDress(g,mesh,rnd,SK,clear,tree,lamp){const cuts=SITES[SITE].cut||[];if(!cuts.length)return;const M=r3Mat,out=siteLook().out;
+function r3CutDress(g,mesh,rnd,SK,clear,tree,lamp){const cuts=SITES[SITE].cut||[];if(!cuts.length||SITE==='train')return;const M=r3Mat,out=siteLook().out;
  const stone=M(SK?'#efe9dc':'#6f8fb8',{e:.25}),leaf=M(SK?'#8fb573':'#2a8163',{e:.25}),pot=M(SK?'#c46a4a':'#a3523a'),hedge=M(SK?'#7da566':'#1c5a4c',{e:.2}),wood=M(SK?'#a8784a':'#6b4a33'),gravel=M(SK?'#efe5cf':'#22405e');
  const free=(x,z)=>clear(x,z)&&ENTRIES.every(e=>Math.hypot(e.spawn[0]+.5-x,e.spawn[1]+.5-z)>1.6);
  for(const [a,b,c2,d] of cuts){const x0=a+.6,x1=c2+.4,z0=b+.6,z1=d+.4,cx=(a+c2+1)/2,cz=(b+d+1)/2,w=c2-a+1,h=d-b+1;
@@ -3157,6 +3202,32 @@ function r3PillarProps(pil,SK){const M=r3Mat,g=new THREE.Group(),kind=siteLook()
   else if(k==='fireplace'){mesh(new THREE.BoxGeometry(w,1.25,d*.9),stone,cx,.62,cz);mesh(new THREE.BoxGeometry(w+.25,.12,d+.15),stone,cx,1.3,cz);mesh(new THREE.BoxGeometry(w*.5,.6,d*.95),dark,cx,.35,cz+.02);mesh(new THREE.ConeGeometry(.22,.4,8),fire,cx,.3,cz+.05).castShadow=false;mesh(new THREE.BoxGeometry(w*.9,.06,d*.5),wood,cx,1.38,cz)}
   else{mesh(new THREE.BoxGeometry(w*.7,1,d*.7),stone,cx,.5,cz);mesh(new THREE.BoxGeometry(w*.8,.1,d*.8),stone,cx,1.05,cz);mesh(new THREE.SphereGeometry(.22,14,10),SITE==='auction'?gold:stone,cx,1.3,cz)}}
  if(SK)r3Outline(g,.03);R3.world.add(g)}
+function r3TrainOut(g,mesh,rnd,SK,tree){const M=r3Mat,lo=R3.q!=='high';
+ const ballast=M(SK?'#d8cfbb':'#1d2c44'),rail=M(SK?'#7a7570':'#8fa3c0',{e:.2,m:.6}),sleeper=M(SK?'#8a6a4a':'#3a2c2a'),dark=M(SK?'#3a3631':'#0b1222'),body=M(SK?'#8a2f3a':'#5a2a4a',{e:.15}),trim=M(SK?'#e9d6a8':'#e8c46a',{e:.35}),post=M(SK?'#6a5a48':'#2a3348'),hedge=M(SK?'#7da566':'#1c5a4c',{e:.2});
+ const box=(w,h,d,mat,par,x,y,z)=>mesh(new THREE.BoxGeometry(w,h,d),mat,par,x,y,z);
+ const bed=box(150,.04,12,ballast,g,20,.02,13);bed.castShadow=false;bed.receiveShadow=true;
+ for(const z of [20.6,21.4])box(150,.08,.08,rail,g,20,.1,z).castShadow=false;
+ // bogies under each carriage and couplings between them
+ for(const x of [4,7.5,11.5,15,19.5,24,28,30.5,34,36])for(const z of [7.7,18.3]){box(.9,.36,.3,dark,g,x,.18,z)}
+ // the locomotive pulls from the east end, a red lamp hangs on the back
+ const loco=new THREE.Group();box(5.2,1.5,8.6,body,loco,0,.95,0);box(5.4,.16,8.8,trim,loco,0,1.75,0);box(1.6,1.0,8.6,body,loco,-1.8,2.3,0);mesh(new THREE.CylinderGeometry(.35,.42,1.0,12),dark,loco,1.6,2.2,0);
+ for(const z of [-3,3])for(const x of [-1.6,0,1.6]){const w=mesh(new THREE.CylinderGeometry(.42,.42,.2,14),dark,loco,x,.42,z);w.rotation.x=Math.PI/2}
+ const lampM=new THREE.MeshBasicMaterial({color:'#fff3c4'});mesh(new THREE.SphereGeometry(.2,10,8),lampM,loco,2.65,1.1,0).castShadow=false;if(!SK){const sp=r3Sprite('#ffe9a0',4,.6);sp.position.set(2.9,1.1,0);loco.add(sp)}
+ loco.position.set(40.9,0,12.9);g.add(loco);
+ const red=new THREE.MeshBasicMaterial({color:'#ff4a4a'});mesh(new THREE.SphereGeometry(.14,8,6),red,g,1.55,1.0,12.9).castShadow=false;if(!SK){const sp=r3Sprite('#ff4a4a',2,.6);sp.position.set(1.3,1.0,12.9);g.add(sp)}
+ // scenery that streams past: sleepers on the next line, telegraph poles, hedges and trees
+ const S_=new THREE.Group();g.add(S_);const add=o=>{S_.add(o);return o};
+ for(let x=-40;x<80;x+=lo?1.6:.9){const sl=box(.22,.06,1.3,sleeper,S_,x,.05,21);sl.castShadow=false}
+ for(let x=-40;x<80;x+=6){const p=new THREE.Group();mesh(new THREE.CylinderGeometry(.05,.07,2.4,7),post,p,0,1.2,0);mesh(new THREE.BoxGeometry(.08,.06,.8),post,p,0,2.25,0);p.position.set(x,0,5);add(p)}
+ for(const z of [4.88,5.12])box(150,.02,.02,dark,g,20,2.3,z).castShadow=false;
+ const hold=new THREE.Group();g.add(hold);
+ for(let x=-40;x<80;x+=lo?5:3){for(const zz of [1.2-rnd()*3.4,24+rnd()*3.4]){if(rnd()<.35){const h=box(1.6+rnd()*1.4,.5,.6,hedge,S_,x+rnd()*2,.25,zz);h.receiveShadow=true}else{const before=g.children.length;tree(x+rnd()*2,zz);const t=g.children[g.children.length-1];if(g.children.length>before){g.remove(t);S_.add(t)}}}}
+ if(lo)g.traverse(m=>{m.castShadow=false});
+ // tunnel walls appear either side while the train is underground
+ const tun=new THREE.Group();const tm=M(SK?'#5a5650':'#05080f');box(150,4,.6,tm,tun,20,2,4.2);box(150,4,.6,tm,tun,20,2,21.9);tun.visible=false;g.add(tun);
+ R3.trainOut={S:S_,tun,v:0}}
+function r3TrainTick(dt){const T_=R3.trainOut;if(SITE!=='train'||!T_)return;const tgt=ST.phase==='heist'||ST.phase==='replay'?(ST.brakeT>0?0:9):1.5;T_.v=lerp(T_.v,tgt,Math.min(1,dt*(ST.brakeT>0?3:.8)));
+ for(const o of T_.S.children){o.position.x-=T_.v*dt;if(o.position.x<-40)o.position.x+=120}T_.tun.visible=!!ST.tunnel&&ST.phase==='heist'}
 function r3Outside(){const SK=R3.look==='sketch',M=r3Mat,g=new THREE.Group();let sd=0;for(const ch of SITE)sd=(sd*31+ch.charCodeAt(0))>>>0;const rnd=()=>{sd=(sd*1664525+1013904223)>>>0;return sd/4294967296};
  const mesh=(geo,mat,par,x,y,z)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x||0,y||0,z||0);m.castShadow=true;par.add(m);return m};
  const leaf=[M(SK?'#8fb573':'#1f6a55',{e:.25}),M(SK?'#a4c586':'#2a8163',{e:.25})],trunk=M(SK?'#8a6a4a':'#3a2c2a'),post=M(SK?'#4a4640':'#1a2338',{e:.2}),hedge=M(SK?'#7da566':'#1c5a4c',{e:.2});
@@ -3165,6 +3236,7 @@ function r3Outside(){const SK=R3.look==='sketch',M=r3Mat,g=new THREE.Group();let
  const bulbM=new THREE.MeshBasicMaterial({color:SK?'#fff0b8':'#ffe2a0'}),poolM=new THREE.MeshBasicMaterial({map:r3Glow(),color:SK?'#f4c95d':'#ffd9a0',transparent:true,opacity:SK?.35:.3,blending:SK?THREE.NormalBlending:THREE.AdditiveBlending,depthWrite:false});
  const lamp=(x,z)=>{const t=new THREE.Group();mesh(new THREE.CylinderGeometry(.045,.07,2.1,8),post,t,0,1.05,0);mesh(new THREE.BoxGeometry(.3,.14,.3),post,t,0,2.15,0);mesh(new THREE.SphereGeometry(.13,10,8),bulbM,t,0,2.05,0).castShadow=false;
   if(!SK){const sp=r3Sprite('#ffd98a',2.6,.5);sp.position.set(0,2.05,0);t.add(sp)}const pool=new THREE.Mesh(new THREE.PlaneGeometry(5,5),poolM);pool.rotation.x=-Math.PI/2;pool.position.y=.02;pool.castShadow=false;t.add(pool);t.position.set(x,0,z);g.add(t)};
+ if(SITE==='train'){R3.van=null;r3TrainOut(g,mesh,rnd,SK,tree);if(SK&&R3.q==='high')r3Outline(g,.03);R3.world.add(g);return}
  // the crew's van waits outside the first way in
  const e0=ENTRIES.find(e=>!e.roof&&e.tiles.length);if(e0){const [ex,ey]=e0.tiles[0];const dB=H-1-ey,dT=ey,dL=ex,dR=W-1-ex,mn=Math.min(dB,dT,dL,dR);const van=new THREE.Group();const body=M(SK?'#e9e2cf':'#c9d3e6',{e:.12}),dark=M(SK?'#3a3631':'#0d1320'),glass=M(SK?'#9cc3d6':'#5fb6e8',{e:.4});
   mesh(new THREE.BoxGeometry(2.1,.95,1.05),body,van,-.25,.78,0);mesh(new THREE.BoxGeometry(.75,.62,1.02),body,van,1.12,.61,0);mesh(new THREE.BoxGeometry(.5,.36,.96),glass,van,1.2,1.0,0);mesh(new THREE.BoxGeometry(2.86,.1,1.07),dark,van,.1,.3,0);
@@ -3405,7 +3477,7 @@ function r3BuildDevices(full){const disp=g=>g.traverse(x=>{if(x.geometry&&x.geom
  for(const c of old.values()){R3.devG.remove(c.grp);disp(c.grp)}}
 function r3Pick(cx,cy){const r=R3.gl.getBoundingClientRect();const v=new THREE.Vector2((cx-r.left)/r.width*2-1,-((cy-r.top)/r.height)*2+1);R3.ray.setFromCamera(v,R3.cam);const p=new THREE.Vector3();if(!R3.ray.ray.intersectPlane(R3.plane,p))return null;return [p.x,p.z]}
 function r3Proj(x,y,z){const v=(R3.pv||(R3.pv=new THREE.Vector3())).set(x,y,z).project(R3.cam);return [(v.x+1)/2*R3.ov.width,(1-v.y)/2*R3.ov.height]}
-function r3Weather(dt){const ev=(ST.phase==='heist'||ST.phase==='replay')?ST.ev:null;
+function r3Weather(dt){r3TrainTick(dt);const ev=(ST.phase==='heist'||ST.phase==='replay')?ST.ev:null;
  {const k=ev==='snow'?1:0;R3.snowK=R3.snowK||0;if(k||R3.snowK>0){if(!R3.snowK)R3.gndBase=R3.groundMat.color.clone();R3.snowK=k?Math.min(1,R3.snowK+dt*.5):Math.max(0,R3.snowK-dt*2);if(R3.gndBase){R3.groundMat.color.copy(R3.gndBase).lerp(new THREE.Color(R3.look==='sketch'?'#f4f6f8':'#9fb3c8'),R3.snowK*.75)}}}
  for(const k of ['rain','snow']){const on=ev===k;let o=R3['wx_'+k];if(!o&&!on)continue;
   if(!o){const N=k==='rain'?900:700,pos=new Float32Array(N*(k==='rain'?6:3));for(let n=0;n<N;n++){const x=-4+Math.random()*(W+8),y=Math.random()*7,z=-4+Math.random()*(H+8);if(k==='rain'){pos.set([x,y,z,x+.04,y+.38,z],n*6)}else pos.set([x,y,z],n*3)}
@@ -3532,10 +3604,10 @@ function repAdd(n){if(!n)return;const before=repGet();const now=before+n;try{loc
 function siteBest(k){try{return (JSON.parse(localStorage.getItem('ij-sitebest')||'{}'))[k]||null}catch(e){return null}}
 function recordSiteBest(){try{const B=JSON.parse(localStorage.getItem('ij-sitebest')||'{}');const st=ST.stars.reduce((a,b)=>a+(b||0),0);const o=B[SITE];if(!o||st>o.stars||st===o.stars&&ST.stolen<o.stolen)B[SITE]={stars:st,stolen:ST.stolen,diff:ST.diff};localStorage.setItem('ij-sitebest',JSON.stringify(B))}catch(e){}}
 function siteOpen(k){return repGet()>=(SITES[k].rep||0)}
-function cityMap(){const R=repGet();const B={gallery:'M-7 6V-3L0-8 7-3V6Z',bank:'M-8 6V-2H8V6ZM-9-2 0-8 9-2Z',manor:'M-9 6V-1L-4-6 0-2 4-6 9-1V6Z',museum:'M-9 6V-3H9V6ZM-9-3 0-9 9-3ZM-6-3V6M-2-3V6M2-3V6M6-3V6',jeweller:'M-6 6V-5H6V6ZM-3-2H3',casino:'M-9 6V-4H9V6ZM-4-4V-8H4V-4Z',auction:'M-9 6V-2H9V6ZM-9-2-5-7H5L9-2ZM-1 6V1H1V6',hotel:'M-7 6V-9H7V6ZM-4-6H-2M2-6H4M-4-2H-2M2-2H4M-1 6V2H1V6'};
+function cityMap(){const R=repGet();const B={gallery:'M-7 6V-3L0-8 7-3V6Z',bank:'M-8 6V-2H8V6ZM-9-2 0-8 9-2Z',manor:'M-9 6V-1L-4-6 0-2 4-6 9-1V6Z',museum:'M-9 6V-3H9V6ZM-9-3 0-9 9-3ZM-6-3V6M-2-3V6M2-3V6M6-3V6',jeweller:'M-6 6V-5H6V6ZM-3-2H3',casino:'M-9 6V-4H9V6ZM-4-4V-8H4V-4Z',auction:'M-9 6V-2H9V6ZM-9-2-5-7H5L9-2ZM-1 6V1H1V6',hotel:'M-7 6V-9H7V6ZM-4-6H-2M2-6H4M-4-2H-2M2-2H4M-1 6V2H1V6',train:'M-9 3V-5H9V3ZM-6-2H-3M0-2H3M-9 3H9M-6 6a1.4 1.4 0 1 0 2.8 0a1.4 1.4 0 1 0-2.8 0M3.2 6a1.4 1.4 0 1 0 2.8 0a1.4 1.4 0 1 0-2.8 0'};
  let svg=`<svg viewBox="0 0 100 86" class="city" aria-label="City map">`;
  // streets and the river
- svg+=`<path d="M0 44 Q30 40 50 46 T100 40" class="riv"/>`;for(const [a,b,c,d] of [[0,14,100,14],[0,76,100,78],[12,0,14,86],[40,0,42,86],[60,0,58,86],[96,0,94,86],[0,38,100,36],[0,56,100,60]])svg+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" class="st"/>`;
+ svg+=`<path d="M0 44 Q30 40 50 46 T100 40" class="riv"/><path d="M0 72 L100 70" class="rail"/>`;for(const [a,b,c,d] of [[0,14,100,14],[0,76,100,78],[12,0,14,86],[40,0,42,86],[60,0,58,86],[96,0,94,86],[0,38,100,36],[0,56,100,60]])svg+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" class="st"/>`;
  for(const [k,d] of Object.entries(SITES)){const [x,y]=d.city||[50,50];const open=R>=(d.rep||0);
   svg+=`<g class="pin${k===SITE?' on':''}${open?'':' lock'}" data-s="${k}" transform="translate(${x} ${y})"><circle r="7.5" class="hit"/><path transform="scale(.62)" d="${B[k]||B.gallery}"/>${open?(siteBest(k)?`<text y="-9.5" text-anchor="middle" class="best">★${siteBest(k).stars}/15</text>`:''):`<text y="-9.5" text-anchor="middle">🔒★${d.rep}</text>`}<text y="11.5" text-anchor="middle" class="nm">${d.short||d.name.replace(/^The /,'')}</text></g>`}
  return svg+`</svg>`}
