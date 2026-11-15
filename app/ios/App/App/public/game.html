@@ -432,6 +432,7 @@ body[data-theme=sketch] #home h1 .o::after{border-color:#2f2c27;box-shadow:2px 2
 #home .hmenu>*:nth-child(2){animation-delay:.06s}#home .hmenu>*:nth-child(3){animation-delay:.12s}#home .hmenu>*:nth-child(4){animation-delay:.18s}#home .hmenu>*:nth-child(5){animation-delay:.24s}#home .hmenu>*:nth-child(6){animation-delay:.3s}
 #home .hmenu button.pri{animation:hUp .45s cubic-bezier(.2,1.2,.4,1) both,pulse 2.4s ease-in-out .5s infinite}
 .rstar{display:inline-block;opacity:.25}
+#sheet .rtmap{display:block;width:100%;height:auto;border:1px solid var(--line);margin:4px 0;border-radius:4px}
 #sheet .rstars{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:16px 0 8px}
 #sheet .stamp:has(~ .rstars){top:8px;font-size:24px;padding:2px 10px;border-width:3px}
 #sheet .rstars div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border:1.5px dashed color-mix(in srgb,currentColor 30%,transparent);border-radius:10px;opacity:.55;text-align:center}
@@ -653,7 +654,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v43 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v44 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -1351,7 +1352,7 @@ function startNight(){if(R3.on)setTimeout(()=>{if(ST.phase==='heist'&&R3.on)tip(
  for(const th of ST.thieves)if(th.leader){th.charges=(th.charges||0)+1;th.speed*=1.08}
  ST.guards=ST.devices.filter(d=>d.type==='guard').map(d=>({dev:d,x:d.x+.5,y:d.y+.5,i:d.i,face:-Math.PI/2,loopPath:guardLoop(d),lp:0,state:'patrol',path:[],look:0,target:null,lastSeen:null,lostT:0,pause:0,stepT:0}));
  for(const g of ST.guards){const k=g.loopPath.indexOf(g.i);g.lp=Math.max(0,k)}
- ST.ev=nightEvent();ST.lt=4;ST.litOff=false;ST.police=null;ST.abil.police=ST.ev==='police'?1:0;
+ ST.ev=nightEvent();ST.prints=[];ST.flick=0;ST.pcx=[];{const r=Math.random();if(ST.ev==='blackout')ST.pcx=[{at:12+r*10,dur:6,t:0,warn:1,src:'grid'},{at:38+r*12,dur:6,t:0,warn:1,src:'grid'}];else if(ST.ev==='storm')ST.pcx=[{at:18+r*24,dur:5,t:0,src:'storm'}]}ST.lt=4;ST.litOff=false;ST.police=null;ST.abil.police=ST.ev==='police'?1:0;
  ST.t=0;ST.clock=0;ST.phase='heist';ST.tool=null;ST.sel=null;ST.routeFor=null;ST.report=[];ST.endT=0;
  ST.nightStats={arrests:0,scared:0,stolen:0,saved:0,items:[]};
  if(ST.ev){if(ST.ev==='fog'||ST.ev==='moon')for(const c of ST.devices)if(c.type==='camera')c.cov=camCoverage(c);computeLit();rebuildWatch();setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2+1.2,EVENTS[ST.ev].name.toUpperCase(),S.danger)},1700);logLine(EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name+'.')}
@@ -1360,13 +1361,16 @@ function startNight(){if(R3.on)setTimeout(()=>{if(ST.phase==='heist'&&R3.on)tip(
 }
 // ---------- night events: some nights bring weather, late staff or a police patrol
 const EVENTS={
- storm:{ic:'⛈',name:'Thunderstorm',desc:'Lightning lights up the whole building every few seconds, and anyone inside gains suspicion. Thunder drowns out noise, so guards hear less.'},
+ storm:{ic:'⛈',name:'Thunderstorm',desc:'Lightning lights up the whole building every few seconds, and anyone inside gains suspicion. Thunder drowns out noise, so guards hear less. One strike knocks the power out for 5 s.'},
  cleaners:{ic:'🧹',name:'Cleaners working late',desc:'The lights stay on for the first 30 seconds. Every room counts as lit, so cameras fill suspicion faster and the crew hangs back.'},
  fog:{ic:'🌫',name:'Thick fog',desc:'Fog presses on the windows. Every camera sees 1.5 tiles less tonight.'},
  football:{ic:'⚽',name:'Football on TV',desc:'The guards are watching the match. For the first 40 seconds they patrol slowly and are slow to notice anyone.'},
  police:{ic:'🚓',name:'Police patrol nearby',desc:'You can call the police once tonight (E). A car arrives 6 s later and waits 15 s at the busiest exit, arresting anyone who leaves through it.'},
  moon:{ic:'🌕',name:'Full moon',desc:'Bright moonlight through every window. Cameras see 1 tile further tonight.'},
- inspector:{ic:'📋',name:'Insurance inspector',desc:'The insurer is watching tonight. Every arrest earns a £100 bonus on top of the usual reward.'}};
+ inspector:{ic:'📋',name:'Insurance inspector',desc:'The insurer is watching tonight. Every arrest earns a £100 bonus on top of the usual reward.'},
+ rain:{ic:'🌧',name:'Heavy rain',desc:'Rain drums on the roof, so noises carry 40% less. But the crew comes in soaking wet: their footprints show for 20 s, and a guard who walks past fresh prints follows them.'},
+ snow:{ic:'❄',name:'Snow',desc:'Snow slows the crew down by 15%. Their footprints stay on the floor all night, and a guard who walks past fresh prints follows them.'},
+ blackout:{ic:'⚡',name:'Rolling blackouts',desc:'The power grid is struggling. The power drops twice tonight for 6 s each, and cameras and floodlights go dark. The lights flicker just before each cut.'}};
 function nightEvent(n){n=n||ST.night;if(ST.daily||n<2||(n>4&&!ST.endless))return null;const r=mulberry((ST.evSeed||1)*31+n*977)();if(r<.25)return null;const k=Object.keys(EVENTS);return k[Math.floor((r-.25)/.75*k.length)%k.length]}
 function eventTick(dt){const ev=ST.ev;if(!ev)return;
  if(ev==='storm'){ST.lt=(ST.lt??4)-dt;if(ST.lt<=0){ST.lt=6+Math.random()*6;FX.flash=.45;FX.flashCol='#e8f4ff';R3.bolt=.5;SYN.noise(2.6,{vol:.32,f:140,q:.5,type:'lowpass',delay:.5+Math.random()*.6,slide:.4});SYN.noise(.25,{vol:.18,f:2400,q:.4,type:'highpass'});
@@ -1447,7 +1451,7 @@ function replan(th){
  }
  th.replanT=.9;
 }
-function thiefSpeed(th){let s=th.speed;const fg=ST.smokes&&ST.smokes.length?inSecFog(th.x,th.y):null;if(fg)s*=.5;if(th.sprint>0)s*=th.type==='runner'?1.55:1.4;if(th.hiding)s*=1.15;if(th.loot)s*=(th.T.carry||.72);if(th.hurry>0)s*=1.3;if(th.state==='flee')s*=1.3;return s}
+function thiefSpeed(th){let s=th.speed;const fg=ST.smokes&&ST.smokes.length?inSecFog(th.x,th.y):null;if(fg)s*=.5;if(th.sprint>0)s*=th.type==='runner'?1.55:1.4;if(th.hiding)s*=1.15;if(th.loot)s*=(th.T.carry||.72);if(th.hurry>0)s*=1.3;if(th.state==='flee')s*=1.3;if(ST.ev==='snow'&&ST.phase==='heist')s*=.85;return s}
 function canSeeTileNow(i,th){
  const px=tx(i)+.5,py=ty(i)+.5;
  for(const d of ST.devices)if(d.type==='camera'&&!(d.looped>0)&&inCone(d.x+.5,d.y+.5,d.cur,CAM.fov,camRange(d),px,py)>0)return true;
@@ -1478,7 +1482,7 @@ function fireFog(x,y){for(const d of ST.devices){if(d.type!=='fog'||d.cd>0||Math
   ST.smokes.push({x:d.x+.5,y:d.y+.5,r:0,R:d.lv?3.3:2.6,t:d.lv?14:9,sec:true,lv:d.lv});costCache={};AU.smoke(d.x+.5);burst(d.x+.5,d.y+.5,16,S.accent,2.2,.9,.08);
   floatText(d.x+.5,d.y-.3,'FOG!',S.accent);logLine('A fog cannon floods the '+roomOf(d.i)+'.');ST.recEv.push({t:ST.t,x:d.x+.5,y:d.y+.5,k:'alarm',s:'Fog in the '+roomOf(d.i)});for(const th of ST.thieves)th.needReplan=true}}
 function inSecFog(x,y){for(const s of ST.smokes){if(!s.sec)continue;const dx=x-s.x,dy=y-s.y;if(dx*dx+dy*dy<s.r*s.r)return s}return null}
-function noise(x,y,r,fromCatch){if(ST.ev==='storm')r*=.6;
+function noise(x,y,r,fromCatch){if(ST.ev==='storm'||ST.ev==='rain')r*=.6;
  FX.rings.push({x,y,r,t:0});const src=idx(Math.floor(x),Math.floor(y));if(!passable(src))return;const res=dijkstra(src,flatCost());
  let told=false;
  for(const g of ST.guards){if(g.state==='chase'||g.state==='cover')continue;const gi=idx(Math.floor(g.x),Math.floor(g.y));if(res.d[gi]>r*1.25*({veteran:2,rookie:.8}[gPers(g)]||1))continue;if(g.dozing>0){g.dozing=0;floatText(g.x,g.y-.8,'!',S.guard)}
@@ -1606,7 +1610,7 @@ function updateThief(th,dt){
  th.face=Math.atan2(dy,dx);
  if(step>=d){th.x=gx;th.y=gy;th.tile=ni;th.path.shift();th.atNode=true;th.waitT=0;onEnterTile(th,ni)}
  else{th.x+=dx/d*step;th.y+=dy/d*step}
- th.dist+=Math.min(step,d);if(th.dist>.35){th.dist=0;th.trail.push([th.x,th.y]);if(th.trail.length>46)th.trail.shift()}
+ th.dist+=Math.min(step,d);if(th.dist>.35){th.dist=0;th.trail.push([th.x,th.y]);if(th.trail.length>46)th.trail.shift();if((ST.ev==='rain'||ST.ev==='snow')&&ST.prints&&G[th.tile]!==OUT&&!th.hiding){th.pk=(th.pk||0)+1;const o=th.pk%2?.09:-.09;ST.prints.push({x:th.x-Math.sin(th.face)*o,y:th.y+Math.cos(th.face)*o,a:th.face,t:ST.t,k:th.id})}}
 }
 function hideSpot(th,g){let best=null;const x0=Math.floor(th.x),y0=Math.floor(th.y);
  for(let y=y0-3;y<=y0+3;y++)for(let x=x0-3;x<=x0+3;x++){if(!inb(x,y))continue;const i=idx(x,y);if(G[i]!==FLOOR)continue;const d=Math.hypot(x-x0,y-y0);if(d>3.2)continue;
@@ -1680,12 +1684,22 @@ function fireSpeaker(d){
  addDanger(x,y,3.5,22);
  if(called){AU.say('bluff',{cd:20});logLine('<i>'+called.name+' isn\'t falling for the speaker again, and tells the crew.</i>');for(const o of ST.thieves)if(o!==called)o.bluffs=Math.max(o.bluffs||0,lim-1)}
 }
-function powerTick(dt){const pc=ST.pc;if(!pc||pc.done)return;pc.t+=dt;
- if(!pc.on&&pc.t>=pc.at){pc.on=true;ST.dark=true;computeLit();rebuildWatch();AU.play('boom',{vol:.5});AU.droneOff&&0;AU.say('power_off',{cd:0,pri:3});FX.flash=.5;FX.flashCol='#000';FX.shake=.25;logLine('<b style="color:var(--danger)">POWER CUT</b> Cameras and floodlights are down.');
-  for(const th of ST.thieves)if(['in','out','flee'].includes(th.state)){th.needReplan=true;th.hurry=pc.dur;th.waitT=9}}
- else if(pc.on&&pc.t>=pc.at+pc.dur){pc.on=false;pc.done=true;ST.dark=false;computeLit();rebuildWatch();AU.say('power_on',{cd:0,pri:3});AU.play('confirm',{vol:.4});logLine('Power restored.');for(const th of ST.thieves)th.needReplan=true}}
+function powerTick(dt){if(ST.flick>0){ST.flick-=dt;if(Math.random()<dt*7){FX.flash=Math.max(FX.flash,.18);FX.flashCol='#000'}}
+ for(const pc of [ST.pc,...(ST.pcx||[])]){if(!pc||pc.done)continue;pc.t+=dt;
+ if(!pc.on&&pc.warn&&!pc.warned&&pc.t>=pc.at-2){pc.warned=true;ST.flick=2;AU.play('click',{vol:.4});logLine('The lights flicker...')}
+ if(!pc.on&&pc.t>=pc.at){if(ST.dark){pc.at+=2;continue}pc.on=true;ST.dark=true;computeLit();rebuildWatch();AU.play('boom',{vol:.5});AU.say('power_off',{cd:0,pri:3});FX.flash=.5;FX.flashCol=pc.src==='storm'?'#e8f4ff':'#000';FX.shake=.25;if(pc.src==='storm')R3.bolt=.5;
+  const msg=pc.src==='storm'?'Lightning hits the substation. Cameras and floodlights are down.':pc.src==='grid'?'The grid drops out. Cameras and floodlights are down.':'Cameras and floodlights are down.';
+  logLine('<b style="color:var(--danger)">POWER CUT</b> '+msg);ST.recEv.push({t:ST.t,x:W/2,y:H/2,k:'alarm',s:'Power cut'});
+  for(const th of ST.thieves)if(['in','out','flee'].includes(th.state)){th.needReplan=true;if(!pc.src){th.hurry=pc.dur;th.waitT=9}}}
+ else if(pc.on&&pc.t>=pc.at+pc.dur){pc.on=false;pc.done=true;ST.dark=false;computeLit();rebuildWatch();AU.say('power_on',{cd:0,pri:3});AU.play('confirm',{vol:.4});logLine('Power restored.');for(const th of ST.thieves)th.needReplan=true}}}
+// v44: rain and snow leave footprints. A patrolling guard who comes across fresh prints follows them to the thief.
+function printsTick(dt){if(!ST.prints||!ST.prints.length)return;if(ST.ev==='rain')while(ST.prints.length&&ST.t-ST.prints[0].t>20)ST.prints.shift();if(ST.prints.length>900)ST.prints.splice(0,ST.prints.length-900);
+ for(const g of ST.guards){if(g.trackCd>0){g.trackCd-=dt;continue}if(g.state!=='patrol'||g.dazedT>0||g.dozing>0)continue;g.pchk=(g.pchk||0)-dt;if(g.pchk>0)continue;g.pchk=.3;
+  let hit=null;for(let k=ST.prints.length-1;k>=0;k--){const p=ST.prints[k];if(ST.t-p.t>12)break;if(Math.hypot(p.x-g.x,p.y-g.y)<2.2&&los(g.x,g.y,p.x,p.y)){const th=ST.thieves[p.k];if(th&&['in','out','flee'].includes(th.state)&&th.x!=null&&!(th.drop>0)){hit=th;break}}}
+  if(!hit)continue;const th=hit;g.trackCd=10;g.state='investigate';g.lastSeen=[th.x,th.y];g.path=guardPath(g,idx(Math.floor(th.x),Math.floor(th.y)));g.look=0;g.search=null;floatText(g.x,g.y-.7,'TRACKS!',S.guard);AU.play('click',{vol:.35,x:g.x});
+  ST.recEv.push({t:ST.t,x:g.x,y:g.y,k:'tracks',s:'A guard follows '+th.name+'\'s footprints'});logLine((ST.ev==='snow'?'A guard spots snowy footprints':'A guard spots wet footprints')+' and follows them towards '+th.name+'.');ach('tracks')}}
 function stepSim(dt){
- powerTick(dt);
+ powerTick(dt);printsTick(dt);
  for(const d of ST.devices)if(d.type==='speaker'&&d.cd>0)d.cd-=dt;
  dogTick(dt);jamTick(dt);seismicTick(dt);eventTick(dt);AU.life(dt);
  ST.t+=dt;ST.clock+=dt*.5;
@@ -1719,7 +1733,7 @@ function endNight(){
  const lines=ST.thieves.map(t=>`<div><span>${t.name}${t.back?' <small style="color:var(--danger)">BACK</small>':''} <small style="opacity:.7">(${t.T.name})</small></span><span style="text-align:right">${t.outcome||'—'}</span></div>`).join('');
  const stampTxt=ns.stolen===0?'SECURE':'BREACHED';const stampCol=ns.stolen===0?'var(--good)':'var(--danger)';
  const st=stars(ns);ST.stars[ST.night-1]=st.filter(Boolean).length;repAdd(ST.stars[ST.night-1]);
- let body=`<div class="stamp" style="color:${stampCol}">${stampTxt}</div><h2>Incident report</h2><div class="rstars">${st.map((b,k)=>`<div class="${b?'on':''}"><i>★</i><span>${STAR_LBL[k]}</span><b>${b?'✓':'✗'}</b></div>`).join('')}</div><p style="margin:0 0 10px;opacity:.75">${dayName(ST.night)} night · ${SITES[SITE].name} · ${st.filter(Boolean).length} of 3 stars</p><div class="lines">${lines}</div>${ns.mvp?`<p style="margin:10px 0 0;font-size:13px"><b>Device of the night:</b> ${ns.mvp}.</p>`:''}${ns.told&&ns.told.length?`<p style="margin:10px 0 0;font-size:13px"><b>Word gets around.</b> The thieves who got away will tell the next crew about ${[...new Set(ns.told)].join(', ')}. Move it or expect them to avoid it.</p>`:''}
+ let body=`<div class="stamp" style="color:${stampCol}">${stampTxt}</div><h2>Incident report</h2><div class="rstars">${st.map((b,k)=>`<div class="${b?'on':''}"><i>★</i><span>${STAR_LBL[k]}</span><b>${b?'✓':'✗'}</b></div>`).join('')}</div><p style="margin:0 0 10px;opacity:.75">${dayName(ST.night)} night · ${SITES[SITE].name} · ${st.filter(Boolean).length} of 3 stars</p><div class="lines">${lines}</div>${ns.mvp?`<p style="margin:10px 0 0;font-size:13px"><b>Device of the night:</b> ${ns.mvp}.</p>`:''}${routeReport()}${ns.told&&ns.told.length?`<p style="margin:10px 0 0;font-size:13px"><b>Word gets around.</b> The thieves who got away will tell the next crew about ${[...new Set(ns.told)].join(', ')}. Move it or expect them to avoid it.</p>`:''}
  <div class="lines" style="margin-top:10px"><div><span>Stolen tonight</span><span class="big">${money(ns.stolen)}</span></div><div><span>Arrests (£150 each)</span><span>${ns.arrests}</span></div><div><span>Retainer${ns.stolen===0?' + clean-night bonus':''}</span><span>+${money(income)}</span></div><div><span>${ST.endless?'Nightly cap':'Contract total stolen'}</span><span>${money(ST.stolen)} of ${money(ST.limit)}</span></div></div>`;
  if(ST.daily){const sc=ns.stolen;let b=dailyBest();const isBest=!b||sc<b.stolen||sc===b.stolen&&ns.arrests>b.arrests;if(isBest){b={key:ST.daily.key,stolen:sc,arrests:ns.arrests};try{localStorage.setItem('ij-daily',JSON.stringify(b))}catch(e){}}logDaily(sc,ns.arrests,st.filter(Boolean).length);
   body+=`<h2 style="margin-top:14px">Daily job: ${ST.daily.mod.name}</h2><p>${money(sc)} lost, ${ns.arrests} arrest${ns.arrests===1?'':'s'}. ${isBest?'<b>Your best today.</b>':'Best today: '+money(b.stolen)+', '+b.arrests+' arrests.'} A new job is posted at midnight UTC.</p><button class="cta" onclick="shareDaily()">Share my result</button><p id="shareOk" style="font-size:12px;margin:4px 0 0;min-height:1em"></p><button class="cta" style="opacity:.9;margin-top:6px" onclick="weekSheet()">This week's jobs</button><button class="cta" style="opacity:.85;margin-top:6px" onclick="startDaily()">Try today's job again</button><button class="cta" style="opacity:.85;margin-top:8px" onclick="titleScreen()">Back to the title</button>`;ST.done=true}
@@ -1755,7 +1769,7 @@ const ACH=[['first','First collar','Catch a thief.'],['bag','Bag man','Catch a t
  ['frugal','Minimalist','A clean night with 4 devices or fewer.'],['bluff','Ventriloquist','Fool 3 thieves with speakers in one night.'],['decoy','Fool\'s gold','A thief opens a decoy.'],['recover','Lost property','A guard recovers dropped loot.'],
  ['impostor','Nice uniform','Catch the Impostor.'],['magpie','Caught the bird','Catch the Magpie after it throws a lure.'],['contract','Renewed','Finish the five-night contract.'],['impenetrable','Impenetrable','Finish the contract with nothing stolen.'],
  ['hard','Hard case','Finish the contract on Hard.'],['ot5','Overtime veteran','Survive 5 overtime nights.'],['style','Two looks','Play in both art styles.'],['fox','Outfoxed','Catch the Fox.'],
- ['climber','Roof patrol','Catch the Climber.'],['jammer','Signal lost','Catch the Jammer.'],['tremor','Felt that','Catch a thief a seismic sensor found.'],['auctioneer','Sold!','Catch the Auctioneer, twice.'],['concierge','Checked out','Catch the Concierge.'],['fogged','Lost in the fog','Catch a thief while they stumble in security fog.'],['perfect','Five-star service','Earn all three stars on every night of a contract.']];
+ ['climber','Roof patrol','Catch the Climber.'],['jammer','Signal lost','Catch the Jammer.'],['tremor','Felt that','Catch a thief a seismic sensor found.'],['auctioneer','Sold!','Catch the Auctioneer, twice.'],['concierge','Checked out','Catch the Concierge.'],['fogged','Lost in the fog','Catch a thief while they stumble in security fog.'],['tracks','Fresh tracks','A guard follows a thief\'s footprints.'],['perfect','Five-star service','Earn all three stars on every night of a contract.']];
 let ACHS=new Set();try{ACHS=new Set(JSON.parse(localStorage.getItem('ij-ach')||'[]'))}catch(e){}
 function ach(id){if(ACHS.has(id))return;const a=ACH.find(a=>a[0]===id);if(!a)return;ACHS.add(id);try{localStorage.setItem('ij-ach',JSON.stringify([...ACHS]))}catch(e){}
  const t=document.createElement('div');t.className='toast';t.innerHTML='<b>★ '+a[1]+'</b>'+a[2];$('toasts').appendChild(t);while($('toasts').children.length>3)$('toasts').firstChild.remove();requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));AU.play('upgrade',{vol:.5});setTimeout(()=>{t.classList.remove('in');setTimeout(()=>t.remove(),600)},4200)}
@@ -1822,6 +1836,29 @@ function renderAbil(){const a=$('abil');a.classList.toggle('show',ST.phase==='he
  a.innerHTML=`<button id="abSlam" class="${ST.abTool==='slam'?'on':''}" ${ST.abil.slam?'':'disabled'}><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6">${ICON.slam.replace(/<\/?svg[^>]*>/g,'')}</svg><span class="ln">Slam a door</span><span class="sh">Slam</span> ×${ST.abil.slam} <kbd>Q</kbd></button><button id="abSiren" ${ST.abil.siren?'':'disabled'}><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6">${ICON.siren.replace(/<\/?svg[^>]*>/g,'')}</svg><span class="ln">Panic siren</span><span class="sh">Siren</span> ×${ST.abil.siren} <kbd>W</kbd></button>${ST.ev==='police'?`<button id="abPolice" ${ST.abil.police?'':'disabled'}><span style="font-size:16px">🚓</span><span class="ln">Call the police</span><span class="sh">Police</span> ×${ST.abil.police} <kbd>E</kbd></button>`:''}`;
  $('abSlam').onclick=()=>{ST.abTool=ST.abTool==='slam'?null:'slam';if(ST.abTool)hint('Click a doorway to slam it shut for 7 seconds. Thieves have to find another way.',4);renderAbil()};
  $('abSiren').onclick=useSiren;if($('abPolice'))$('abPolice').onclick=callPolice}
+// v44: each thief's whole route, and how long they spent where nothing saw them.
+function nightRoutes(){if(ST._rt&&ST._rt.n===ST.rec.length)return ST._rt;const R=ST.thieves.map(()=>({pts:[],blind:{},unseen:0,seen:0}));let pt=0;
+ for(const f of ST.rec){const dt=Math.max(0,f.t-pt);pt=f.t;f.th.forEach((a,k)=>{const r=R[k];if(!r)return;const act=['in','out','flee'].includes(a[3])&&a[0]!=null;const L=r.pts[r.pts.length-1];
+  if(!act){if(L)r.pts.push(null);return}if(L&&Math.hypot(L[0]-a[0],L[1]-a[1])>3)r.pts.push(null);const L2=r.pts[r.pts.length-1];if(!L2||Math.hypot(L2[0]-a[0],L2[1]-a[1])>.3||L2[2]!==a[5])r.pts.push([a[0],a[1],a[5]]);
+  const i=idx(clamp(Math.floor(a[0]),0,W-1),clamp(Math.floor(a[1]),0,H-1));if(G[i]===OUT||G[i]===WALL)return;if(a[5])r.seen+=dt;else{r.unseen+=dt;const rm=roomOf(i).replace(/^security$/,'security room');r.blind[rm]=(r.blind[rm]||0)+dt}})}
+ ST._rt={n:ST.rec.length,R};return ST._rt}
+function drawRouteMap(c,lw=1){const {R}=nightRoutes();c.save();c.lineCap='round';c.lineJoin='round';
+ R.forEach((r,k)=>{const th=ST.thieves[k];if(!th||!r.pts.length)return;let prev=null;
+  for(const p of r.pts){if(!p){prev=null;continue}if(prev){c.beginPath();c.moveTo(prev[0],prev[1]);c.lineTo(p[0],p[1]);if(p[2]&&prev[2]){c.setLineDash([]);c.strokeStyle=th.col;c.globalAlpha=.85;c.lineWidth=.07*lw}else{c.setLineDash(lw>1?[.45,.3]:[.16,.12]);c.strokeStyle=S.danger;c.globalAlpha=.9;c.lineWidth=.13*lw}c.stroke()}prev=p}
+  c.setLineDash([]);const first=r.pts.find(Boolean),last=[...r.pts].reverse().find(Boolean);c.globalAlpha=1;
+  if(first){c.fillStyle=th.col;c.beginPath();c.arc(first[0],first[1],.16*lw,0,7);c.fill()}
+  if(last&&th.state==='caught'){c.strokeStyle=S.good;c.lineWidth=.12*lw;const q=.24*lw;c.beginPath();c.moveTo(last[0]-q,last[1]-q);c.lineTo(last[0]+q,last[1]+q);c.moveTo(last[0]+q,last[1]-q);c.lineTo(last[0]-q,last[1]+q);c.stroke()}
+  else if(last&&th.state==='escaped'){c.strokeStyle=S.danger;c.lineWidth=.1*lw;c.beginPath();c.arc(last[0],last[1],.3*lw,0,7);c.stroke();c.fillStyle=S.danger;c.beginPath();c.arc(last[0],last[1],.12*lw,0,7);c.fill()}});
+ c.restore()}
+function routeMapURL(){try{const sc=16,cw=document.createElement('canvas');cw.width=W*sc;cw.height=H*sc;const c=cw.getContext('2d');c.setTransform(sc,0,0,sc,0,0);c.drawImage(stat,0,0,W,H);
+  c.fillStyle=getComputedStyle(document.body).getPropertyValue('--bg')||'#000';c.globalAlpha=.25;c.fillRect(0,0,W,H);c.globalAlpha=.9;c.fillStyle=S.ink;for(let i=0;i<W*H;i++)if(G[i]===WALL)c.fillRect(tx(i),ty(i),1,1);c.globalAlpha=1;
+  drawRouteMap(c,1.3);return cw.toDataURL('image/png')}catch(e){return ''}}
+function routeReport(){if(!ST.rec.length)return '';const {R}=nightRoutes();const tot={};R.forEach(r=>{for(const [k,v] of Object.entries(r.blind))tot[k]=(tot[k]||0)+v});
+ const out=[];ST.thieves.forEach((th,k)=>{const r=R[k];if(!r||th.state!=='escaped')return;const top=Object.entries(r.blind).sort((a,b)=>b[1]-a[1])[0];
+  out.push(`<b>${th.name}</b> got away after ${Math.round(r.unseen)} s unseen`+(top&&top[1]>=2?`, most of it in the ${top[0]}.`:'.'))});
+ const worst=Object.entries(tot).sort((a,b)=>b[1]-a[1])[0];if(worst&&worst[1]>=4)out.push(`Biggest blind spot: <b>the ${worst[0]}</b>, with ${Math.round(worst[1])} s of thieves nobody saw.`);
+ const url=routeMapURL();
+ return `<h3 style="margin:12px 0 4px;font-size:15px">Where it went wrong</h3>${out.length?`<p style="margin:0 0 6px;font-size:13px">${out.join('<br>')}</p>`:`<p style="margin:0 0 6px;font-size:13px">Nobody slipped past unseen for long.</p>`}${url?`<img class="rtmap" src="${url}" alt="Map of the crew's routes">`:''}<p style="margin:2px 0 0;font-size:12px;opacity:.75">Line: seen. <span style="color:var(--danger)">Red dashes: nobody saw them.</span> ✕ caught, ◉ got away.</p>`}
 // ================================================================ REPLAY
 function startReplay(){if(!ST.rec.length)return;setTimeout(()=>tip('replay','Replay','Tap a coloured marker on the timeline to jump straight to that moment.'),800);hideSheet();$('hint').classList.remove('show');hintTimer=0;ST.phase='replay';ST.rp={t:0,speed:0,fi:0,ev:0,cap:'',capT:0};ST.recEv.sort((a,b)=>a.t-b.t);document.querySelectorAll('#replayBar [data-r]').forEach(o=>o.classList.toggle('on',o.dataset.r==='0'));document.body.classList.add('rp');for(const th of ST.thieves){th.trail=[];th.caughtT=0;th.crackT=0;th.breachT=0;th.climbT=0;th.waiting=false}
  FX.stamps=[];FX.floats=[];$('replayBar').classList.add('show');rpMarkers();renderAbil();refreshUI();AU.droneOn()}
@@ -1832,7 +1869,7 @@ function applyFrame(f){f.th.forEach((a,k)=>{const th=ST.thieves[k];if(!th)return
  const lz=ST.devices.filter(d=>d.type==='laser');(f.lz||[]).forEach((b,k)=>{if(lz[k])lz[k].broken=!!b});
  ST.smokes=f.sm;ST.slams=f.sl;ST.t=f.t;ST.clock=f.t*.5}
 // highlights pacing: race through quiet stretches, ease into each big moment
-function rpMarkers(){const bar=$('rpBar').parentNode;bar.querySelectorAll('.mk').forEach(m=>m.remove());const T=ST.rec[ST.rec.length-1].t||1;const col={catch:'var(--good)',esc:'var(--danger)',alarm:'#ffb340',grab:'var(--accent)',dog:'#d39a5c'};
+function rpMarkers(){const bar=$('rpBar').parentNode;bar.querySelectorAll('.mk').forEach(m=>m.remove());const T=ST.rec[ST.rec.length-1].t||1;const col={catch:'var(--good)',esc:'var(--danger)',alarm:'#ffb340',grab:'var(--accent)',dog:'#d39a5c',tracks:'#9fc4ff',tremor:'#c7a6ff'};
  ST.recEv.forEach((e,k)=>{const m=document.createElement('button');m.className='mk';m.title=(e.s||e.k).replace(/<[^>]+>/g,'');m.style.left=(e.t/T*100)+'%';m.style.background=col[e.k]||'#fff';m.onclick=ev=>{ev.stopPropagation();rpSeek(e.t-1.6)};bar.appendChild(m)})}
 function rpSeek(t){const rp=ST.rp;if(!rp)return;rp.t=Math.max(0,t);rp.fi=0;rp.ev=ST.recEv.findIndex(e=>e.t>=rp.t);if(rp.ev<0)rp.ev=ST.recEv.length;for(const th of ST.thieves){th.trail=[];th.caughtT=0}FX.slow=0;AU.click()}
 function rpPace(rp){if(rp.speed)return rp.speed;const nx=ST.recEv.find(e=>e.t>=rp.t-.2);const gap=nx?nx.t-rp.t:99;const tgt=gap<1.6?1.2:gap<4?3:7;rp.cur=lerp(rp.cur||tgt,tgt,.08);return rp.cur}
@@ -1841,7 +1878,7 @@ function rpFocus(){const rp=ST.rp;if(!rp)return null;const nx=ST.recEv.find(e=>e
 function updateReplay(dt){const rp=ST.rp;rp.t+=dt*rpPace(rp)*(FX.slow>0?.25:1);if(rp.capT>0){rp.capT-=dt;if(rp.capT<=0)$('rpCap').classList.remove('in')}
  while(rp.fi<ST.rec.length-1&&ST.rec[rp.fi+1].t<=rp.t)rp.fi++;applyFrame(ST.rec[rp.fi]);
  for(const th of ST.thieves)if(th.state==='caught')th.caughtT+=dt*rp.speed;
- while(rp.ev<ST.recEv.length&&ST.recEv[rp.ev].t<=rp.t){const e=ST.recEv[rp.ev++];if(e.s){$('rpCap').textContent=e.s.replace(/<[^>]+>/g,'');$('rpCap').classList.add('in');rp.capT=2.4}if(e.k==='alarm'||e.k==='dog'){burst(e.x,e.y,16,S.danger,2.5);FX.flash=.3;FX.flashCol=S.danger;continue}if(e.k==='grab'){burst(e.x,e.y,14,S.accent,2.5);AU.loot&&AU.loot(e.x);continue}if(e.k==='catch'){stamp(e.x,e.y,e.s,S.danger);burst(e.x,e.y,40,S.danger,4,1.1,.1);FX.slow=.9;FX.focus=[e.x,e.y];FX.flash=.6;FX.flashCol=S.danger;AU.caught()}else{floatText(e.x,e.y-.6,e.s,S.danger,true);AU.escaped()}}
+ while(rp.ev<ST.recEv.length&&ST.recEv[rp.ev].t<=rp.t){const e=ST.recEv[rp.ev++];if(e.s){$('rpCap').textContent=e.s.replace(/<[^>]+>/g,'');$('rpCap').classList.add('in');rp.capT=2.4}if(e.k==='alarm'||e.k==='dog'){burst(e.x,e.y,16,S.danger,2.5);FX.flash=.3;FX.flashCol=S.danger;continue}if(e.k==='grab'){burst(e.x,e.y,14,S.accent,2.5);AU.loot&&AU.loot(e.x);continue}if(e.k==='tracks'||e.k==='tremor'){burst(e.x,e.y,12,S.accent,2);continue}if(e.k==='catch'){stamp(e.x,e.y,e.s,S.danger);burst(e.x,e.y,40,S.danger,4,1.1,.1);FX.slow=.9;FX.focus=[e.x,e.y];FX.flash=.6;FX.flashCol=S.danger;AU.caught()}else{floatText(e.x,e.y-.6,e.s,S.danger,true);AU.escaped()}}
  $('rpBar').style.width=Math.min(100,rp.t/ST.rec[ST.rec.length-1].t*100)+'%';$('rpLbl').textContent='REPLAY · '+dayName(ST.night).toUpperCase()+' · '+fmtClock();
  if(rp.t>ST.rec[ST.rec.length-1].t+1.5)stopReplay()}
 document.querySelectorAll('#replayBar [data-r]').forEach(b=>b.onclick=()=>{ST.rp.speed=+b.dataset.r;document.querySelectorAll('#replayBar [data-r]').forEach(o=>o.classList.toggle('on',o===b))});
@@ -2243,6 +2280,8 @@ function render(dtReal){
  drawGuardRoutes(c);
  drawSmokes(c);
  drawPolice(c);
+ if(ST.phase==='replay'&&ST.rec.length){c.save();c.globalAlpha=.4;drawRouteMap(c);c.restore()}
+ drawPrints(c);
  drawTrails(c);
  drawWalls3D(c);
  drawDoors3D(c);
@@ -2257,6 +2296,7 @@ function render(dtReal){
  drawSlams(c);
  drawAnimFX(c,dtReal);
  drawFX(c,dtReal);
+ if(!R3.on)drawWeather(c);
  if(PIX){ctx.setTransform(1,0,0,1,0,0);ctx.imageSmoothingEnabled=false;ctx.drawImage(low,0,0,cv.width,cv.height);ctx.imageSmoothingEnabled=true}
  ctx.setTransform(1,0,0,1,0,0);
  if(R3.on)r3Frame(GOV.dt3||.016);else post(ctx);
@@ -2332,6 +2372,12 @@ function drawLoot(c){for(const l of ST.loot){if(l.stolen&&ST.phase!=='plan'){}
  if(ST.phase==='plan'||hoverTile===l.i)txt(c,'£'+(l.v/1000)+'k',x,y+.62,.27,theme==='board'?'#2b1d14':theme==='sketch'?'#b8741a':S.accent,{font:S.mono,weight:theme==='board'?'800':''});
  c.restore()}}
 function drawSmokes(c){for(const s of ST.smokes){for(let k=0;k<9;k++){const a=k*.7+ST.t*.3,r=s.r*(.45+.25*Math.sin(k*2.1+ST.t));const x=s.x+Math.cos(a)*s.r*.45,y=s.y+Math.sin(a)*s.r*.45;const g=c.createRadialGradient(x,y,0,x,y,r);const col=theme==='thermal'?'90,60,160':theme==='sketch'?'110,105,95':theme==='board'?'230,230,230':theme==='cctv'?'120,200,150':'210,225,240';g.addColorStop(0,`rgba(${col},.75)`);g.addColorStop(1,`rgba(${col},0)`);c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,7);c.fill()}}}
+function drawPrints(c){const P=ST.prints;if(!P||!P.length||!(ST.phase==='heist'||ST.phase==='replay'))return;const snow=ST.ev==='snow';const lightBg=theme==='sketch'||theme==='board'||LOOK==='sketch3d';
+ c.save();c.fillStyle=snow?(lightBg?'#6f8092':'#e6f3ff'):(lightBg?'#3f6f9e':'#8fc3ff');for(const p of P){if(p.t>ST.t)continue;const age=ST.t-p.t;const a=snow?Math.max(.3,.8-age/60):Math.max(0,.75*(1-age/20));if(a<=0)continue;c.globalAlpha=a;c.save();c.translate(p.x,p.y);c.rotate(p.a);c.beginPath();c.ellipse(0,0,.1,.05,0,0,7);c.fill();c.restore()}c.restore()}
+function drawWeather(c){const ev=ST.ev;if(!(ev==='rain'||ev==='snow')||!(ST.phase==='heist'||ST.phase==='replay'))return;const t=performance.now()/1000;c.save();
+ if(ev==='rain'){c.strokeStyle=theme==='sketch'?'rgba(60,90,130,.5)':'rgba(170,210,255,.35)';c.lineWidth=.03;c.beginPath();for(let k=0;k<160;k++){const x=((k*7.31)%W+t*3)%W,y=((k*13.7)%H+t*22+k)%H;c.moveTo(x,y);c.lineTo(x-.12,y-.7)}c.stroke()}
+ else{c.fillStyle=theme==='sketch'?'rgba(120,135,150,.6)':'rgba(255,255,255,.75)';for(let k=0;k<120;k++){const x=((k*7.31)%W+Math.sin(t*.8+k)*.6+W)%W,y=((k*11.3)%H+t*1.6)%H;c.beginPath();c.arc(x,y,.06,0,7);c.fill()}}
+ c.restore()}
 function drawTrails(c){for(const th of ST.thieves){if(th.state==='wait'||!th.trail.length)continue;
  c.save();const n=th.trail.length;
  th.trail.forEach(([x,y],k)=>{const a=(k/n)*(th.state==='escaped'||th.state==='caught'?.4:.9);c.globalAlpha=a;
@@ -3335,6 +3381,17 @@ function r3BuildDevices(full){const disp=g=>g.traverse(x=>{if(x.geometry&&x.geom
  for(const c of old.values()){R3.devG.remove(c.grp);disp(c.grp)}}
 function r3Pick(cx,cy){const r=R3.gl.getBoundingClientRect();const v=new THREE.Vector2((cx-r.left)/r.width*2-1,-((cy-r.top)/r.height)*2+1);R3.ray.setFromCamera(v,R3.cam);const p=new THREE.Vector3();if(!R3.ray.ray.intersectPlane(R3.plane,p))return null;return [p.x,p.z]}
 function r3Proj(x,y,z){const v=(R3.pv||(R3.pv=new THREE.Vector3())).set(x,y,z).project(R3.cam);return [(v.x+1)/2*R3.ov.width,(1-v.y)/2*R3.ov.height]}
+function r3Weather(dt){const ev=(ST.phase==='heist'||ST.phase==='replay')?ST.ev:null;
+ {const k=ev==='snow'?1:0;R3.snowK=R3.snowK||0;if(k||R3.snowK>0){if(!R3.snowK)R3.gndBase=R3.groundMat.color.clone();R3.snowK=k?Math.min(1,R3.snowK+dt*.5):Math.max(0,R3.snowK-dt*2);if(R3.gndBase){R3.groundMat.color.copy(R3.gndBase).lerp(new THREE.Color(R3.look==='sketch'?'#f4f6f8':'#9fb3c8'),R3.snowK*.75)}}}
+ for(const k of ['rain','snow']){const on=ev===k;let o=R3['wx_'+k];if(!o&&!on)continue;
+  if(!o){const N=k==='rain'?900:700,pos=new Float32Array(N*(k==='rain'?6:3));for(let n=0;n<N;n++){const x=-4+Math.random()*(W+8),y=Math.random()*7,z=-4+Math.random()*(H+8);if(k==='rain'){pos.set([x,y,z,x+.04,y+.38,z],n*6)}else pos.set([x,y,z],n*3)}
+   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+   o=k==='rain'?new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:R3.look==='sketch'?'#5a7aa0':'#a8ccff',transparent:true,opacity:.45,depthWrite:false})):new THREE.Points(g,new THREE.PointsMaterial({color:'#ffffff',size:.13,transparent:true,opacity:.9,depthWrite:false}));
+   o.frustumCulled=false;R3.sc.add(o);R3['wx_'+k]=o}
+  o.visible=on;if(!on)continue;const pa=o.geometry.attributes.position,arr=pa.array;
+  if(k==='rain'){const v=dt*16;for(let n=0;n<arr.length;n+=6){let y=arr[n+1]-v;if(y<0)y+=7;arr[n+1]=y;arr[n+4]=y+.38}}
+  else{for(let n=0;n<arr.length;n+=3){let y=arr[n+1]-dt*.9;if(y<0)y+=7;arr[n+1]=y;arr[n]+=Math.sin(R3.t*.7+n)*dt*.15}}
+  pa.needsUpdate=true}}
 function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;if(!R3.warm){R3.warm=true;r3Prewarm()}
  // camera: framed building, eases toward the action in slow-mo, shakes on impact
  const f=R3.fit,cam=R3.cam;const z=FX.zoom||1;const [fx,fy]=FX.focus||[W/2,H/2];const k=clamp((z-1)/.35,0,1);
@@ -3352,6 +3409,7 @@ function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;i
  R3.floorMat.emissiveIntensity=lerp(R3.floorMat.emissiveIntensity,LP.floorE[plan?0:1],.08);R3.r.toneMappingExposure=lerp(R3.r.toneMappingExposure,LP.exp[plan?0:1],.08);
  r3Sync(dt);
  if(R3.dust.visible){const pa=R3.dust.geometry.attributes.position;for(let i=0;i<pa.count;i++){let y=pa.getY(i)+dt*.05*Math.sin(i+R3.t*.3);let x=pa.getX(i)+dt*.04*Math.cos(i*1.7+R3.t*.2);if(y>2.9)y=.2;pa.setXY(i,x,y)}pa.needsUpdate=true}
+ r3Weather(dt);
  if(R3.floorDirty){R3.tex.needsUpdate=true;R3.floorDirty=false}const GL=GOVL[GOV.lvl]||GOVL[2];R3.r.shadowMap.needsUpdate=(GOV.sk=(GOV.sk+1)%GL.shadow)===0||R3.shNow;R3.shNow=false;R3.r.render(R3.sc,cam);
  // labels on top, anchored to the 3D positions
  if(!R3.wc&&ST.phase!=='replay'&&!(FX.zoom>1.01)){const a=r3Proj(W/2,0,H/2),b=r3Proj(W/2+1,0,H/2);R3.s0=Math.hypot(b[0]-a[0],b[1]-a[1])}
