@@ -331,7 +331,9 @@ body.routing:where(.tl) #selBox,body.routing:where(.tl) #tools{display:none}
 html:where(.tl),body:where(.tl){position:fixed;inset:0;overflow:hidden;overscroll-behavior:none;touch-action:manipulation}
 :where(body.tl) #app{height:100%;min-height:0}
 :where(body.tl) #top{padding:6px 10px;gap:8px;flex-wrap:nowrap}
-:where(body.tl) #top .ttl{font-size:19px!important;white-space:nowrap}
+:where(body.tl) #top .ttl{font-size:19px!important;white-space:nowrap;min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis}
+/* v40: narrow phones drop the title before any button runs off the edge */
+@media (max-width:420px){:where(body.tl) #top .ttl{font-size:16px!important;letter-spacing:.02em}}
 :where(body.tl) #top .ttl small{display:none}
 :where(body.tl) #styles{margin-left:auto}
 :where(body.tl) #lookBtn,:where(body.tl) #mute,:where(body.tl) #fsBtn{font-size:12px!important;padding:5px 9px!important}
@@ -402,7 +404,10 @@ body[data-theme=sketch]:where(.ls) #go{font-size:18px!important}
 :where(body.ls) #side .tool svg{width:15px!important;height:15px!important}
 :where(body.ls) .tool .c{font-size:9.5px!important}
 :where(body.ls) #side>.card h3{margin-bottom:4px}
-:where(body.ls) #hint{top:auto!important;bottom:6px!important;opacity:.95}
+:where(body.ls) #hint{top:auto!important;bottom:6px!important}
+:where(body.ls) #hint.show{opacity:.95}
+/* v40: a hidden hint never blocks taps on the map */
+#hint:not(.show){pointer-events:none!important}
 :where(body.ls) #toasts{top:auto!important;bottom:8px!important}
 /* ===== home / title page ===== */
 #home{position:fixed;inset:0;z-index:45;display:none;overflow:hidden;background:radial-gradient(120% 90% at 50% 30%,#14467f 0%,#0b2a4f 55%,#061a33 100%);color:#e8f3ff}
@@ -511,8 +516,8 @@ body[data-theme=sketch]:where(.tl) #coach{font-size:calc(16px*var(--u,1))!import
 :where(body.ls) #side{width:var(--sideW,340px)!important}
 :where(body.ls) #mtabs button{min-height:38px}
 :where(body.ls) #side .tool{min-height:42px}
-/* nine tools in two rows of five */
-:where(body.tl) #tools{grid-template-columns:repeat(5,1fr)!important}
+/* eleven tools in two rows of six */
+:where(body.tl) #tools{grid-template-columns:repeat(6,1fr)!important}
 :where(body.tl) #side .tool{flex-direction:column!important;align-items:center!important;text-align:center!important;gap:2px!important;padding:4px 1px!important;font-size:11.5px}
 :where(body.tl) #side .tool svg{width:19px;height:19px}
 :where(body.tl) #side .tool>span{align-items:center}
@@ -532,8 +537,8 @@ body.hassel:where(.tl) #worksBtn,body.hassel:where(.tl) #buildCard>h3{display:no
 :where(body.tl) #side>.card h3{font-size:19px!important;margin-bottom:4px!important;line-height:1.1}
 :where(body.tight) #toolHelp,:where(body.tight) #buildCard>h3{display:none}
 :where(body.tl) #toolHelp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-/* squat screens (a folded Duo): all nine tools in one row */
-:where(body.row9) #tools{grid-template-columns:repeat(10,1fr)!important;gap:3px!important}
+/* squat screens (a folded Duo): all the tools in one row */
+:where(body.row9) #tools{grid-template-columns:repeat(11,1fr)!important;gap:3px!important}
 :where(body.row9) #side .tool{font-size:10px;padding:4px 0!important}
 :where(body.row9) #selBtns{grid-template-columns:repeat(6,1fr)}
 :where(body.row9) #selBtns button{font-size:12px;padding:2px 3px}
@@ -580,7 +585,16 @@ body[data-phase=heist]:where(.ls) #styles{display:none}
 :where(body.ls) #buildCard>h3{display:none!important}
 :where(body.ls) .stat .v{font-size:15px!important}
 :where(body.ls) #side .tool{min-height:44px!important;padding:3px 1px!important}
-:where(body.ls) #side .tool{min-width:44px}
+:where(body.ls) #side .tool{min-width:0;font-size:10.5px!important}
+:where(body.ls) #tools{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+:where(body.ls.short) #side .tool{line-height:1.02!important;padding:2px 0!important;gap:0!important}
+:where(body.ls.short) #side .tool svg{width:13px!important;height:13px!important}
+:where(body.ls.short) #tools{row-gap:3px!important}
+:where(body.ls.short) #go{padding:4px 6px!important;min-height:44px}
+:where(body.ls.short) .stats{gap:0 6px!important}
+:where(body.ls.short) .stat .k{letter-spacing:0!important}
+:where(body.ls.short) .stat .v{font-size:14px!important}
+:where(body.ls.short) .stat .k{font-size:9px!important}
 /* the night report and other menus */
 :where(body.tl) #sheet small,:where(body.tl) #sheet .rstars span,:where(body.tl) #sheet .rstars b{font-size:13px!important}
 body[data-phase=heist]:where(.tl:not(.ls)) #homeBtn{margin-left:auto}
@@ -636,7 +650,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v39 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v40 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -902,6 +916,7 @@ const DEV={
  speaker:{name:'Speaker',cost:70,key:'8',desc:'A hidden PA speaker. During the night, click it to play a guard\'s voice: nearby thieves hide or turn back. Fool a crew twice and they stop believing it.'},
  dog:{name:'Guard dog',cost:130,key:'9',desc:'Asleep in its basket until someone creeps within 3 tiles. Then it barks: the nearest guards come running and the thief is rattled. It works by ear, so smoke and power cuts don\'t stop it.'},
  decoy:{name:'Decoy',cost:100,key:'7',desc:'A fake valuable that thieves can\'t tell from the real thing. Lure them past your cameras; opening it wastes their time and rattles them.'},
+ seismic:{name:'Seismic sensor',cost:90,key:'y',desc:'Hidden in the floor. Feels footsteps anywhere in its room, through walls and round corners, and quietly sends the nearest guard to look. No alarm goes off, so the crew never knows it is there. Jammers can\'t touch it.'},
  fog:{name:'Fog cannon',cost:110,key:'0',desc:'Hidden in the ceiling. When an alarm goes off within 4 tiles, it floods the area with security fog for 9 seconds. Thieves caught in it stumble at half speed while your guards close in. Fog blinds cameras too, so place it with care.'},
 };
 const BASE_COST=Object.fromEntries(Object.entries(DEV).map(([k,d])=>[k,d.cost]));
@@ -915,6 +930,7 @@ const UPG={
  steel:[{name:'Vault grade',cost:60,desc:'Takes 8 seconds to force.'}],
  dog:[{name:'Light sleeper',cost:70,desc:'Hears 4.5 tiles away and is ready to bark again in 6 s instead of 10.'}],
  decoy:[{name:'Dye pack',cost:60,desc:'Bursts when opened: +40 suspicion, and the thief fills 50% faster on camera after.'}],
+ seismic:[{name:'Sharper ears',cost:60,desc:'Ready again in 4 s instead of 8, and sends the two nearest guards.'}],
  fog:[{name:'Sticky fog',cost:70,desc:'A wider cloud that lasts 14 seconds, and anyone in it gains suspicion while they stumble.'}],
 };
 const PERKS=[
@@ -944,6 +960,7 @@ const ICON={
  speaker:'<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>',
  dog:'<svg viewBox="0 0 24 24"><path d="M5 20v-7l-2-3 3-1 2-4 3 3h4l4 4v8h-3v-4h-5v4z"/><circle cx="8" cy="10" r=".7"/></svg>',
  decoy:'<svg viewBox="0 0 24 24"><path d="M6 4h12l3 5-9 11L3 9z"/><path d="M10 9.5a2 2 0 1 1 3 1.7c-.8.5-1 1-1 1.8M12 16v.5"/></svg>',
+ seismic:'<svg viewBox="0 0 24 24"><path d="M2 13h4l2-5 3 10 3-13 3 12 2-4h3"/></svg>',
  fog:'<svg viewBox="0 0 24 24"><path d="M8 3h8v4H8z"/><path d="M12 7v3"/><path d="M4 15c2-2 4-2 6 0s4 2 6 0 4-2 4-2M4 19c2-2 4-2 6 0s4 2 6 0 4-2 4-2"/></svg>',
  slam:'<svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18"/><path d="M14 12h1M2 8l2 1M2 16l2-1"/></svg>',
  siren:'<svg viewBox="0 0 24 24"><path d="M7 18v-6a5 5 0 0 1 10 0v6M5 18h14v3H5zM12 2v3M4 6l2 2M20 6l-2 2"/></svg>',
@@ -961,20 +978,21 @@ const TYPES={
  magpie:{name:'Magpie',speed:2.8,counter:'lure',charges:2,tag:'LURE',desc:'Throws a noise-maker to pull guards off their patrol before slipping past.'},
  muscle:{name:'Muscle',speed:2.2,maxSus:150,breach:.25,carry:.95,tag:'TANK',desc:'Shoulders doors open, carries at full pace, takes longer to identify.'},
  auctioneer:{name:'The Auctioneer',speed:2.9,crack:.5,sus:.8,maxSus:130,counter:'loop',charges:1,knowsPlates:true,boss:true,bribe:true,tag:'BOSS',desc:'Runs the auction-house job. The first time she is caught she bribes her way out and bolts, so you have to catch her twice. Knows your plates, loops one camera, and goes for the biggest prize.'},
+ jammer:{name:'Jammer',speed:2.6,jam:2.5,tag:'JAM',desc:'Carries a signal jammer. Cameras, lasers and pressure plates within 2½ tiles of them go dead while they pass. Guards, dogs and seismic sensors still work.'},
  climber:{name:'Climber',speed:2.9,roof:true,tag:'ROOF',desc:'Comes in through the roof, even on nights the roof is shut to everyone else. Drops straight into the room nearest the prize.'},
 };
 const NAMES=['Wren','Tally','Moth','Juno','Pike','Vesper','Dutch','Sable','Rook','Kes','Fig','Nettle','Bram','Ivo','Lark','Odette'];
 const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday'];
 function dayName(n){if(ST.daily)return 'Daily job';return n<=5?DAYS[n-1]:'Overtime '+(n-5)}
 const OT_CAP=15000;
-function nightDef(n){if(ST.daily)return ST.daily.def;if(n<=5){const bs=SITES[SITE].boss;const base=bs&&n===5?{...NIGHTS[4],crew:NIGHTS[4].crew.map(([t,w])=>[t==='fox'?bs:t,w])}:NIGHTS[n-1];const h=SITES[SITE].hints&&SITES[SITE].hints[n-1];return h?{...base,hint:h}:base}const r=mulberry(n*7919+(ST.otSeed||0));const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor','climber'];
+function nightDef(n){if(ST.daily)return ST.daily.def;if(n<=5){const bs=SITES[SITE].boss;const base=bs&&n===5?{...NIGHTS[4],crew:NIGHTS[4].crew.map(([t,w])=>[t==='fox'?bs:t,w])}:NIGHTS[n-1];const h=SITES[SITE].hints&&SITES[SITE].hints[n-1];return h?{...base,hint:h}:base}const r=mulberry(n*7919+(ST.otSeed||0));const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor','climber','jammer'];
  const size=Math.min(10,5+Math.floor((n-5)/2)+(ST.otMod&&ST.otMod.id==='big'?1:0));const crew=[];let t=1.5;for(let k=0;k<size;k++){crew.push([pool[Math.floor(r()*pool.length)],+t.toFixed(1)]);t+=2+r()*2.6}
  return {crew,hint:`Overtime night ${n-5}${ST.otMod?' · '+ST.otMod.name+': '+(ST.otMod.id==='budget'?'£400 docked from your budget.':ST.otMod.desc):''} The gallery restocked, every entry is open and the crews keep growing. Lose more than ${money(OT_CAP)} in one night and it ends.`}}
 const NIGHTS=[
  {crew:[['runner',1.5],['cracker',8]],hint:'Pick Camera (or press 1) and click near the front doors to fit one; drag to aim. Thieves route around what you can see, so watch their dotted routes bend.'},
  {crew:[['runner',1.5],['ghost',6],['cracker',11]],hint:'A back door opens tonight. Thieves pick the least-watched way in, so cover both.'},
  {crew:[['hacker',1.5],['magpie',5],['muscle',10],['climber',15]],hint:'The loading dock opens. Hackers loop cameras on their route, and the Magpie throws noise-makers to drag guards away. Back cameras up with plates.'},
- {crew:[['scout',1.5],['lens',5],['ghost',9],['cracker',14],['impostor',18]],hint:'From tonight the crew cuts the power once, briefly. Someone will come through the skylight. The scout radios your plates to the crew, the lensman walks through one laser, and an Impostor in a guard uniform walks straight past cameras.'},
+ {crew:[['scout',1.5],['lens',5],['ghost',9],['cracker',14],['impostor',18],['jammer',22]],hint:'From tonight the crew cuts the power once, briefly. Someone will come through the skylight. The scout radios your plates to the crew, the lensman walks through one laser, and an Impostor in a guard uniform walks straight past cameras.'},
  {crew:[['hacker',1.5],['smoke',4],['lens',8],['muscle',12],['ghost',16],['magpie',20],['fox',26]],hint:'Last night. Six of them, a storm drain into the store room, and at 01:26 the Fox: a professional who goes straight for the biggest prize.'},
 ];
 
@@ -1073,8 +1091,8 @@ function rebuildWatch(){
  watch=new Float32Array(W*H);laserMap.fill(-1);plateMap.fill(-1);
  for(const d of ST.devices){
   if(d.type==='camera'&&!(d.looped>0)&&!ST.dark&&d.cov){const f=ST.intel&&ST.intel.cams.has(d.i)?1.6:1;for(let i=0;i<W*H;i++)watch[i]+=d.cov[i]*16*f}
-  if(d.type==='laser'&&!d.broken&&d.beam)for(const i of d.beam)laserMap[i]=d.id;
-  if(d.type==='plate')plateMap[d.i]=d.id;
+  if(d.type==='laser'&&!d.broken&&!(d.jamT>0)&&d.beam)for(const i of d.beam)laserMap[i]=d.id;
+  if(d.type==='plate'&&!(d.jamT>0))plateMap[d.i]=d.id;
   if(d.type==='dog'&&ST.intel&&ST.intel.dogs&&ST.intel.dogs.has(d.i)){const R=(d.lv?4.5:3)+1;for(let y=Math.floor(d.y-R);y<=d.y+R;y++)for(let x=Math.floor(d.x-R);x<=d.x+R;x++){if(!inb(x,y))continue;const dd=Math.hypot(x-d.x,y-d.y);if(dd<R)watch[idx(x,y)]+=(R-dd)*3}}
  }
  for(let i=0;i<W*H;i++)watch[i]+=lit[i]*2.5+patrolMap[i]*10;
@@ -1270,7 +1288,7 @@ function hint(s,dur=7){const h=$('hint');if(TOUCH)s=s.replace(/ \(or press \d\)/
 function startNight(){if(R3.on)setTimeout(()=>{if(ST.phase==='heist'&&R3.on)tip('watch','Watch them up close','Tap a thief or a guard, or a name in the Crew list, and the camera follows them. Tap again to pull back.')},6000);setTimeout(()=>{if(ST.ev&&EVENTS[ST.ev])tip('ev-'+ST.ev,EVENTS[ST.ev].ic+' '+EVENTS[ST.ev].name,EVENTS[ST.ev].desc)},1500);setMTab('crew');$('hint').classList.remove('show');hintTimer=0;setTimeout(()=>{if(ST.phase==='heist')stamp(W/2,H/2-1,(ST.daily?'DAILY JOB':dayName(ST.night).toUpperCase()+' NIGHT'),S.accent)},150);ST.dark=false;for(const d of ST.devices)d.work=0;ST.pc=(ST.night>=4||ST.endless||ST.daily)?{at:28+Math.random()*28,dur:ST.perks.includes('gen')?3:8,t:0,on:false,done:false}:null;if(ST.phase==='plan')saveGame();
  if(ST.phase!=='plan')return;
  syncDecoys();ST.danger=new Float32Array(W*H);const plans=planNight();ST.thieves=[];ST.smokes=[];ST.slams=[];ST.rec=[];ST.recEv=[];ST.recT=0;ST.vaultOpen=false;ST.alarmT=0;ST.abil={slam:ST.mods.slam,siren:ST.mods.siren};ST.abTool=null;
- for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false;d.armed=0;d.hit=0;d.lock=null;d.lockT=0;d.cd=0;d.fired=0}
+ for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false;d.armed=0;d.hit=0;d.lock=null;d.lockT=0;d.cd=0;d.fired=0;d.jamT=0;d.ping=0}ST.tremors=[];
  devicesChanged();
  nightDef(ST.night).crew.forEach(([type,t],k)=>{const T=TYPES[type];
   const cm=T.boss?{name:type==='fox'?'The Fox':T.name,gang:null}:crewMember(k);const ldr=!!(cm.gang&&GANGS[cm.gang]&&GANGS[cm.gang].leader===cm.name);
@@ -1347,6 +1365,7 @@ function spawnThief(th){
  if(!b){th.state='gone';th.outcome='stayed home (nothing left worth taking)';return}
  th.target=b.loot;if(th.T.boss){const big=ST.loot.filter(l=>!l.stolen&&!l.carrier&&!l.fake&&!l.spent).sort((a,b)=>b.v-a.v)[0];if(big)th.target=big;if(th.type==='fox')setTimeout(()=>AU.say('fox_in',{cd:0,pri:3}),300);FX.slow=.9;FX.focus=[th.x,th.y];logLine(th.type==='fox'?'<b>The Fox is in the building.</b> He is going for '+th.target.name+'.':'<b>'+th.name+' is in the building.</b> She is going for '+th.target.name+'.');FX.flash=.4;FX.flashCol=S.accent}th.entry=b.entry;const si=spawnI(b.entry);th.tile=si;th.x=tx(si)+.5;th.y=ty(si)+.5;th.state='in';if(th.counter==='scout'&&ST.thieves.some(o=>o!==th&&o.state!=='caught'&&o.state!=='escaped')){logLine('<i>'+th.name+' is on the crew radio, calling out where your pressure plates are.</i>');for(const o of ST.thieves)o.needReplan=true}
  if(b.entry.roof){th.drop=1.2;if(th.T.roof)tip('climber','Someone on the roof','The Climber drops in through the roof, even on nights it is shut to everyone else. Cover the rooms under the roof entries.')}
+ if(th.T.jam)tip('jammer','A Jammer is in','The Jammer kills every camera, laser and pressure plate within 2½ tiles as they walk past (the dashed circle). Guards, dogs and seismic sensors still work, so mix them in.');
  th.path=[];replan(th);
  logLine((b.entry.roof?'Movement at the ':'Someone at the ')+b.entry.name.toLowerCase()+'.');
  AU.say('ent_'+b.entry.id,{cd:3});
@@ -1418,6 +1437,20 @@ function dogTick(dt){for(const d of ST.devices){if(d.type!=='dog')continue;if(d.
   for(const th of ST.thieves){if(!['in','out','flee'].includes(th.state)||th.x==null)continue;const dd=Math.hypot(th.x-d.x-.5,th.y-d.y-.5);if(dd<R&&dd<nd){nd=dd;near=th}}
   if(!near)continue;d.cd=d.lv?6:10;d.bark=1.6;d.face=Math.atan2(near.y-d.y-.5,near.x-d.x-.5);AU.bark(d.x);floatText(d.x+.5,d.y-.3,'WOOF!',S.accent);FX.rings.push({x:d.x+.5,y:d.y+.5,r:R,t:0});
   addSus(near,22,'dog');ST.recEv.push({t:ST.t,x:near.x,y:near.y,k:'dog',s:'The dog barks at '+near.name});learn(near,'dog',d);if(near.state!=='caught'){near.hurry=Math.max(near.hurry||0,4);near.needReplan=true}addDanger(d.x+.5,d.y+.5,3,16);noise(d.x+.5,d.y+.5,11);logLine('The dog barks at '+near.name+' in the '+roomOf(d.i)+'.');ST.barks=(ST.barks||0)+1}}
+// v40: the Jammer kills cameras, lasers and plates near them; seismic sensors feel footsteps in their room and quietly send a guard
+const JAMMABLE={camera:1,laser:1,plate:1};
+function jamTick(dt){const js=ST.thieves.filter(t=>t.T.jam&&['in','out','flee'].includes(t.state)&&t.x!=null&&!(t.drop>0));if(!js.length&&!ST.devices.some(d=>d.jamT>0))return;let ch=false;
+ for(const d of ST.devices){if(!JAMMABLE[d.type])continue;const pts=d.type==='laser'&&d.beam&&d.beam.length?d.beam.map(i=>[tx(i)+.5,ty(i)+.5]):[[d.x+.5,d.y+.5]];
+  const hit=js.find(t=>pts.some(([x,y])=>Math.hypot(t.x-x,t.y-y)<t.T.jam));const was=d.jamT>0;
+  if(hit){if(!was){ch=true;floatText(d.x+.5,d.y-.3,'JAMMED',S.danger);if(!hit.jamSaid){hit.jamSaid=1;logLine(hit.name+' switches on a jammer. '+DEV[d.type].name+'s nearby go dead.')}}d.jamT=.35;if(d.type==='camera')d.looped=Math.max(d.looped||0,.35)}
+  else if(was){d.jamT=Math.max(0,d.jamT-dt);if(d.jamT<=0)ch=true}}
+ if(ch){rebuildWatch();for(const th of ST.thieves)th.needReplan=true}}
+function seismicTick(dt){for(const d of ST.devices){if(d.type!=='seismic')continue;if(d.ping>0)d.ping-=dt;if(d.cd>0){d.cd-=dt;continue}d.chk=(d.chk||0)-dt;if(d.chk>0)continue;d.chk=.25;
+  const room=roomOf(d.i);if(room==='street')continue;const th=ST.thieves.find(t=>['in','out','flee'].includes(t.state)&&t.x!=null&&!t.hiding&&!(t.drop>0)&&roomOf(idx(Math.floor(t.x),Math.floor(t.y)))===room);if(!th)continue;
+  d.cd=d.lv?4:8;d.ping=1.4;FX.rings.push({x:d.x+.5,y:d.y+.5,r:1.6,t:0});(ST.tremors=ST.tremors||[]).push({x:th.x,y:th.y,t:0});AU.play('click',{vol:.35,x:d.x});hap(15);
+  const free=ST.guards.filter(g=>g.state!=='chase'&&g.state!=='cover').map(g=>({g,dd:Math.hypot(g.x-th.x,g.y-th.y)})).sort((a,b)=>a.dd-b.dd).slice(0,d.lv?2:1);
+  for(const {g} of free){g.state='investigate';g.lastSeen=[th.x,th.y];g.path=guardPath(g,idx(Math.floor(th.x),Math.floor(th.y)));g.look=0;g.search=null;floatText(g.x,g.y-.7,'?',S.guard)}
+  th.tremor=1;ST.recEv.push({t:ST.t,x:th.x,y:th.y,k:'tremor',s:'A seismic sensor feels '+th.name+' in the '+room});logLine('Seismic sensor: footsteps in the '+room+(free.length?'. A guard is on the way.':'. No guard free to check.'));ST.tremN=(ST.tremN||0)+1}}
 function learn(th,kind,d){(th.learned=th.learned||[]).push({kind,id:d.id,i:d.i})}
 function learnCam(th){for(const d of ST.devices)if(d.type==='camera'&&d.seeing)(th.learned=th.learned||[]).push({kind:'cam',id:d.id,i:d.i})}
 function coverTile(e){if(e.roof)return spawnI(e);const [x,y]=e.tiles[0];const c=[[0,-1],[1,0],[-1,0],[0,1]].map(([dx,dy])=>idx(x+dx,y+dy)).find(i=>G[i]===FLOOR);return c??idx(x,y)}
@@ -1435,7 +1468,7 @@ function catchThief(th,by){hap(70);
   for(const g of ST.guards)if(g.target===th||Math.hypot(g.x-th.x,g.y-th.y)<2.2){g.dazedT=2.5;g.state='patrol';g.path=[]}stamp(th.x,th.y,'BRIBED!',S.accent);floatText(th.x,th.y-1,'She paid her way out!',S.accent,true);burst(th.x,th.y,24,S.accent,3);FX.shake=.4;logLine('<b>'+th.name+'</b> bribes her way out and bolts. Catch her again!');ST.recEv.push({t:ST.t,x:th.x,y:th.y,k:'alarm',s:th.name+' bribed her way out'});AU.play('jingBad',{vol:.4});refreshUI();return}
  const srcName={fog:'stumbling in the fog',police:'by the police at the door',lightning:'in a lightning flash',dog:'after the dog barked',camera:'on camera',guard:'tackled by a guard',laser:'after tripping a laser',plate:'after stepping on a pressure plate'}[by]||'on camera';
  th.outcome='caught '+srcName+(th.loot?' holding '+th.loot.name:'');th.state='caught';th.caughtT=0;th.caughtBy=by;AU.play('cuffs',{vol:.55,x:th.x,delay:.45});
- ach('first');if(th.loot)ach('bag');if(th.T.boss){if(th.type==='fox'){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900)}else ach('auctioneer');ST.cash+=500;floatText(th.x,th.y-1.6,th.name.toUpperCase()+'! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.type==='climber')ach('climber');if(ST.smokes&&ST.smokes.length&&inSecFog(th.x,th.y))ach('fogged');if(th.leader){AU.say('leader_caught',{cd:0,pri:3});ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
+ ach('first');if(th.loot)ach('bag');if(th.T.boss){if(th.type==='fox'){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900)}else ach('auctioneer');ST.cash+=500;floatText(th.x,th.y-1.6,th.name.toUpperCase()+'! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.type==='climber')ach('climber');if(th.type==='jammer')ach('jammer');if(th.tremor)ach('tremor');if(ST.smokes&&ST.smokes.length&&inSecFog(th.x,th.y))ach('fogged');if(th.leader){AU.say('leader_caught',{cd:0,pri:3});ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
  if(th.loot){const l=th.loot;l.carrier=null;th.loot=null;if(G[th.tile]===FLOOR||G[th.tile]===DOOR){l.home=l.home??l.i;l.i=th.tile;l.dropped=true;setTimeout(()=>floatText(tx(l.i)+.5,ty(l.i)-.2,'DROPPED',S.accent),400);logLine(th.name+' drops '+l.name+'. It is lying in the '+roomOf(l.i)+'.')}}
  {let n=0;for(const o of ST.thieves){if(o===th||!['in','out','flee'].includes(o.state))continue;n++;o.spooked=1;o.needReplan=true;
    if(o.state==='in'&&!o.crackT&&o.sus>o.maxSus*.3&&Math.random()<.75){o.state='flee';o.needReplan=true;o.hiding=false;floatText(o.x,o.y-.7,'ABORT',S.accent)}else o.hurry=0}
@@ -1599,7 +1632,7 @@ function powerTick(dt){const pc=ST.pc;if(!pc||pc.done)return;pc.t+=dt;
 function stepSim(dt){
  powerTick(dt);
  for(const d of ST.devices)if(d.type==='speaker'&&d.cd>0)d.cd-=dt;
- dogTick(dt);eventTick(dt);AU.life(dt);
+ dogTick(dt);jamTick(dt);seismicTick(dt);eventTick(dt);AU.life(dt);
  ST.t+=dt;ST.clock+=dt*.5;
  for(const d of ST.devices){if(d.type==='camera'){if(d.lockT>0&&d.lock&&['in','out','flee'].includes(d.lock.state)){d.lockT-=dt;const ta=Math.atan2(d.lock.y-d.y-.5,d.lock.x-d.x-.5);d.trk=(d.trk??d.cur)+angDiff(ta,d.trk??d.cur)*Math.min(1,dt*7);d.cur=d.trk}else{d.trk=null;d.lock=null;d.cur=camAngle(d,ST.t)}d.seeing=false;if(d.looped>0){d.looped-=dt;if(d.looped<=0){d.looped=0;rebuildWatch();for(const th of ST.thieves)th.needReplan=true}}}if(d.armed>0)d.armed-=dt;if(d.hit>0)d.hit-=dt*1.5}
  for(const s of ST.smokes){s.t-=dt;s.r=Math.min(s.R,s.r+dt*4);if(s.t<1)s.r=Math.max(0,s.R*s.t)}
@@ -1667,7 +1700,7 @@ const ACH=[['first','First collar','Catch a thief.'],['bag','Bag man','Catch a t
  ['frugal','Minimalist','A clean night with 4 devices or fewer.'],['bluff','Ventriloquist','Fool 3 thieves with speakers in one night.'],['decoy','Fool\'s gold','A thief opens a decoy.'],['recover','Lost property','A guard recovers dropped loot.'],
  ['impostor','Nice uniform','Catch the Impostor.'],['magpie','Caught the bird','Catch the Magpie after it throws a lure.'],['contract','Renewed','Finish the five-night contract.'],['impenetrable','Impenetrable','Finish the contract with nothing stolen.'],
  ['hard','Hard case','Finish the contract on Hard.'],['ot5','Overtime veteran','Survive 5 overtime nights.'],['style','Two looks','Play in both art styles.'],['fox','Outfoxed','Catch the Fox.'],
- ['climber','Roof patrol','Catch the Climber.'],['auctioneer','Sold!','Catch the Auctioneer, twice.'],['fogged','Lost in the fog','Catch a thief while they stumble in security fog.'],['perfect','Five-star service','Earn all three stars on every night of a contract.']];
+ ['climber','Roof patrol','Catch the Climber.'],['jammer','Signal lost','Catch the Jammer.'],['tremor','Felt that','Catch a thief a seismic sensor found.'],['auctioneer','Sold!','Catch the Auctioneer, twice.'],['fogged','Lost in the fog','Catch a thief while they stumble in security fog.'],['perfect','Five-star service','Earn all three stars on every night of a contract.']];
 let ACHS=new Set();try{ACHS=new Set(JSON.parse(localStorage.getItem('ij-ach')||'[]'))}catch(e){}
 function ach(id){if(ACHS.has(id))return;const a=ACH.find(a=>a[0]===id);if(!a)return;ACHS.add(id);try{localStorage.setItem('ij-ach',JSON.stringify([...ACHS]))}catch(e){}
  const t=document.createElement('div');t.className='toast';t.innerHTML='<b>★ '+a[1]+'</b>'+a[2];$('toasts').appendChild(t);while($('toasts').children.length>3)$('toasts').firstChild.remove();requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));AU.play('upgrade',{vol:.5});setTimeout(()=>{t.classList.remove('in');setTimeout(()=>t.remove(),600)},4200)}
@@ -1679,7 +1712,7 @@ const DAILY_MODS=[{id:'fog',name:'Fogged lenses',desc:'Every camera sees 2 tiles
  {id:'pricey',name:'Supplier strike',desc:'Cameras cost £180.',apply(){DEV.camera.cost=180}},{id:'nolight',name:'Power rationing',desc:'No floodlights tonight.',apply(){DEV.light.cost=99999}},
  {id:'guards',name:'Skeleton staff',desc:'Guards cost £400.',apply(){DEV.guard.cost=400}},{id:'pros',name:'Professionals',desc:'Every thief moves 20% faster.',apply(){ST.mods.tspeed=1.2}},{id:'big',name:'Busy night',desc:'Seven thieves instead of six.',apply(){}}];
 function dailyKey(){const d=new Date();return d.getUTCFullYear()*10000+(d.getUTCMonth()+1)*100+d.getUTCDate()}
-function dailyInfo(){const key=dailyKey();const r=mulberry(key*7919+7);r();r();const mod=DAILY_MODS[Math.floor(r()*DAILY_MODS.length)];const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor','climber'];
+function dailyInfo(){const key=dailyKey();const r=mulberry(key*7919+7);r();r();const mod=DAILY_MODS[Math.floor(r()*DAILY_MODS.length)];const pool=['runner','cracker','ghost','hacker','lens','scout','smoke','magpie','muscle','impostor','climber','jammer'];
  const crew=[];let t=1.5;const n=mod.id==='big'?7:6;for(let k=0;k<n;k++){crew.push([pool[Math.floor(r()*pool.length)],+t.toFixed(1)]);t+=2.2+r()*2.4}
  return {key,mod,def:{crew,hint:`Daily job: ${mod.name}. ${mod.desc} One night, every entry open, £1,500 to spend. Lose as little as you can.`}}}
 // ---------- weekly board: every daily job this week, plus a spoiler-free result to share with friends
@@ -1772,7 +1805,7 @@ function layoutMode(){const w=innerWidth,h=innerHeight,touch=!!window.IJ_APP||ma
  for(const e of [document.documentElement,document.body]){e.classList.toggle('tl',tl);e.classList.toggle('ls',ls);e.classList.toggle('short',ls&&h<500)}
  document.documentElement.style.setProperty('--u',u);
  if(ls){// panel as narrow as is comfortable, wider when the map cannot use the width anyway
-  const mapW=(h-6)*W/H;let sw=Math.max(Math.min(250*u,.4*w),Math.min(w-mapW,430*u,.5*w));
+  const mapW=(h-6)*W/H;let sw=Math.max(Math.min(290*u,.4*w),Math.min(w-mapW,430*u,.5*w));
   document.documentElement.style.setProperty('--sideW',(sw/u)+'px')}
  const sp=$('speedRow');if(sp&&sp.parentNode!==$('goCard'))$('goCard').appendChild(sp);
  const a=$('abil');if(a){if(tl){if(a.parentNode!==$('goCard'))$('goCard').prepend(a)}else if(a.parentNode!==$('stage'))$('stage').appendChild(a)}
@@ -2149,7 +2182,7 @@ function drawSlams(c){for(const sl of ST.slams){const x=tx(sl.i),y=ty(sl.i);cons
   if(ST.phase==='heist'&&ST.abTool==='slam'){const t=.5+.5*Math.sin(ST.t*6);for(const d of doorTiles()){if(d.vault||isSlam(d.i)||SHUT[d.i])continue;c.save();c.strokeStyle=S.danger;c.globalAlpha=.4+t*.5;c.lineWidth=.06;c.strokeRect(d.x+.05,d.y+.05,.9,.9);c.restore()}}}
 function drawHeat(c){for(let i=0;i<W*H;i++){const w=watch[i];if(w<.5||!passable(i))continue;c.fillStyle=theme==='sketch'?`rgba(200,56,43,${Math.min(.35,w/40)})`:theme==='board'?`rgba(214,60,47,${Math.min(.45,w/35)})`:`rgba(255,90,110,${Math.min(.4,w/40)})`;c.fillRect(tx(i),ty(i),1,1)}}
 function drawLights(c){for(const d of ST.devices)if(d.type==='light'){const g=c.createRadialGradient(d.x+.5,d.y+.5,.2,d.x+.5,d.y+.5,3.6);g.addColorStop(0,S.light.replace(/[\d.]+\)$/,m=>(parseFloat(m)*2.2)+')'));g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;for(let i=0;i<W*H;i++)if(lit[i]>0&&Math.abs(tx(i)-d.x)<=4&&Math.abs(ty(i)-d.y)<=4)c.fillRect(tx(i),ty(i),1.01,1.01)}}
-function drawPlates(c){for(const d of ST.devices)if(d.type==='plate'){const x=d.x,y=d.y,hit=d.hit>0;if(ST.intel.plates.has(d.i)&&ST.phase==='plan')txt(c,'KNOWN',x+.5,y-.2,.2,S.danger,{font:S.mono,weight:'700'});
+function drawPlates(c){for(const d of ST.devices)if(d.type==='plate'){const x=d.x,y=d.y,hit=d.hit>0;if(d.jamT>0)txt(c,'JAMMED',x+.5,y-.2,.2,S.danger,{font:S.mono,weight:'700'});if(ST.intel.plates.has(d.i)&&ST.phase==='plan')txt(c,'KNOWN',x+.5,y-.2,.2,S.danger,{font:S.mono,weight:'700'});
  c.save();if(theme==='board'){c.fillStyle=hit?'#d63c2f':'#8b8f96';rr(c,x+.12,y+.12,.76,.76,.12);c.fill();c.strokeStyle='#2b1d14';c.lineWidth=.04;c.stroke();c.fillStyle='rgba(255,255,255,.35)';c.fillRect(x+.25,y+.25,.5,.08)}
  else{c.strokeStyle=hit?S.danger:S.ink;c.globalAlpha=hit?1:.55;c.lineWidth=.04;c.setLineDash([.08,.06]);c.strokeRect(x+.15,y+.15,.7,.7);c.setLineDash([]);c.beginPath();c.moveTo(x+.35,y+.5);c.lineTo(x+.65,y+.5);c.moveTo(x+.5,y+.35);c.lineTo(x+.5,y+.65);c.stroke()}c.restore()}}
 function drawCones(c){
@@ -2174,7 +2207,7 @@ function coneShape(c,pts,mode,d){
 function drawLasers(c){for(const d of ST.devices)if(d.type==='laser'&&d.beam){const b=d.beam;const xs=b.map(tx),ys=b.map(ty);const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
  const h=d.orient==='h';const ax=h?x0+.05:x0+.5,ay=h?y0+.5:y0+.05,bx=h?x1+.95:x0+.5,by=h?y0+.5:y1+.95;
  c.save();
- if(!d.broken){const fl=.75+.25*Math.sin(ST.t*30+d.id);c.strokeStyle=S.laser;c.globalAlpha=fl;c.lineWidth=d.hit>0?.14:.05;if(S.glow||theme==='blueprint'){c.shadowColor=S.laser;c.shadowBlur=8*DPR}c.beginPath();c.moveTo(ax,ay);c.lineTo(bx,by);c.stroke();c.shadowBlur=0;c.globalAlpha=1;
+ if(!d.broken&&!(d.jamT>0)){const fl=.75+.25*Math.sin(ST.t*30+d.id);c.strokeStyle=S.laser;c.globalAlpha=fl;c.lineWidth=d.hit>0?.14:.05;if(S.glow||theme==='blueprint'){c.shadowColor=S.laser;c.shadowBlur=8*DPR}c.beginPath();c.moveTo(ax,ay);c.lineTo(bx,by);c.stroke();c.shadowBlur=0;c.globalAlpha=1;
   if(theme==='board'){c.strokeStyle='rgba(255,255,255,.6)';c.lineWidth=.015;c.beginPath();c.moveTo(ax,ay-.02);c.lineTo(bx,by-.02);c.stroke()}}
  else{c.strokeStyle=S.laser;c.globalAlpha=.35;c.lineWidth=.03;c.setLineDash([.06,.12]);c.beginPath();c.moveTo(ax,ay);c.lineTo(bx,by);c.stroke();c.setLineDash([])}
  c.globalAlpha=1;for(const [px,py] of [[ax,ay],[bx,by]]){emitter(c,px,py)}c.restore()}}
@@ -2232,6 +2265,7 @@ function drawDevices(c){for(const d of ST.devices){
  else if(d.type==='speaker')drawSpeaker(c,x,y,d);
  else if(d.type==='dog')drawDog(c,x,y,d);
  else if(d.type==='fog')drawFogDev(c,x,y,d);
+ else if(d.type==='seismic')drawSeismic(c,x,y,d);
  c.restore();
  if(sel){c.save();c.strokeStyle=S.accent;c.lineWidth=.05;c.setLineDash([.12,.08]);c.lineDashOffset=-ST.t;c.beginPath();c.arc(x,y,.62,0,7);c.stroke();c.restore()}
 }}
@@ -2268,6 +2302,13 @@ function drawSpeaker(c,x,y,d){
   else{c.globalAlpha=.8;c.strokeStyle=S.accent;c.lineWidth=.06;c.beginPath();c.arc(x,y,.36,-Math.PI/2,-Math.PI/2+Math.PI*2*(1-d.cd/(d.lv?6:12)));c.stroke()}}
  c.restore();if(d.lv&&ST.phase==='plan')txt(c,'★',x+.38,y-.4,.22,S.accent,{font:'Nunito',weight:'800'});
 }
+function drawSeismic(c,x,y,d){
+ c.save();const col=theme==='board'?'#2b1d14':S.devCol,fill=theme==='board'?'#e8dcc0':S.devFill;c.fillStyle=fill;c.strokeStyle=col;c.lineWidth=.05;
+ c.beginPath();c.rect(x-.22,y-.16,.44,.32);c.fill();c.stroke();c.lineWidth=.04;c.beginPath();c.moveTo(x-.17,y);c.lineTo(x-.09,y);c.lineTo(x-.05,y-.1);c.lineTo(x,y+.1);c.lineTo(x+.05,y-.07);c.lineTo(x+.09,y);c.lineTo(x+.17,y);c.stroke();
+ if(d.ping>0){c.strokeStyle=S.accent;c.globalAlpha=Math.min(1,d.ping);c.lineWidth=.05;for(let k=0;k<2;k++){const r=.3+((1.4-d.ping)*.6+k*.25)%.6;c.beginPath();c.arc(x,y,r,0,7);c.stroke()}}
+ if(ST.phase==='plan'&&ST.sel===d){const room=roomOf(d.i);c.globalAlpha=.16;c.fillStyle=S.accent;for(let yy=0;yy<H;yy++)for(let xx=0;xx<W;xx++){const i=idx(xx,yy);if(G[i]===FLOOR&&roomOf(i)===room)c.fillRect(xx,yy,1,1)}}
+ c.restore();if(d.lv&&ST.phase==='plan')txt(c,'★',x+.38,y-.4,.22,S.accent,{font:'Nunito',weight:'800'});
+}
 function drawFogDev(c,x,y,d){
  c.save();const col=theme==='board'?'#2b1d14':S.devCol,fill=theme==='board'?'#d9e6ef':S.devFill;
  if(S.glow){c.shadowColor=col;c.shadowBlur=6*DPR}c.fillStyle=fill;c.strokeStyle=col;c.lineWidth=.05;c.beginPath();c.arc(x,y,.24,0,7);c.fill();c.stroke();c.shadowBlur=0;
@@ -2283,7 +2324,7 @@ function drawCamera(c,x,y,a,d){
  else if(theme==='sketch'){c.rotate(a);c.strokeStyle='#2f2c27';c.lineWidth=.045;rng=mulberry(d.id*7);c.fillStyle='#fbf6e8';c.fillRect(-.22,-.14,.4,.28);wob(c,-.22,-.14,.18,-.14,.02,1);wob(c,.18,-.14,.18,.14,.02,1);wob(c,.18,.14,-.22,.14,.02,1);wob(c,-.22,.14,-.22,-.14,.02,1);c.beginPath();c.moveTo(.18,-.08);c.lineTo(.32,-.14);c.lineTo(.32,.14);c.lineTo(.18,.08);c.stroke()}
  else{const col=S.devCol;c.rotate(a);if(S.glow){c.shadowColor=col;c.shadowBlur=6*DPR}c.fillStyle=S.devFill;c.strokeStyle=col;c.lineWidth=.045;c.fillRect(-.22,-.13,.42,.26);c.strokeRect(-.22,-.13,.42,.26);c.beginPath();c.moveTo(.2,-.07);c.lineTo(.32,-.13);c.lineTo(.32,.13);c.lineTo(.2,.07);c.closePath();c.stroke();c.fillStyle=d.looped>0?'#888':(Math.sin(ST.t*4)>0?S.danger:'transparent');c.beginPath();c.arc(-.1,0,.045,0,7);c.fill()}
  c.restore();
- if(d.looped>0){txt(c,'LOOP '+Math.ceil(d.looped),x,y-.55,.26,S.accent,{font:S.mono})}
+ if(d.jamT>0){txt(c,'JAMMED',x,y-.55,.26,S.danger,{font:S.mono})}else if(d.looped>0){txt(c,'LOOP '+Math.ceil(d.looped),x,y-.55,.26,S.accent,{font:S.mono})}
  else if(theme!=='board'&&theme!=='pixel')txt(c,'C'+d.n,x-.42,y+.42,.22,S.paper?S.labelInk:S.ink,{font:S.mono,alpha:.7});
  if(d.lv&&ST.phase==='plan')txt(c,'★'.repeat(d.lv),x+.38,y-.4,.22,S.accent,{font:'Nunito',weight:'800'});
 }
@@ -2433,6 +2474,8 @@ function drawFX(c,dt){
  FX.floats=FX.floats.filter(f=>f.t<1.8);
  for(const r of FX.rings){r.t+=dt;const k=r.t/1.1;c.save();c.strokeStyle=S.accent;c.globalAlpha=Math.max(0,.6*(1-k));c.lineWidth=.05;c.setLineDash([.15,.12]);c.beginPath();c.arc(r.x,r.y,r.r*Math.min(1,k*1.2),0,7);c.stroke();c.restore()}
  FX.rings=FX.rings.filter(r=>r.t<1.1);
+ if(ST.phase==='heist'||ST.phase==='replay')for(const t of ST.thieves)if(t.T.jam&&['in','out','flee'].includes(t.state)&&t.x!=null&&!(t.drop>0)){c.save();c.strokeStyle=S.danger;c.globalAlpha=.45+.2*Math.sin(ST.t*9);c.lineWidth=.05;c.setLineDash([.1,.14]);c.lineDashOffset=ST.t*.6;c.beginPath();c.arc(t.x,t.y,t.T.jam,0,7);c.stroke();c.restore()}
+ if(ST.tremors&&ST.tremors.length){for(const m of ST.tremors){m.t+=dt;const a=Math.max(0,1-m.t/2.2);c.save();c.strokeStyle=S.accent;c.lineWidth=.06;c.globalAlpha=a;for(let k=0;k<3;k++){const r=.25+((m.t*.9+k*.33)%1)*.9;c.beginPath();c.arc(m.x,m.y,r,0,7);c.stroke()}c.restore();if(m.t<.1&&!R3.on)floatText(m.x,m.y-.8,'TREMOR',S.accent)}ST.tremors=ST.tremors.filter(m=>m.t<2.2)}
  if(FX.drops&&FX.drops.length){for(const p of FX.drops){p.t+=dt;const k=Math.min(1,p.t/.3),e=1-(1-k)*(1-k),sz=.5+(1-e)*1.1;c.save();c.strokeStyle=S.accent;c.globalAlpha=k<1?.35+k*.65:Math.max(0,1-(p.t-.3)/.3);c.lineWidth=.07;const L=.24;for(const [sx,sy] of [[-1,-1],[1,-1],[-1,1],[1,1]]){const x=p.x+sx*sz,y=p.y+sy*sz;c.beginPath();c.moveTo(x-sx*L,y);c.lineTo(x,y);c.lineTo(x,y-sy*L);c.stroke()}c.restore()}FX.drops=FX.drops.filter(p=>p.t<.6)}
  for(const t of FX.throws){t.t+=dt*1.8;const k=Math.min(1,t.t);const x=lerp(t.x0,t.x1,k),y=lerp(t.y0,t.y1,k)-Math.sin(k*Math.PI)*1.4;c.save();c.fillStyle=S.accent;c.beginPath();c.arc(x,y,.1,0,7);c.fill();c.globalAlpha=.4;c.setLineDash([.06,.1]);c.strokeStyle=S.accent;c.lineWidth=.03;c.beginPath();for(let q=0;q<=k;q+=.05){const X=lerp(t.x0,t.x1,q),Y=lerp(t.y0,t.y1,q)-Math.sin(q*Math.PI)*1.4;q?c.lineTo(X,Y):c.moveTo(X,Y)}c.stroke();c.restore()}
  FX.throws=FX.throws.filter(t=>t.t<1.3);
@@ -2488,6 +2531,7 @@ function place(type,i,opts={}){
  if(type==='laser')d.orient=opts.orient||autoOrient(d.x,d.y);
  ST.cash-=DEV[type].cost;d.paid=DEV[type].cost;ST.devices.push(d);devicesChanged();AU.place();
  burst(d.x+.5,d.y+.5,10,S.accent,2,.5,.06);(FX.drops=FX.drops||[]).push({x:d.x+.5,y:d.y+.5,t:0});hap(12);if(type==='guard')tip('pers','Guards have personalities','Select a guard and tap the personality button: a Veteran sees further, a Rookie is cheap, a Dozy one nods off.');
+ if(type==='seismic')tip('seismic','Seismic sensor','It covers its whole room, walls and all. When it feels someone it quietly sends your nearest guard, so it needs a guard on site to be any use. Thieves never know it is there.');
  if(type==='fog')tip('fog','Fog cannon','It fires when a laser, plate or dog raises the alarm within 4 tiles (the dashed circle). Thieves in the fog stumble at half speed, but your cameras can\'t see through it either.');
  if(type==='speaker'&&!opts.noRoute)hint('Speaker fitted. During the night, click it to bluff: thieves nearby hide or turn back. Recharges in 12 s.',6);
  if(type==='guard'&&!opts.noRoute){ST.routeFor=d;ST.tool=null;hint(TOUCH?'Tap up to 6 patrol points, then press Done. No points makes a stationary sentry.':'Click up to 6 patrol points for this guard. Click the guard again, press Enter or right-click to finish. No points makes a stationary sentry.',10)}
@@ -2556,7 +2600,7 @@ function selectTool(t){if(ST.routeFor)finishRoute();ST.tool=ST.tool===t?null:t;S
 function setSpeed(s){ST.speed=s;document.querySelectorAll('#speedRow button').forEach(b=>b.classList.toggle('on',+b.dataset.s===s))}
 
 // ================================================================ UI
-const SHORT={plate:'Plate',light:'Light',steel:'Door',floodlight:'Light',speaker:'Speaker',dog:'Dog',camera:'Camera',laser:'Laser',guard:'Guard',decoy:'Decoy',fog:'Fog'};
+const SHORT={plate:'Plate',light:'Light',steel:'Door',floodlight:'Light',speaker:'Speaker',dog:'Dog',camera:'Camera',laser:'Laser',guard:'Guard',decoy:'Decoy',fog:'Fog',seismic:'Sensor'};
 function buildToolUI(){$('tools').innerHTML=Object.entries(DEV).map(([k,d])=>`<button class="tool" data-t="${k}">${ICON[k]}<span><span class="nm">${d.name}</span><span class="sn">${SHORT[k]||d.name}</span><span class="c">${money(d.cost)}</span></span><kbd>${d.key}</kbd></button>`).join('');
  document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{AU.init();selectTool(b.dataset.t)});
  $('routeDone').onclick=()=>{if(ST.routeFor)finishRoute()};$('worksBtn').onclick=()=>{AU.init();AU.click();worksSheet()};$('styles').innerHTML='<button id="lookBtn"></button>';$('lookBtn').onclick=()=>{AU.init();AU.click();setTheme(nextLook())};
@@ -2647,12 +2691,18 @@ function openLooks(){if($('looksDone'))return;looksPrev=$('overlay').classList.c
 // ---------- v22: options, haptics, one-time tips
 const OPT={kit:true,shake:!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches),flash:true,slow:true,hap:true,tips:true};try{Object.assign(OPT,JSON.parse(localStorage.getItem('ij-opt')||'{}'))}catch(e){}
 function saveOpt(){try{localStorage.setItem('ij-opt',JSON.stringify(OPT))}catch(e){}}
-function hap(p){if(OPT.hap&&navigator.vibrate)try{navigator.vibrate(p)}catch(e){}}
+// v40: the iPhone app has a native Haptics plugin (Capacitor). A short tap is a light/medium/heavy impact, a pattern is a
+// notification buzz (alarm = warning, escape = error). Older app installs without the plugin, and browsers, fall back to navigator.vibrate.
+function hapNative(){try{const H=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.Haptics;return H&&Capacitor.isPluginAvailable&&Capacitor.isPluginAvailable('Haptics')?H:null}catch(e){return null}}
+function canHap(){return !!(hapNative()||navigator.vibrate)}
+function hap(p){if(!OPT.hap)return;const H=hapNative();
+ if(H){try{if(Array.isArray(p))H.notification({type:p[0]>=80?'ERROR':'WARNING'});else H.impact({style:p>=60?'HEAVY':p>=25?'MEDIUM':'LIGHT'})}catch(e){}return}
+ if(navigator.vibrate)try{navigator.vibrate(p)}catch(e){}}
 let TIPS=new Set();try{TIPS=new Set(JSON.parse(localStorage.getItem('ij-tips')||'[]'))}catch(e){}
 function tip(id,title,text){try{if(!OPT.tips||TIPS.has(id)||TUT.on)return}catch(e){return}TIPS.add(id);try{localStorage.setItem('ij-tips',JSON.stringify([...TIPS]))}catch(e){}
  const t=document.createElement('div');t.className='toast tip';t.innerHTML='<b>💡 '+title+'</b>'+text;$('toasts').appendChild(t);while($('toasts').children.length>3)$('toasts').firstChild.remove();requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));
  SYN.tone(660,.12,{type:'sine',vol:.1});SYN.tone(990,.2,{type:'sine',vol:.09,delay:.1});setTimeout(()=>{t.classList.remove('in');setTimeout(()=>t.remove(),600)},9000)}
-const OPTS=[['kit','3D character models','Off uses simple figures, for slow phones.'],['shake','Screen shake','On catches and escapes.'],['flash','Screen flashes','Alarms, lightning, power cuts.'],['slow','Slow-motion catches','Zoom and slow down for an arrest.'],['hap','Vibration','Alarms and arrests. Android only.'],['tips','Tips','Hints when something new turns up.']];
+const OPTS=[['kit','3D character models','Off uses simple figures, for slow phones.'],['shake','Screen shake','On catches and escapes.'],['flash','Screen flashes','Alarms, lightning, power cuts.'],['slow','Slow-motion catches','Zoom and slow down for an arrest.'],['hap','Vibration','Alarms and arrests.'+(canHap()?'':' Not on this device.')],['tips','Tips','Hints when something new turns up.']];
 function optionsSheet(){const fromHome=homeOn()||HOME.from!=='game'&&ST.phase==='title';let spd=0;if(ST.phase==='heist'&&ST.speed>0){spd=ST.speed;setSpeed(0)}hideHome();
  const draw=()=>{const sl=(k,l,max)=>`<label>${l}</label><input type="range" data-mx="${k}" min="0" max="${max}" step=".05" value="${MIX[k]}">`;
   showSheet(`<h2>Options</h2><div class="optG">${sl('sfx','Effects',1.5)}${sl('vo','Radio voices',1.5)}${sl('mus','Music',1)}</div>
@@ -3053,7 +3103,10 @@ function r3Sync(dt){const used=new Set();const P=R3.people;
  const dk=ST.devices.map(d=>d.type+d.i+(d.o||'')+(d.lv||'')).join(',')+'|'+ST.loot.map(l=>l.id+(l.fake?'f':'')).join(',');if(dk!==R3.dk){const full=R3.dk==null;R3.dk=dk;r3BuildDevices(full)}
  for(const it of R3.devs){const d=it.d;if(it.dog){const up=d.bark>0;it.dog.rotation.y=up?-(d.face||0):.6;it.dog.position.y=.1+(up?.12+Math.abs(Math.sin(R3.t*14))*.1:Math.sin(R3.t*1.6)*.008);it.dog.scale.y=up?1.15:.8;continue}if(it.cam){const a=d.cur??d.ang;it.head.rotation.y=-a;const on=!(d.looped>0)&&!ST.dark;it.light.intensity=on?LP.cam:0;it.cone.visible=on;if(on)r3FanSet(it.cone,d._pts||rays(d.x+.5,d.y+.5,a,CAM.fov,camRange(d)),1.5);it.led.material=on&&Math.sin(ST.t*6)>-.2?R3.mats.led:R3.mats.dark}
   if(it.lamp){const on=!ST.dark;it.light.intensity=on?LP.lamp:0;it.glow.visible=on}
-  if(it.beam){it.beam.visible=!(d.broken)&&!ST.dark;it.beam.material.opacity=.7+.3*Math.sin(ST.t*20)}}
+  if(it.seis){it.ring.visible=d.ping>0;if(d.ping>0){const k=1.4-d.ping;const sc=.6+k*1.6;it.ring.scale.set(sc,sc,1);it.ring.material.opacity=Math.min(1,d.ping)*.8}}
+  if(it.beam){it.beam.visible=!(d.broken)&&!ST.dark&&!(d.jamT>0);it.beam.material.opacity=.7+.3*Math.sin(ST.t*20)}}
+ {const JR=R3.jamR||(R3.jamR=[]);let n=0;if(ST.phase==='heist'||ST.phase==='replay')for(const t of ST.thieves){if(!t.T.jam||!['in','out','flee'].includes(t.state)||t.x==null||t.drop>0)continue;let m=JR[n];if(!m){m=new THREE.Mesh(new THREE.RingGeometry(.94,1,48),new THREE.MeshBasicMaterial({color:'#ff4d6a',transparent:true,depthWrite:false,side:THREE.DoubleSide}));m.rotation.x=-Math.PI/2;R3.dyn.add(m);JR.push(m)}
+  const r=t.T.jam;m.scale.set(r,r,1);m.position.set(t.x,.05,t.y);m.material.opacity=.45+.2*Math.sin(ST.t*9);m.visible=true;n++}for(;n<JR.length;n++)JR[n].visible=false}
  if(R3.van)R3.van.visible=ST.phase!=='plan';r3PoolSync();
  // v32: smoke and security fog as soft billowing puffs
  {const SM=R3.smk||(R3.smk=[]),SK=R3.look==='sketch';let n=0;if(ST.phase==='heist'||ST.phase==='replay')for(const sm of ST.smokes||[]){if(sm.r<=.05)continue;for(let k=0;k<7;k++){let sp=SM[n];if(!sp){sp=new THREE.Sprite(new THREE.SpriteMaterial({map:r3Glow(),transparent:true,depthWrite:false}));sp.renderOrder=3;R3.dyn.add(sp);SM.push(sp)}
@@ -3095,6 +3148,8 @@ function r3BuildDevices(full){const disp=g=>g.traverse(x=>{if(x.geometry&&x.geom
    const can=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,.34,16),M.steel);can.position.set(x,1.38,z);can.castShadow=true;G3.add(can);const cap=new THREE.Mesh(new THREE.SphereGeometry(.16,16,8,0,Math.PI*2,0,Math.PI/2),M.steel);cap.position.set(x,1.55,z);G3.add(cap);
    for(let k=0;k<3;k++){const a=k*2.094;const nz=new THREE.Mesh(new THREE.CylinderGeometry(.03,.05,.12,8),M.dark);nz.position.set(x+Math.cos(a)*.1,1.18,z+Math.sin(a)*.1);G3.add(nz)}
    const band=new THREE.Mesh(new THREE.TorusGeometry(.165,.02,6,20),M.brass);band.rotation.x=Math.PI/2;band.position.set(x,1.3,z);G3.add(band)}
+  else if(d.type==='seismic'){const pk=new THREE.Mesh(new THREE.CylinderGeometry(.2,.23,.06,20),M.steel);pk.position.set(x,.03,z);pk.castShadow=true;G3.add(pk);const ld=new THREE.Mesh(new THREE.SphereGeometry(.035,10,8),M.laser);ld.position.set(x,.07,z);G3.add(ld);
+   const ring=new THREE.Mesh(new THREE.RingGeometry(.42,.5,32),new THREE.MeshBasicMaterial({color:'#7fe3ff',transparent:true,opacity:.8,depthWrite:false,side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.set(x,.06,z);ring.visible=false;G3.add(ring);R3.devs.push({d,seis:true,ring})}
   else if(d.type==='speaker'){const b=new THREE.Mesh(r3Block(d.x+.3,d.y+.3,.4,.4,.5,.08,.04),M.dark);b.castShadow=true;G3.add(b);const cone=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,.02,20),M.brass);cone.position.set(x,.52,z);G3.add(cone)}
   else if(d.type==='steel'){const vert=G[idx(d.x,d.y-1)]===WALL;const b=new THREE.Mesh(r3Block(vert?d.x+.38:d.x+.02,vert?d.y+.02:d.y+.38,vert?.24:.96,vert?.96:.24,1.32,.05,.03),M.steel);b.castShadow=true;b.receiveShadow=true;G3.add(b)}});
  for(const l of ST.loot)item('L'+l.id+(l.fake?'f':''),l,G3=>{const x=l.x+.5,z=l.y+.5,SK=R3.look==='sketch';const bl=r3Blob(1.2,.5);bl.position.set(x,.012,z);G3.add(bl);
