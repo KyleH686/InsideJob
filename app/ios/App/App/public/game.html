@@ -653,7 +653,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v42 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v43 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -738,14 +738,14 @@ const SITES={
   roomOf(x,y){if(x<13)return y<12?'office':'store room';if(x<26)return y<16?'gallery':'lobby';if(y<11)return 'vault';if(y<15)return 'corridor';return 'loading dock'}},
  bank:{name:'Pell Street Bank',caption:'PELL STREET BANK · BRANCH SECURITY PLAN · DRG 12/A',note1:'Pell Street - in through the hall?',note2:['pillars = blind spots!',22,24.9],
   blurb:'Harder. An old high-street bank: pillars break up the hall, and the strongroom is one room from the staff door.',
-  walls(hl,vl,G){vl(12,2,12);hl(2,25,12);vl(25,2,23);hl(25,37,8);hl(25,37,16);hl(2,8,17);vl(8,17,23);for(const [x,y] of [[15,15],[21,15],[15,20],[21,20]])hl(x,x,y)},
+  cut:[[34,9,37,15]],walls(hl,vl,G){vl(12,2,12);hl(2,25,12);vl(25,2,23);hl(25,37,8);hl(25,37,16);hl(2,8,17);vl(8,17,23);for(const [x,y] of [[15,15],[21,15],[15,20],[21,20]])hl(x,x,y)},
   doors:[{x:12,y:7},{x:6,y:12,shut:2},{x:19,y:12},{x:8,y:20},{x:25,y:19,shut:2},{x:25,y:13},{x:31,y:16},{x:31,y:8,vault:true}],
   entries:[{id:'main',name:'Front doors',tiles:[[14,23],[15,23]],spawn:[14,24],night:1},
    {id:'side',name:'Staff door',tiles:[[37,20]],spawn:[38,20],night:2,lab:[-2.3,-1.5]},
    {id:'atm',name:'ATM wall',tiles:[[2,20]],spawn:[1,20],night:3,lab:[2.2,-1.5]},
    {id:'roof',name:'Roof hatch',tiles:[],spawn:[18,6],night:4,roof:true},
    {id:'sewer',name:'Sewer tunnel',tiles:[],spawn:[30,20],night:5,roof:true}],
-  rooms:[{n:'OFFICE',x:7,y:7.5},{n:'DEPOSIT ROOM',x:18.5,y:8.2},{n:'BANKING HALL',x:18,y:17.6},{n:'ATM',x:5,y:20.6},{n:'STRONGROOM',x:31.5,y:5.6},{n:'SECURITY',x:31.5,y:12},{n:'CASH ROOM',x:31.5,y:19.2}],
+  rooms:[{n:'OFFICE',x:7,y:7.5},{n:'DEPOSIT ROOM',x:18.5,y:8.2},{n:'BANKING HALL',x:18,y:17.6},{n:'ATM',x:5,y:20.6},{n:'STRONGROOM',x:31.5,y:5.6},{n:'SECURITY',x:29.5,y:12},{n:'CASH ROOM',x:31.5,y:19.2}],
   loot:[{id:'safe',name:'Manager\'s safe',x:3,y:3,v:6000,crack:6,kind:'safe'},
    {id:'box1',name:'Deposit box 114',x:14,y:3,v:4000,crack:3,kind:'safe'},
    {id:'box2',name:'Deposit box 207',x:23,y:3,v:5000,crack:3,kind:'safe'},
@@ -763,14 +763,14 @@ const SITES={
   roomOf(x,y){if(x<25){if(y<12)return x<12?'office':'deposit room';return x<8&&y>17?'atm lobby':'banking hall'}if(y<8)return 'strongroom';if(y<16)return 'security room';return 'cash room'}},
  manor:{name:'Ashcombe House',caption:'ASHCOMBE HOUSE · COUNTRY HOUSE SECURITY SURVEY · DRG 03/C',note1:'Ashcombe - too many ways in!',n1x:13,note2:['glasshouse = weak spot?',2.6,24.9],
   blurb:'Spread thin. A rambling country house with two ways in from night one, then a kitchen door, a chimney and a coal chute. The Ashcombe Tiara sits in the study.',
-  walls(hl,vl){vl(10,2,23);hl(2,10,13);hl(10,27,10);vl(27,2,23);hl(27,37,9);hl(27,37,16);for(const [x,y] of [[14,16],[23,16],[14,20],[23,20]])hl(x,x,y);hl(17,20,13)},
-  doors:[{x:10,y:5},{x:6,y:13},{x:10,y:18},{x:18,y:10},{x:27,y:12},{x:27,y:20},{x:33,y:16},{x:32,y:9,vault:true}],
-  entries:[{id:'main',name:'Front door',tiles:[[18,23],[19,23]],spawn:[18,24],night:1},
+  cut:[[12,21,25,23]],walls(hl,vl){vl(10,2,23);hl(2,10,13);hl(10,27,10);vl(27,2,23);hl(27,37,9);hl(27,37,16);for(const [x,y] of [[14,16],[23,16],[14,20],[23,20]])hl(x,x,y);hl(17,20,13)},
+  doors:[{x:10,y:5},{x:6,y:13},{x:10,y:18},{x:18,y:10},{x:27,y:12},{x:27,y:18},{x:33,y:16},{x:32,y:9,vault:true}],
+  entries:[{id:'main',name:'Front door',tiles:[[18,20],[19,20]],spawn:[18,21],night:1},
    {id:'cons',name:'Conservatory doors',tiles:[[2,19]],spawn:[1,19],night:1,lab:[4,-1.5]},
    {id:'kitchen',name:'Kitchen door',tiles:[[5,2]],spawn:[5,1],night:2,lab:[2.6,.2]},
    {id:'chimney',name:'Chimney',tiles:[],spawn:[22,4],night:3,roof:true},
    {id:'cellar',name:'Coal chute',tiles:[],spawn:[4,9],night:5,roof:true}],
-  rooms:[{n:'KITCHEN',x:6,y:7.6},{n:'CONSERVATORY',x:6,y:16.2},{n:'LIBRARY',x:18.5,y:6.8},{n:'GREAT HALL',x:18.5,y:18.2},{n:'STUDY',x:32,y:6.2},{n:'LONG GALLERY',x:32,y:13.4},{n:'DRAWING ROOM',x:32,y:19.6}],
+  rooms:[{n:'KITCHEN',x:6,y:7.6},{n:'CONSERVATORY',x:6,y:16.2},{n:'LIBRARY',x:18.5,y:6.8},{n:'GREAT HALL',x:18.5,y:18.4},{n:'STUDY',x:32,y:6.2},{n:'LONG GALLERY',x:32,y:13.4},{n:'DRAWING ROOM',x:32,y:19.6}],
   loot:[{id:'wine',name:'Vintage claret',x:3,y:3,v:3500,crack:2,kind:'crate'},
    {id:'orchid',name:'Ghost orchids',x:3,y:22,v:2500,crack:1.5,kind:'statue'},
    {id:'folio',name:'First folio',x:12,y:3,v:5000,crack:2.5,kind:'cash'},
@@ -789,21 +789,21 @@ const SITES={
   roomOf(x,y){if(x<10)return y<13?'kitchen':'conservatory';if(x<27)return y<10?'library':'great hall';if(y<9)return 'study';if(y<16)return 'long gallery';return 'drawing room'}},
  museum:{name:'The Harrow Museum',caption:'THE HARROW MUSEUM · NATIONAL COLLECTION · SECURITY DRG 21/D',note1:'Harrow - long hall, long sightlines',n1x:14,note2:['skylight over the hall!',19,24.9],rep:6,bonus:150,city:[54,22],
   blurb:'Bigger. A grand central hall lined with display cases, two wings, and the Harrow Sapphire behind a vault door. Long sightlines suit cameras, but there is a lot of glass.',
-  walls(hl,vl){vl(13,2,23);vl(26,2,23);hl(2,13,12);hl(26,37,12);for(const [x,y] of [[17,7],[22,7],[17,12],[22,12],[17,17],[22,17]])hl(x,x,y)},
+  cut:[[2,2,6,6],[33,2,37,6]],walls(hl,vl){vl(13,2,23);vl(26,2,23);hl(2,13,12);hl(26,37,12);for(const [x,y] of [[17,7],[22,7],[17,12],[22,12],[17,17],[22,17]])hl(x,x,y)},
   doors:[{x:13,y:7},{x:13,y:18},{x:7,y:12},{x:26,y:17},{x:31,y:12},{x:26,y:6,vault:true}],
   entries:[{id:'main',name:'Front steps',tiles:[[19,23],[20,23]],spawn:[19,24],night:1},
    {id:'bay',name:'Loading bay',tiles:[[37,19]],spawn:[38,19],night:1,lab:[-5,-1.4]},
    {id:'win',name:'West window',tiles:[[2,17]],spawn:[1,17],night:2,lab:[2.6,-1.4]},
    {id:'sky',name:'Hall skylight',tiles:[],spawn:[19,4],night:3,roof:true},
    {id:'drain',name:'Old drain',tiles:[],spawn:[32,21],night:5,roof:true}],
-  rooms:[{n:'EGYPTIAN ROOM',x:7.5,y:7},{n:'ARMOURY',x:7.5,y:18},{n:'GRAND HALL',x:19.5,y:20.4},{n:'GEM ROOM',x:31.5,y:7},{n:'ARCHIVE',x:31.5,y:18}],
-  loot:[{id:'mask',name:'Gold death mask',x:3,y:3,v:7000,crack:3,kind:'statue'},
+  rooms:[{n:'EGYPTIAN ROOM',x:9.5,y:9.6},{n:'ARMOURY',x:7.5,y:18},{n:'GRAND HALL',x:19.5,y:20.4},{n:'GEM ROOM',x:29.5,y:9.6},{n:'ARCHIVE',x:31.5,y:18}],
+  loot:[{id:'mask',name:'Gold death mask',x:3,y:9,v:7000,crack:3,kind:'statue'},
    {id:'scarab',name:'Scarab amulets',x:11,y:3,v:3500,crack:2,kind:'gem'},
    {id:'sword',name:'Ceremonial sword',x:3,y:22,v:4000,crack:2,kind:'gold'},
    {id:'helm',name:'Viking helm',x:11,y:22,v:3000,crack:1.5,kind:'statue'},
    {id:'p1',name:'"The Harrow Hunt"',x:19,y:3,v:6000,crack:3,kind:'painting'},
    {id:'gem',name:'The Harrow Sapphire',x:31,y:3,v:16000,crack:7,kind:'gem'},
-   {id:'tiara',name:'Duchess tiara',x:35,y:3,v:6000,crack:4,kind:'gem'},
+   {id:'tiara',name:'Duchess tiara',x:35,y:9,v:6000,crack:4,kind:'gem'},
    {id:'coins',name:'Roman coin hoard',x:28,y:3,v:4500,crack:3,kind:'gold'},
    {id:'maps',name:'Drake\'s charts',x:35,y:22,v:4000,crack:2,kind:'cash'},
    {id:'safe',name:'Archive safe',x:28,y:22,v:5000,crack:5,kind:'safe'}],
@@ -815,14 +815,14 @@ const SITES={
   roomOf(x,y){if(x<13)return y<12?'egyptian room':'armoury';if(x<26)return 'grand hall';return y<12?'gem room':'archive'}},
  jeweller:{name:'Vane & Daughters',caption:'VANE & DAUGHTERS · JEWELLERS SINCE 1888 · SECURITY DRG 04/F',note1:'Vane & Daughters - small but rich',n1x:12,note2:['skylight in the workshop',6,24.9],rep:12,bonus:250,city:[17,68],
   blurb:'Tight. A small Hatton Garden jeweller packed with stones: the strongroom holds most of the value, and the alley side has three ways in.',
-  walls(hl,vl){vl(20,2,23);hl(2,20,14);hl(20,37,9);hl(20,37,16);vl(11,14,23);for(const [x,y] of [[6,7],[14,7]])hl(x,x+1,y)},
+  cut:[[32,2,37,8]],walls(hl,vl){vl(20,2,23);hl(2,20,14);hl(20,37,9);hl(20,37,16);vl(11,14,23);for(const [x,y] of [[6,7],[14,7]])hl(x,x+1,y)},
   doors:[{x:20,y:12},{x:7,y:14},{x:11,y:19},{x:20,y:20},{x:30,y:16},{x:28,y:9,vault:true}],
   entries:[{id:'main',name:'Shop door',tiles:[[10,2],[11,2]],spawn:[10,1],night:1,lab:[0,-.2]},
    {id:'back',name:'Alley door',tiles:[[37,20]],spawn:[38,20],night:2,lab:[-5,-1.4]},
    {id:'win',name:'Side window',tiles:[[2,8]],spawn:[1,8],night:1,lab:[2.6,-1.4]},
    {id:'sky',name:'Workshop skylight',tiles:[],spawn:[6,19],night:3,roof:true},
    {id:'drain',name:'Cellar drain',tiles:[],spawn:[25,20],night:5,roof:true}],
-  rooms:[{n:'SHOWROOM',x:11,y:10.6},{n:'WORKSHOP',x:6.5,y:21.4},{n:'OFFICE',x:15.5,y:21.4},{n:'STRONGROOM',x:28.5,y:5.6},{n:'CUTTING ROOM',x:28.5,y:12.6},{n:'STAFF ROOM',x:28.5,y:20}],
+  rooms:[{n:'SHOWROOM',x:11,y:10.6},{n:'WORKSHOP',x:6.5,y:21.4},{n:'OFFICE',x:15.5,y:21.4},{n:'STRONGROOM',x:25.5,y:5.6},{n:'CUTTING ROOM',x:28.5,y:12.6},{n:'STAFF ROOM',x:28.5,y:20}],
   loot:[{id:'ring',name:'Engagement rings',x:3,y:3,v:3500,crack:2,kind:'gem'},
    {id:'watch',name:'Gold watches',x:18,y:3,v:4000,crack:2,kind:'gold'},
    {id:'pearl',name:'Pearl necklace',x:3,y:12,v:3000,crack:1.5,kind:'gem'},
@@ -830,7 +830,7 @@ const SITES={
    {id:'cash',name:'Petty cash',x:18,y:22,v:2000,crack:1.5,kind:'cash'},
    {id:'gem',name:'The Vane Pink',x:28,y:3,v:17000,crack:7,kind:'gem'},
    {id:'safe',name:'Strongroom safe',x:22,y:3,v:7000,crack:6,kind:'safe'},
-   {id:'bars',name:'Gold bars',x:35,y:3,v:6000,crack:4,kind:'gold'},
+   {id:'bars',name:'Gold bars',x:30,y:7,v:6000,crack:4,kind:'gold'},
    {id:'tray',name:'Diamond tray',x:35,y:11,v:5000,crack:3,kind:'gem'},
    {id:'brooch',name:'Emerald brooch',x:22,y:11,v:4000,crack:2.5,kind:'gem'}],
   hints:['Two ways in from night one: the shop door and the side window, both into the showroom. Everything worth having is through the door on the right.',
@@ -841,7 +841,7 @@ const SITES={
   roomOf(x,y){if(x<20){if(y<14)return 'showroom';return x<11?'workshop':'office'}if(y<9)return 'strongroom';if(y<16)return 'cutting room';return 'staff room'}},
  casino:{name:'The Golden Ace',caption:'THE GOLDEN ACE CASINO · HOUSE SECURITY · DRG 09/K',note1:'Golden Ace - the count room!',n1x:12,note2:['tables = cover for them',12,24.9],rep:20,bonus:400,city:[76,64],
   blurb:'The big one. A busy gaming floor full of tables to hide behind, a cashier cage, and a count room stacked with the night\'s takings.',
-  walls(hl,vl){hl(2,24,9);vl(24,2,23);hl(24,37,8);hl(24,37,15);vl(12,2,9);for(const [x,y] of [[6,14],[11,14],[16,14],[6,19],[11,19],[16,19]])hl(x,x+1,y)},
+  cut:[[2,20,7,23]],walls(hl,vl){hl(2,24,9);vl(24,2,23);hl(24,37,8);hl(24,37,15);vl(12,2,9);for(const [x,y] of [[6,14],[11,14],[16,14],[6,19],[11,19],[16,19]])hl(x,x+1,y)},
   doors:[{x:6,y:9},{x:18,y:9},{x:12,y:5},{x:24,y:19},{x:24,y:12},{x:30,y:15},{x:30,y:8,vault:true}],
   entries:[{id:'main',name:'Main entrance',tiles:[[11,23],[12,23]],spawn:[11,24],night:1},
    {id:'back',name:'Staff door',tiles:[[37,19]],spawn:[38,19],night:1,lab:[-5,-1.4]},
@@ -855,7 +855,7 @@ const SITES={
    {id:'cage2',name:'Cashier safe',x:22,y:3,v:6000,crack:5,kind:'safe'},
    {id:'take',name:'The night\'s takings',x:30,y:3,v:16000,crack:7,kind:'cash'},
    {id:'gold',name:'Gold reserve',x:35,y:3,v:7000,crack:4,kind:'gold'},
-   {id:'wheel',name:'Gold roulette wheel',x:3,y:22,v:3000,crack:2,kind:'gold'},
+   {id:'wheel',name:'Gold roulette wheel',x:10,y:21,v:3000,crack:2,kind:'gold'},
    {id:'tapes',name:'Security tapes',x:35,y:10,v:2500,crack:1.5,kind:'crate'},
    {id:'wine',name:'Rare whisky',x:35,y:22,v:3500,crack:1.5,kind:'crate'},
    {id:'statue',name:'Golden ace statue',x:22,y:22,v:4500,crack:3,kind:'statue'}],
@@ -868,15 +868,15 @@ const SITES={
 };
  SITES.auction={name:"Lockwood's Auction House",short:"Lockwood's",caption:"LOCKWOOD'S AUCTION HOUSE · RIVERSIDE · SECURITY DRG 33/L",note1:"Lockwood's - sale day tomorrow",n1x:14,note2:['river stairs = way in?',6,24.9],rep:28,bonus:500,city:[80,42],boss:'auctioneer',
   blurb:'An old riverside auction house the night before a big sale. Every lot is out on view, the strongroom holds the star of the catalogue, and the river stairs give the crews a back way in.',
-  walls(hl,vl){vl(12,2,23);hl(2,12,12);vl(27,2,23);hl(12,27,8);hl(27,37,9);hl(27,37,15);for(const [x,y] of [[16,13],[22,13],[16,18],[22,18]])hl(x,x+1,y)},
+  cut:[[2,2,5,6]],walls(hl,vl){vl(12,2,23);hl(2,12,12);vl(27,2,23);hl(12,27,8);hl(27,37,9);hl(27,37,15);for(const [x,y] of [[16,13],[22,13],[16,18],[22,18]])hl(x,x+1,y)},
   doors:[{x:12,y:6},{x:7,y:12},{x:12,y:18},{x:19,y:8},{x:27,y:12},{x:27,y:19},{x:32,y:15},{x:32,y:9,vault:true}],
   entries:[{id:'main',name:'Front doors',tiles:[[19,23],[20,23]],spawn:[19,24],night:1},
    {id:'dock',name:'Loading bay',tiles:[[31,23],[32,23],[33,23]],spawn:[32,24],night:1},
    {id:'river',name:'River stairs',tiles:[[2,17]],spawn:[1,17],night:2,lab:[2.6,-1.4]},
    {id:'lantern',name:'Roof lantern',tiles:[],spawn:[19,11],night:3,roof:true},
    {id:'sewer',name:'Old sewer',tiles:[],spawn:[5,20],night:5,roof:true}],
-  rooms:[{n:'VIEWING GALLERY',x:7,y:7},{n:'PACKING ROOM',x:7,y:17.6},{n:'VALUATION OFFICE',x:19.5,y:5},{n:'SALEROOM',x:19.5,y:15.8},{n:'STRONGROOM',x:32,y:5.8},{n:'CORRIDOR',x:32,y:12},{n:'LOADING BAY',x:32,y:19.2}],
-  loot:[{id:'lot1',name:'"Storm over Wapping"',x:5,y:3,v:5500,crack:3,kind:'painting'},
+  rooms:[{n:'VIEWING GALLERY',x:8,y:8.4},{n:'PACKING ROOM',x:7,y:17.6},{n:'VALUATION OFFICE',x:19.5,y:5},{n:'SALEROOM',x:19.5,y:15.8},{n:'STRONGROOM',x:32,y:5.8},{n:'CORRIDOR',x:32,y:12},{n:'LOADING BAY',x:32,y:19.2}],
+  loot:[{id:'lot1',name:'"Storm over Wapping"',x:8,y:3,v:5500,crack:3,kind:'painting'},
    {id:'lot2',name:'"The Ferryman\'s Daughter"',x:10,y:3,v:6000,crack:3,kind:'painting'},
    {id:'vase',name:'Lot 40: porcelain vase',x:3,y:10,v:4000,crack:2.5,kind:'statue'},
    {id:'dep',name:'Bidders\' deposits',x:14,y:3,v:4000,crack:2,kind:'cash'},
@@ -896,14 +896,14 @@ const SITES={
 // v41: the eighth building. Every room name already has guard voice lines.
  SITES.hotel={name:'The Belvedere Hotel',short:'Belvedere',caption:'THE BELVEDERE HOTEL · PARK LANE · SECURITY DRG 41/H',note1:'Belvedere - tiara in the vault',n1x:14,note2:['kitchen door = staff only?',6,24.9],rep:36,bonus:550,city:[19,45],boss:'concierge',
   blurb:'A grand hotel with a royal guest in the penthouse. Her tiara sits in the hotel vault, the guests\' valuables are in the deposit boxes, and the night porter has seen nothing for years.',
-  walls(hl,vl){vl(12,2,23);hl(2,12,10);vl(26,2,23);hl(12,26,9);hl(26,37,8);hl(26,37,14);for(const [x,y] of [[16,13],[22,13],[16,18],[22,18]])hl(x,x,y)},
+  cut:[[2,20,6,23],[34,19,37,23]],walls(hl,vl){vl(12,2,23);hl(2,12,10);vl(26,2,23);hl(12,26,9);hl(26,37,8);hl(26,37,14);for(const [x,y] of [[16,13],[22,13],[16,18],[22,18]])hl(x,x,y)},
   doors:[{x:7,y:10},{x:12,y:16},{x:12,y:5},{x:19,y:9},{x:26,y:11},{x:26,y:19},{x:31,y:14},{x:31,y:8,vault:true}],
   entries:[{id:'main',name:'Revolving doors',tiles:[[18,23],[19,23]],spawn:[18,24],night:1},
    {id:'kitchen',name:'Kitchen door',tiles:[[2,18]],spawn:[1,18],night:1,lab:[2.6,-1.4]},
    {id:'lift',name:'Service lift',tiles:[],spawn:[33,11],night:2,roof:true},
    {id:'dock',name:'Loading dock',tiles:[[31,23],[32,23]],spawn:[31,24],night:3},
    {id:'chute',name:'Laundry chute',tiles:[],spawn:[6,5],night:5,roof:true}],
-  rooms:[{n:'OFFICE',x:7,y:6},{n:'KITCHEN',x:7,y:19.8},{n:'BAR',x:19,y:5.6},{n:'LOBBY',x:19,y:15.8},{n:'VAULT',x:31.5,y:4.6},{n:'CORRIDOR',x:31.5,y:11.2},{n:'LOADING DOCK',x:31.5,y:19}],
+  rooms:[{n:'OFFICE',x:7,y:6},{n:'KITCHEN',x:8.5,y:14.2},{n:'BAR',x:19,y:5.6},{n:'LOBBY',x:19,y:15.8},{n:'VAULT',x:31.5,y:4.6},{n:'CORRIDOR',x:31.5,y:11.2},{n:'LOADING DOCK',x:30,y:18.6}],
   loot:[{id:'msafe',name:'Manager\'s safe',x:3,y:3,v:6000,crack:5,kind:'safe'},
    {id:'ledger',name:'Guest ledger',x:10,y:3,v:2500,crack:1.5,kind:'crate'},
    {id:'cognac',name:'Vintage cognac',x:14,y:3,v:3500,crack:1.5,kind:'crate'},
@@ -913,8 +913,8 @@ const SITES={
    {id:'brief',name:'A guest\'s briefcase',x:36,y:12,v:4500,crack:2,kind:'cash'},
    {id:'lady',name:'"Lady at the Window"',x:14,y:22,v:5000,crack:3,kind:'painting'},
    {id:'clock',name:'Lobby clock',x:24,y:22,v:3000,crack:2,kind:'statue'},
-   {id:'silver',name:'Silver service',x:3,y:22,v:3500,crack:2,kind:'gold'},
-   {id:'wine',name:'Wine delivery',x:36,y:22,v:3000,crack:1.5,kind:'crate'}],
+   {id:'silver',name:'Silver service',x:9,y:21,v:3500,crack:2,kind:'gold'},
+   {id:'wine',name:'Wine delivery',x:29,y:21,v:3000,crack:1.5,kind:'crate'}],
   hints:['Two ways in tonight: the revolving doors into the lobby and the kitchen door on the west side. The lobby pillars give thieves cover.',
    'The service lift is working tonight. Someone will step out of it into the corridor, right outside the vault door.',
    'The loading dock opens tonight on the east side.',
@@ -948,6 +948,9 @@ function buildMap(night){
  const hl=(a,b,y)=>{for(let x=a;x<=b;x++)G[idx(x,y)]=WALL}, vl=(x,a,b)=>{for(let y=a;y<=b;y++)G[idx(x,y)]=WALL};
  hl(2,37,2);hl(2,37,23);vl(2,2,23);vl(37,2,23);
  SITES[SITE].walls(hl,vl);
+ // v43: each building has its own outline. Cut-away corners become outside, and the floor next to them becomes wall.
+ const cuts=SITES[SITE].cut||[];if(cuts.length){for(const [a,b,c2,d] of cuts)for(let y=b;y<=d;y++)for(let x=a;x<=c2;x++)G[idx(x,y)]=OUT;
+  const edge=[];for(let i=0;i<W*H;i++){if(G[i]===OUT||G[i]===WALL)continue;const x=tx(i),y=ty(i);let o=false;for(let dy=-1;dy<=1&&!o;dy++)for(let dx=-1;dx<=1;dx++)if(inb(x+dx,y+dy)&&G[idx(x+dx,y+dy)]===OUT){o=true;break}if(o)edge.push(i)}for(const i of edge)G[i]=WALL}
  for(const d of DOORS)G[idx(d.x,d.y)]=DOOR;
  // v37: some inner doors stay locked for the first nights of a contract, so a starter budget can cover the way to the loot
  SHUT.fill(0);if(!ST.daily&&!ST.endless)for(const d of DOORS)if(d.shut&&night<=d.shut&&night>=(d.shutFrom||1))SHUT[idx(d.x,d.y)]=1;try{costCache={};_rcKey=''}catch(e){}
@@ -1799,7 +1802,7 @@ function loadGame(){const s=readSave();if(!s)return newGame();ST.diff=s.diff;SIT
   intel:{plates:new Set(s.intel.plates),cams:new Set(s.intel.cams),lasers:new Set(s.intel.lasers),dogs:new Set(s.intel.dogs||[])},back:s.back||[],jailed:s.jailed||[],busted:s.busted||[],works:s.works||{sealed:[],vault:false,cctv:false},evSeed:s.evSeed||7});
  for(const k in s.costs)if(DEV[k])DEV[k].cost=s.costs[k];
  for(const l of ST.loot)l.stolen=s.stolenIds.includes(l.id);
- buildMap(ST.night);ST.devices=s.devices.map(d=>({...d,id:ST.devId++,route:d.route||[]}));camN=s.camN||ST.devices.length+1;
+ buildMap(ST.night);ST.devices=s.devices.map(d=>({...d,id:ST.devId++,route:(d.route||[]).filter(i=>G[i]===FLOOR||G[i]===DOOR)})).filter(d=>{const ok=d.type==='steel'?G[d.i]===DOOR:G[d.i]===FLOOR;if(!ok)ST.cash+=d.paid||0;return ok});camN=s.camN||ST.devices.length+1;
  devicesChanged();redrawStatic();refreshUI();hint('Welcome back. '+nightDef(ST.night).hint,9);logLine('Contract resumed: '+dayName(ST.night)+'.')}
 function nextNight(){setTimeout(()=>{if(ST.phase!=='plan')return;if(!ST.daily)tip('works','Building works','Open Building works under the tools to brick up an entry, reinforce the vault or wire the doors to the alarm.');const gk=nightGang();if(gk)setTimeout(()=>tip('gang','A gang is in town','The crew panel shows who is coming. Catch their leader for a £200 bounty. Anyone who escapes will be back.'),4000)},1200);setMTab('build');hideSheet();ST.night++;for(const l of ST.loot)if(l.dropped){l.i=l.home;l.dropped=false}if(ST.endless){resetLoot();ST.stolen=0;ST.limit=OT_CAP;ST.intel.plates.clear();otMod()}buildMap(ST.night);ST.phase='plan';ST.thieves=[];ST.guards=[];ST.smokes=[];ST.vaultOpen=false;
  for(const d of ST.devices){d.forced=false;d.looped=0;d.broken=false}
@@ -3037,7 +3040,7 @@ function r3SiteOut(g,mesh,rnd,SK,clear,tree,lamp){const M=r3Mat,out=siteLook().o
   grass=new THREE.MeshBasicMaterial({color:SK?'#a9c47f':'#0f4a3a'}),water=new THREE.MeshBasicMaterial({color:SK?'#7fb2d6':'#1d5fa8',transparent:true,opacity:SK?.9:.85}),neon=new THREE.MeshBasicMaterial({color:'#ff4fa0'}),neon2=new THREE.MeshBasicMaterial({color:'#ffd84a'});
  const flat=(w,d,mat,x,z,y)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),mat);m.rotation.x=-Math.PI/2;m.position.set(x,y||.01,z);m.receiveShadow=true;g.add(m);return m};
  const car=(x,z,col)=>{const c=new THREE.Group();const b=M(col,{e:.2});mesh(new THREE.BoxGeometry(1.5,.34,.75),b,c,0,.3,0);mesh(new THREE.BoxGeometry(.8,.28,.7),b,c,-.05,.6,0);for(const [wx,wz] of [[-.5,.36],[-.5,-.36],[.5,.36],[.5,-.36]]){const w=mesh(new THREE.CylinderGeometry(.15,.15,.1,12),dark,c,wx,.15,wz);w.rotation.x=Math.PI/2}c.position.set(x,0,z);g.add(c);return c};
- if(out==='columns'){for(let k=0;k<3;k++)mesh(new THREE.BoxGeometry(ew+5-k*1.2,.1,.6),stone,g,mid,.05+k*.1,fz+dir*(1.1-k*.35));for(let x=4.5;x<36;x+=2.4){if(Math.abs(x-mid)<ew/2+1.2)continue;mesh(new THREE.BoxGeometry(.9,.16,.9),stone,g,x,.08,fz+dir*.55);mesh(new THREE.CylinderGeometry(.34,.4,2.1,16),stone,g,x,1.2,fz+dir*.55);mesh(new THREE.BoxGeometry(.86,.16,.86),stone,g,x,2.3,fz+dir*.55)}
+ if(out==='columns'){for(let k=0;k<3;k++)mesh(new THREE.BoxGeometry(ew+5-k*1.2,.1,.6),stone,g,mid,.05+k*.1,fz+dir*(1.1-k*.35));for(let x=4.5;x<36;x+=2.4){if(Math.abs(x-mid)<ew/2+1.2||G[idx(Math.floor(x),ey)]!==WALL)continue;mesh(new THREE.BoxGeometry(.9,.16,.9),stone,g,x,.08,fz+dir*.55);mesh(new THREE.CylinderGeometry(.34,.4,2.1,16),stone,g,x,1.2,fz+dir*.55);mesh(new THREE.BoxGeometry(.86,.16,.86),stone,g,x,2.3,fz+dir*.55)}
   const fp=mesh(new THREE.CylinderGeometry(.035,.035,3.2,8),dark,g,mid+ew/2+2,1.6,fz+dir*1.6);const fl=mesh(new THREE.BoxGeometry(.9,.55,.02),M(SK?'#2c5aa0':'#5f9ad8',{e:.3}),g,mid+ew/2+2.47,2.9,fz+dir*1.6)}
  else if(out==='awning'){mesh(new THREE.BoxGeometry(ew+1.6,.08,2.2),red,g,mid,1.35,fz+dir*1.0);for(const sx of [-1,1])mesh(new THREE.CylinderGeometry(.04,.04,1.35,8),gold,g,mid+sx*(ew/2+.6),.68,fz+dir*2);flat(ew+.6,3.2,red,mid,fz+dir*1.5,.015);
   for(let k=0;k<3;k++){const fx=mid-ew/2-3.2-k*1.4;mesh(new THREE.CylinderGeometry(.03,.03,2.6,8),gold,g,fx,1.3,fz+dir*.4);mesh(new THREE.BoxGeometry(.7,.45,.02),M(['#2c5aa0','#c8382b','#e8c46a'][k],{e:.3}),g,fx+.37,2.3,fz+dir*.4)}
@@ -3060,6 +3063,15 @@ function r3SiteOut(g,mesh,rnd,SK,clear,tree,lamp){const M=r3Mat,out=siteLook().o
   const boat=new THREE.Group();mesh(new THREE.BoxGeometry(2.4,.35,.8),M(SK?'#c46a4a':'#8a3a2a'),boat,0,.18,0);mesh(new THREE.BoxGeometry(.8,.4,.6),white,boat,.2,.55,0);boat.position.set(-4.5,0,H/2+5);g.add(boat)}
  else{for(let x=6;x<36;x+=3.2){if(Math.abs(x-mid)<ew/2+1)continue;mesh(new THREE.CylinderGeometry(.08,.1,.6,8),dark,g,x,.3,fz+dir*1.6)}for(const sx of [-1,1])mesh(new THREE.BoxGeometry(.04,1.2,.6),M(SK?'#2c5aa0':'#5f9ad8',{e:.3}),g,mid+sx*(ew/2+1.2),1.6,fz-dir*.05)}
 }
+function r3CutDress(g,mesh,rnd,SK,clear,tree,lamp){const cuts=SITES[SITE].cut||[];if(!cuts.length)return;const M=r3Mat,out=siteLook().out;
+ const stone=M(SK?'#efe9dc':'#6f8fb8',{e:.25}),leaf=M(SK?'#8fb573':'#2a8163',{e:.25}),pot=M(SK?'#c46a4a':'#a3523a'),hedge=M(SK?'#7da566':'#1c5a4c',{e:.2}),wood=M(SK?'#a8784a':'#6b4a33'),gravel=M(SK?'#efe5cf':'#22405e');
+ const free=(x,z)=>clear(x,z)&&ENTRIES.every(e=>Math.hypot(e.spawn[0]+.5-x,e.spawn[1]+.5-z)>1.6);
+ for(const [a,b,c2,d] of cuts){const x0=a+.6,x1=c2+.4,z0=b+.6,z1=d+.4,cx=(a+c2+1)/2,cz=(b+d+1)/2,w=c2-a+1,h=d-b+1;
+  if(SITE==='manor'){const p=new THREE.Mesh(new THREE.PlaneGeometry(w-.4,h-.2),gravel);p.rotation.x=-Math.PI/2;p.position.set(cx,.012,cz);g.add(p);for(const sx of [-1,1]){mesh(new THREE.BoxGeometry(.6,.55,h-.6),hedge,g,cx+sx*(w/2-.6),.28,cz);for(let k=0;k<2;k++)mesh(new THREE.ConeGeometry(.3,.9,8),hedge,g,cx+sx*(w/2-1.6-k*2.2),.45,cz-.2)}continue}
+  if(out==='garden'||out==='river'||SITE==='museum'){for(let x=x0+.4;x<x1;x+=1.8)for(let z=z0+.4;z<z1;z+=1.8)if(free(x,z))tree(x+(rnd()-.5)*.4,z+(rnd()-.5)*.4);continue}
+  // city buildings: a paved corner with planters, a bench and a lamp
+  for(let x=x0+.3;x<x1;x+=1.6)for(let z=z0+.3;z<z1;z+=1.6){if(!free(x,z))continue;const r=rnd();if(r<.45){mesh(new THREE.CylinderGeometry(.26,.2,.4,10),pot,g,x,.2,z);mesh(new THREE.IcosahedronGeometry(.32,1),leaf,g,x,.6,z)}else if(r<.6){mesh(new THREE.BoxGeometry(1,.08,.36),wood,g,x,.42,z);mesh(new THREE.BoxGeometry(1,.4,.06),wood,g,x,.6,z+.18)}}
+  if(free(cx,cz))lamp(cx,cz)}}
 function r3Pillars(){const seen=new Uint8Array(W*H),out=[];for(let i=0;i<W*H;i++){if(G[i]!==WALL||seen[i])continue;const comp=[],q=[i];seen[i]=1;let edge=false;
   while(q.length){const j=q.pop();comp.push(j);const x=tx(j),y=ty(j);if(x<=2||y<=2||x>=37||y>=23)edge=true;for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const k=idx(x+dx,y+dy);if(inb(x+dx,y+dy)&&G[k]===WALL&&!seen[k]){seen[k]=1;q.push(k)}}}
   if(!edge&&comp.length<=4){const xs=comp.map(tx),ys=comp.map(ty);out.push({tiles:comp,x0:Math.min(...xs),y0:Math.min(...ys),x1:Math.max(...xs)+1,y1:Math.max(...ys)+1})}}return out}
@@ -3091,7 +3103,7 @@ function r3Outside(){const SK=R3.look==='sketch',M=r3Mat,g=new THREE.Group();let
   const stripe=mesh(new THREE.BoxGeometry(1.5,.16,1.07),M(SK?'#d9553f':'#e8742a',{e:.3}),van,-.3,.78,0);stripe.castShadow=false;
   const off=2.6;if(mn===dB)van.position.set(ex+3.2,0,H+off-.6);else if(mn===dT){van.position.set(ex+3.2,0,-off+.6)}else if(mn===dL){van.position.set(-off+.4,0,ey+3.2);van.rotation.y=Math.PI/2}else{van.position.set(W+off-.4,0,ey+3.2);van.rotation.y=Math.PI/2}
   van.userData.keep=true;g.add(van);R3.van=van}else R3.van=null;
- r3SiteOut(g,mesh,rnd,SK,clear,tree,lamp);
+ r3SiteOut(g,mesh,rnd,SK,clear,tree,lamp);r3CutDress(g,mesh,rnd,SK,clear,tree,lamp);
  // a ring of trees, hedges and street lamps just outside the plan (city buildings get neighbouring blocks instead of trees)
  const city=['bank','hotel','casino','jeweller'].includes(SITE),blockM=[M(SK?'#d8cdb5':'#13284a',{e:.15}),M(SK?'#c9bca0':'#182f55',{e:.15}),M(SK?'#e2d8c2':'#0f2240',{e:.15})],winM=new THREE.MeshBasicMaterial({color:SK?'#9cc3d6':'#ffd98a'});
  const block=(x,z)=>{const h=1.2+rnd()*2.2,w=1.6+rnd()*1.2;mesh(new THREE.BoxGeometry(w,h,w),blockM[Math.floor(rnd()*3)],g,x,h/2,z);for(let k=0;k<3;k++){const wy=.5+k*.6;if(wy<h-.2)mesh(new THREE.BoxGeometry(w+.02,.16,.3),winM,g,x,wy,z).castShadow=false}};
