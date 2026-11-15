@@ -668,7 +668,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v46 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v47 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -2433,12 +2433,13 @@ function drawLoot(c){for(const l of ST.loot){if(l.stolen&&ST.phase!=='plan'){}
  c.restore()}}
 function drawSmokes(c){for(const s of ST.smokes){for(let k=0;k<9;k++){const a=k*.7+ST.t*.3,r=s.r*(.45+.25*Math.sin(k*2.1+ST.t));const x=s.x+Math.cos(a)*s.r*.45,y=s.y+Math.sin(a)*s.r*.45;const g=c.createRadialGradient(x,y,0,x,y,r);const col=theme==='thermal'?'90,60,160':theme==='sketch'?'110,105,95':theme==='board'?'230,230,230':theme==='cctv'?'120,200,150':'210,225,240';g.addColorStop(0,`rgba(${col},.75)`);g.addColorStop(1,`rgba(${col},0)`);c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,7);c.fill()}}}
 const TRAIN2D={x:0,v:0};
-function drawTrainOut(c,dt){const tgt=ST.phase==='heist'||ST.phase==='replay'?(ST.brakeT>0?0:6):1.2;TRAIN2D.v=lerp(TRAIN2D.v,tgt,Math.min(1,dt*(ST.brakeT>0?3:.8)));TRAIN2D.x=(TRAIN2D.x+TRAIN2D.v*dt)%120;const o=TRAIN2D.x;
+function drawTrainOut(c,dt){const tgt=ST.phase==='heist'||ST.phase==='replay'?(ST.brakeT>0?0:16):3;TRAIN2D.v=lerp(TRAIN2D.v,tgt,Math.min(1,dt*(ST.brakeT>0?3:.8)));TRAIN2D.x=(TRAIN2D.x+TRAIN2D.v*dt)%120;const o=TRAIN2D.x;
  c.save();c.strokeStyle=S.ink;c.fillStyle=S.ink;c.globalAlpha=.35;c.lineWidth=.06;
  for(const y of [20.6,21.4]){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}
  c.globalAlpha=.22;for(let x=-(o%.9);x<W;x+=.9)c.fillRect(x,20.35,.22,1.3);
  c.globalAlpha=.4;for(let x=-(o%6);x<W+1;x+=6){c.beginPath();c.arc(x,5,.16,0,7);c.fill()}c.globalAlpha=.25;c.beginPath();c.moveTo(0,4.9);c.lineTo(W,4.9);c.stroke();
  c.globalAlpha=.3;c.fillStyle=theme==='sketch'?'#6f8f4f':S.good;for(let k=0;k<14;k++){const x=((k*8.7-o*.9)%W+W)%W;c.beginPath();c.arc(x,2.6+(k%3)*.5,.45+(k%2)*.2,0,7);c.fill();const x2=((k*6.3+3-o*.9)%W+W)%W;c.beginPath();c.arc(x2,23.4+(k%3)*.4,.45+(k%2)*.2,0,7);c.fill()}
+ c.globalAlpha=Math.min(.45,TRAIN2D.v/30);c.strokeStyle=theme==='sketch'?'#8a8070':S.ink;c.lineWidth=.04;for(let k=0;k<22;k++){const len=2+(k%4);const x=((k*11.7-o*1.6)%(W+6)+W+6)%(W+6)-3,y=[6.4,7.1,18.9,19.6,22.6][k%5]+(k%3)*.15;c.beginPath();c.moveTo(x,y);c.lineTo(x+len,y);c.stroke()}
  if(ST.tunnel){c.globalAlpha=.55;c.fillStyle='#000';c.fillRect(0,0,W,7.6);c.fillRect(0,18.4,W,H-18.4)}
  c.restore()}
 function drawPrints(c){const P=ST.prints;if(!P||!P.length||!(ST.phase==='heist'||ST.phase==='replay'))return;const snow=ST.ev==='snow';const lightBg=theme==='sketch'||theme==='board'||LOOK==='sketch3d';
@@ -2691,7 +2692,7 @@ const RAIN=[];for(let k=0;k<140;k++)RAIN.push({x:Math.random(),y:Math.random(),v
 function rainDrops(c,w,h){c.strokeStyle='rgba(180,220,255,.22)';c.lineWidth=1*DPR;c.beginPath();const dt=1/60;for(const r of RAIN){r.y+=r.v*dt;r.x+=r.v*dt*.15;if(r.y>1){r.y-=1.05;r.x=Math.random()}if(r.x>1)r.x-=1;c.moveTo(r.x*w,r.y*h);c.lineTo((r.x+r.l*.15)*w,(r.y+r.l)*h)}c.stroke()}
 function post(c){
  const w=c.canvas.width,h=c.canvas.height;
- if(ST.dark&&ST.phase==='heist'){c.save();c.fillStyle='rgba(0,0,0,'+(.42+.06*Math.sin(ST.t*23))+')';c.fillRect(0,0,w,h);if(Math.sin(ST.t*5)>-.3){c.font=`${30*DPR}px ${S.font==='VT323'?'VT323':'"'+S.font+'"'}`;c.textAlign='center';c.fillStyle=S.danger;c.fillText('POWER CUT',w/2,h*.12);}c.restore()}
+ if(ST.dark&&ST.phase==='heist'){c.save();c.fillStyle='rgba(0,0,0,'+(.42+.06*Math.sin(ST.t*23))+')';c.fillRect(0,0,w,h);if(Math.sin(ST.t*5)>-.3){c.font=`${30*DPR}px ${S.font==='VT323'?'VT323':'"'+S.font+'"'}`;c.textAlign='center';c.fillStyle=S.danger;c.fillText(ST.tunnel?'TUNNEL':'POWER CUT',w/2,h*.12);}c.restore()}
  if(FX.flash>0){c.save();c.globalAlpha=Math.min(.45,FX.flash*.5);const g=c.createRadialGradient(w/2,h/2,Math.min(w,h)*.25,w/2,h/2,Math.max(w,h)*.7);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,FX.flashCol);c.fillStyle=g;c.fillRect(0,0,w,h);c.globalAlpha=Math.min(.18,FX.flash*.2);c.fillStyle=FX.flashCol;c.fillRect(0,0,w,h);c.restore()}
  if(ST.alarmT>0&&Math.sin(performance.now()/120)>0){c.save();c.strokeStyle=S.danger;c.globalAlpha=.6;c.lineWidth=6*DPR;c.strokeRect(3*DPR,3*DPR,w-6*DPR,h-6*DPR);c.restore()}
  if(theme==='term'){c.save();c.fillStyle='rgba(0,0,0,.22)';for(let y=0;y<h;y+=3*DPR)c.fillRect(0,y,w,1*DPR);const vg=c.createRadialGradient(w/2,h/2,h*.4,w/2,h/2,h*.95);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.55)');c.fillStyle=vg;c.fillRect(0,0,w,h);c.restore()}
@@ -3216,17 +3217,19 @@ function r3TrainOut(g,mesh,rnd,SK,tree){const M=r3Mat,lo=R3.q!=='high';
  loco.position.set(40.9,0,12.9);g.add(loco);
  const red=new THREE.MeshBasicMaterial({color:'#ff4a4a'});mesh(new THREE.SphereGeometry(.14,8,6),red,g,1.55,1.0,12.9).castShadow=false;if(!SK){const sp=r3Sprite('#ff4a4a',2,.6);sp.position.set(1.3,1.0,12.9);g.add(sp)}
  // scenery that streams past: sleepers on the next line, telegraph poles, hedges and trees
- const S_=new THREE.Group();g.add(S_);const add=o=>{S_.add(o);return o};
+ const S_=new THREE.Group();S_.userData.keep=true;g.add(S_);const add=o=>{S_.add(o);return o};
  for(let x=-40;x<80;x+=lo?1.6:.9){const sl=box(.22,.06,1.3,sleeper,S_,x,.05,21);sl.castShadow=false}
  for(let x=-40;x<80;x+=6){const p=new THREE.Group();mesh(new THREE.CylinderGeometry(.05,.07,2.4,7),post,p,0,1.2,0);mesh(new THREE.BoxGeometry(.08,.06,.8),post,p,0,2.25,0);p.position.set(x,0,5);add(p)}
  for(const z of [4.88,5.12])box(150,.02,.02,dark,g,20,2.3,z).castShadow=false;
+ const streak=new THREE.MeshBasicMaterial({color:SK?'#6a6050':'#a8ccff',transparent:true,opacity:SK?.7:.6,depthWrite:false});
+ for(let k=0;k<(lo?14:28);k++){const m=new THREE.Mesh(new THREE.PlaneGeometry(3+rnd()*4,.14),streak);m.rotation.x=-Math.PI/2;m.position.set(-40+rnd()*120,.3,[6.6,7.2,18.9,19.5,22.4,23.2][k%6]+(rnd()-.5)*.3);m.castShadow=false;S_.add(m)}
  const hold=new THREE.Group();g.add(hold);
  for(let x=-40;x<80;x+=lo?5:3){for(const zz of [1.2-rnd()*3.4,24+rnd()*3.4]){if(rnd()<.35){const h=box(1.6+rnd()*1.4,.5,.6,hedge,S_,x+rnd()*2,.25,zz);h.receiveShadow=true}else{const before=g.children.length;tree(x+rnd()*2,zz);const t=g.children[g.children.length-1];if(g.children.length>before){g.remove(t);S_.add(t)}}}}
  if(lo)g.traverse(m=>{m.castShadow=false});
  // tunnel walls appear either side while the train is underground
- const tun=new THREE.Group();const tm=M(SK?'#5a5650':'#05080f');box(150,4,.6,tm,tun,20,2,4.2);box(150,4,.6,tm,tun,20,2,21.9);tun.visible=false;g.add(tun);
+ const tun=new THREE.Group();const tm=M(SK?'#5a5650':'#05080f');box(150,4,.6,tm,tun,20,2,4.2);box(150,4,.6,tm,tun,20,2,21.9);tun.visible=false;tun.userData.keep=true;g.add(tun);
  R3.trainOut={S:S_,tun,v:0}}
-function r3TrainTick(dt){const T_=R3.trainOut;if(SITE!=='train'||!T_)return;const tgt=ST.phase==='heist'||ST.phase==='replay'?(ST.brakeT>0?0:9):1.5;T_.v=lerp(T_.v,tgt,Math.min(1,dt*(ST.brakeT>0?3:.8)));
+function r3TrainTick(dt){const T_=R3.trainOut;if(SITE!=='train'||!T_)return;const tgt=ST.phase==='heist'||ST.phase==='replay'?(ST.brakeT>0?0:26):4;T_.v=lerp(T_.v,tgt,Math.min(1,dt*(ST.brakeT>0?3:.8)));
  for(const o of T_.S.children){o.position.x-=T_.v*dt;if(o.position.x<-40)o.position.x+=120}T_.tun.visible=!!ST.tunnel&&ST.phase==='heist'}
 function r3Outside(){const SK=R3.look==='sketch',M=r3Mat,g=new THREE.Group();let sd=0;for(const ch of SITE)sd=(sd*31+ch.charCodeAt(0))>>>0;const rnd=()=>{sd=(sd*1664525+1013904223)>>>0;return sd/4294967296};
  const mesh=(geo,mat,par,x,y,z)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x||0,y||0,z||0);m.castShadow=true;par.add(m);return m};
