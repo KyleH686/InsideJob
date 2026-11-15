@@ -333,7 +333,7 @@ html:where(.tl),body:where(.tl){position:fixed;inset:0;overflow:hidden;overscrol
 :where(body.tl) #top{padding:6px 10px;gap:8px;flex-wrap:nowrap}
 :where(body.tl) #top .ttl{font-size:19px!important;white-space:nowrap;min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis}
 /* v40: narrow phones drop the title before any button runs off the edge */
-@media (max-width:420px){:where(body.tl) #top .ttl{font-size:16px!important;letter-spacing:.02em}}
+@media (max-width:420px){:where(body.tl) #top .ttl{display:none}}
 :where(body.tl) #top .ttl small{display:none}
 :where(body.tl) #styles{margin-left:auto}
 :where(body.tl) #lookBtn,:where(body.tl) #mute,:where(body.tl) #fsBtn{font-size:12px!important;padding:5px 9px!important}
@@ -650,7 +650,7 @@ body.r3 #cv3,body.r3 #cvo{display:block}body.r3 #cv{opacity:0;position:absolute;
 </style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v40 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ SEVEN BUILDINGS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v41 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -882,6 +882,34 @@ const SITES={
    'The crews know the building now. The strongroom door is one room from the loading bay; watch the corridor.',
    'Sale day. A crew is coming up the old sewer into the packing room, and the Auctioneer herself wants the Lockwood Emerald. She has bribed her way out before: you will have to catch her twice.'],
   roomOf(x,y){if(x<12)return y<12?'viewing gallery':'packing room';if(x<27)return y<8?'valuation office':'saleroom';if(y<9)return 'strongroom';if(y<15)return 'corridor';return 'loading bay'}};
+// v41: the eighth building. Every room name already has guard voice lines.
+ SITES.hotel={name:'The Belvedere Hotel',short:'Belvedere',caption:'THE BELVEDERE HOTEL · PARK LANE · SECURITY DRG 41/H',note1:'Belvedere - tiara in the vault',n1x:14,note2:['kitchen door = staff only?',6,24.9],rep:36,bonus:550,city:[19,45],boss:'concierge',
+  blurb:'A grand hotel with a royal guest in the penthouse. Her tiara sits in the hotel vault, the guests\' valuables are in the deposit boxes, and the night porter has seen nothing for years.',
+  walls(hl,vl){vl(12,2,23);hl(2,12,10);vl(26,2,23);hl(12,26,9);hl(26,37,8);hl(26,37,14);for(const [x,y] of [[16,13],[22,13],[16,18],[22,18]])hl(x,x,y)},
+  doors:[{x:7,y:10},{x:12,y:16},{x:12,y:5},{x:19,y:9},{x:26,y:11},{x:26,y:19},{x:31,y:14},{x:31,y:8,vault:true}],
+  entries:[{id:'main',name:'Revolving doors',tiles:[[18,23],[19,23]],spawn:[18,24],night:1},
+   {id:'kitchen',name:'Kitchen door',tiles:[[2,18]],spawn:[1,18],night:1,lab:[2.6,-1.4]},
+   {id:'lift',name:'Service lift',tiles:[],spawn:[33,11],night:2,roof:true},
+   {id:'dock',name:'Loading dock',tiles:[[31,23],[32,23]],spawn:[31,24],night:3},
+   {id:'chute',name:'Laundry chute',tiles:[],spawn:[6,5],night:5,roof:true}],
+  rooms:[{n:'OFFICE',x:7,y:6},{n:'KITCHEN',x:7,y:19.8},{n:'BAR',x:19,y:5.6},{n:'LOBBY',x:19,y:15.8},{n:'VAULT',x:31.5,y:4.6},{n:'CORRIDOR',x:31.5,y:11.2},{n:'LOADING DOCK',x:31.5,y:19}],
+  loot:[{id:'msafe',name:'Manager\'s safe',x:3,y:3,v:6000,crack:5,kind:'safe'},
+   {id:'ledger',name:'Guest ledger',x:10,y:3,v:2500,crack:1.5,kind:'crate'},
+   {id:'cognac',name:'Vintage cognac',x:14,y:3,v:3500,crack:1.5,kind:'crate'},
+   {id:'till',name:'Bar takings',x:24,y:3,v:4000,crack:2,kind:'cash'},
+   {id:'tiara',name:'The Belvedere Tiara',x:31,y:3,v:16000,crack:7,kind:'gem'},
+   {id:'boxes',name:'Guests\' deposit boxes',x:36,y:3,v:8000,crack:4,kind:'gold'},
+   {id:'brief',name:'A guest\'s briefcase',x:36,y:12,v:4500,crack:2,kind:'cash'},
+   {id:'lady',name:'"Lady at the Window"',x:14,y:22,v:5000,crack:3,kind:'painting'},
+   {id:'clock',name:'Lobby clock',x:24,y:22,v:3000,crack:2,kind:'statue'},
+   {id:'silver',name:'Silver service',x:3,y:22,v:3500,crack:2,kind:'gold'},
+   {id:'wine',name:'Wine delivery',x:36,y:22,v:3000,crack:1.5,kind:'crate'}],
+  hints:['Two ways in tonight: the revolving doors into the lobby and the kitchen door on the west side. The lobby pillars give thieves cover.',
+   'The service lift is working tonight. Someone will step out of it into the corridor, right outside the vault door.',
+   'The loading dock opens tonight on the east side.',
+   'The crews know the hotel now. The corridor joins the lobby, the dock and the vault, so watch it.',
+   'Last night. A crew will drop down the laundry chute into the office, and the Concierge wants the Belvedere Tiara. His master key opens steel doors and the vault door in a moment.'],
+  roomOf(x,y){if(x<12)return y<10?'office':'kitchen';if(x<26)return y<9?'bar':'lobby';if(y<8)return 'vault';if(y<14)return 'corridor';return 'loading dock'}};
 SITES.gallery.city=[22,24];SITES.bank.city=[44,54];SITES.manor.city=[82,20];
 let SITE='gallery';try{const v=localStorage.getItem('ij-site');if(v&&SITES[v])SITE=v}catch(e){}
 function useSite(id){if(!SITES[id])id='gallery';SITE=id;const S_=SITES[id];
@@ -979,6 +1007,7 @@ const TYPES={
  muscle:{name:'Muscle',speed:2.2,maxSus:150,breach:.25,carry:.95,tag:'TANK',desc:'Shoulders doors open, carries at full pace, takes longer to identify.'},
  auctioneer:{name:'The Auctioneer',speed:2.9,crack:.5,sus:.8,maxSus:130,counter:'loop',charges:1,knowsPlates:true,boss:true,bribe:true,tag:'BOSS',desc:'Runs the auction-house job. The first time she is caught she bribes her way out and bolts, so you have to catch her twice. Knows your plates, loops one camera, and goes for the biggest prize.'},
  jammer:{name:'Jammer',speed:2.6,jam:2.5,tag:'JAM',desc:'Carries a signal jammer. Cameras, lasers and pressure plates within 2½ tiles of them go dead while they pass. Guards, dogs and seismic sensors still work.'},
+ concierge:{name:'The Concierge',speed:2.9,crack:.5,sus:.75,maxSus:135,knowsPlates:true,boss:true,master:true,he:true,tag:'BOSS',desc:'Runs the hotel job. Carries a master key: steel doors and the vault door open for him in a moment. Knows your plates and goes for the biggest prize.'},
  climber:{name:'Climber',speed:2.9,roof:true,tag:'ROOF',desc:'Comes in through the roof, even on nights the roof is shut to everyone else. Drops straight into the room nearest the prize.'},
 };
 const NAMES=['Wren','Tally','Moth','Juno','Pike','Vesper','Dutch','Sable','Rook','Kes','Fig','Nettle','Bram','Ivo','Lark','Odette'];
@@ -1363,7 +1392,7 @@ function spawnThief(th){
  const kn=knowledge(th);const claimed=new Set(ST.thieves.filter(o=>o!==th&&o.target).map(o=>o.target.id));
  const b=th.T.roof?roofChoice(kn,th.crack,claimed):chooseTarget(kn,th.crack,null,claimed);
  if(!b){th.state='gone';th.outcome='stayed home (nothing left worth taking)';return}
- th.target=b.loot;if(th.T.boss){const big=ST.loot.filter(l=>!l.stolen&&!l.carrier&&!l.fake&&!l.spent).sort((a,b)=>b.v-a.v)[0];if(big)th.target=big;if(th.type==='fox')setTimeout(()=>AU.say('fox_in',{cd:0,pri:3}),300);FX.slow=.9;FX.focus=[th.x,th.y];logLine(th.type==='fox'?'<b>The Fox is in the building.</b> He is going for '+th.target.name+'.':'<b>'+th.name+' is in the building.</b> She is going for '+th.target.name+'.');FX.flash=.4;FX.flashCol=S.accent}th.entry=b.entry;const si=spawnI(b.entry);th.tile=si;th.x=tx(si)+.5;th.y=ty(si)+.5;th.state='in';if(th.counter==='scout'&&ST.thieves.some(o=>o!==th&&o.state!=='caught'&&o.state!=='escaped')){logLine('<i>'+th.name+' is on the crew radio, calling out where your pressure plates are.</i>');for(const o of ST.thieves)o.needReplan=true}
+ th.target=b.loot;if(th.T.boss){const big=ST.loot.filter(l=>!l.stolen&&!l.carrier&&!l.fake&&!l.spent).sort((a,b)=>b.v-a.v)[0];if(big)th.target=big;if(th.type==='fox')setTimeout(()=>AU.say('fox_in',{cd:0,pri:3}),300);FX.slow=.9;FX.focus=[th.x,th.y];logLine(th.type==='fox'?'<b>The Fox is in the building.</b> He is going for '+th.target.name+'.':'<b>'+th.name+' is in the building.</b> '+(th.T.he?'He':'She')+' is going for '+th.target.name+'.');FX.flash=.4;FX.flashCol=S.accent}th.entry=b.entry;const si=spawnI(b.entry);th.tile=si;th.x=tx(si)+.5;th.y=ty(si)+.5;th.state='in';if(th.counter==='scout'&&ST.thieves.some(o=>o!==th&&o.state!=='caught'&&o.state!=='escaped')){logLine('<i>'+th.name+' is on the crew radio, calling out where your pressure plates are.</i>');for(const o of ST.thieves)o.needReplan=true}
  if(b.entry.roof){th.drop=1.2;if(th.T.roof)tip('climber','Someone on the roof','The Climber drops in through the roof, even on nights it is shut to everyone else. Cover the rooms under the roof entries.')}
  if(th.T.jam)tip('jammer','A Jammer is in','The Jammer kills every camera, laser and pressure plate within 2½ tiles as they walk past (the dashed circle). Guards, dogs and seismic sensors still work, so mix them in.');
  th.path=[];replan(th);
@@ -1468,7 +1497,7 @@ function catchThief(th,by){hap(70);
   for(const g of ST.guards)if(g.target===th||Math.hypot(g.x-th.x,g.y-th.y)<2.2){g.dazedT=2.5;g.state='patrol';g.path=[]}stamp(th.x,th.y,'BRIBED!',S.accent);floatText(th.x,th.y-1,'She paid her way out!',S.accent,true);burst(th.x,th.y,24,S.accent,3);FX.shake=.4;logLine('<b>'+th.name+'</b> bribes her way out and bolts. Catch her again!');ST.recEv.push({t:ST.t,x:th.x,y:th.y,k:'alarm',s:th.name+' bribed her way out'});AU.play('jingBad',{vol:.4});refreshUI();return}
  const srcName={fog:'stumbling in the fog',police:'by the police at the door',lightning:'in a lightning flash',dog:'after the dog barked',camera:'on camera',guard:'tackled by a guard',laser:'after tripping a laser',plate:'after stepping on a pressure plate'}[by]||'on camera';
  th.outcome='caught '+srcName+(th.loot?' holding '+th.loot.name:'');th.state='caught';th.caughtT=0;th.caughtBy=by;AU.play('cuffs',{vol:.55,x:th.x,delay:.45});
- ach('first');if(th.loot)ach('bag');if(th.T.boss){if(th.type==='fox'){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900)}else ach('auctioneer');ST.cash+=500;floatText(th.x,th.y-1.6,th.name.toUpperCase()+'! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.type==='climber')ach('climber');if(th.type==='jammer')ach('jammer');if(th.tremor)ach('tremor');if(ST.smokes&&ST.smokes.length&&inSecFog(th.x,th.y))ach('fogged');if(th.leader){AU.say('leader_caught',{cd:0,pri:3});ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
+ ach('first');if(th.loot)ach('bag');if(th.T.boss){if(th.type==='fox'){ach('fox');setTimeout(()=>AU.say('fox_caught',{cd:0,pri:3}),900)}else ach(th.type==='concierge'?'concierge':'auctioneer');ST.cash+=500;floatText(th.x,th.y-1.6,th.name.toUpperCase()+'! +£500',S.good,true)}if(th.type==='impostor')ach('impostor');if(th.type==='climber')ach('climber');if(th.type==='jammer')ach('jammer');if(th.tremor)ach('tremor');if(ST.smokes&&ST.smokes.length&&inSecFog(th.x,th.y))ach('fogged');if(th.leader){AU.say('leader_caught',{cd:0,pri:3});ST.cash+=200;floatText(th.x,th.y-1.6,'GANG LEADER! +£200',S.good,true);logLine('<b style="color:var(--good)">'+th.name+', leader of '+GANGS[th.gang].name+', is in cuffs.</b> +£200 bounty.')}if(th.type==='magpie'&&th.charges<2)ach('magpie');
  if(th.loot){const l=th.loot;l.carrier=null;th.loot=null;if(G[th.tile]===FLOOR||G[th.tile]===DOOR){l.home=l.home??l.i;l.i=th.tile;l.dropped=true;setTimeout(()=>floatText(tx(l.i)+.5,ty(l.i)-.2,'DROPPED',S.accent),400);logLine(th.name+' drops '+l.name+'. It is lying in the '+roomOf(l.i)+'.')}}
  {let n=0;for(const o of ST.thieves){if(o===th||!['in','out','flee'].includes(o.state))continue;n++;o.spooked=1;o.needReplan=true;
    if(o.state==='in'&&!o.crackT&&o.sus>o.maxSus*.3&&Math.random()<.75){o.state='flee';o.needReplan=true;o.hiding=false;floatText(o.x,o.y-.7,'ABORT',S.accent)}else o.hurry=0}
@@ -1542,7 +1571,7 @@ function updateThief(th,dt){
  const ni=th.path[0];
  if(th.atNode!==false){
   // gate: locks
-  const lk=lockAt(ni);if(lk>0){th.breachT=lk*(th.T.breach||th.crack||1);if(th.T.breach)th.breachT=lk*th.T.breach;return}
+  const lk=lockAt(ni);if(lk>0){th.breachT=lk*(th.T.breach||th.crack||1);if(th.T.breach)th.breachT=lk*th.T.breach;if(th.T.master){th.breachT=.5;if(!th.keySaid){th.keySaid=1;floatText(th.x,th.y-.7,'MASTER KEY',S.danger);logLine(th.name+' lets himself in with a master key.')}}return}
   // gate: wait for a gap in camera sweep
   if(th.hurry<=0&&th.sus<40&&th.waitT<(th.spooked?5:2.6)&&canSeeTileNow(ni,th)&&!canSeeTileNow(th.tile,th)){th.waitT+=dt;th.waiting=true;return}
   th.waiting=false;th.atNode=false;
@@ -1700,7 +1729,7 @@ const ACH=[['first','First collar','Catch a thief.'],['bag','Bag man','Catch a t
  ['frugal','Minimalist','A clean night with 4 devices or fewer.'],['bluff','Ventriloquist','Fool 3 thieves with speakers in one night.'],['decoy','Fool\'s gold','A thief opens a decoy.'],['recover','Lost property','A guard recovers dropped loot.'],
  ['impostor','Nice uniform','Catch the Impostor.'],['magpie','Caught the bird','Catch the Magpie after it throws a lure.'],['contract','Renewed','Finish the five-night contract.'],['impenetrable','Impenetrable','Finish the contract with nothing stolen.'],
  ['hard','Hard case','Finish the contract on Hard.'],['ot5','Overtime veteran','Survive 5 overtime nights.'],['style','Two looks','Play in both art styles.'],['fox','Outfoxed','Catch the Fox.'],
- ['climber','Roof patrol','Catch the Climber.'],['jammer','Signal lost','Catch the Jammer.'],['tremor','Felt that','Catch a thief a seismic sensor found.'],['auctioneer','Sold!','Catch the Auctioneer, twice.'],['fogged','Lost in the fog','Catch a thief while they stumble in security fog.'],['perfect','Five-star service','Earn all three stars on every night of a contract.']];
+ ['climber','Roof patrol','Catch the Climber.'],['jammer','Signal lost','Catch the Jammer.'],['tremor','Felt that','Catch a thief a seismic sensor found.'],['auctioneer','Sold!','Catch the Auctioneer, twice.'],['concierge','Checked out','Catch the Concierge.'],['fogged','Lost in the fog','Catch a thief while they stumble in security fog.'],['perfect','Five-star service','Earn all three stars on every night of a contract.']];
 let ACHS=new Set();try{ACHS=new Set(JSON.parse(localStorage.getItem('ij-ach')||'[]'))}catch(e){}
 function ach(id){if(ACHS.has(id))return;const a=ACH.find(a=>a[0]===id);if(!a)return;ACHS.add(id);try{localStorage.setItem('ij-ach',JSON.stringify([...ACHS]))}catch(e){}
  const t=document.createElement('div');t.className='toast';t.innerHTML='<b>★ '+a[1]+'</b>'+a[2];$('toasts').appendChild(t);while($('toasts').children.length>3)$('toasts').firstChild.remove();requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));AU.play('upgrade',{vol:.5});setTimeout(()=>{t.classList.remove('in');setTimeout(()=>t.remove(),600)},4200)}
@@ -3304,7 +3333,7 @@ function repAdd(n){if(!n)return;const before=repGet();const now=before+n;try{loc
 function siteBest(k){try{return (JSON.parse(localStorage.getItem('ij-sitebest')||'{}'))[k]||null}catch(e){return null}}
 function recordSiteBest(){try{const B=JSON.parse(localStorage.getItem('ij-sitebest')||'{}');const st=ST.stars.reduce((a,b)=>a+(b||0),0);const o=B[SITE];if(!o||st>o.stars||st===o.stars&&ST.stolen<o.stolen)B[SITE]={stars:st,stolen:ST.stolen,diff:ST.diff};localStorage.setItem('ij-sitebest',JSON.stringify(B))}catch(e){}}
 function siteOpen(k){return repGet()>=(SITES[k].rep||0)}
-function cityMap(){const R=repGet();const B={gallery:'M-7 6V-3L0-8 7-3V6Z',bank:'M-8 6V-2H8V6ZM-9-2 0-8 9-2Z',manor:'M-9 6V-1L-4-6 0-2 4-6 9-1V6Z',museum:'M-9 6V-3H9V6ZM-9-3 0-9 9-3ZM-6-3V6M-2-3V6M2-3V6M6-3V6',jeweller:'M-6 6V-5H6V6ZM-3-2H3',casino:'M-9 6V-4H9V6ZM-4-4V-8H4V-4Z',auction:'M-9 6V-2H9V6ZM-9-2-5-7H5L9-2ZM-1 6V1H1V6'};
+function cityMap(){const R=repGet();const B={gallery:'M-7 6V-3L0-8 7-3V6Z',bank:'M-8 6V-2H8V6ZM-9-2 0-8 9-2Z',manor:'M-9 6V-1L-4-6 0-2 4-6 9-1V6Z',museum:'M-9 6V-3H9V6ZM-9-3 0-9 9-3ZM-6-3V6M-2-3V6M2-3V6M6-3V6',jeweller:'M-6 6V-5H6V6ZM-3-2H3',casino:'M-9 6V-4H9V6ZM-4-4V-8H4V-4Z',auction:'M-9 6V-2H9V6ZM-9-2-5-7H5L9-2ZM-1 6V1H1V6',hotel:'M-7 6V-9H7V6ZM-4-6H-2M2-6H4M-4-2H-2M2-2H4M-1 6V2H1V6'};
  let svg=`<svg viewBox="0 0 100 86" class="city" aria-label="City map">`;
  // streets and the river
  svg+=`<path d="M0 44 Q30 40 50 46 T100 40" class="riv"/>`;for(const [a,b,c,d] of [[0,14,100,14],[0,76,100,78],[12,0,14,86],[40,0,42,86],[60,0,58,86],[96,0,94,86],[0,38,100,36],[0,56,100,60]])svg+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" class="st"/>`;
