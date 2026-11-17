@@ -472,7 +472,7 @@ body[data-theme=sketch] #home h1 .o::after{border-color:#2f2c27;box-shadow:2px 2
 .optG{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;align-items:center;font-size:13px;margin:6px 0 10px}.optG input{width:100%}
 .optT{display:flex;width:100%;justify-content:space-between;align-items:center;gap:10px;text-align:left;padding:6px 10px;margin:4px 0;background:none;border:1px solid var(--line,currentColor);color:inherit;font:inherit;font-size:14px;cursor:pointer}
 .optT small{display:block;font-size:11px;opacity:.7;margin-top:1px}.optT i{font-style:normal;font-weight:bold;min-width:74px;text-align:center;padding:3px 8px;border:1px solid currentColor;opacity:.55;white-space:nowrap}.optT.on i{opacity:1;background:var(--btn);color:var(--btnink);border-color:var(--btn)}
-.optR{display:flex;gap:8px;margin-top:8px}.optR button{flex:1;padding:8px;background:none;border:1px solid currentColor;color:inherit;font:inherit;font-size:13px;cursor:pointer;opacity:.85}.optR button.danger{color:var(--danger)}
+.optR{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.optR button{flex:1 1 40%;padding:8px;background:none;border:1px solid currentColor;color:inherit;font:inherit;font-size:13px;cursor:pointer;opacity:.85}.optR button.danger{color:var(--danger)}
 @media (prefers-reduced-motion:reduce){#home .hmenu>*,.rstar.on{animation:none}}
 
 #hScene{width:100%;min-height:110px}
@@ -655,7 +655,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v47 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v48 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -2892,13 +2892,20 @@ function tip(id,title,text){try{if(!OPT.tips||TIPS.has(id)||TUT.on)return}catch(
  const t=document.createElement('div');t.className='toast tip';t.innerHTML='<b>💡 '+title+'</b>'+text;$('toasts').appendChild(t);while($('toasts').children.length>3)$('toasts').firstChild.remove();requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));
  SYN.tone(660,.12,{type:'sine',vol:.1});SYN.tone(990,.2,{type:'sine',vol:.09,delay:.1});setTimeout(()=>{t.classList.remove('in');setTimeout(()=>t.remove(),600)},9000)}
 const OPTS=[['kit','3D character models','Off uses simple figures, for slow phones.'],['shake','Screen shake','On catches and escapes.'],['flash','Screen flashes','Alarms, lightning, power cuts.'],['slow','Slow-motion catches','Zoom and slow down for an arrest.'],['hap','Vibration','Alarms and arrests.'+(canHap()?'':' Not on this device.')],['tips','Tips','Hints when something new turns up.']];
+function privacySheet(back){showSheet(`<h2>Privacy &amp; credits</h2>
+ <p><b>Inside Job collects nothing about you.</b> There are no accounts, no adverts, no analytics and no tracking. Your progress, settings and daily job results are saved only on this device, and <i>Erase progress</i> in Options deletes them.</p>
+ <p>The app connects to the internet for one thing: to check for and download new versions of the game. That request carries no information about you or how you play. Sharing a daily job result only happens when you tap Share, and goes wherever you choose to send it.</p>
+ <p style="font-size:13px;opacity:.8">Full policy: kyleh686.github.io/InsideJob/privacy.html</p>
+ <h3 style="margin:14px 0 6px">Credits</h3>
+ <p style="font-size:13px">Sound effects by Kenney (CC0). Characters and furniture by KayKit (CC0). Voices made with Kokoro (Apache 2.0). 3D by three.js (MIT).</p>
+ <button class="cta" id="privBack">Back</button>`);$('privBack').onclick=()=>{AU.click();back()}}
 function optionsSheet(){const fromHome=homeOn()||HOME.from!=='game'&&ST.phase==='title';let spd=0;if(ST.phase==='heist'&&ST.speed>0){spd=ST.speed;setSpeed(0)}hideHome();
  const draw=()=>{const sl=(k,l,max)=>`<label>${l}</label><input type="range" data-mx="${k}" min="0" max="${max}" step=".05" value="${MIX[k]}">`;
   showSheet(`<h2>Options</h2><div class="optG">${sl('sfx','Effects',1.5)}${sl('vo','Radio voices',1.5)}${sl('mus','Music',1)}</div>
   <button class="optT ${AU.on?'on':''}" id="optSnd"><span><b>Sound</b><small>Everything on or off.</small></span><i>${AU.on?'On':'Off'}</i></button>
   <button class="optT on" id="optLook"><span><b>Art style</b><small>Tap to switch the look of the game.</small></span><i>${lookName()}</i></button>
   ${OPTS.map(([k,l,d])=>`<button class="optT ${OPT[k]?'on':''}" data-o="${k}"><span><b>${l}</b><small>${d}</small></span><i>${OPT[k]?'On':'Off'}</i></button>`).join('')}
-  <div class="optR"><button id="optTut">Play the tutorial</button><button id="optTips">Show tips again</button><button id="optWipe" class="danger">Erase progress</button></div>
+  <div class="optR"><button id="optTut">Play the tutorial</button><button id="optTips">Show tips again</button><button id="optPriv">Privacy &amp; credits</button><button id="optWipe" class="danger">Erase progress</button></div>
   <button class="cta" id="optBack">Back</button>`);
   document.querySelectorAll('#sheet [data-mx]').forEach(el=>el.oninput=()=>{AU.init();const k=el.dataset.mx;MIX[k]=+el.value;applyMix();const m=$({sfx:'mxSfx',vo:'mxVo',mus:'mxMus'}[k]);if(m)m.value=MIX[k];if(k==='sfx')AU.click()});
   document.querySelectorAll('#sheet [data-o]').forEach(b=>b.onclick=()=>{const k=b.dataset.o;OPT[k]=!OPT[k];saveOpt();AU.click();if(k==='hap')hap(30);if(k==='kit'&&R3.ready)r3ClearPeople();draw()});
@@ -2906,6 +2913,7 @@ function optionsSheet(){const fromHome=homeOn()||HOME.from!=='game'&&ST.phase===
   $('optTips').onclick=()=>{TIPS.clear();try{localStorage.removeItem('ij-tips')}catch(e){}OPT.tips=true;saveOpt();AU.click();$('optTips').textContent='Tips reset ✓'};
   $('optTut').onclick=()=>{AU.click();if($('optTut').dataset.ok||!readSave()&&HOME.from!=='game'&&fromHome){clearSave();SITE='gallery';try{localStorage.setItem('ij-site',SITE)}catch(e){}hideSheet();newGame();tutStart()}else{$('optTut').dataset.ok=1;$('optTut').textContent='Ends this contract. Tap again'}};
   $('optWipe').onclick=()=>{if($('optWipe').dataset.ok){try{Object.keys(localStorage).filter(k=>k.startsWith('ij-')).forEach(k=>localStorage.removeItem(k))}catch(e){}$('optWipe').textContent='Erased. Reopen the game.';try{location.reload()}catch(e){}}else{AU.deny();$('optWipe').dataset.ok=1;$('optWipe').textContent='Tap again to erase everything'}};
+  $('optPriv').onclick=()=>{AU.click();privacySheet(draw)};
   $('optBack').onclick=()=>{AU.click();if(fromHome)showHome();else{hideSheet();if(spd)setSpeed(spd)}}};
  draw()}
 function drawGlints(c){if(theme!=='blueprint'&&theme!=='sketch')return;const now=performance.now()/1000;for(const l of ST.loot){if(l.stolen||l.carrier||l.dropped||l.spent)continue;const tt=(now*.55+l.x*.37+l.y*.61)%3.2;if(tt>.55)continue;const k=Math.sin(tt/.55*Math.PI),x=l.x+.72,y=l.y+.22,r=.2*k;c.save();c.globalAlpha=k;c.fillStyle=theme==='sketch'?'#e0a020':'#ffffff';c.beginPath();c.moveTo(x,y-r);c.quadraticCurveTo(x,y,x+r,y);c.quadraticCurveTo(x,y,x,y+r);c.quadraticCurveTo(x,y,x-r,y);c.quadraticCurveTo(x,y,x,y-r);c.fill();c.restore()}}
