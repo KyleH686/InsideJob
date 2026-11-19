@@ -3825,7 +3825,11 @@ AU.themeOff=function(){this.wantTheme=false;if(!this.th)return;const c=this.ctx,
 let themeTick=0,themeWasHome=null;
 function syncTheme(dt){themeTick-=dt;if(themeTick>0)return;themeTick=.3;if(!AU.ctx)return;const want=homeOn()||ST.phase==='plan'||ST.phase==='report';
  if(want&&!AU.th)AU.themeOn();else if(!want&&AU.th)AU.themeOff();const h=homeOn();if(AU.th&&h!==themeWasHome)AU.themeLevel();themeWasHome=h}
-document.addEventListener('pointerdown',()=>{if(!AU.ctx)AU.init()},{capture:true});
+// v52: start the sound system as the game opens, so the music can begin straight away where the device allows it (the app does).
+// Browsers keep sound paused until the first tap, so every tap also wakes it.
+{const wake=()=>{if(!AU.ctx)AU.init();else if(AU.ctx.state!=='running')try{AU.ctx.resume()}catch(e){}};
+ for(const ev of ['pointerdown','touchend','click','keydown'])document.addEventListener(ev,wake,{capture:true});
+ setTimeout(()=>{try{AU.init()}catch(e){}},0)}
 
 $('home').prepend(hcv);if(LOOK==='night3d'||LOOK==='sketch3d'){AUTO_BUSY=true;try{setTheme(LOOK)}finally{AUTO_BUSY=false}if(AUTO_LOOK)try{localStorage.setItem('ij-theme','auto')}catch(e){}}
 try{DARKQ.addEventListener('change',()=>{applyAutoLook();if(homeOn())showHome()})}catch(e){try{DARKQ.addListener(()=>applyAutoLook())}catch(e2){}}addEventListener('resize',()=>{if(homeOn()){resizeHome();homeFit()}});if(document.fonts)document.fonts.ready.then(homeFit);$('homeBtn').onclick=()=>{AU.init();AU.click();HOME.from='game';showHome()};
