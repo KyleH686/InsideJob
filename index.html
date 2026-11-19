@@ -691,6 +691,12 @@ input[type=range]{accent-color:var(--accent)}
 .med{display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center;border:1px dashed var(--line);padding:5px 8px;font-size:13px}
 .med i{grid-row:span 2;font-style:normal;font-size:22px;width:26px;text-align:center}.med small{font-size:11px;opacity:.75}.med.none{opacity:.6}
 @media (max-width:380px){.firmTop b{font-size:14px}.upgs{grid-template-columns:1fr}}
+
+/* v53: zoom and device tips */
+#zoomFit{position:absolute;right:8px;bottom:8px;z-index:6;width:44px;height:44px;border-radius:22px;padding:0;font-size:20px;line-height:1;background:var(--panel);color:var(--ink);border:1.5px solid var(--line);box-shadow:0 3px 10px rgba(0,0,0,.25)}
+#toolTip{position:fixed;z-index:60;max-width:260px;background:var(--ink);color:var(--panel);border-radius:10px;padding:9px 12px;font-size:14px;line-height:1.3;box-shadow:0 8px 22px rgba(0,0,0,.35);pointer-events:none;opacity:0;transform:translateY(6px);transition:opacity .12s,transform .12s}
+#toolTip.show{opacity:1;transform:none}#toolTip b{display:block;font-size:16px;margin-bottom:3px}#toolTip small{display:block;opacity:.7;margin-top:4px;font-size:12px}
+#tools .tool{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 </style>
 <style>:root{--pe:0px;--sat:max(env(safe-area-inset-top),var(--fsat,0px));--sar:max(env(safe-area-inset-right),var(--fsar,0px));--sab:max(env(safe-area-inset-bottom),var(--fsab,0px));--sal:max(env(safe-area-inset-left),var(--fsal,0px))}
 @media (pointer:coarse) and (max-width:500px),(pointer:coarse) and (max-height:500px){:root{--pe:6px}}
@@ -698,7 +704,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v52 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v53 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -706,7 +712,7 @@ body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) 
   <button id="homeBtn" title="Menu (Esc)">☰</button><button id="fsBtn" title="Full screen (F)">⛶</button><button id="mute" title="Sound (M)">♪ on</button>
  </header>
  <main>
-  <div id="toasts"></div><canvas id="loupe" width="300" height="300"></canvas><div id="stage"><canvas id="cv"></canvas><div id="hint"></div><button id="watch" class="small"></button><div id="abil"></div><div id="replayBar"><span id="rpLbl">REPLAY</span><div class="bar"><i id="rpBar"></i></div><button class="small on" data-r="0">Auto</button><button class="small" data-r="2">2×</button><button class="small" data-r="4">4×</button><button class="small" data-r="8">8×</button><button class="small" id="rpSkip">Skip ▸▸</button></div><div id="rpCap"></div><div id="overlay"><div id="sheet"></div></div></div>
+  <div id="toasts"></div><canvas id="loupe" width="300" height="300"></canvas><div id="stage"><canvas id="cv"></canvas><button id="zoomFit" type="button" hidden aria-label="Zoom out to the whole building">⤢</button><div id="hint"></div><button id="watch" class="small"></button><div id="abil"></div><div id="replayBar"><span id="rpLbl">REPLAY</span><div class="bar"><i id="rpBar"></i></div><button class="small on" data-r="0">Auto</button><button class="small" data-r="2">2×</button><button class="small" data-r="4">4×</button><button class="small" data-r="8">8×</button><button class="small" id="rpSkip">Skip ▸▸</button></div><div id="rpCap"></div><div id="overlay"><div id="sheet"></div></div></div>
   <aside id="side">
    <section class="card"><div class="stats">
     <div class="stat"><div class="k">Night</div><div class="v" id="sNight">1 / 5</div></div>
@@ -1009,7 +1015,7 @@ const SITE_LOOK={
 function siteLook(){return SITE_LOOK[SITE]||SITE_LOOK.gallery}
 SITES.gallery.city=[22,24];SITES.bank.city=[46,51];SITES.bank.short='Pell St Bank';SITES.manor.city=[82,20];
 let SITE='gallery';try{const v=localStorage.getItem('ij-site');if(v&&SITES[v])SITE=v}catch(e){}
-function useSite(id){if(!SITES[id])id='gallery';SITE=id;const S_=SITES[id];
+function useSite(id){if(!SITES[id])id='gallery';SITE=id;try{viewReset()}catch(e){}const S_=SITES[id];
  DOORS.splice(0,DOORS.length,...S_.doors.map(d=>({...d})));ENTRIES.splice(0,ENTRIES.length,...S_.entries.map(e=>({...e})));
  ROOMS.splice(0,ROOMS.length,...S_.rooms.map(r=>({...r})));LOOT_DEF.splice(0,LOOT_DEF.length,...S_.loot.map(l=>({...l})));
  const sub=document.querySelector('.ttl small');if(sub)sub.textContent='security contract · '+S_.name;
@@ -1417,6 +1423,12 @@ function applyMix(){if(AU.sfxBus){AU.sfxBus.gain.value=MIX.sfx;AU.voBus.gain.val
 function subtitle(text,who){const d=document.createElement('div');d.innerHTML='<b>'+fmtClock()+'</b> <i style="opacity:.8">'+(who==='ctl'?'Control':'Guard')+':</i> “'+text+'”';const L=$('log');L.prepend(d);while(L.children.length>12)L.lastChild.remove()}
 
 // ================================================================ FX
+// v53: the player's own view of the map: pinch or scroll to zoom, two fingers to move around. In tiles; z=1 shows the whole building.
+const VIEW={z:1,cx:W/2,cy:H/2};
+function viewClamp(){VIEW.z=Math.max(1,Math.min(3.2,VIEW.z));if(VIEW.z<1.02){VIEW.z=1;VIEW.cx=W/2;VIEW.cy=H/2}const hw=W/2/VIEW.z,hh=H/2/VIEW.z;VIEW.cx=Math.max(hw,Math.min(W-hw,VIEW.cx));VIEW.cy=Math.max(hh,Math.min(H-hh,VIEW.cy));const b=document.getElementById('zoomFit');if(b)b.hidden=VIEW.z<=1}
+function viewReset(){VIEW.z=1;VIEW.cx=W/2;VIEW.cy=H/2;viewClamp()}
+function viewToWorld(u,v){return [(u-W/2)/VIEW.z+VIEW.cx,(v-H/2)/VIEW.z+VIEW.cy]}
+function worldToView(x,y){return [(x-VIEW.cx)*VIEW.z+W/2,(y-VIEW.cy)*VIEW.z+H/2]}
 const FX={throws:[],rings:[],parts:[],floats:[],stamps:[],shake:0,flash:0,flashCol:'#f00',slow:0,zoom:1,focus:[W/2,H/2]};
 function burst(x,y,n,col,spd=3,life=.8,size=.08){for(let k=0;k<n;k++){const a=Math.random()*Math.PI*2,s=spd*(.3+Math.random());FX.parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life,max:life,col,size:size*(.5+Math.random())})}}
 function floatText(x,y,s,col,big){FX.floats.push({x,y,s,col,t:0,big})}
@@ -2376,7 +2388,7 @@ function render(dtReal){
  const PIX=theme==='pixel';const c=PIX?lctx:ctx;const base=PIX?16:T*DPR;
  ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,PIX?low.width:cv.width,PIX?low.height:cv.height);c.imageSmoothingEnabled=!PIX;
  const z=R3.on?1:FX.zoom,[fx,fy]=FX.focus;const sh=FX.shake>0&&!R3.on?FX.shake*.25:0;const ox=(Math.random()-.5)*sh,oy=(Math.random()-.5)*sh;
- const s=base*z;c.setTransform(s,0,0,s,base*(fx*(1-z)+ox*z),base*(fy*(1-z)+oy*z));
+ const vz=R3.on?1:VIEW.z,vx=R3.on?W/2:VIEW.cx,vy=R3.on?H/2:VIEW.cy;const s=base*z*vz;c.setTransform(s,0,0,s,base*(z*(W/2-vz*vx)+fx*(1-z)+ox*z),base*(z*(H/2-vz*vy)+fy*(1-z)+oy*z));
  c.drawImage(stat,0,0,W,H);
  if(SITE==='train'&&!R3.on)drawTrainOut(c,dtReal||.016);
  if(ST.heat||ST.phase==='plan'&&ST.tool)drawHeat(c);
@@ -2789,7 +2801,7 @@ function place(type,i,opts={}){
 }
 function sell(d){ST.devices=ST.devices.filter(o=>o!==d);ST.cash+=Math.round(d.paid*.8);if(ST.sel===d)ST.sel=null;if(ST.routeFor===d)ST.routeFor=null;devicesChanged();AU.sell();floatText(d.x+.5,d.y,'+'+money(Math.round(d.paid*.8)),S.good);refreshUI()}
 let aimDrag=null;
-function ptTile(e){const r=cv.getBoundingClientRect();let x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;if(R3.on){const p=r3Pick(e.clientX,e.clientY);if(p){x=p[0];y=p[1]}else{x=-1;y=-1}}return {x,y,i:inb(Math.floor(x),Math.floor(y))?idx(Math.floor(x),Math.floor(y)):-1}}
+function ptTile(e){const r=cv.getBoundingClientRect();let x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;if(!R3.on&&VIEW.z>1){[x,y]=viewToWorld(x,y)}if(R3.on){const p=r3Pick(e.clientX,e.clientY);if(p){x=p[0];y=p[1]}else{x=-1;y=-1}}return {x,y,i:inb(Math.floor(x),Math.floor(y))?idx(Math.floor(x),Math.floor(y)):-1}}
 cv.addEventListener('pointermove',e=>{const p=ptTile(e);hoverTile=p.i;hoverPt=[p.x,p.y];if(touchP&&e.pointerId===touchP.id){touchP.x=e.clientX;touchP.y=e.clientY}
  if(aimDrag){const a=Math.atan2(p.y-(aimDrag.y+.5),p.x-(aimDrag.x+.5));if(Math.hypot(p.y-(aimDrag.y+.5),p.x-(aimDrag.x+.5))>.6){aimDrag.ang=a;aimDrag.moved=true;if(aimDrag.dev){aimDrag.dev.ang=a;aimDrag.dev.cur=a}}}});
 cv.addEventListener('pointerleave',()=>{if(!touchP)hoverTile=-1});
@@ -2820,7 +2832,7 @@ cv.addEventListener('pointercancel',()=>{touchP=null;loupeHide();hoverTile=-1});
 const loupe=document.getElementById("loupe"),lpx=loupe.getContext("2d");
 function loupeHide(){loupe.style.display='none'}
 function drawLoupe(){if(!touchP||performance.now()-touchP.t0<130)return;const r=cv.getBoundingClientRect();const sc=cv.width/r.width;
- const R=3.2*T*DPR;let cx=(touchP.x-r.left)*sc,cy=(touchP.y-r.top)*sc;if(R3.on){const p=r3Pick(touchP.x,touchP.y);if(p){cx=p[0]*T*DPR;cy=p[1]*T*DPR}}lpx.fillStyle=getComputedStyle(document.body).backgroundColor||'#000';lpx.fillRect(0,0,300,300);
+ const R=3.2*T*DPR;let cx=(touchP.x-r.left)*sc,cy=(touchP.y-r.top)*sc;if(R3.on&&!(R3.vw&&R3.vw.s>1.01)){const p=r3Pick(touchP.x,touchP.y);if(p){cx=p[0]*T*DPR;cy=p[1]*T*DPR}}lpx.fillStyle=getComputedStyle(document.body).backgroundColor||'#000';lpx.fillRect(0,0,300,300);
  lpx.imageSmoothingEnabled=true;lpx.drawImage(cv,cx-R,cy-R,2*R,2*R,0,0,300,300);
  lpx.strokeStyle=S.accent;lpx.lineWidth=3;lpx.beginPath();lpx.moveTo(150,128);lpx.lineTo(150,140);lpx.moveTo(150,160);lpx.lineTo(150,172);lpx.moveTo(128,150);lpx.lineTo(140,150);lpx.moveTo(160,150);lpx.lineTo(172,150);lpx.stroke();
  const L=150;let lx=touchP.x-L/2,ly=touchP.y-L-46;if(ly<6)ly=touchP.y+46;lx=Math.max(6,Math.min(innerWidth-L-6,lx));loupe.style.left=lx+'px';loupe.style.top=ly+'px';loupe.style.display='block'}
@@ -3550,7 +3562,8 @@ function r3Weather(dt){r3TrainTick(dt);const ev=(ST.phase==='heist'||ST.phase===
 function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;if(!R3.warm){R3.warm=true;r3Prewarm()}
  // camera: framed building, eases toward the action in slow-mo, shakes on impact
  const f=R3.fit,cam=R3.cam;const z=FX.zoom||1;const [fx,fy]=FX.focus||[W/2,H/2];const k=clamp((z-1)/.35,0,1);
- let tx_=lerp(f.tgt.x,fx,k*.8),tz_=lerp(f.tgt.z,fy,k*.8),d=f.d/(1+k*.6),el=f.el;const sh=FX.shake>0?FX.shake*.06:0;
+ let tx_=lerp(f.tgt.x,fx,k*.8),tz_=lerp(f.tgt.z,fy,k*.8),d=f.d/(1+k*.6),el=f.el;
+ {const V=R3.vw||(R3.vw={x:f.tgt.x,z:f.tgt.z,s:1});const want=VIEW.z>1;const a=Math.min(1,dt*12);V.x=lerp(V.x,want?VIEW.cx:f.tgt.x,a);V.z=lerp(V.z,want?VIEW.cy:f.tgt.z,a);V.s=lerp(V.s,VIEW.z,a);if(V.s>1.005||want){const m=clamp((V.s-1)/.15,0,1);tx_=lerp(tx_,V.x,m);tz_=lerp(tz_,V.z,m);d=d/V.s}}const sh=FX.shake>0?FX.shake*.06:0;
  if(ST.phase==='replay'){const p=rpFocus()||[f.tgt.x,f.tgt.z];const C=R3.cine||(R3.cine={x:p[0],z:p[1],d:f.d*.7});const a=Math.min(1,dt*1.6);C.x=lerp(C.x,p[0],a);C.z=lerp(C.z,p[1],a);C.d=lerp(C.d,f.d*(FX.slow>0?.32:.48),Math.min(1,dt*1.2));tx_=C.x;tz_=C.z;d=C.d;el=36*Math.PI/180}else R3.cine=null;
  let ly=.4*(ST.phase==='replay');if(ST.phase!=='replay'){const w=r3WatchOk(R3.watch)?R3.watch:null;if(R3.watch&&!w){R3.watch=null;watchPill();renderCrew()}
   if(w||R3.wc){const C=R3.wc||(R3.wc={x:tx_,z:tz_,d,el});const gx=w?w.x:tx_,gz=w?w.y:tz_,gd=w?f.d*.27*clamp(R3.gl.clientWidth/900,.55,1):d,ge=w?42*Math.PI/180:el;const a=Math.min(1,dt*(w?3.2:2.6)),b=Math.min(1,dt*2.4);C.x=lerp(C.x,gx,a);C.z=lerp(C.z,gz,a);C.d=lerp(C.d,gd,b);C.el=lerp(C.el,ge,b);
@@ -3812,9 +3825,39 @@ function tutPlace(){const st=TUTS[TUT.i],c=$('coach'),dot=$('coachDot');if(!st||
  if(el){el.classList.add('tutHi');const r=el.getBoundingClientRect();ax=r.left+r.width/2;if(r.top-ch-14>8){top=r.top-ch-14;dir='up'}else{top=Math.min(vh-ch-8,r.bottom+14);dir='down'}left=ax-cw/2}
  else{const r=$('stage').getBoundingClientRect(),mob=LAY.tl&&!LAY.ls;if(mob){left=r.left+r.width/2-cw/2;top=Math.min(vh-ch-8,r.bottom+8)}else{left=r.left+10;top=Math.max(8,r.top+10)}}
  left=Math.max(8,Math.min(vw-cw-8,left));c.style.left=left+'px';c.style.top=top+'px';c.classList.remove('up','down','none');c.classList.add(dir);if(ax!==null)c.style.setProperty('--ax',(ax-left)+'px');
- const p=st.pt&&st.pt();if(p&&dot){const r=cv.getBoundingClientRect();dot.style.display='block';dot.style.left=(r.left+p[0]/W*r.width)+'px';dot.style.top=(r.top+p[1]/H*r.height)+'px'}else if(dot)dot.style.display='none'}
+ let p=st.pt&&st.pt();if(p&&!R3.on&&VIEW.z>1)p=worldToView(p[0],p[1]);if(p&&dot){const r=cv.getBoundingClientRect();dot.style.display='block';dot.style.left=(r.left+p[0]/W*r.width)+'px';dot.style.top=(r.top+p[1]/H*r.height)+'px'}else if(dot)dot.style.display='none'}
 function tutTick(){if(!TUT.on)return;if(homeOn()||$('overlay').classList.contains('show')){coachHide();return}const st=TUTS[TUT.i];if(!$('coach').classList.contains('show'))tutShow();
  if(st.done&&st.done()){tutAdvance();return}if(st.auto&&performance.now()-TUT.shownAt>st.auto*1000&&!st.done){tutAdvance();return}tutPlace()}
+// ================================================================ ZOOM AND DEVICE TIPS (v53)
+// Two fingers on the map: pinch to zoom, move to pan. A mouse wheel or trackpad zooms around the pointer. ⤢ zooms back out.
+{const P=new Map();let pin=null,quiet=false;const units=(x,y)=>{const r=cv.getBoundingClientRect();return [(x-r.left)/r.width*W,(y-r.top)/r.height*H]};
+ const mid=()=>{const a=[...P.values()];return [(a[0].x+a[1].x)/2,(a[0].y+a[1].y)/2,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)]};
+ const begin=()=>{const [mx,my,d]=mid();const u=units(mx,my);pin={d:Math.max(20,d),z:VIEW.z,w:viewToWorld(u[0],u[1])};touchP=null;loupeHide();aimDrag=null;hoverTile=-1};
+ cv.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return;P.set(e.pointerId,{x:e.clientX,y:e.clientY});if(P.size===2){begin();quiet=true;e.stopImmediatePropagation()}else if(P.size>2)e.stopImmediatePropagation()},{capture:true});
+ cv.addEventListener('pointermove',e=>{if(!P.has(e.pointerId))return;P.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!pin||P.size<2)return;e.stopImmediatePropagation();
+  const [mx,my,d]=mid();const u=units(mx,my);VIEW.z=pin.z*d/pin.d;viewClamp();VIEW.cx=pin.w[0]-(u[0]-W/2)/VIEW.z;VIEW.cy=pin.w[1]-(u[1]-H/2)/VIEW.z;viewClamp()},{capture:true});
+ const up=e=>{if(!P.has(e.pointerId))return;P.delete(e.pointerId);if(pin&&P.size<2)pin=null;if(quiet){e.stopImmediatePropagation();if(e.type==='pointerup'||e.type==='pointercancel'){touchP=null;loupeHide()}if(P.size===0)quiet=false}};
+ cv.addEventListener('pointerup',up,{capture:true});cv.addEventListener('pointercancel',up,{capture:true});
+ cv.addEventListener('wheel',e=>{if(homeOn())return;e.preventDefault();const u=units(e.clientX,e.clientY);const w=viewToWorld(u[0],u[1]);VIEW.z*=Math.exp(-e.deltaY*(e.ctrlKey?.01:.0025));viewClamp();VIEW.cx=w[0]-(u[0]-W/2)/VIEW.z;VIEW.cy=w[1]-(u[1]-H/2)/VIEW.z;viewClamp()},{passive:false});
+ $('zoomFit').onclick=e=>{e.stopPropagation();AU.click&&AU.click();viewReset()};
+ setTimeout(()=>{if(TOUCH)tip('pinch','Zoom in on the map','Pinch the map with two fingers to zoom in, and move two fingers to look around. ⤢ zooms back out.')},1500)}
+// Hold a device button to see what it is and what it does. A quick tap still picks it.
+{let lpT=0,shown=false;const tipEl=document.createElement('div');tipEl.id='toolTip';tipEl.setAttribute('role','tooltip');document.body.appendChild(tipEl);
+ const hide=()=>tipEl.classList.remove('show');
+ const show=b=>{const k=b.dataset.t,d=DEV[k];if(!d)return;const cost=d.cost>=9999?'not available tonight':money(d.cost);
+  tipEl.innerHTML=`<b>${d.name} · ${cost}</b>${d.desc.replace(/Drag when placing to aim it\./,TOUCH?'Turn it once it is placed.':'Drag when placing to aim it.')}<small>Tap to pick it, then tap the map.</small>`;
+  const r=b.getBoundingClientRect();tipEl.style.left='0px';tipEl.style.top='0px';tipEl.classList.add('show');const tw=tipEl.offsetWidth,th=tipEl.offsetHeight;
+  let x=r.left+r.width/2-tw/2,y=r.top-th-10;if(y<8)y=r.bottom+10;x=Math.max(8,Math.min(innerWidth-tw-8,x));tipEl.style.left=x+'px';tipEl.style.top=y+'px';shown=true;
+  try{hap(8)}catch(e){}};
+ const T_=$('tools');
+ T_.addEventListener('pointerdown',e=>{const b=e.target.closest('.tool');if(!b)return;shown=false;clearTimeout(lpT);hide();lpT=setTimeout(()=>show(b),420)});
+ const end=()=>{clearTimeout(lpT);if(shown)setTimeout(hide,1800)};
+ T_.addEventListener('pointerup',end);T_.addEventListener('pointerleave',end);T_.addEventListener('pointercancel',()=>{clearTimeout(lpT);hide()});
+ T_.addEventListener('click',e=>{if(shown){e.stopPropagation();e.preventDefault();shown=false}},true);
+ T_.addEventListener('contextmenu',e=>e.preventDefault());
+ // a mouse gets the same card on hover
+ T_.addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return;const b=e.target.closest('.tool');if(b){clearTimeout(lpT);lpT=setTimeout(()=>{show(b);shown=false},500)}});
+ T_.addEventListener('pointerout',e=>{if(e.pointerType==='mouse'){clearTimeout(lpT);hide()}})}
 // ================================================================ THEME MUSIC
 // v52: Velvet Caper music (src/music.py). The loops are an exact number of bars; skip the mp3 encoder's lead-in so they join without a gap
 const MUSLEN={musPlan:32.5424,musHeist:13.1507};
