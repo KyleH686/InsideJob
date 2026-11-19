@@ -732,6 +732,8 @@ body.mf[data-phase=heist] #goCard #speedRow>span{display:none}
 body.mf[data-phase=heist] #goCard #speedRow button{min-width:40px!important;padding:4px 2px!important}
 
 body.mf #zoomFit{bottom:22px}
+body.mf #hint{font-size:13px!important;line-height:1.35;padding:7px 11px;max-width:94%}
+body.mf.sheetMin[data-phase=heist] #goCard{padding-bottom:4px!important}
 #toolTip{position:fixed;z-index:60;max-width:260px;background:var(--ink);color:var(--panel);border-radius:10px;padding:9px 12px;font-size:14px;line-height:1.3;box-shadow:0 8px 22px rgba(0,0,0,.35);pointer-events:none;opacity:0;transform:translateY(6px);transition:opacity .12s,transform .12s}
 #toolTip.show{opacity:1;transform:none}#toolTip b{display:block;font-size:16px;margin-bottom:3px}#toolTip small{display:block;opacity:.7;margin-top:4px;font-size:12px}
 #tools .tool{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
@@ -742,7 +744,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v54 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v55 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -1122,19 +1124,19 @@ const PERKS=[
  {id:'bounty',icon:'★',name:'Bounty scheme',desc:'Every arrest earns £100 more.',apply(){}},
 ];
 const STYLE_DESC={blueprint:'Architect\'s drawing, cyan on navy.',cctv:'Green night-vision security monitor.',sketch:'A crew\'s pencil plan on lined paper.',board:'Wooden tabletop with chunky pieces.',thermal:'Heat camera: thieves glow white-hot.',pixel:'Chunky 16-bit pixel art.',noir:'Rain, neon and wet reflections.',riso:'Two-ink risograph print, pink and blue.',caper:'Flat 1960s heist-film title card in bold blocks.',comic:'Pop-art comic panel with halftone dots.',water:'Soft washes and ink on cold-press paper.',term:'Amber phosphor roguelike terminal, all ASCII.',paper:'Cut card and kraft paper, layered by hand.'};
-const ICON={
- camera:'<svg viewBox="0 0 24 24"><path d="M3 7h12l2 2v6l-2 2H3z"/><path d="M17 10l4-2v8l-4-2"/><circle cx="7" cy="12" r="1.6"/></svg>',
- laser:'<svg viewBox="0 0 24 24"><rect x="2" y="9" width="4" height="6"/><rect x="18" y="9" width="4" height="6"/><path d="M6 12h12" stroke-dasharray="2 2"/></svg>',
- plate:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" stroke-dasharray="3 2"/><path d="M9 12h6M12 9v6"/></svg>',
- light:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>',
- guard:'<svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>',
- steel:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18"/><circle cx="9" cy="7" r=".8"/><circle cx="15" cy="7" r=".8"/><circle cx="9" cy="17" r=".8"/><circle cx="15" cy="17" r=".8"/><path d="M15 12h2"/></svg>',
+const ICON={// v55: redrawn so each device reads at a glance (wall camera, tripwire posts, pressure plate, bulb, guard in a cap, locked door, dog's head)
+ camera:'<svg viewBox="0 0 24 24"><path d="M3 4v6M3 7h4l2 2"/><path d="M8 6.5l11 3.5-1.6 5-11-3.5z"/><path d="M18.6 11.2l2.9 1-1 3-2.9-1"/><circle cx="11" cy="10" r=".6"/></svg>',
+ laser:'<svg viewBox="0 0 24 24"><path d="M3 5v14M21 5v14M2 19h3M19 19h3"/><path d="M3 9h18M3 14h18" stroke-dasharray="1.6 1.8"/></svg>',
+ plate:'<svg viewBox="0 0 24 24"><path d="M2 17l4-5h12l4 5z"/><path d="M2 17v2h20v-2"/><path d="M12 2v7M9 6l3 3 3-3"/></svg>',
+ light:'<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M9 15c0-2-3-3.5-3-7a6 6 0 0 1 12 0c0 3.5-3 5-3 7z"/><path d="M12 6v3"/></svg>',
+ guard:'<svg viewBox="0 0 24 24"><path d="M6 7.5c1-2.5 3.5-3.5 6-3.5s5 1 6 3.5z"/><path d="M5 7.5h14"/><path d="M8 9a4 4 0 0 0 8 0"/><path d="M4 21c.5-3.5 3.5-6 8-6s7.5 2.5 8 6"/><path d="M12 4.5v2"/></svg>',
+ steel:'<svg viewBox="0 0 24 24"><path d="M5 21V3h14v18"/><path d="M3 21h18"/><path d="M5 8h14M5 13h14"/><rect x="10.5" y="14.5" width="3" height="3"/><path d="M11 14.5v-1a1 1 0 0 1 2 0v1"/></svg>',
  speaker:'<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>',
- dog:'<svg viewBox="0 0 24 24"><path d="M5 20v-7l-2-3 3-1 2-4 3 3h4l4 4v8h-3v-4h-5v4z"/><circle cx="8" cy="10" r=".7"/></svg>',
- decoy:'<svg viewBox="0 0 24 24"><path d="M6 4h12l3 5-9 11L3 9z"/><path d="M10 9.5a2 2 0 1 1 3 1.7c-.8.5-1 1-1 1.8M12 16v.5"/></svg>',
- seismic:'<svg viewBox="0 0 24 24"><path d="M2 13h4l2-5 3 10 3-13 3 12 2-4h3"/></svg>',
- fog:'<svg viewBox="0 0 24 24"><path d="M8 3h8v4H8z"/><path d="M12 7v3"/><path d="M4 15c2-2 4-2 6 0s4 2 6 0 4-2 4-2M4 19c2-2 4-2 6 0s4 2 6 0 4-2 4-2"/></svg>',
- slam:'<svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18"/><path d="M14 12h1M2 8l2 1M2 16l2-1"/></svg>',
+ dog:'<svg viewBox="0 0 24 24"><path d="M7 6l-3 1.5L5 13l2.5-1.5"/><path d="M7 6c2-2 6-2 8 0l1.5 3H20c1 0 1.5 1 1 2l-.5 1.5c-.3.8-1 1-1.8 1H15c-1 3-3 5-5 5H8c-1 0-1.5-.5-1.5-1.5V12"/><circle cx="13" cy="9.5" r=".7"/><circle cx="20.3" cy="10.8" r=".5"/></svg>',
+ decoy:'<svg viewBox="0 0 24 24"><path d="M6 4h12l3 5-9 11L3 9z"/><path d="M3 9h18M9 4l-1.5 5L12 20l4.5-11L15 4"/></svg>',
+ seismic:'<svg viewBox="0 0 24 24"><path d="M2 12h4l2-5 3 10 3-13 3 12 2-4h3"/><path d="M2 21h20" stroke-dasharray="2 2"/></svg>',
+ fog:'<svg viewBox="0 0 24 24"><rect x="3" y="13" width="8" height="7" rx="1"/><path d="M11 15h2"/><path d="M13 12c1-2 3-2 4-1 1-2 4-1 4 1 1.5.5 1.5 3 0 3.5 0 2-3 2.5-4 1-1 1.5-3.5 1-4-.5"/></svg>',
+ slam:'<svg viewBox="0 0 24 24"><path d="M6 21V3h11v18"/><path d="M4 21h15"/><path d="M14 12h1"/><path d="M20 7l2-1M20 12h2.5M20 17l2 1"/></svg>',
  siren:'<svg viewBox="0 0 24 24"><path d="M7 18v-6a5 5 0 0 1 10 0v6M5 18h14v3H5zM12 2v3M4 6l2 2M20 6l-2 2"/></svg>',
 };
 const TYPES={
@@ -1617,7 +1619,7 @@ function onEnterTile(th,i){
  if(pl>=0){const d=ST.devices.find(d=>d.id===pl);if(d&&d.armed<=0){d.armed=2;d.hit=1;if(d.lv){th.stun=2;floatText(th.x,th.y-.7,'ZAP!',S.accent);burst(th.x,th.y,20,S.accent,3);AU.stun(th.x)}addSus(th,35+ST.mods.plate,'plate');alarm(th.x,th.y,'Pressure plate in the '+roomOf(i),'plate');AU.plate(th.x);learn(th,'plate',d);FX.shake=.25;FX.flash=.35;FX.flashCol=S.danger}}
 }
 // v54: a turned label runs north-south, so centre it on its room that way
-const TURNY={};function turnY(x,y){const k=SITE+'|'+x+'|'+y;if(k in TURNY)return TURNY[k];let v=y;try{const fx=Math.floor(x),fy=Math.floor(y);if(inb(fx,fy)&&G[idx(fx,fy)]!==OUT){const rm=roomOf(idx(fx,fy));let lo=fy,hi=fy;while(lo>0&&G[idx(fx,lo-1)]!==WALL&&G[idx(fx,lo-1)]!==OUT&&roomOf(idx(fx,lo-1))===rm)lo--;while(hi<H-1&&G[idx(fx,hi+1)]!==WALL&&G[idx(fx,hi+1)]!==OUT&&roomOf(idx(fx,hi+1))===rm)hi++;v=(lo+hi+1)/2}}catch(e){}return TURNY[k]=v}
+const TURNY={};function turnY(x,y){const k=SITE+'|'+x+'|'+y;if(k in TURNY)return TURNY[k];let v=y,span=99;try{const fx=Math.floor(x),fy=Math.floor(y);if(inb(fx,fy)&&G[idx(fx,fy)]!==OUT){const rm=roomOf(idx(fx,fy));let lo=fy,hi=fy;while(lo>0&&G[idx(fx,lo-1)]!==WALL&&G[idx(fx,lo-1)]!==OUT&&roomOf(idx(fx,lo-1))===rm)lo--;while(hi<H-1&&G[idx(fx,hi+1)]!==WALL&&G[idx(fx,hi+1)]!==OUT&&roomOf(idx(fx,hi+1))===rm)hi++;v=(lo+hi+1)/2;span=hi-lo+1}}catch(e){}return TURNY[k]=[v,span]}
 function roomOf(i){const x=tx(i),y=ty(i);if(G[i]===OUT)return 'street';return SITES[SITE].roomOf(x,y)}
 function addSus(th,v,src){th.sus+=v*(th.T.sus||1)*(th.susMul||1);th.seenBy=src;th.unseen=0;th.hurry=2.5;if(th.sus>=th.maxSus)catchThief(th,src)}
 function alarm(x,y,msg,kind){hap([30,40,30]);
@@ -2075,9 +2077,10 @@ function resize(){
 }
 function txt(c,s,x,y,size,col,{font=S.mono,align='center',base='middle',weight='',alpha=1,rot=0,stroke=null,glow=0}={}){
   if(LAY.tl&&typeof s==='string'&&(s===SITES[SITE].caption||/^\d+\.00 m$/.test(s)||s.includes('EDITION OF')||s===SITES[SITE].note1||(SITES[SITE].note2&&s===SITES[SITE].note2[0])))return;
- if(R3TURN&&typeof s==='string'&&ROOMS.some(r=>r.n.toLowerCase()===s.toLowerCase())){rot+=Math.PI/2;y=turnY(x,y)}// v54: room names stay upright on a turned 3D map
+ let turned=0;if(R3TURN&&typeof s==='string'&&ROOMS.some(r=>r.n.toLowerCase()===s.toLowerCase())){turned=1;rot+=Math.PI/2;const t=turnY(x,y);y=t[0];turned=t[1]*.9/(s.length*.62)}// v54: room names stay upright on a turned 3D map
+ else if(R3TURN&&typeof s==='string'&&ENTRIES.some(e=>s.toLowerCase().startsWith(e.name.toLowerCase()))){rot+=Math.PI/2;if(y>H/2){align='right';y=Math.min(y,H-2.2)}else{align='left';y=Math.max(y,.3)}}
  const m=c.getTransform(),p=m.transformPoint(new DOMPoint(x,y)),sc=Math.hypot(m.a,m.b);
- c.save();c.setTransform(1,0,0,1,p.x,p.y);if(rot)c.rotate(rot);c.globalAlpha*=alpha;c.font=`${weight} ${Math.max(LAY.tl?11*DPR:theme==='pixel'?5:6,theme==='pixel'?Math.round(size*sc):size*sc)}px "${font}"`;c.textAlign=align;c.textBaseline=base;
+ c.save();c.setTransform(1,0,0,1,p.x,p.y);if(rot)c.rotate(rot);c.globalAlpha*=alpha;c.font=`${weight} ${turned?Math.min(Math.max(11*DPR,size*sc),turned*sc):Math.max(LAY.tl?11*DPR:theme==='pixel'?5:6,theme==='pixel'?Math.round(size*sc):size*sc)}px "${font}"`;c.textAlign=align;c.textBaseline=base;
  if(glow){c.shadowColor=col;c.shadowBlur=glow*sc}
  if(stroke){c.lineWidth=stroke[1]*sc;c.strokeStyle=stroke[0];c.lineJoin='round';c.strokeText(s,0,0)}
  c.fillStyle=col;c.fillText(s,0,0);c.restore();
@@ -2786,10 +2789,10 @@ function drawFX(c,dt){
  for(const t of FX.throws){t.t+=dt*1.8;const k=Math.min(1,t.t);const x=lerp(t.x0,t.x1,k),y=lerp(t.y0,t.y1,k)-Math.sin(k*Math.PI)*1.4;c.save();c.fillStyle=S.accent;c.beginPath();c.arc(x,y,.1,0,7);c.fill();c.globalAlpha=.4;c.setLineDash([.06,.1]);c.strokeStyle=S.accent;c.lineWidth=.03;c.beginPath();for(let q=0;q<=k;q+=.05){const X=lerp(t.x0,t.x1,q),Y=lerp(t.y0,t.y1,q)-Math.sin(q*Math.PI)*1.4;q?c.lineTo(X,Y):c.moveTo(X,Y)}c.stroke();c.restore()}
  FX.throws=FX.throws.filter(t=>t.t<1.3);
  for(const s of FX.stamps){s.t+=dt;const k=s.t<.25?2.6-1.6*(s.t/.25):1;const a=s.t<2.2?1:Math.max(0,1-(s.t-2.2)/.5);
-  c.save();c.translate(s.x,s.y-1.1);c.rotate(s.rot);c.scale(k,k);c.globalAlpha=a*.92;
+  c.save();if(R3TURN)c.translate(s.x+1.1,s.y);else c.translate(s.x,s.y-1.1);c.rotate(s.rot+(R3TURN?Math.PI/2:0));c.scale(k,k);c.globalAlpha=a*.92;
   const m=c.getTransform();c.font=`${.7*m.a}px "${S.font}"`;const w=c.measureText(s.s).width/m.a+.5;
   c.strokeStyle=s.col;c.lineWidth=.09;if(theme==='board'){c.fillStyle='#ffcf4a';rr(c,-w/2,-.5,w,1,.2);c.fill();c.strokeStyle='#2b1d14';c.stroke()}else{rr(c,-w/2,-.48,w,.96,.08);c.stroke();c.lineWidth=.03;rr(c,-w/2+.08,-.4,w-.16,.8,.05);c.stroke()}
-  txt(c,s.s,0,.04,.7,theme==='board'?'#d63c2f':s.col,{font:S.font,weight:'700'});c.restore()}
+  txt(c,s.s,0,.04,.7,theme==='board'?'#d63c2f':s.col,{font:S.font,weight:'700',rot:R3TURN?s.rot+Math.PI/2:0});c.restore()}
  FX.stamps=FX.stamps.filter(s=>s.t<2.7);
 }
 const RAIN=[];for(let k=0;k<140;k++)RAIN.push({x:Math.random(),y:Math.random(),v:.6+Math.random()*.8,l:.02+Math.random()*.03});
@@ -2920,7 +2923,7 @@ function refreshUI(){if($('worksBtn'))$('worksBtn').hidden=ST.phase!=='plan'||!!
  $('routeDone').hidden=!ST.routeFor;if(ST.routeFor)$('routeDone').textContent=ST.routeFor.route.length?'Done: set '+ST.routeFor.route.length+'-point patrol':'Done: make a sentry';const d=ST.sel;$('selBox').hidden=!d;document.body.classList.toggle('hassel',!!d&&ST.phase==='plan'&&!ST.routeFor);document.body.classList.toggle('routing',!!ST.routeFor);
  if(d){$('selName').innerHTML=`<b>${DEV[d.type].name}${d.n?' C'+d.n:''}</b>`+(d.type==='camera'?` · ${d.sweep?'sweeping':'fixed'}${d.looped>0?' · LOOPED':''}`:'')+(d.type==='guard'?` · ${d.route.length?d.route.length+' patrol points':'sentry'} · ${PERS[d.pers||'steady'].ic} ${PERS[d.pers||'steady'].name}<div style="font-size:12px;opacity:.75;margin-top:2px">${PERS[d.pers||'steady'].desc}</div>`:'')+(d.broken?' · broken':'')+(d.forced?' · forced':'');
   const b=[];if(ST.phase==='plan'){if(d.type==='camera')b.push(['⟲','rotSel(-1)'],['⟳','rotSel(1)'],[d.sweep?'Fix in place':'Sweep','toggleSweep()']);if(d.type==='laser')b.push(['Turn beam','rotSel(1)']);if(d.type==='guard')b.push(['Redraw patrol','redrawRoute()'],[`${PERS[d.pers||'steady'].ic} ${PERS[d.pers||'steady'].name} ▸`,'cyclePers()']);const up=(UPG[d.type]||[])[d.lv||0];if(up)b.push([`★ ${up.name} ${money(up.cost)}`,'upgradeSel()',ST.cash<up.cost]);b.push(['Sell '+money(Math.round(d.paid*.8)),'sellSel()']);if(TOUCH)b.push(['✓ Done','deselSel()'])}
-  $('selBtns').innerHTML=b.map(([t,f,dis])=>`<button onclick="${f}" ${dis?'disabled style="opacity:.4"':''}>${t}</button>`).join('');const up=(UPG[d.type]||[])[d.lv||0];$('selName').innerHTML+=(d.lv?` · ${'★'.repeat(d.lv)} ${UPG[d.type].slice(0,d.lv).map(u=>u.name).join(', ')}`:'')+(up&&ST.phase==='plan'?`<div style="font-size:12px;opacity:.75;margin-top:4px">Upgrade (U): ${up.desc}</div>`:'')}
+  $('selBtns').innerHTML=b.map(([t,f,dis])=>`<button onclick="${f}" ${dis?'disabled style="opacity:.4"':''}>${t}</button>`).join('');const up=(UPG[d.type]||[])[d.lv||0];$('selName').innerHTML+=(d.lv?` · ${'★'.repeat(d.lv)} ${UPG[d.type].slice(0,d.lv).map(u=>u.name).join(', ')}`:'')+(up&&ST.phase==='plan'?`<div style="font-size:12px;opacity:.75;margin-top:4px">Upgrade${TOUCH?'':' (U)'}: ${up.desc}</div>`:'')}
  const go=$('go');go.disabled=ST.phase!=='plan';go.textContent=ST.phase==='plan'?(ST.daily?'Start the daily job ▸':`Start ${dayName(ST.night)} night ▸`):ST.phase==='heist'?'Night in progress…':'Night over';
  $('tRoutes').classList.toggle('on',ST.routes);$('tHeat').classList.toggle('on',ST.heat);$('tThink').classList.toggle('on',ST.thoughts);
  $('sClock').textContent=fmtClock();
@@ -3125,7 +3128,7 @@ function r3Size(){if(!R3.ready)return;const st=$('stage').getBoundingClientRect(
  for(const el of [R3.gl,R3.ov]){el.style.left='0px';el.style.top='0px';el.style.width=w+'px';el.style.height=h+'px'}
  R3.q=r3Quality();govInit();const GL=GOVL[GOV.lvl];const pr=Math.min(devicePixelRatio||1,GL.pr);R3.r.setPixelRatio(pr);R3.dust.visible=GL.dust&&R3.look!=='sketch';R3.r.setSize(w,h,false);R3.ov.width=Math.round(w*DPR);R3.ov.height=Math.round(h*DPR);
  const sm=R3.q==='high'?4096:2048;if(R3.moon.shadow.mapSize.x!==sm){R3.moon.shadow.mapSize.set(sm,sm);if(R3.moon.shadow.map){R3.moon.shadow.map.dispose();R3.moon.shadow.map=null}}
- R3.az=LAY.mf&&h>w*1.1?-Math.PI/2:0;{const t=R3.az&&R3.on?1:0;if(t!==R3TURN){R3TURN=t;redrawStatic()}}
+ R3.az=LAY.mf&&h>w*.8?-Math.PI/2:0;{const t=R3.az&&R3.on?1:0;if(t!==R3TURN){R3TURN=t;redrawStatic()}}
  R3.cam.aspect=w/h;R3.fit=null;R3.cam.updateProjectionMatrix()}
 function r3Fit(){// frame the whole building at a 56° tilt
  const cam=R3.cam,el=57*Math.PI/180,az=R3.az||0;let d=40;const tgt=new THREE.Vector3(W/2+(az?-.5:0),0,H/2+(az?0:.5));
@@ -3896,6 +3899,9 @@ function sheetMin(on){if(!LAY.mf)on=false;if(document.body.classList.contains('s
 {const g=$('sheetGrip');let y0=null;g.addEventListener('pointerdown',e=>{y0=e.clientY});
  g.addEventListener('pointerup',e=>{if(y0==null)return;const dy=e.clientY-y0;y0=null;AU.click&&AU.click();sheetMin(dy>24?true:dy<-24?false:!document.body.classList.contains('sheetMin'))});
  document.querySelectorAll('#mtabs button').forEach(b=>b.addEventListener('click',()=>sheetMin(false)))}
+// v55: on a portrait phone the sheet tucks itself away when a night starts (Slam, Siren and speed stay) and comes back for planning
+{let lastPh=null;
+ setInterval(()=>{const ph=ST.phase;if(ph===lastPh)return;const was=lastPh;lastPh=ph;if(!LAY.mf)return;if(ph==='heist'&&was==='plan')sheetMin(true);else if(ph==='plan'&&was&&was!=='plan')sheetMin(false)},250)}
 // Hold a device button to see what it is and what it does. A quick tap still picks it.
 {let lpT=0,shown=false;const tipEl=document.createElement('div');tipEl.id='toolTip';tipEl.setAttribute('role','tooltip');document.body.appendChild(tipEl);
  const hide=()=>tipEl.classList.remove('show');
