@@ -1343,7 +1343,7 @@ const AU={on:true,ctx:null,buf:{},vo:{},master:null,sfxBus:null,voBus:null,musBu
  pump(){if(this.vBusy||!this.vq.length)return;const {k,pri,t}=this.vq.shift();const b=this.vo[k];if(!b||(pri<2&&performance.now()/1000-t>6)){this.pump();return}const c=this.ctx;this.vBusy=true;if(VO_TEXT[k])subtitle(VO_TEXT[k][1],VO_TEXT[k][0]);
   this.play('static',{vol:.35});const src=c.createBufferSource();src.buffer=b;src.connect(this.voBus);src.start(c.currentTime+.08);
   src.onended=()=>{this.play('static',{vol:.25});setTimeout(()=>{this.vBusy=false;this.pump()},this.vq.length&&this.vq[0].pri>=2?550:1100)}},
- musicOn(){this.wantMus=true;if(!this.ctx||this.mus||!this.has('musHeist'))return;const c=this.ctx;const src=c.createBufferSource();src.buffer=this.buf.musHeist.find(Boolean);src.loop=true;src.connect(this.musF);src.start();this.mus=src;this.musBus.gain.cancelScheduledValues(c.currentTime);this.musBus.gain.setValueAtTime(this.musBus.gain.value,c.currentTime);this.musBus.gain.linearRampToValueAtTime(MIX.mus,c.currentTime+2)},
+ musicOn(){this.wantMus=true;if(!this.ctx||this.mus||!this.has('musHeist'))return;const c=this.ctx;const src=c.createBufferSource();src.buffer=this.buf.musHeist.find(Boolean);src.loop=true;musLoop(src,'musHeist');src.connect(this.musF);src.start();this.mus=src;this.musBus.gain.cancelScheduledValues(c.currentTime);this.musBus.gain.setValueAtTime(this.musBus.gain.value,c.currentTime);this.musBus.gain.linearRampToValueAtTime(MIX.mus,c.currentTime+2)},
  musicOff(){this.wantMus=false;if(!this.mus)return;const c=this.ctx,m=this.mus;this.musBus.gain.cancelScheduledValues(c.currentTime);this.musBus.gain.setValueAtTime(this.musBus.gain.value,c.currentTime);this.musBus.gain.linearRampToValueAtTime(0,c.currentTime+1.2);setTimeout(()=>{try{m.stop()}catch(e){}},1400);this.mus=null},
  // ---- game events (samples first, synth fallback)
  tone(...a){SYN.tone(...a)},noise(...a){SYN.noise(...a)},
@@ -3792,7 +3792,10 @@ function tutPlace(){const st=TUTS[TUT.i],c=$('coach'),dot=$('coachDot');if(!st||
 function tutTick(){if(!TUT.on)return;if(homeOn()||$('overlay').classList.contains('show')){coachHide();return}const st=TUTS[TUT.i];if(!$('coach').classList.contains('show'))tutShow();
  if(st.done&&st.done()){tutAdvance();return}if(st.auto&&performance.now()-TUT.shownAt>st.auto*1000&&!st.done){tutAdvance();return}tutPlace()}
 // ================================================================ THEME MUSIC
-AU.themeOn=function(){this.wantTheme=true;if(!this.ctx||this.th||!this.has('musPlan'))return;const c=this.ctx;const g=c.createGain();g.gain.value=0;g.connect(this.master);const src=c.createBufferSource();src.buffer=this.buf.musPlan.find(Boolean);src.loop=true;src.connect(g);src.start();this.th={src,g};this.themeLevel()};
+// v52: Velvet Caper music (src/music.py). The loops are an exact number of bars; skip the mp3 encoder's lead-in so they join without a gap
+const MUSLEN={musPlan:32.5424,musHeist:13.1507};
+function musLoop(src,k){try{const L=MUSLEN[k],b=src.buffer;const extra=b.duration-L;if(L&&extra>.004){src.loopStart=Math.min(extra,1105/32000);src.loopEnd=src.loopStart+L}}catch(e){}}
+AU.themeOn=function(){this.wantTheme=true;if(!this.ctx||this.th||!this.has('musPlan'))return;const c=this.ctx;const g=c.createGain();g.gain.value=0;g.connect(this.master);const src=c.createBufferSource();src.buffer=this.buf.musPlan.find(Boolean);src.loop=true;musLoop(src,'musPlan');src.connect(g);src.start();this.th={src,g};this.themeLevel()};
 AU.themeLevel=function(){if(!this.th)return;const c=this.ctx,g=this.th.g;const v=MIX.mus*(homeOn()?1.25:.75);g.gain.cancelScheduledValues(c.currentTime);g.gain.setValueAtTime(g.gain.value,c.currentTime);g.gain.linearRampToValueAtTime(v,c.currentTime+1.2)};
 AU.themeOff=function(){this.wantTheme=false;if(!this.th)return;const c=this.ctx,{src,g}=this.th;g.gain.cancelScheduledValues(c.currentTime);g.gain.setValueAtTime(g.gain.value,c.currentTime);g.gain.linearRampToValueAtTime(0,c.currentTime+1);setTimeout(()=>{try{src.stop()}catch(e){}},1200);this.th=null};
 let themeTick=0,themeWasHome=null;
