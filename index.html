@@ -698,7 +698,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v51 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v52 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -1132,11 +1132,16 @@ const STYLES={
  blueprint:{name:'Blueprint',crew:['#ffd36b','#ff8fb1','#8dffb5','#c7a6ff','#ffffff'],cone:'rgba(127,227,255,.16)',coneEdge:'rgba(170,235,255,.55)',hot:'rgba(255,107,120,.30)',hotEdge:'#ff6b78',guardCone:'rgba(255,211,107,.15)',ink:'#eaf4ff',accent:'#7fe3ff',danger:'#ff6b78',good:'#8dffb5',laser:'#ff5f74',light:'rgba(255,240,170,.16)',font:'Architects Daughter',mono:'Share Tech Mono',thief:'#ffffff',guard:'#ffd36b'},
  sketch:{name:'Sketchbook',crew:['#2c5aa0','#3d7d3a','#8a4f9e','#b8741a','#2f2c27'],cone:'rgba(200,56,43,.08)',coneEdge:'rgba(200,56,43,.6)',hot:'rgba(200,56,43,.22)',hotEdge:'#c8382b',guardCone:'rgba(44,90,160,.10)',ink:'#2f2c27',accent:'#2c5aa0',danger:'#c8382b',good:'#3d7d3a',laser:'#c8382b',light:'rgba(255,214,90,.25)',font:'Caveat',mono:'Patrick Hand',thief:'#2f2c27',guard:'#2c5aa0'},
 };
-STYLES.night3d=Object.assign({},STYLES.blueprint,{name:'3D Night'});STYLE_DESC.night3d='The building in real 3D at night: shadows, torches and glowing loot.';
+STYLES.night3d=Object.assign({},STYLES.blueprint,{name:'3D Blueprint'});STYLE_DESC.night3d='The building in real 3D at night: shadows, torches and glowing loot.';
 Object.assign(STYLES.blueprint,{devCol:'#eaf4ff',devFill:'#0f3a6b',lootCol:'#ffd36b'});
 Object.assign(STYLES.sketch,{devCol:'#2f2c27',devFill:'#fbf6e8',paper:true,labelInk:'#2b1d14',lootCol:'#b8741a'});
 let theme='blueprint', S=STYLES[theme], LOOK='blueprint';
-const LOOKS=['blueprint','sketch','night3d','sketch3d'];function lookName(){return LOOK==='sketch3d'?'3D Sketchbook':S.name}
+const LOOKS=['blueprint','sketch','night3d','sketch3d'];function lookName(full){const n=LOOK==='sketch3d'?'3D Sketchbook':S.name;return full&&AUTO_LOOK?'Auto: '+n:n}
+// v52: unless the player picks a style, the look follows the phone: 3D Sketchbook in light mode, 3D Blueprint in dark mode
+const DARKQ=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):{matches:false};let AUTO_LOOK=true,AUTO_BUSY=false;
+try{if(!localStorage.getItem('ij-auto52')){localStorage.setItem('ij-auto52','1');localStorage.setItem('ij-theme','auto')}const t=localStorage.getItem('ij-theme');AUTO_LOOK=!t||t==='auto'}catch(e){}
+function autoLook(){return DARKQ.matches?'night3d':'sketch3d'}
+function applyAutoLook(){if(!AUTO_LOOK)return;AUTO_BUSY=true;try{if(LOOK!==autoLook())setTheme(autoLook())}finally{AUTO_BUSY=false}try{localStorage.setItem('ij-theme','auto')}catch(e){}}
 
 // ================================================================ RNG / UTIL
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -2959,7 +2964,7 @@ function optionsSheet(){const fromHome=homeOn()||HOME.from!=='game'&&ST.phase===
  const draw=()=>{const sl=(k,l,max)=>`<label>${l}</label><input type="range" data-mx="${k}" min="0" max="${max}" step=".05" value="${MIX[k]}">`;
   showSheet(`<h2>Options</h2><div class="optG">${sl('sfx','Effects',1.5)}${sl('vo','Radio voices',1.5)}${sl('mus','Music',1)}</div>
   <button class="optT ${AU.on?'on':''}" id="optSnd"><span><b>Sound</b><small>Everything on or off.</small></span><i>${AU.on?'On':'Off'}</i></button>
-  <button class="optT on" id="optLook"><span><b>Art style</b><small>Tap to switch the look of the game.</small></span><i>${lookName()}</i></button>
+  <button class="optT on" id="optLook"><span><b>Art style</b><small>Tap to switch the look of the game. Auto follows your phone's light or dark mode.</small></span><i>${lookName(true)}</i></button>
   ${OPTS.map(([k,l,d])=>`<button class="optT ${OPT[k]?'on':''}" data-o="${k}"><span><b>${l}</b><small>${d}</small></span><i>${OPT[k]?'On':'Off'}</i></button>`).join('')}
   <div class="optR"><button id="optTut">Play the tutorial</button><button id="optTips">Show tips again</button><button id="optPriv">Privacy &amp; credits</button><button id="optWipe" class="danger">Erase progress</button></div>
   <button class="cta" id="optBack">Back</button>`);
@@ -2996,7 +3001,7 @@ function frame(now){
 function refreshSelOnly(){}
 window.IJ={FX,ST,place,startNight,setSpeed,setTheme,planNight,stepSim,newGame,nextNight,endNight,devicesChanged};
 buildToolUI();useSite(SITE);buildMap(1);resetLoot();devicesChanged();
-try{const t=localStorage.getItem('ij-theme');if(t==='sketch3d'){theme='sketch';LOOK=t}else if(t&&STYLES[t]){theme=t;LOOK=t}const d=localStorage.getItem('ij-diff');if(d&&DIFF[d])ST.diff=d}catch(e){}
+try{const t=AUTO_LOOK?autoLook():localStorage.getItem('ij-theme');if(t==='sketch3d'){theme='sketch';LOOK=t}else if(t&&STYLES[t]){theme=t;LOOK=t}const d=localStorage.getItem('ij-diff');if(d&&DIFF[d])ST.diff=d}catch(e){}
 setTheme(theme);document.querySelectorAll('#mtabs button').forEach(b=>b.onclick=()=>{setMTab(b.dataset.t);AU.click&&AU.click()});
 addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,250));resize();$('fsBtn').onclick=()=>{AU.init();toggleFS()};if(window.IJ_APP||navigator.standalone||matchMedia('(display-mode: fullscreen),(display-mode: standalone)').matches)$('fsBtn').hidden=true;
 if(document.fonts)document.fonts.ready.then(()=>redrawStatic());
@@ -3572,8 +3577,8 @@ function r3Frame(dt){if(!R3.ready)return;if(!R3.fit)r3Fit();r3Walls();R3.t+=dt;i
 function r3Enable(on){if(on&&!r3Init()){{const t=document.createElement('div');t.className='toast';t.innerHTML='<b>3D needs WebGL</b>This device can\'t run the 3D style.';$('toasts').appendChild(t);requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));setTimeout(()=>t.remove(),5000)}return false}
  R3.on=on;document.body.classList.toggle('r3',on);if(on){r3Size();R3.wkey=null;R3.dk=null;r3Walls()}return true}
 
-function nextLook(){return LOOKS[(LOOKS.indexOf(LOOK)+1)%LOOKS.length]}
-const _setTheme0=setTheme;setTheme=function(k){let is3=k==='night3d'||k==='sketch3d';if(is3&&!r3Init()){r3Enable(true);k=k==='sketch3d'?'sketch':'blueprint';is3=false}
+function nextLook(){const L=['auto',...LOOKS];return L[(L.indexOf(AUTO_LOOK?'auto':LOOK)+1)%L.length]}
+const _setTheme0=setTheme;setTheme=function(k){if(k==='auto'){AUTO_LOOK=true;applyAutoLook();refreshUI();return}if(!AUTO_BUSY)AUTO_LOOK=false;let is3=k==='night3d'||k==='sketch3d';if(is3&&!r3Init()){r3Enable(true);k=k==='sketch3d'?'sketch':'blueprint';is3=false}
  LOOK=k;if(is3)r3Look(k==='sketch3d'?'sketch':'night');_setTheme0(k==='sketch3d'?'sketch':k);
  if(k==='sketch3d')try{localStorage.setItem('ij-theme',k);const ts=new Set(JSON.parse(localStorage.getItem('ij-styles')||'[]'));ts.add(k);localStorage.setItem('ij-styles',JSON.stringify([...ts]))}catch(e){}
  document.body.dataset.theme=k==='night3d'?'blueprint':k==='sketch3d'?'sketch':k;r3Enable(is3);refreshUI()};
@@ -3819,7 +3824,8 @@ function syncTheme(dt){themeTick-=dt;if(themeTick>0)return;themeTick=.3;if(!AU.c
  if(want&&!AU.th)AU.themeOn();else if(!want&&AU.th)AU.themeOff();const h=homeOn();if(AU.th&&h!==themeWasHome)AU.themeLevel();themeWasHome=h}
 document.addEventListener('pointerdown',()=>{if(!AU.ctx)AU.init()},{capture:true});
 
-$('home').prepend(hcv);if(LOOK==='night3d'||LOOK==='sketch3d')setTheme(LOOK);addEventListener('resize',()=>{if(homeOn()){resizeHome();homeFit()}});if(document.fonts)document.fonts.ready.then(homeFit);$('homeBtn').onclick=()=>{AU.init();AU.click();HOME.from='game';showHome()};
+$('home').prepend(hcv);if(LOOK==='night3d'||LOOK==='sketch3d'){AUTO_BUSY=true;try{setTheme(LOOK)}finally{AUTO_BUSY=false}if(AUTO_LOOK)try{localStorage.setItem('ij-theme','auto')}catch(e){}}
+try{DARKQ.addEventListener('change',()=>{applyAutoLook();if(homeOn())showHome()})}catch(e){try{DARKQ.addListener(()=>applyAutoLook())}catch(e2){}}addEventListener('resize',()=>{if(homeOn()){resizeHome();homeFit()}});if(document.fonts)document.fonts.ready.then(homeFit);$('homeBtn').onclick=()=>{AU.init();AU.click();HOME.from='game';showHome()};
 titleScreen();refreshUI();
 requestAnimationFrame(frame);
 
