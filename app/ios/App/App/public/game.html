@@ -719,6 +719,10 @@ body.mf[data-phase=heist] #goCard #speedRow>span{display:none}
 body.mf[data-phase=heist] #goCard #speedRow button{min-width:40px!important;padding:4px 2px!important}
 
 body.mf #zoomFit{bottom:22px}
+body.mf #coach{font-size:14px!important;line-height:1.35!important;padding:10px 12px!important}
+body.mf #coach .step{font-size:10px}
+body.mf #coach .cbtns{margin-top:6px}
+#sheet .optT i{white-space:normal;text-align:center;line-height:1.15}
 body.mf #hint{font-size:13px!important;line-height:1.35;padding:7px 11px;max-width:94%}
 body.mf.sheetMin[data-phase=heist] #goCard{padding-bottom:4px!important}
 #toolTip{position:fixed;z-index:60;max-width:260px;background:var(--ink);color:var(--panel);border-radius:10px;padding:9px 12px;font-size:14px;line-height:1.3;box-shadow:0 8px 22px rgba(0,0,0,.35);pointer-events:none;opacity:0;transform:translateY(6px);transition:opacity .12s,transform .12s}
@@ -731,7 +735,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v55 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v56 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -1878,7 +1882,7 @@ function endNight(){
  const st=stars(ns);ST.stars[ST.night-1]=st.filter(Boolean).length;repAdd(ST.stars[ST.night-1]);const fee=firmPayNight(ST.stars[ST.night-1],last&&!fired);ns.fee=fee;
  let body=`<div class="stamp" style="color:${stampCol}">${stampTxt}</div><h2>Incident report</h2><div class="rstars">${st.map((b,k)=>`<div class="${b?'on':''}"><i>★</i><span>${STAR_LBL[k]}</span><b>${b?'✓':'✗'}</b></div>`).join('')}</div><p style="margin:0 0 10px;opacity:.75">${dayName(ST.night)} night · ${SITES[SITE].name} · ${st.filter(Boolean).length} of 3 stars</p><div class="lines">${lines}</div>${ns.mvp?`<p style="margin:10px 0 0;font-size:13px"><b>Device of the night:</b> ${ns.mvp}.</p>`:''}${routeReport()}${ns.told&&ns.told.length?`<p style="margin:10px 0 0;font-size:13px"><b>Word gets around.</b> The thieves who got away will tell the next crew about ${[...new Set(ns.told)].join(', ')}. Move it or expect them to avoid it.</p>`:''}
  <div class="lines" style="margin-top:10px"><div><span>Stolen tonight</span><span class="big">${money(ns.stolen)}</span></div><div><span>Arrests (£150 each)</span><span>${ns.arrests}</span></div><div><span>Retainer${ns.stolen===0?' + clean-night bonus':''}</span><span>+${money(income)}</span></div>${fee.amt?`<div><span>Firm fee${ST.req?' (client request 1.5×)':''}${last&&!fired&&!ST.daily?' + completion bonus':''}${fee.add<fee.amt?` <small style="opacity:.7">(${money(fee.amt-fee.add)} paid before)</small>`:''}</span><span style="color:var(--accent)">+${money(fee.add)}</span></div>`:''}<div><span>${ST.endless?'Nightly cap':'Contract total stolen'}</span><span>${money(ST.stolen)} of ${money(ST.limit)}</span></div></div>`;
- if(ST.daily){const sc=ns.stolen;let b=dailyBest();const isBest=!b||sc<b.stolen||sc===b.stolen&&ns.arrests>b.arrests;if(isBest){b={key:ST.daily.key,stolen:sc,arrests:ns.arrests};try{localStorage.setItem('ij-daily',JSON.stringify(b))}catch(e){}}logDaily(sc,ns.arrests,st.filter(Boolean).length);
+ if(ST.daily){const sc=ns.stolen;let b=dailyBest();const isBest=!b||sc<b.stolen||sc===b.stolen&&ns.arrests>b.arrests;if(isBest){b={key:ST.daily.key,stolen:sc,arrests:ns.arrests};try{localStorage.setItem('ij-daily',JSON.stringify(b))}catch(e){}}logDaily(sc,ns.arrests,st.filter(Boolean).length);gcScore('ij.daily',dailyScore(st.filter(Boolean).length,ns.arrests,sc));
   body+=`<h2 style="margin-top:14px">Daily job: ${ST.daily.mod.name}</h2><p>${money(sc)} lost, ${ns.arrests} arrest${ns.arrests===1?'':'s'}. ${isBest?'<b>Your best today.</b>':'Best today: '+money(b.stolen)+', '+b.arrests+' arrests.'} A new job is posted at midnight UTC.</p><button class="cta" onclick="shareDaily()">Share my result</button><p id="shareOk" style="font-size:12px;margin:4px 0 0;min-height:1em"></p><button class="cta" style="opacity:.9;margin-top:6px" onclick="weekSheet()">This week's jobs</button><button class="cta" style="opacity:.85;margin-top:6px" onclick="startDaily()">Try today's job again</button><button class="cta" style="opacity:.85;margin-top:8px" onclick="titleScreen()">Back to the title</button>`;ST.done=true}
  else if(fired){body+=ST.endless?`<p>Overtime is over. ${money(ST.stolen)} went out in a single night, past the ${money(OT_CAP)} nightly cap.</p>`:`<p>The insurers have pulled the contract. ${money(ST.stolen)} walked out of the building on your watch.</p>`;body+=`<button class="cta" onclick="retryContract()">Try the contract again</button>`;if(ST.endless){let b=0;try{b=+localStorage.getItem('ij-best')||0}catch(e){}body+=`<p style="font-size:13px">Overtime survived: <b>${ST.night-6}</b> night${ST.night-6===1?'':'s'} · best ${b}.</p>`}ST.done=true}
  else if(last){if(!fired&&!ST.endless)recordSiteBest();const gr=ST.stolen===0?'Impenetrable':ST.stolen<6000?'Gold standard':ST.stolen<14000?'Solid work':'Scraped through';body+=`<h2 style="margin-top:14px">Contract complete: ${gr}</h2><p>Five nights, ${ST.arrests} arrests, ${money(ST.stolen)} lost. ${SITES[SITE].name} renews your contract.</p><button class="cta" onclick="startOvertime()">Work overtime: endless nights ▸</button><button class="cta" style="opacity:.85;margin-top:8px" onclick="setupSheet()">New contract</button><button class="cta" style="opacity:.8;margin-top:8px" onclick="firmSheet(()=>titleScreen())">🏢 The Firm · ${money(firmGet().funds)}</button>`;ST.done=true}
@@ -1915,7 +1919,7 @@ const ACH=[['first','First collar','Catch a thief.'],['bag','Bag man','Catch a t
  ['hard','Hard case','Finish the contract on Hard.'],['ot5','Overtime veteran','Survive 5 overtime nights.'],['style','Two looks','Play in both art styles.'],['fox','Outfoxed','Catch the Fox.'],
  ['climber','Roof patrol','Catch the Climber.'],['jammer','Signal lost','Catch the Jammer.'],['tremor','Felt that','Catch a thief a seismic sensor found.'],['auctioneer','Sold!','Catch the Auctioneer, twice.'],['concierge','Checked out','Catch the Concierge.'],['conductor','End of the line','Catch the Conductor.'],['fogged','Lost in the fog','Catch a thief while they stumble in security fog.'],['tracks','Fresh tracks','A guard follows a thief\'s footprints.'],['academy','Academy graduates','Train your guards in all five courses in one contract.'],['perfect','Five-star service','Earn all three stars on every night of a contract.'],['request','The client is always right','Finish a client request contract.'],['partner','Made partner','Reach the rank of Partner at the firm.']];
 let ACHS=new Set();try{ACHS=new Set(JSON.parse(localStorage.getItem('ij-ach')||'[]'))}catch(e){}
-function ach(id){if(ACHS.has(id))return;const a=ACH.find(a=>a[0]===id);if(!a)return;ACHS.add(id);try{localStorage.setItem('ij-ach',JSON.stringify([...ACHS]))}catch(e){}
+function ach(id){if(ACHS.has(id))return;const a=ACH.find(a=>a[0]===id);if(!a)return;ACHS.add(id);try{localStorage.setItem('ij-ach',JSON.stringify([...ACHS]))}catch(e){}gcAch(id,true);
  const t=document.createElement('div');t.className='toast';t.innerHTML='<b>★ '+a[1]+'</b>'+a[2];$('toasts').appendChild(t);while($('toasts').children.length>3)$('toasts').firstChild.remove();requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));AU.play('upgrade',{vol:.5});setTimeout(()=>{t.classList.remove('in');setTimeout(()=>t.remove(),600)},4200)}
 function achHTML(){return `<div class="achs">${ACH.map(([id,n,d])=>`<div class="${ACHS.has(id)?'on':''}"><b>${ACHS.has(id)?'★':'☆'} ${n}</b>${d}</div>`).join('')}</div>`}
 function showKeys(){if(ST.phase==='heist')setSpeed(0);const prev=$('overlay').classList.contains('show')?$('sheet').innerHTML:null;const K=[['1-9','Pick a device to install'],['Click / tap','Place it. Drag a camera to aim'],['U','Upgrade the selected device'],['Esc','Cancel the current tool'],['Enter','Finish drawing a patrol'],['Q','Slam a door shut for 7 s'],['W','Panic siren'],['Click a speaker','Bluff a guard\'s voice (during the night)'],['Space','Start the night, then pause'],['V / H / I','Routes, watch heat, thoughts'],['T','Next art style']];
@@ -1947,7 +1951,7 @@ function weekSheet(){const L=dailyLog();const wd=weekDays();let tot=0,played=0,a
  $('wkShare').onclick=()=>{AU.click();shareDaily()};if($('wkPlay'))$('wkPlay').onclick=()=>{AU.click();hideSheet();startDaily()};$('wkBack2').onclick=()=>{AU.click();showHome()}}
 function dailyBest(){try{const b=JSON.parse(localStorage.getItem('ij-daily')||'null');return b&&b.key===dailyKey()?b:null}catch(e){return null}}
 function startDaily(){const info=dailyInfo();info.site=['gallery','bank','manor'][dailyKey()%3];SITE=info.site;newGame();ST.daily=info;ST.night=5;ST.cash=1500;ST.limit=60000;resetLoot();info.mod.apply();buildMap(5);devicesChanged();redrawStatic();refreshUI();hint(info.def.hint,10);logLine('Daily job: '+info.mod.name+'.')}
-function setMTab(t){document.body.dataset.mtab=t;document.querySelectorAll('#mtabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+function setMTab(t){document.body.dataset.mtab=t;if(t!=='crew'&&document.body.classList.contains('sheetMin'))sheetMin(false);document.querySelectorAll('#mtabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
 const SAVE_KEY='ij-save';
 function saveGame(){if(ST.daily)return;if(ST.done){clearSave();return}try{const keep=['type','i','x','y','ang','sweep','phase','orient','route','cur','n','lv','paid','pers'];
  localStorage.setItem(SAVE_KEY,JSON.stringify({v:1,t:Date.now(),site:SITE,diff:ST.diff,night:ST.night,cash:ST.cash,stolen:ST.stolen,limit:ST.limit,arrests:ST.arrests,endless:ST.endless,otSeed:ST.otSeed||0,otMod:ST.otMod?ST.otMod.id:null,otSnap:ST.otSnap,perks:ST.perks,mods:ST.mods,stars:ST.stars,
@@ -2039,6 +2043,7 @@ function layoutMode(){const w=innerWidth,h=innerHeight,touch=!!window.IJ_APP||ma
  const tl=w<=900||h<=560||touch,ls=tl&&w/h>=1.25;let u=tl&&touch?Math.max(1,Math.min(1.45,Math.min(w,h)/440)):1;
  // v51: a big tablet held sideways has height to spare in the panel, so the controls grow to use it
  if(ls&&touch&&h>=900)u=Math.max(u,Math.min(1.8,(h-40)/540));
+ u*=BIGTXT();
  // v54: a portrait phone puts the map first: it fills the screen, with the controls in a bottom sheet
  const mf=tl&&!ls&&w<=560&&h>=640&&h>=w*1.35;
  const ch=tl!==LAY.tl||mf!==LAY.mf;LAY.tl=tl;LAY.ls=ls;LAY.u=u;LAY.mf=mf;
@@ -2065,9 +2070,9 @@ function resize(){
 function txt(c,s,x,y,size,col,{font=S.mono,align='center',base='middle',weight='',alpha=1,rot=0,stroke=null,glow=0}={}){
   if(LAY.tl&&typeof s==='string'&&(s===SITES[SITE].caption||/^\d+\.00 m$/.test(s)||s.includes('EDITION OF')||s===SITES[SITE].note1||(SITES[SITE].note2&&s===SITES[SITE].note2[0])))return;
  let turned=0;if(R3TURN&&typeof s==='string'&&ROOMS.some(r=>r.n.toLowerCase()===s.toLowerCase())){turned=1;rot+=Math.PI/2;const t=turnY(x,y);y=t[0];turned=t[1]*.9/(s.length*.62)}// v54: room names stay upright on a turned 3D map
- else if(R3TURN&&typeof s==='string'&&ENTRIES.some(e=>s.toLowerCase().startsWith(e.name.toLowerCase()))){rot+=Math.PI/2;if(y>H/2){align='right';y=Math.min(y,H-2.2)}else{align='left';y=Math.max(y,.3)}}
+ else if(R3TURN&&typeof s==='string'&&ENTRIES.some(e=>s.toLowerCase().replace(/^[^a-z]+/,'').startsWith(e.name.toLowerCase()))){rot+=Math.PI/2;if(y>H/2){align='right';y=Math.min(y,H-2.2)}else{align='left';y=Math.max(y,.3)}}
  const m=c.getTransform(),p=m.transformPoint(new DOMPoint(x,y)),sc=Math.hypot(m.a,m.b);
- c.save();c.setTransform(1,0,0,1,p.x,p.y);if(rot)c.rotate(rot);c.globalAlpha*=alpha;c.font=`${weight} ${turned?Math.min(Math.max(11*DPR,size*sc),turned*sc):Math.max(LAY.tl?11*DPR:theme==='pixel'?5:6,theme==='pixel'?Math.round(size*sc):size*sc)}px "${font}"`;c.textAlign=align;c.textBaseline=base;
+ c.save();c.setTransform(1,0,0,1,p.x,p.y);if(rot)c.rotate(rot);c.globalAlpha*=alpha;c.font=`${weight} ${turned?Math.min(Math.max(11*DPR*BIGTXT(),size*sc),turned*sc):Math.max(LAY.tl?11*DPR*BIGTXT():theme==='pixel'?5:6,theme==='pixel'?Math.round(size*sc):size*sc)}px "${font}"`;c.textAlign=align;c.textBaseline=base;
  if(glow){c.shadowColor=col;c.shadowBlur=glow*sc}
  if(stroke){c.lineWidth=stroke[1]*sc;c.strokeStyle=stroke[0];c.lineJoin='round';c.strokeText(s,0,0)}
  c.fillStyle=col;c.fillText(s,0,0);c.restore();
@@ -2719,7 +2724,7 @@ function drawThief(c,th){
  const lc=S.paper?S.labelInk:S.ink;
  if(ST.thoughts){const it=thiefIntent(th);if(it!==th._it){th._it=it;th._itT=0}th._itT=(th._itT||0)+1/60;
   const hov=hoverTile>=0&&Math.hypot(hoverPt[0]-x,hoverPt[1]-y)<1.2;const a=hov?1:Math.max(0,Math.min(1,(3.2-th._itT)*2));
-  if(a>0&&it){c.save();c.globalAlpha=a;const fy=y+dy-(th.sus>.5?1.1:.8)-(useFigures()?.45:0);const px=theme==='pixel';const k=lblK(px?.5:.38);const w=it.length*(px?.31:.205)*k+.4;const lx=Math.max(w/2+.1,Math.min(W-w/2-.1,x));
+  if(a>0&&it){c.save();c.globalAlpha=a;const fy=y+dy-(th.sus>.5?1.1:.8)-(useFigures()?.45:0);const px=theme==='pixel';const k=lblK(px?.5:.38);const w=it.length*(px?.31:.205)*k+.4;let lx=Math.max(w/2+.1,Math.min(W-w/2-.1,x));if(R3.labels&&R3.ov){const m=c.getTransform();lx=x;const lo=(6-m.e)/m.a+w/2,hi=(R3.ov.width-6-m.e)/m.a-w/2;if(lo<hi)lx=Math.max(lo,Math.min(hi,lx))}// v56: in 3D keep the thought on screen
    c.fillStyle=S.paper?'rgba(255,255,255,.85)':'rgba(0,0,0,.62)';if(px)c.fillRect(lx-w/2,fy-.3*k,w,.6*k);else{rr(c,lx-w/2,fy-.27*k,w,.52*k,.14);c.fill()}txt(c,it,lx,fy+(px?.03:0),px?.5:.38,S.paper?S.labelInk:'#fff',{font:px?'Silkscreen':theme==='cctv'||theme==='term'?'VT323':'Nunito',weight:px?'':'700'});c.restore()}}
  if(theme==='cctv')txt(c,'SUBJ-'+(th.id+1)+' '+th.name.toUpperCase(),x+.48,y+dy-.42,.42,'#eaffef',{font:'VT323',align:'left'});
  else txt(c,th.name,x,y+dy+.58,.3,lc,{font:S.font,stroke:theme==='board'?['#f3e6c6',.12]:null});
@@ -2939,7 +2944,7 @@ function renderCrew(){
 }
 $('watch').addEventListener('click',()=>setWatch(null));$('crew').addEventListener('pointerdown',e=>{const r=e.target.closest('[data-w]');if(r&&R3.on)setWatch(ST.thieves[+r.dataset.w])});
 let crewTick=0;
-function setTheme(k){if(!STYLES[k])return;theme=k;S=STYLES[k];try{const ts=new Set(JSON.parse(localStorage.getItem('ij-styles')||'[]'));ts.add(k);localStorage.setItem('ij-styles',JSON.stringify([...ts]));if(ts.size>=2&&typeof ACHS!=='undefined')ach('style')}catch(e){}if(ST.phase==='heist'&&AU.amb&&AU.amb.rain!==(k==='noir'))AU.ambOn();document.body.dataset.theme=k;for(const th of ST.thieves)th.col=S.crew[th.id%5];redrawStatic();refreshUI();_rcKey='';try{localStorage.setItem('ij-theme',k)}catch(e){}
+function setTheme(k){if(!STYLES[k])return;theme=k;S=cvdStyle(STYLES[k]);try{const ts=new Set(JSON.parse(localStorage.getItem('ij-styles')||'[]'));ts.add(k);localStorage.setItem('ij-styles',JSON.stringify([...ts]));if(ts.size>=2&&typeof ACHS!=='undefined')ach('style')}catch(e){}if(ST.phase==='heist'&&AU.amb&&AU.amb.rain!==(k==='noir'))AU.ambOn();document.body.dataset.theme=k;for(const th of ST.thieves)th.col=S.crew[th.id%5];redrawStatic();refreshUI();_rcKey='';try{localStorage.setItem('ij-theme',k)}catch(e){}
  if(document.fonts)document.fonts.ready.then(()=>redrawStatic())}
 
 function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement}
@@ -2998,7 +3003,13 @@ let TIPS=new Set();try{TIPS=new Set(JSON.parse(localStorage.getItem('ij-tips')||
 function tip(id,title,text){try{if(!OPT.tips||TIPS.has(id)||TUT.on)return}catch(e){return}TIPS.add(id);try{localStorage.setItem('ij-tips',JSON.stringify([...TIPS]))}catch(e){}
  const t=document.createElement('div');t.className='toast tip';t.innerHTML='<b>💡 '+title+'</b>'+text;$('toasts').appendChild(t);while($('toasts').children.length>3)$('toasts').firstChild.remove();requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));
  SYN.tone(660,.12,{type:'sine',vol:.1});SYN.tone(990,.2,{type:'sine',vol:.09,delay:.1});setTimeout(()=>{t.classList.remove('in');setTimeout(()=>t.remove(),600)},9000)}
-const OPTS=[['kit','3D character models','Off uses simple figures, for slow phones.'],['shake','Screen shake','On catches and escapes.'],['flash','Screen flashes','Alarms, lightning, power cuts.'],['slow','Slow-motion catches','Zoom and slow down for an arrest.'],['hap','Vibration','Alarms and arrests.'+(canHap()?'':' Not on this device.')],['tips','Tips','Hints when something new turns up.']];
+// v56: colour-blind friendly mode swaps red/green for orange/blue (Okabe-Ito colours), on the map and in the panels
+function cvdStyle(st){let on=false;try{on=!!OPT.cvd}catch(e){}const b=document.body;if(!on){if(b){b.style.removeProperty('--good');b.style.removeProperty('--danger');b.classList.remove('cvd')}return st}
+ const light=!!st.paper||/sketch|board|paper/.test(st.name.toLowerCase());const good=light?'#0072b2':'#56b4e9',danger=light?'#d55e00':'#e69f00';
+ if(b){b.style.setProperty('--good',good);b.style.setProperty('--danger',danger);b.classList.add('cvd')}return Object.assign({},st,{good,danger})}
+// v56: bigger text scales every panel, button and map label up by about a fifth
+function BIGTXT(){try{return OPT.big?1.18:1}catch(e){return 1}}
+const OPTS=[['kit','3D character models','Off uses simple figures, for slow phones.'],['shake','Screen shake','On catches and escapes.'],['flash','Screen flashes','Alarms, lightning, power cuts.'],['slow','Slow-motion catches','Zoom and slow down for an arrest.'],['hap','Vibration','Alarms and arrests.'+(canHap()?'':' Not on this device.')],['tips','Tips','Hints when something new turns up.'],['cvd','Colour-blind friendly','Swaps red and green for orange and blue.'],['big','Bigger text','Larger words and buttons everywhere.']];
 function privacySheet(back){showSheet(`<h2>Privacy &amp; credits</h2>
  <p><b>Inside Job collects nothing about you.</b> There are no accounts, no adverts, no analytics and no tracking. Your progress, settings and daily job results are saved only on this device, and <i>Erase progress</i> in Options deletes them.</p>
  <p>The app connects to the internet for one thing: to check for and download new versions of the game. That request carries no information about you or how you play. Sharing a daily job result only happens when you tap Share, and goes wherever you choose to send it.</p>
@@ -3012,11 +3023,11 @@ function optionsSheet(){const fromHome=homeOn()||HOME.from!=='game'&&ST.phase===
   <button class="optT ${AU.on?'on':''}" id="optSnd"><span><b>Sound</b><small>Everything on or off.</small></span><i>${AU.on?'On':'Off'}</i></button>
   <button class="optT on" id="optLook"><span><b>Art style</b><small>Tap to switch the look of the game. Auto follows your phone's light or dark mode.</small></span><i>${lookName(true)}</i></button>
   ${OPTS.map(([k,l,d])=>`<button class="optT ${OPT[k]?'on':''}" data-o="${k}"><span><b>${l}</b><small>${d}</small></span><i>${OPT[k]?'On':'Off'}</i></button>`).join('')}
-  <div class="optR"><button id="optTut">Play the tutorial</button><button id="optTips">Show tips again</button><button id="optPriv">Privacy &amp; credits</button><button id="optWipe" class="danger">Erase progress</button></div>
+  <div class="optR"><button id="optTut">Play the tutorial</button><button id="optTips">Show tips again</button>${gcAvail()?'<button id="optGC">🏆 Game Center</button>':''}<button id="optPriv">Privacy &amp; credits</button><button id="optWipe" class="danger">Erase progress</button></div>
   <button class="cta" id="optBack">Back</button>`);
   document.querySelectorAll('#sheet [data-mx]').forEach(el=>el.oninput=()=>{AU.init();const k=el.dataset.mx;MIX[k]=+el.value;applyMix();const m=$({sfx:'mxSfx',vo:'mxVo',mus:'mxMus'}[k]);if(m)m.value=MIX[k];if(k==='sfx')AU.click()});
-  document.querySelectorAll('#sheet [data-o]').forEach(b=>b.onclick=()=>{const k=b.dataset.o;OPT[k]=!OPT[k];saveOpt();AU.click();if(k==='hap')hap(30);if(k==='kit'&&R3.ready)r3ClearPeople();draw()});
-  $('optSnd').onclick=()=>{AU.init();toggleMute();AU.click();draw()};$('optLook').onclick=()=>{AU.click();setTheme(nextLook());draw()};
+  document.querySelectorAll('#sheet [data-o]').forEach(b=>b.onclick=()=>{const k=b.dataset.o;OPT[k]=!OPT[k];saveOpt();AU.click();if(k==='hap')hap(30);if(k==='kit'&&R3.ready)r3ClearPeople();if(k==='cvd'){setTheme(theme);redrawStatic();refreshUI()}if(k==='big')resize();draw()});
+  if($('optGC'))$('optGC').onclick=()=>{AU.click();gcShow()};$('optSnd').onclick=()=>{AU.init();toggleMute();AU.click();draw()};$('optLook').onclick=()=>{AU.click();setTheme(nextLook());draw()};
   $('optTips').onclick=()=>{TIPS.clear();try{localStorage.removeItem('ij-tips')}catch(e){}OPT.tips=true;saveOpt();AU.click();$('optTips').textContent='Tips reset ✓'};
   $('optTut').onclick=()=>{AU.click();if($('optTut').dataset.ok||!readSave()&&HOME.from!=='game'&&fromHome){clearSave();SITE='gallery';try{localStorage.setItem('ij-site',SITE)}catch(e){}hideSheet();newGame();tutStart()}else{$('optTut').dataset.ok=1;$('optTut').textContent='Ends this contract. Tap again'}};
   $('optWipe').onclick=()=>{if($('optWipe').dataset.ok){try{Object.keys(localStorage).filter(k=>k.startsWith('ij-')).forEach(k=>localStorage.removeItem(k))}catch(e){}$('optWipe').textContent='Erased. Reopen the game.';try{location.reload()}catch(e){}}else{AU.deny();$('optWipe').dataset.ok=1;$('optWipe').textContent='Tap again to erase everything'}};
@@ -3113,7 +3124,8 @@ function r3Init(){if(R3.ready)return true;if(R3.failed||!window.THREE)return fal
   R3.ready=true;R3.q=r3Quality();govInit();r3Look(LOOK==='sketch3d'?'sketch':'night');r3LoadKit();return true}catch(e){console.warn('3D unavailable',e);R3.failed=true;return false}}
 function r3Size(){if(!R3.ready)return;const st=$('stage').getBoundingClientRect();const w=Math.max(10,Math.round(st.width)),h=Math.max(10,Math.round(st.height));
  for(const el of [R3.gl,R3.ov]){el.style.left='0px';el.style.top='0px';el.style.width=w+'px';el.style.height=h+'px'}
- R3.q=r3Quality();govInit();const GL=GOVL[GOV.lvl];const pr=Math.min(devicePixelRatio||1,GL.pr);R3.r.setPixelRatio(pr);R3.dust.visible=GL.dust&&R3.look!=='sketch';R3.r.setSize(w,h,false);R3.ov.width=Math.round(w*DPR);R3.ov.height=Math.round(h*DPR);
+ R3.q=r3Quality();govInit();const GL=GOVL[GOV.lvl];// v56: the portrait map can fill most of the phone, so cap the pixels drawn per frame (phones: about 650k) and older iPhones stay smooth
+ const pr=Math.max(1,Math.min(devicePixelRatio||1,GL.pr,Math.sqrt((R3.q==='high'?4e6:6.5e5)/(w*h))));R3.r.setPixelRatio(pr);R3.dust.visible=GL.dust&&R3.look!=='sketch';R3.r.setSize(w,h,false);R3.ov.width=Math.round(w*DPR);R3.ov.height=Math.round(h*DPR);
  const sm=R3.q==='high'?4096:2048;if(R3.moon.shadow.mapSize.x!==sm){R3.moon.shadow.mapSize.set(sm,sm);if(R3.moon.shadow.map){R3.moon.shadow.map.dispose();R3.moon.shadow.map=null}}
  R3.az=LAY.mf&&h>w*.8?-Math.PI/2:0;{const t=R3.az&&R3.on?1:0;if(t!==R3TURN){R3TURN=t;redrawStatic()}}
  R3.cam.aspect=w/h;R3.fit=null;R3.cam.updateProjectionMatrix()}
@@ -3708,7 +3720,7 @@ function drawHome(){const c=hcv.getContext('2d'),dpr=hcv._dpr||1,Wp=hcv.width/dp
 // ================================================================ SETUP (new contract)
 // ---------- reputation: every star you earn counts toward unlocking bigger contracts
 function repGet(){try{let v=localStorage.getItem('ij-rep');if(v==null){v=Math.min(10,(typeof ACHS!=='undefined'?ACHS.size:0)*2);localStorage.setItem('ij-rep',v)}return +v||0}catch(e){return 0}}
-function repAdd(n){if(!n)return;const before=repGet();const now=before+n;try{localStorage.setItem('ij-rep',now)}catch(e){}
+function repAdd(n){if(!n)return;const before=repGet();const now=before+n;try{localStorage.setItem('ij-rep',now)}catch(e){}gcScore('ij.rep',now);
  {const a=rankOf(before),b=rankOf(now);if(b>a)setTimeout(()=>{firmToast('Promoted: '+RANKS[b][1],'New firm upgrades are open. See The Firm on the title screen.');if(b>=3)ach('partner')},2600)}
  for(const [k,d] of Object.entries(SITES))if(d.rep&&before<d.rep&&now>=d.rep)setTimeout(()=>{const t=document.createElement('div');t.className='toast';t.innerHTML='<b>New contract unlocked</b>'+d.name+' is on the city map.';$('toasts').appendChild(t);requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('in')));setTimeout(()=>t.remove(),6000);AU.play&&AU.play('jingGood',{vol:.5})},1800)}
 function siteBest(k){try{return (JSON.parse(localStorage.getItem('ij-sitebest')||'{}'))[k]||null}catch(e){return null}}
@@ -3859,9 +3871,12 @@ function tutPlace(){const st=TUTS[TUT.i],c=$('coach'),dot=$('coachDot');if(!st||
  document.querySelectorAll('.tutHi').forEach(e=>{if(!st.el||!e.matches(st.el))e.classList.remove('tutHi')});
  let el=st.el?[...document.querySelectorAll(st.el)].find(e=>e.offsetParent):null;let ax=null,top,left,dir='none';
  if(el){el.classList.add('tutHi');const r=el.getBoundingClientRect();ax=r.left+r.width/2;if(r.top-ch-14>8){top=r.top-ch-14;dir='up'}else{top=Math.min(vh-ch-8,r.bottom+14);dir='down'}left=ax-cw/2}
- else{const r=$('stage').getBoundingClientRect(),mob=LAY.tl&&!LAY.ls;if(mob){left=r.left+r.width/2-cw/2;top=Math.min(vh-ch-8,r.bottom+8)}else{left=r.left+10;top=Math.max(8,r.top+10)}}
+ else{const r=$('stage').getBoundingClientRect(),mob=LAY.tl&&!LAY.ls;if(LAY.mf){left=r.left+r.width/2-cw/2;top=r.top+8}else if(mob){left=r.left+r.width/2-cw/2;top=Math.min(vh-ch-8,r.bottom+8)}else{left=r.left+10;top=Math.max(8,r.top+10)}}
  left=Math.max(8,Math.min(vw-cw-8,left));c.style.left=left+'px';c.style.top=top+'px';c.classList.remove('up','down','none');c.classList.add(dir);if(ax!==null)c.style.setProperty('--ax',(ax-left)+'px');
- let p=st.pt&&st.pt();if(p&&!R3.on&&VIEW.z>1)p=worldToView(p[0],p[1]);if(p&&dot){const r=cv.getBoundingClientRect();dot.style.display='block';dot.style.left=(r.left+p[0]/W*r.width)+'px';dot.style.top=(r.top+p[1]/H*r.height)+'px'}else if(dot)dot.style.display='none'}
+ let p=st.pt&&st.pt();if(p&&!R3.on&&VIEW.z>1)p=worldToView(p[0],p[1]);
+ if(p&&dot&&R3.on&&R3.ready){// v56: in 3D the dot follows the real camera (the map may be turned or zoomed)
+  const q=r3Proj(p[0],0,p[1]),r=R3.ov.getBoundingClientRect();dot.style.display='block';dot.style.left=(r.left+q[0]*r.width/R3.ov.width)+'px';dot.style.top=(r.top+q[1]*r.height/R3.ov.height)+'px'}
+ else if(p&&dot){const r=cv.getBoundingClientRect();dot.style.display='block';dot.style.left=(r.left+p[0]/W*r.width)+'px';dot.style.top=(r.top+p[1]/H*r.height)+'px'}else if(dot)dot.style.display='none'}
 function tutTick(){if(!TUT.on)return;if(homeOn()||$('overlay').classList.contains('show')){coachHide();return}const st=TUTS[TUT.i];if(!$('coach').classList.contains('show'))tutShow();
  if(st.done&&st.done()){tutAdvance();return}if(st.auto&&performance.now()-TUT.shownAt>st.auto*1000&&!st.done){tutAdvance();return}tutPlace()}
 // ================================================================ ZOOM AND DEVICE TIPS (v53)
@@ -3906,6 +3921,19 @@ function sheetMin(on){if(!LAY.mf)on=false;if(document.body.classList.contains('s
  // a mouse gets the same card on hover
  T_.addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return;const b=e.target.closest('.tool');if(b){clearTimeout(lpT);lpT=setTimeout(()=>{show(b);shown=false},500)}});
  T_.addEventListener('pointerout',e=>{if(e.pointerType==='mouse'){clearTimeout(lpT);hide()}})}
+// ================================================================ GAME CENTER (v56)
+// The iPhone app has a small native Game Center plugin (SceneDelegate.swift). Signed-in players get achievements and two
+// leaderboards: ij.rep (career reputation) and ij.daily (today's daily job). Browsers and older app installs skip all of this.
+const GC={ok:false,tried:false};
+function gcPlug(){try{return window.Capacitor&&Capacitor.isPluginAvailable&&Capacitor.isPluginAvailable('GameCenter')?Capacitor.Plugins.GameCenter:null}catch(e){return null}}
+function gcAvail(){return !!gcPlug()}
+function dailyScore(stars,arrests,stolen){return Math.max(0,stars*1000+arrests*100-Math.floor(stolen/100))}
+function gcAch(id,banner){try{const p=gcPlug();if(p&&GC.ok)p.unlockAchievement({id:'ij.ach.'+id,banner:!!banner}).catch(()=>{})}catch(e){}}
+function gcScore(lb,v){try{const p=gcPlug();if(p&&GC.ok)p.submitScore({leaderboard:lb,score:Math.round(v)}).catch(()=>{})}catch(e){}}
+function gcSignIn(){const p=gcPlug();if(!p||GC.tried)return;GC.tried=true;p.signIn().then(r=>{GC.ok=!!(r&&r.authenticated);if(!GC.ok)return;
+ for(const id of ACHS)gcAch(id,false);gcScore('ij.rep',repGet())}).catch(()=>{})}
+function gcShow(){const p=gcPlug();if(!p)return;if(!GC.ok){GC.tried=false;gcSignIn();return}p.showDashboard({}).catch(()=>{})}
+setTimeout(gcSignIn,2500);
 // ================================================================ THEME MUSIC
 // v52: Velvet Caper music (src/music.py). The loops are an exact number of bars; skip the mp3 encoder's lead-in so they join without a gap
 const MUSLEN={musPlan:32.5424,musHeist:13.1507};

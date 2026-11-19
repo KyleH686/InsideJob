@@ -1,5 +1,75 @@
 import UIKit
 import Capacitor
+import GameKit
+
+// v56: the game's own bridge view controller, so the app can register its Game Center plugin
+class GameBridgeViewController: CAPBridgeViewController {
+    override func capacitorDidLoad() {
+        bridge?.registerPluginInstance(GameCenterPlugin())
+    }
+}
+
+// v56: Game Center (sign in, leaderboards, achievements). The game calls it from JavaScript as Capacitor.Plugins.GameCenter.
+// Every method quietly does nothing until the player is signed in, so the game never waits on it.
+@objc(GameCenterPlugin)
+public class GameCenterPlugin: CAPPlugin, CAPBridgedPlugin, GKGameCenterControllerDelegate {
+    public let identifier = "GameCenterPlugin"
+    public let jsName = "GameCenter"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "submitScore", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "unlockAchievement", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "showDashboard", returnType: CAPPluginReturnPromise)
+    ]
+    private var answered = false
+
+    @objc func signIn(_ call: CAPPluginCall) {
+        DispatchQueue.main.async {
+            if GKLocalPlayer.local.isAuthenticated { call.resolve(["authenticated": true]); return }
+            self.answered = false
+            GKLocalPlayer.local.authenticateHandler = { [weak self] vc, error in
+                guard let self = self else { return }
+                if let vc = vc { self.bridge?.viewController?.present(vc, animated: true); return }
+                if !self.answered { self.answered = true; call.resolve(["authenticated": GKLocalPlayer.local.isAuthenticated, "error": error?.localizedDescription ?? ""]) }
+            }
+        }
+    }
+
+    @objc func submitScore(_ call: CAPPluginCall) {
+        guard GKLocalPlayer.local.isAuthenticated, let id = call.getString("leaderboard") else { call.resolve(["ok": false]); return }
+        let score = call.getInt("score") ?? 0
+        GKLeaderboard.submitScore(score, context: 0, player: GKLocalPlayer.local, leaderboardIDs: [id]) { error in
+            call.resolve(["ok": error == nil])
+        }
+    }
+
+    @objc func unlockAchievement(_ call: CAPPluginCall) {
+        guard GKLocalPlayer.local.isAuthenticated, let id = call.getString("id") else { call.resolve(["ok": false]); return }
+        let a = GKAchievement(identifier: id)
+        a.percentComplete = 100
+        a.showsCompletionBanner = call.getBool("banner") ?? false
+        GKAchievement.report([a]) { error in call.resolve(["ok": error == nil]) }
+    }
+
+    @objc func showDashboard(_ call: CAPPluginCall) {
+        DispatchQueue.main.async {
+            guard GKLocalPlayer.local.isAuthenticated else { call.resolve(["ok": false]); return }
+            let vc: GKGameCenterViewController
+            if let id = call.getString("leaderboard") {
+                vc = GKGameCenterViewController(leaderboardID: id, playerScope: .global, timeScope: .allTime)
+            } else {
+                vc = GKGameCenterViewController(state: .dashboard)
+            }
+            vc.gameCenterDelegate = self
+            self.bridge?.viewController?.present(vc, animated: true)
+            call.resolve(["ok": true])
+        }
+    }
+
+    public func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
+        gameCenterViewController.dismiss(animated: true)
+    }
+}
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -8,7 +78,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
 
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = CAPBridgeViewController()
+        window?.rootViewController = GameBridgeViewController()
         window?.makeKeyAndVisible()
 
         SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)
