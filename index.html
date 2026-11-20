@@ -749,7 +749,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v57 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v58 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -3744,7 +3744,7 @@ function recordSiteBest(){try{const B=JSON.parse(localStorage.getItem('ij-sitebe
 // the reputation to take on). The iPhone app asks Apple through the native Store plugin (SceneDelegate.swift). The browser build has no
 // store, so it stays fully unlocked; add ?paywall to the address (or set ij-paytest) to try the purchase flow with a pretend store.
 const FREE_SITES=new Set(['gallery','bank','manor']);
-const BOOK={id:'ij.contractbook',owned:false,price:'£3.99',busy:false};
+const BOOK={id:'ij.contractbook',owned:false,price:'£2.99',busy:false};
 try{BOOK.owned=localStorage.getItem('ij-book')==='1'}catch(e){}
 function storePlug(){try{return window.Capacitor&&Capacitor.isPluginAvailable&&Capacitor.isPluginAvailable('Store')?Capacitor.Plugins.Store:null}catch(e){return null}}
 function payTest(){try{return /[?&]paywall/.test(location.search)||localStorage.getItem('ij-paytest')==='1'}catch(e){return false}}
