@@ -736,7 +736,7 @@ html{background:var(--ijbg,#0c2f57)}
 body{box-sizing:border-box;padding:calc(var(--sat) + var(--pe)) calc(var(--sar) + var(--pe)) calc(var(--sab) + var(--pe)) calc(var(--sal) + var(--pe))}#app{height:100%!important}</style>
 </head>
 <body data-theme="blueprint" data-mtab="build">
-<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v59 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
+<div id="home"><div class="hwrap"><div class="hlogo"><div class="hkick">A heist game from the other side</div><h1>INSIDE<br>J<span class="o">O</span>B</h1><div class="htape"><div class="htrack"><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span><span>&nbsp;NIGHT SHIFT ★ FIVE NIGHTS ★ NINE JOBS ★ ONE SECURITY CONSULTANT ★ ZERO ROOM FOR ERROR ★</span></div></div></div><div id="hScene"></div><div class="hmenu" id="hMenu"></div><div class="hfoot">Inside Job · v60 · sound by Kenney, characters by KayKit (CC0) · voices by Kokoro</div></div></div><div id="coach"></div><div id="coachDot"></div>
 <div id="app">
  <header id="top">
   <div class="ttl">INSIDE JOB<small>security contract · The Marchbank Gallery</small></div>
@@ -2871,9 +2871,12 @@ cv.addEventListener('pointerup',e=>{
 cv.addEventListener('pointercancel',()=>{touchP=null;loupeHide();hoverTile=-1});
 const loupe=document.getElementById("loupe"),lpx=loupe.getContext("2d");
 function loupeHide(){loupe.style.display='none'}
-function drawLoupe(){if(!touchP||performance.now()-touchP.t0<130)return;const r=cv.getBoundingClientRect();const sc=cv.width/r.width;
- const R=3.2*T*DPR;let cx=(touchP.x-r.left)*sc,cy=(touchP.y-r.top)*sc;if(R3.on&&!(R3.vw&&R3.vw.s>1.01)){const p=r3Pick(touchP.x,touchP.y);if(p){cx=p[0]*T*DPR;cy=p[1]*T*DPR}}lpx.fillStyle=getComputedStyle(document.body).backgroundColor||'#000';lpx.fillRect(0,0,300,300);
- lpx.imageSmoothingEnabled=true;lpx.drawImage(cv,cx-R,cy-R,2*R,2*R,0,0,300,300);
+function drawLoupe(){if(!touchP||performance.now()-touchP.t0<130)return;
+ // v60: magnify exactly what's on screen under the finger (the 3D view when it's on), not the flat plan underneath it
+ lpx.fillStyle=getComputedStyle(document.body).backgroundColor||'#000';lpx.fillRect(0,0,300,300);lpx.imageSmoothingEnabled=true;
+ const RC=40,src=R3.on&&R3.gl?[R3.gl,R3.ov]:[cv];
+ for(const c of src){if(!c)continue;const r=c.getBoundingClientRect();if(!r.width||!r.height)continue;const sx=c.width/r.width,sy=c.height/r.height;
+  try{lpx.drawImage(c,(touchP.x-r.left-RC)*sx,(touchP.y-r.top-RC)*sy,2*RC*sx,2*RC*sy,0,0,300,300)}catch(_){}}
  lpx.strokeStyle=S.accent;lpx.lineWidth=3;lpx.beginPath();lpx.moveTo(150,128);lpx.lineTo(150,140);lpx.moveTo(150,160);lpx.lineTo(150,172);lpx.moveTo(128,150);lpx.lineTo(140,150);lpx.moveTo(160,150);lpx.lineTo(172,150);lpx.stroke();
  const L=150;let lx=touchP.x-L/2,ly=touchP.y-L-46;if(ly<6)ly=touchP.y+46;lx=Math.max(6,Math.min(innerWidth-L-6,lx));loupe.style.left=lx+'px';loupe.style.top=ly+'px';loupe.style.display='block'}
 function finishRoute(){const g=ST.routeFor;ST.routeFor=null;devicesChanged();hint(g.route.length?'Patrol set: '+g.route.length+' points.':'Sentry set: this guard stands and scans.',3);refreshUI()}
