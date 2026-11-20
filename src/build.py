@@ -38,6 +38,8 @@ import hashlib
 ver=int(re.search(r'Inside Job · v(\d+) · ',s).group(1));ib=i.encode('utf-8')
 os.makedirs('ios',exist_ok=True);open('ios/game.html','wb').write(ib)
 ld=open('ios/loader.html').read();assert '/*__VER__*/0' in ld
-open('ios/index.html','w').write(ld.replace('/*__VER__*/0',str(ver)))
+# Live updates (the app fetching newer game.html from GitHub Pages) are OFF for App Store builds. IJ_LIVE=1 python3 build.py turns them back on for play-testing builds.
+LIVE=os.environ.get('IJ_LIVE','0')=='1';assert '/*__LIVE__*/1' in ld
+open('ios/index.html','w').write(ld.replace('/*__VER__*/0',str(ver)).replace('/*__LIVE__*/1','1' if LIVE else '0'))
 open('ios/version.json','w').write(json.dumps({'v':ver,'size':len(ib),'sha256':hashlib.sha256(ib).hexdigest(),'shell':1})+'\n')
-print('ios v%d'%ver,len(ib)//1024,'KB')
+print('ios v%d'%ver,len(ib)//1024,'KB','live updates ON' if LIVE else 'live updates off (App Store)')
